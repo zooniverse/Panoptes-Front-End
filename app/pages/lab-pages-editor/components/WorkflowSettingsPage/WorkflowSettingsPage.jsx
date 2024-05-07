@@ -3,16 +3,18 @@ import AssociatedSubjectSets from './components/AssociatedSubjectSets.jsx';
 import AssociatedTutorial from './components/AssociatedTutorial.jsx';
 import WorkflowVersion from '../WorkflowVersion.jsx';
 
-// Use ?showRemovedOptions=true to show options that are technically valid in
-// the API, but removed from the editor.
-function getShowRemovedOptions() {
+// Use ?advanced=true to enable advanced mode.
+// - switches from simpler "linear workflow" to "manual workflow".
+// - enables Experimental Panel.
+// - shows hidden options in workflow settings.
+function getAdvancedMode() {
   const params = new URLSearchParams(window?.location?.search);
-  return !!params.get('showRemovedOptions');
+  return !!params.get('advanced');
 }
 
 export default function WorkflowSettingsPage() {
   const { workflow, update, project } = useWorkflowContext();
-  const showRemovedOptions = getShowRemovedOptions();
+  const advancedMode = getAdvancedMode();
   const showSeparateFramesOptions = !!workflow?.configuration?.enable_switching_flipbook_and_separate;
 
   function onSubmit(e) {
@@ -94,14 +96,14 @@ export default function WorkflowSettingsPage() {
               aria-label="Retirement criteria"
               className="flex-item"
               defaultValue={workflow?.retirement?.criteria}
-              disabled={!showRemovedOptions}
+              disabled={!advancedMode}
               aria-describedby="subject-retirement-info"
               name="retirement.criteria"
               onChange={doUpdate}
             >
               <option value="classification_count">Classification count</option>
               {/* Reason for removal (May 2024): standardisation. PFE/FEM Lab doesn't allow "never retire" option, nor setting the retirement count. */}
-              {(showRemovedOptions || workflow?.retirement?.criteria === 'never_retire') &&
+              {(advancedMode || workflow?.retirement?.criteria === 'never_retire') &&
                 <option value="never_retire">Never retire</option>
               }
             </select>
@@ -294,7 +296,7 @@ export default function WorkflowSettingsPage() {
           </div>
         </fieldset>
 
-        {showRemovedOptions && (<>  {/* Reason for removal (Apr 2024): we want users to use automatic subject viewer selection, to reduce complexity and complications. */}
+        {advancedMode && (<>  {/* Reason for removal (Apr 2024): we want users to use automatic subject viewer selection, to reduce complexity and complications. */}
           <hr />
 
           <fieldset>

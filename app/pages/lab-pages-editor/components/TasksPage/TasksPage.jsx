@@ -17,6 +17,15 @@ import StepItem from './components/StepItem';
 import WorkflowVersion from '../WorkflowVersion.jsx';
 import WrenchIcon from '../../icons/WrenchIcon.jsx';
 
+// Use ?advanced=true to enable advanced mode.
+// - switches from simpler "linear workflow" to "manual workflow".
+// - enables Experimental Panel.
+// - shows hidden options in workflow settings.
+function getAdvancedMode() {
+  const params = new URLSearchParams(window?.location?.search);
+  return !!params.get('advanced');
+}
+
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
@@ -25,12 +34,13 @@ export default function TasksPage() {
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const firstStepKey = workflow?.steps?.[0]?.[0] || '';
   const isActive = true; // TODO
+  const advancedMode = getAdvancedMode();
 
   // A linear workflow means every step (except branching steps) will move into
   // the next step in the workflow.steps array. e.g. step0.next = step1 
   // A manual (i.e. non-linear) workflow asks the user to explicity spell out
   // the next step of each step. 
-  const isLinearWorkflow = true;
+  const isLinearWorkflow = !advancedMode;
 
   /*
   Adds a new Task of a specified type (with default settings) to a Step.
@@ -313,9 +323,11 @@ export default function TasksPage() {
         />
 
         {/* EXPERIMENTAL */}
-        <ExperimentalPanel
-          update={update}
-        />
+        {advancedMode && (
+          <ExperimentalPanel
+            update={update}
+          />
+        )}
       </section>
     </div>
   );
