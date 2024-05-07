@@ -5,6 +5,7 @@ import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
 import getNewTaskKey from '../../helpers/getNewTaskKey.js';
+import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
@@ -40,7 +41,7 @@ export default function TasksPage() {
     if (!workflow) return;
     const newTaskKey = getNewTaskKey(workflow.tasks);
     const newTask = createTask(taskType);
-    const steps = workflow.steps?.slice() || [];
+    let steps = workflow.steps?.slice() || [];
     
     let step
     if (stepIndex < 0) {
@@ -69,6 +70,10 @@ export default function TasksPage() {
       ...workflow.tasks,
       [newTaskKey]: newTask
     };
+
+    if (linkStepsInWorkflow) {
+      steps = linkStepsInWorkflow(steps, tasks);
+    }
 
     await update({ tasks, steps });
     return (stepIndex < 0) ? steps.length - 1 : stepIndex;
@@ -125,7 +130,10 @@ export default function TasksPage() {
     const oldSteps = workflow.steps || [];
     if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
 
-    const steps = moveItemInArray(oldSteps, from, to);
+    let steps = moveItemInArray(oldSteps, from, to);
+    if (linkStepsInWorkflow) {
+      steps = linkStepsInWorkflow(steps, workflow.tasks);
+    }
     update({ steps });
   }
 
@@ -142,6 +150,9 @@ export default function TasksPage() {
 
     // cleanedupTasksAndSteps() will also remove tasks not associated with any step.
     const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
+    if (linkStepsInWorkflow) {
+      cleanedTasksAndSteps.steps = linkStepsInWorkflow(cleanedTasksAndSteps.steps, cleanedTasksAndSteps.tasks);
+    }
     update(cleanedTasksAndSteps);
   }
 
