@@ -6,6 +6,7 @@ import BranchingNextControls from './BranchingNextControls.jsx';
 
 const TaskLabels = {
   'drawing': 'Drawing Task',
+  'multiple': 'Question Task',  // Multiple question
   'single': 'Question Task',  // Single question
   'text': 'Text Task'
 };
@@ -32,7 +33,7 @@ function TaskItem({
         <span className="task-key">{taskKey}</span>
         <span className="task-icon">
           <TaskIcon
-            alt={TaskLabels[task.type]}
+            alt={TaskLabels[task.type] || 'Unknown Task Type'}
             type={task.type}
           />
         </span>
