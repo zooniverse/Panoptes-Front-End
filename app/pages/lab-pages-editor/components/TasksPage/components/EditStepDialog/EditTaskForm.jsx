@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import SingleQuestionTask from './types/SingleQuestionTask.jsx';
 import TextTask from './types/TextTask.jsx';
+import UnknownTask from './types/UnknownTask.jsx';
 
 const taskTypes = {
   'multiple': SingleQuestionTask,  // Shared with single answer question task
@@ -18,7 +19,7 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
 }) {
   if (!task || !taskKey) return <li>ERROR: could not render Task</li>;
 
-  const TaskForm = taskTypes[task.type];
+  const TaskForm = taskTypes[task.type] || UnknownTask;
   
   return (
     <fieldset
