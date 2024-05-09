@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
-export default function TextTask({
+function TextTask({
   deleteTask = DEFAULT_HANDLER,
   stepHasManyTasks = false,
   task,
   taskKey,
-  taskIndexInStep,
   updateTask = DEFAULT_HANDLER
 }) {
   const [ help, setHelp ] = useState(task?.help || '');
@@ -96,3 +97,13 @@ export default function TextTask({
     </div>
   );
 }
+
+TextTask.propTypes = {
+  deleteTask: PropTypes.func,
+  stepHasManyTasks: PropTypes.bool,
+  task: PropTypes.object,
+  taskKey: PropTypes.string,
+  updateTask: PropTypes.func
+};
+
+export default TextTask;

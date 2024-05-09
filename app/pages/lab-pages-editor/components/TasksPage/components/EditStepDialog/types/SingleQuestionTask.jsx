@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
 import MinusIcon from '../../../../../icons/MinusIcon.jsx';
@@ -6,14 +7,13 @@ import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
-export default function SingleQuestionTask({
+function SingleQuestionTask({
   deleteTask = DEFAULT_HANDLER,
   enforceLimitedBranchingRule,
   stepHasManyTasks = false,
   task,
   taskKey,
-  taskIndexInStep,
-  updateTask = DEFAULT_HANDLER  
+  updateTask = DEFAULT_HANDLER
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
   const [ help, setHelp ] = useState(task?.help || '');
@@ -193,3 +193,18 @@ export default function SingleQuestionTask({
     </div>
   );
 }
+
+SingleQuestionTask.propTypes = {
+  deleteTask: PropTypes.func,
+  enforceLimitedBranchingRule: PropTypes.shape({
+    stepHasBranch: PropTypes.bool,
+    stepHasOneTask: PropTypes.bool,
+    stepHasManyTasks: PropTypes.bool
+  }),
+  stepHasManyTasks: PropTypes.bool,
+  task: PropTypes.object,
+  taskKey: PropTypes.string,
+  updateTask: PropTypes.func
+};
+
+export default SingleQuestionTask;

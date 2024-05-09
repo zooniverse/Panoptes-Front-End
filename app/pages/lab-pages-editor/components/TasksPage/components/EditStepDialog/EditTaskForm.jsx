@@ -35,7 +35,6 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
             stepHasManyTasks={stepHasManyTasks}
             task={task}
             taskKey={taskKey}
-            taskIndexInStep={taskIndexInStep}
             updateTask={updateTask}
           />
         : null
