@@ -7,7 +7,7 @@ import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
-function SingleQuestionTask({
+function QuestionTask({
   deleteTask = DEFAULT_HANDLER,
   enforceLimitedBranchingRule,
   stepHasManyTasks = false,
@@ -194,7 +194,7 @@ function SingleQuestionTask({
   );
 }
 
-SingleQuestionTask.propTypes = {
+QuestionTask.propTypes = {
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool,
@@ -207,4 +207,4 @@ SingleQuestionTask.propTypes = {
   updateTask: PropTypes.func
 };
 
-export default SingleQuestionTask;
+export default QuestionTask;

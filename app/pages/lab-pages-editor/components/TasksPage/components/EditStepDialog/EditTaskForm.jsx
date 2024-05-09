@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 
-import SingleQuestionTask from './types/SingleQuestionTask.jsx';
+import QuestionTask from './types/QuestionTask.jsx';
 import TextTask from './types/TextTask.jsx';
 import UnknownTask from './types/UnknownTask.jsx';
 
 const taskTypes = {
-  'multiple': SingleQuestionTask,  // Shared with single answer question task
-  'single': SingleQuestionTask,
+  'multiple': QuestionTask,  // Shared with single answer question task
+  'single': QuestionTask,
   'text': TextTask
 };
 
