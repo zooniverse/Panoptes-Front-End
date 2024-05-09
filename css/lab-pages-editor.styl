@@ -394,14 +394,21 @@ $fontWeightBoldPlus = 700
         background: $white
       
         .dialog-body
-          padding: $sizeS $sizeL
+          max-height: 70vh
+          overflow: auto
       
         .edit-task-form
           // Yup, the form is actually a fieldset, so maybe strip out the default values
-          padding: 0
+          padding: $sizeM
           margin: 0
-          border: none
+          border-bottom: none
+          border-left: none
+          border-right: none
+          border-top: 1px solid $grey1
 
+          &:first-child
+            border-top: none
+          
           legend
             display: none  // TODO: reconsider design
 
@@ -447,7 +454,7 @@ $fontWeightBoldPlus = 700
         
       .dialog-footer
         padding: $sizeXS $sizeL $sizeL $sizeL
-        margin-bottom: $sizeL
+        margin-bottom: $sizeS
 
     section
       h3
