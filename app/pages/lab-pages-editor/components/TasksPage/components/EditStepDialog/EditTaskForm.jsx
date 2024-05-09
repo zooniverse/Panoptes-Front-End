@@ -13,8 +13,10 @@ const taskTypes = {
 function EditTaskForm({  // It's not actually a form, but a fieldset that's part of a form.
   deleteTask,
   enforceLimitedBranchingRule,
+  stepHasManyTasks,
   task,
   taskKey,
+  taskIndexInStep,
   updateTask
 }) {
   if (!task || !taskKey) return <li>ERROR: could not render Task</li>;
@@ -30,8 +32,10 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
         ? <TaskForm
             deleteTask={deleteTask}
             enforceLimitedBranchingRule={enforceLimitedBranchingRule}
+            stepHasManyTasks={stepHasManyTasks}
             task={task}
             taskKey={taskKey}
+            taskIndexInStep={taskIndexInStep}
             updateTask={updateTask}
           />
         : null
@@ -47,9 +51,11 @@ EditTaskForm.propTypes = {
     stepHasOneTask: PropTypes.bool,
     stepHasManyTasks: PropTypes.bool
   }),
+  stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
+  taskIndexInStep: PropTypes.number,
   updateTask: PropTypes.func
-}
+}              
 
 export default EditTaskForm;

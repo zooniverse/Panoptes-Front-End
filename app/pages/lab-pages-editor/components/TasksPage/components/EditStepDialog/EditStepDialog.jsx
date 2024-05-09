@@ -6,8 +6,8 @@ import CloseIcon from '../../../../icons/CloseIcon.jsx';
 
 const taskNames = {
   'drawing': 'Drawing',
-  'multiple': 'Multiple Answer Question',
-  'single': 'Single Answer Question',
+  'multiple': 'Question',
+  'single': 'Question',
   'text': 'Text',
 }
 
@@ -50,7 +50,8 @@ function EditStepDialog({
 
   const firstTask = allTasks?.[taskKeys?.[0]]
   const taskName = taskNames[firstTask?.type] || '???';
-  const title = taskKeys?.length > 1
+  const stepHasManyTasks = taskKeys?.length > 1
+  const title = stepHasManyTasks
     ? 'Edit A Multi-Task Page'
     : `Edit ${taskName} Task`;
 
@@ -79,15 +80,17 @@ function EditStepDialog({
         className="dialog-body"
         onSubmit={onSubmit}
       >
-        {taskKeys.map((taskKey) => {
+        {taskKeys.map((taskKey, index) => {
           const task = allTasks[taskKey];
           return (
             <EditTaskForm
               key={`editTaskForm-${taskKey}`}
               deleteTask={deleteTask}
               enforceLimitedBranchingRule={enforceLimitedBranchingRule}
+              stepHasManyTasks={stepHasManyTasks}
               task={task}
               taskKey={taskKey}
+              taskIndexInStep={index}
               updateTask={updateTask}
             />
           );

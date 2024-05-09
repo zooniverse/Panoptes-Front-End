@@ -4,15 +4,17 @@ import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
 const DEFAULT_HANDLER = () => {};
 
 export default function TextTask({
+  deleteTask = DEFAULT_HANDLER,
+  stepHasManyTasks = false,
   task,
   taskKey,
-  deleteTask = DEFAULT_HANDLER,
+  taskIndexInStep,
   updateTask = DEFAULT_HANDLER
 }) {
   const [ help, setHelp ] = useState(task?.help || '');
   const [ instruction, setInstruction ] = useState(task?.instruction || '');
   const [ required, setRequired ] = useState(!!task?.required);
-
+  const title = stepHasManyTasks ? 'Text Task' : 'Main Text';
   // Update is usually called manually onBlur, after user input is complete.
   function update() {
     const newTask = {
@@ -40,7 +42,7 @@ export default function TextTask({
           className="big"
           htmlFor={`task-${taskKey}-instruction`}
         >
-          Main Text
+          {title}
         </label>
         <div className="flex-row">
           <span className="task-key">{taskKey}</span>

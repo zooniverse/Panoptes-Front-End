@@ -7,10 +7,12 @@ import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 const DEFAULT_HANDLER = () => {};
 
 export default function SingleQuestionTask({
-  enforceLimitedBranchingRule,
   deleteTask = DEFAULT_HANDLER,
+  enforceLimitedBranchingRule,
+  stepHasManyTasks = false,
   task,
   taskKey,
+  taskIndexInStep,
   updateTask = DEFAULT_HANDLER  
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
@@ -18,6 +20,7 @@ export default function SingleQuestionTask({
   const [ question, setQuestion ] = useState(task?.question || '');  // TODO: figure out if FEM is standardising Question vs Instructions
   const [ required, setRequired ] = useState(!!task?.required);
   const [ isMultiple, setIsMultiple ] = useState(task?.type === 'multiple');
+  const title = stepHasManyTasks ? 'Question Task' : 'Main Text';
 
   // Update is usually called manually onBlur, after user input is complete.
   function update(optionalStateOverrides) {
@@ -82,7 +85,7 @@ export default function SingleQuestionTask({
           className="big"
           htmlFor={`task-${taskKey}-instruction`}
         >
-          Main Text
+          {title}
         </label>
         <div className="flex-row">
           <span className="task-key">{taskKey}</span>
