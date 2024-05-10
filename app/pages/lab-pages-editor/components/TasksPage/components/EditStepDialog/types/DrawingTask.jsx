@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
+import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx';
 import MinusIcon from '../../../../../icons/MinusIcon.jsx';
 import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
@@ -220,19 +221,22 @@ function DrawingTask({
               <div className="grid">
                 <div className="grid-item grid-item-1">
                   <label htmlFor={`task-${taskKey}-tool-${index}-type`}>Tool Type</label>
-                  <select
-                    id={`task-${taskKey}-tool-${index}-type`}
-                    onChange={editTool}
-                    value={type}
-                    data-index={index}
-                    data-field="type"
-                  >
-                    {TOOL_TYPE_OPTIONS.map(typeOption => (
-                      <option value={typeOption} key={typeOption}>
-                        {typeOption}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="flex-row with-preview">
+                    <DrawingToolIcon type={type} />
+                    <select
+                      id={`task-${taskKey}-tool-${index}-type`}
+                      onChange={editTool}
+                      value={type}
+                      data-index={index}
+                      data-field="type"
+                    >
+                      {TOOL_TYPE_OPTIONS.map(typeOption => (
+                        <option value={typeOption} key={typeOption}>
+                          {typeOption}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="grid-item grid-item-2">
                   <label htmlFor={`task-${taskKey}-tool-${index}-color`}>Color</label>

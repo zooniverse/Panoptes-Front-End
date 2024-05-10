@@ -28,6 +28,7 @@ export default function GripIcon({
 }
 
 GripIcon.propTypes = {
+  alt: PropTypes.string,
   className: PropTypes.string,
   color: PropTypes.string,
   size: PropTypes.number
