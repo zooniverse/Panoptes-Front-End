@@ -236,19 +236,22 @@ function DrawingTask({
                 </div>
                 <div className="grid-item grid-item-2">
                   <label htmlFor={`task-${taskKey}-tool-${index}-color`}>Color</label>
-                  <select
-                    id={`task-${taskKey}-tool-${index}-color`}
-                    onChange={editTool}
-                    value={color}
-                    data-index={index}
-                    data-field="color"
-                  >
-                    {TOOL_COLOR_OPTIONS.map(colorOption => (
-                      <option value={colorOption.value} key={colorOption.value}>
-                        {colorOption.label}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="flex-row with-preview">
+                    <div className="preview-box" style={{ background: color }}>&nbsp;</div>
+                    <select
+                      id={`task-${taskKey}-tool-${index}-color`}
+                      onChange={editTool}
+                      value={color}
+                      data-index={index}
+                      data-field="color"
+                    >
+                      {TOOL_COLOR_OPTIONS.map(colorOption => (
+                        <option value={colorOption.value} key={colorOption.value}>
+                          {colorOption.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 {(type === 'point') && (
                   <div className="grid-item grid-item-3">
