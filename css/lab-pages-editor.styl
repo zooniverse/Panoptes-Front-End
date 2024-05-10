@@ -6,6 +6,7 @@ $grey5 = #E2E5E9
 $grey6 = #EFF2F5
 $black = #000000
 $teal = #00979D
+$darkGreen = #005D69
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
@@ -461,9 +462,52 @@ $fontWeightBoldPlus = 700
               padding: 0
             
             li
-              border: 1px solid red
+              background: $grey6
+              border: 1px solid $darkGreen
+              border-radius: $sizeXS
               margin: $sizeSM 0
-              padding: 0
+              padding: $sizeM
+
+            .grid
+              display: grid
+              gap: $sizeM
+              grid-template-columns: auto 16.5% 16.5% auto
+              grid-template-rows: auto auto
+
+            .grid-item
+              label
+                display: block
+              
+              select, input
+                width: 100%
+
+            .grid-item-1
+              grid-column: 1
+              grid-row: 1
+            
+            .grid-item-2
+              grid-column: 2 / span 2
+              grid-row: 1
+            
+            .grid-item-3
+              grid-column: 4
+              grid-row: 1
+            
+            .grid-item-4
+              grid-column: 1
+              grid-row: 2
+            
+            .grid-item-5
+              grid-column: 2
+              grid-row: 2
+            
+            .grid-item-6
+              grid-column: 3
+              grid-row: 2
+            
+            .grid-item-7
+              grid-column: 4
+              grid-row: 2
         
       .dialog-footer
         padding: $sizeXS $sizeL $sizeL $sizeL

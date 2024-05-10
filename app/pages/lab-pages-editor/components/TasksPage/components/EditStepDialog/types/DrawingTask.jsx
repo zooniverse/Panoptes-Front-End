@@ -167,8 +167,8 @@ function DrawingTask({
                   <MinusIcon data-index={index} />
                 </button>
               </div>
-              <div>
-                <div>
+              <div className="grid">
+                <div className="grid-item grid-item-1">
                   <label htmlFor={`task-${taskKey}-tool-${index}-type`}>Tool Type</label>
                   <select
                     id={`task-${taskKey}-tool-${index}-type`}
@@ -182,8 +182,7 @@ function DrawingTask({
                     <option value="polygon">polygon</option>
                   </select>
                 </div>
-
-                <div>
+                <div className="grid-item grid-item-2">
                   <label htmlFor={`task-${taskKey}-tool-${index}-color`}>Color</label>
                   <select
                     id={`task-${taskKey}-tool-${index}-color`}
