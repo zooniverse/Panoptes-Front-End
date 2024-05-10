@@ -253,22 +253,7 @@ function DrawingTask({
                     </select>
                   </div>
                 </div>
-                {(type === 'point') && (
-                  <div className="grid-item grid-item-3">
-                    <label htmlFor={`task-${taskKey}-tool-${index}-size`}>Size</label>
-                    <select
-                      id={`task-${taskKey}-tool-${index}-size`}
-                      onChange={editTool}
-                      value={size || 'large'}
-                      data-index={index}
-                      data-field="size"
-                    >
-                      <option value="small">Small</option>
-                      <option value="large">Large</option>
-                    </select>
-                  </div>
-                )}
-                <div className="grid-item grid-item-5">
+                <div className="grid-item grid-item-3">
                   <label htmlFor={`task-${taskKey}-tool-${index}-min`}>Min</label>
                   <input
                     id={`task-${taskKey}-tool-${index}-min`}
@@ -282,7 +267,7 @@ function DrawingTask({
                     data-field="min"
                   />
                 </div>
-                <div className="grid-item grid-item-6">
+                <div className="grid-item grid-item-4">
                   <label htmlFor={`task-${taskKey}-tool-${index}-min`}>Max</label>
                   <input
                     id={`task-${taskKey}-tool-${index}-max`}
@@ -296,6 +281,21 @@ function DrawingTask({
                     data-field="max"
                   />
                 </div>
+                {(type === 'point') && (
+                  <div className="grid-item grid-item-5">
+                    <label htmlFor={`task-${taskKey}-tool-${index}-size`}>Size</label>
+                    <select
+                      id={`task-${taskKey}-tool-${index}-size`}
+                      onChange={editTool}
+                      value={size || 'large'}
+                      data-index={index}
+                      data-field="size"
+                    >
+                      <option value="small">Small</option>
+                      <option value="large">Large</option>
+                    </select>
+                  </div>
+                )}
               </div>
             </li>
           ))}
