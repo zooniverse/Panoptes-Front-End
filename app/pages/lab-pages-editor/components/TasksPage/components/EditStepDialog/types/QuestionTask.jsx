@@ -79,7 +79,7 @@ function QuestionTask({
   useEffect(update, [required, isMultiple]);
 
   return (
-    <div className="single-question-task">
+    <div className="question-task">
       <div className="input-row">
         <label
           className="big"
@@ -152,7 +152,7 @@ function QuestionTask({
           {answers.map(({ label, next }, index) => (
             <li
               className="flex-row"
-              key={`single-question-task-answer-${index}`}
+              key={`question-task-answer-${index}`}
             >
               <input
                 aria-label={`Choice ${index}`}
