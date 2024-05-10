@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 // import strings from '../../../strings.json'; // TODO: move all text into strings
+import DrawingToolIcon from '../../../../icons/DrawingToolIcon.jsx';
 import TaskIcon from '../../../../icons/TaskIcon.jsx';
 import BranchingNextControls from './BranchingNextControls.jsx';
 
@@ -89,6 +90,27 @@ function PlaceholderAnswers({
       <div>
         <div className="fake-text-input">Participant text here</div>
       </div>
+    );
+  }
+
+  if (task.type === 'drawing') {
+    const tools = task.tools || [];
+
+    return (
+      <ul className="fake-drawing-tools">
+        {tools.map((tool, index) => (
+          <li
+            key={`placeholder-answer-${taskKey}-${index}`}
+            className="flex-row"
+          >
+            <span className="icon-wrapper">
+              <DrawingToolIcon type={tool?.type} color={tool?.color} />
+            </span>
+            <span className="flex-item">{tool?.label}</span>
+            <span>0 drawn</span>
+          </li>
+        ))}
+      </ul>
     );
   }
 
