@@ -7,6 +7,21 @@ import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
+const TOOL_COLOR_OPTIONS = [
+  { value: '#ff0000', label: 'Red' },
+  { value: '#ffff00', label: 'Yellow' },
+  { value: '#00ff00', label: 'Green' },
+  { value: '#00ffff', label: 'Cyan' },
+  { value: '#0000ff', label: 'Blue' },
+  { value: '#ff00ff', label: 'Magenta' }
+]
+
+const TOOL_TYPE_OPTIONS = [
+  'point',
+  'rectangle',
+  'polygon'
+]
+
 function DrawingTask({
   deleteTask = DEFAULT_HANDLER,
   stepHasManyTasks = false,
@@ -69,7 +84,16 @@ function DrawingTask({
       case 'label':
       case 'type':
       case 'color':
+      case 'size':
         tool[field] = value || '';
+        break;
+      
+      case 'min':
+      case 'max':
+        tool[field] = parseInt(value) || undefined;
+        if (tool.min !== undefined && tool.max !== undefined && tool.max < tool.min) {
+          tool.max = tool.min;
+        }
         break;
     }
 
@@ -177,9 +201,11 @@ function DrawingTask({
                     data-index={index}
                     data-field="type"
                   >
-                    <option value="point">point</option>
-                    <option value="rectangle">rectangle</option>
-                    <option value="polygon">polygon</option>
+                    {TOOL_TYPE_OPTIONS.map(typeOption => (
+                      <option value={typeOption} key={typeOption}>
+                        {typeOption}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="grid-item grid-item-2">
@@ -191,13 +217,55 @@ function DrawingTask({
                     data-index={index}
                     data-field="color"
                   >
-                    <option value="#ff0000">Red</option>
-                    <option value="#ffff00">Yellow</option>
-                    <option value="#00ff00">Green</option>
-                    <option value="#00ffff">Cyan</option>
-                    <option value="#0000ff">Blue</option>
-                    <option value="#ff00ff">Magenta</option>
+                    {TOOL_COLOR_OPTIONS.map(colorOption => (
+                      <option value={colorOption.value} key={colorOption.value}>
+                        {colorOption.label}
+                      </option>
+                    ))}
                   </select>
+                </div>
+                {(type === 'point') && (
+                  <div className="grid-item grid-item-3">
+                    <label htmlFor={`task-${taskKey}-tool-${index}-size`}>Size</label>
+                    <select
+                      id={`task-${taskKey}-tool-${index}-size`}
+                      onChange={editTool}
+                      value={size || 'large'}
+                      data-index={index}
+                      data-field="size"
+                    >
+                      <option value="small">Small</option>
+                      <option value="large">Large</option>
+                    </select>
+                  </div>
+                )}
+                <div className="grid-item grid-item-5">
+                  <label htmlFor={`task-${taskKey}-tool-${index}-min`}>Min</label>
+                  <input
+                    id={`task-${taskKey}-tool-${index}-min`}
+                    inputMode="numeric"
+                    min="0"
+                    onChange={editTool}
+                    placeholder="0"
+                    type="number"
+                    value={(min !== undefined) ? min : ''}
+                    data-index={index}
+                    data-field="min"
+                  />
+                </div>
+                <div className="grid-item grid-item-6">
+                  <label htmlFor={`task-${taskKey}-tool-${index}-min`}>Max</label>
+                  <input
+                    id={`task-${taskKey}-tool-${index}-max`}
+                    inputMode="numeric"
+                    min={min || 0}
+                    onChange={editTool}
+                    placeholder="∞"
+                    type="number"
+                    value={(max !== undefined) ? max : ''}
+                    data-index={index}
+                    data-field="max"
+                  />
                 </div>
               </div>
             </li>
