@@ -64,7 +64,7 @@ function QuestionTask({
     const index = e?.target?.dataset?.index;
     if (index === undefined || index < 0 || index >= answers.length) return;
 
-    const newAnswers = answers.slice()
+    const newAnswers = answers.slice();  // Copy answers
     newAnswers.splice(index, 1);
     setAnswers(newAnswers);
     update({ answers: newAnswers });  // Use optional state override, since setAnswers() won't reflect new values in this step of the lifecycle.

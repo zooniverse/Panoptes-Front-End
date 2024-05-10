@@ -94,7 +94,7 @@ export default function TasksPage() {
    */
   function updateTask(taskKey, task) {
     if (!workflow || !taskKey) return;
-    const newTasks = structuredClone(workflow.tasks);  // Copy tasks
+    const newTasks = structuredClone(workflow.tasks);  // Copy tasks.
     newTasks[taskKey] = task;
     update({ tasks: newTasks });
   }
@@ -114,11 +114,11 @@ export default function TasksPage() {
     if (!confirmed) return;
 
     // Delete the task.
-    const newTasks = structuredClone(workflow.tasks) || {};
+    const newTasks = structuredClone(workflow.tasks) || {};  // Copy tasks.
     delete newTasks[taskKey];
 
     // Delete the task reference in steps.
-    const newSteps = structuredClone(workflow.steps) || [];
+    const newSteps = structuredClone(workflow.steps) || [];  // Copy steps.
     newSteps.forEach(step => {
       const stepBody = step[1] || {};
       stepBody.taskKeys = (stepBody?.taskKeys || []).filter(key => key !== taskKey);
@@ -215,7 +215,7 @@ export default function TasksPage() {
     const answer = task?.answers[answerIndex];
     if (!task || !answer) return;
     
-    const newTasks = structuredClone(workflow.tasks);  // Copy tasks
+    const newTasks = structuredClone(workflow.tasks);  // Copy tasks.
     const newAnswers = task.answers.with(answerIndex, { ...answer, next })  // Copy, then modify, answers
     newTasks[taskKey] = {  // Insert modified answers into the task inside the copied tasks. Phew!
       ...task,

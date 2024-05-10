@@ -58,17 +58,17 @@ function DrawingTask({
     const index = e?.target?.dataset?.index;
     if (index === undefined || index < 0 || index >= tools.length) return;
 
-    const tool = tools[index];
-    const newLabel = e?.target?.value || '';
+    const tool = structuredClone(tools[index]) || {};  // Copy target tool.
+    tool.label = e?.target?.value || '';
 
-    setTools(tools.with(index, { ...tool, label: newLabel }));
+    setTools(tools.with(index, tool));
   }
 
   function deleteTool(e) {
     const index = e?.target?.dataset?.index;
     if (index === undefined || index < 0 || index >= tools.length) return;
 
-    const newTools = tools.slice()
+    const newTools = tools.slice();  // Copy tools.
     newTools.splice(index, 1);
     setTools(newTools);
     update({ tools: newTools });  // Use optional state override, since setTools() won't reflect new values in this step of the lifecycle.
