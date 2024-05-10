@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 
+import DrawingTask from './types/DrawingTask.jsx';
 import QuestionTask from './types/QuestionTask.jsx';
 import TextTask from './types/TextTask.jsx';
 import UnknownTask from './types/UnknownTask.jsx';
 
 const taskTypes = {
+  'drawing': DrawingTask,
   'multiple': QuestionTask,  // Shared with single answer question task
   'single': QuestionTask,
   'text': TextTask
