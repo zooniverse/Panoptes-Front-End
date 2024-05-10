@@ -298,7 +298,7 @@ function DrawingTask({
           ))}
         </ul>
       </div>
-      <div className="input-row">
+      <div className="input-row flex-row">
         <button
           aria-label="Add tool"
           className="big"
