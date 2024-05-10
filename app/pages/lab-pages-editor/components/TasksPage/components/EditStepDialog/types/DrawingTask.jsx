@@ -86,7 +86,7 @@ function DrawingTask({
     const newTools = [ ...tools, {
       color: '#00ff00',
       details: [],
-      label: '',
+      label: 'Tool name',
       max: undefined,
       min: undefined,
       size: undefined,
