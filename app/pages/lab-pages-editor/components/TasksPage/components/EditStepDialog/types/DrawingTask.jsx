@@ -17,8 +17,7 @@ function DrawingTask({
   const [ tools, setTools ] = useState(task?.tools || []);
   const [ help, setHelp ] = useState(task?.help || '');
   const [ instruction, setInstruction ] = useState(task?.instruction || '');  // TODO: figure out if FEM is standardising Question vs Instructions
-  const [ required, setRequired ] = useState(!!task?.required);
-  const [ enableHidePrevMarks, setEnableHidePrevMarks ] = useState(!!task?.enableHidePrevMarks);
+  const [ prevMarks, setPrevMarks ] = useState(!!task?.enableHidePrevMarks);
   const title = stepHasManyTasks ? 'Drawing Task' : 'Main Text';
 
   // Update is usually called manually onBlur, after user input is complete.
@@ -32,8 +31,8 @@ function DrawingTask({
       tools: _tools,
       help,
       instruction,
-      required,
-      enableHidePrevMarks
+      required: false,  // On PFE/FEM Lab, this can't be changed.
+      enableHidePrevMarks: prevMarks
     };
     updateTask(taskKey, newTask);
   }
@@ -81,7 +80,7 @@ function DrawingTask({
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  useEffect(update, [required, enableHidePrevMarks]);
+  useEffect(update, [prevMarks]);
 
   return (
     <div className="drawing-task">
@@ -112,31 +111,21 @@ function DrawingTask({
           </button>
         </div>
       </div>
-      <div className="input-row">
-        <span className="big">Choices</span>
-        <div className="flex-row">
-          <button
-            aria-label="Add choice"
-            className="big"
-            onClick={addTool}
-            type="button"
-          >
-            <PlusIcon />
-          </button>
-          <span className="narrow">
-            <input
-              id={`task-${taskKey}-required`}
-              type="checkbox"
-              checked={required}
-              onChange={(e) => {
-                setRequired(!!e?.target?.checked);
-              }}
-            />
-            <label htmlFor={`task-${taskKey}-required`}>
-              Required
-            </label>
-          </span>
-        </div>
+      <div className="input-row flex-row">
+        <span className="big">Tool Configuration</span>
+        <span className="narrow">
+          <input
+            id={`task-${taskKey}-prevMarks`}
+            type="checkbox"
+            checked={prevMarks}
+            onChange={(e) => {
+              setPrevMarks(!!e?.target?.checked);
+            }}
+          />
+          <label htmlFor={`task-${taskKey}-prevMarks`}>
+            Allow hiding of marks
+          </label>
+        </span>
       </div>
       <div className="input-row">
         <ul>
@@ -166,6 +155,19 @@ function DrawingTask({
             </li>
           ))}
         </ul>
+      </div>
+      <div className="input-row">
+        <button
+          aria-label="Add tool"
+          className="big"
+          onClick={addTool}
+          type="button"
+        >
+          <PlusIcon />
+        </button>
+        <span>
+          Add another tool
+        </span>
       </div>
       <div className="input-row">
         <label
