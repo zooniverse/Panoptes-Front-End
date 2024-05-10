@@ -40,7 +40,7 @@ function TextTask({
     <div className="text-task">
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
         >
           {title}
@@ -82,7 +82,7 @@ function TextTask({
       </div>
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-help`}
         >
           Help Text

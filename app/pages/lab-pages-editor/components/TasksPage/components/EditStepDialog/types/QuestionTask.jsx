@@ -82,7 +82,7 @@ function QuestionTask({
     <div className="question-task">
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
         >
           {title}
@@ -108,7 +108,7 @@ function QuestionTask({
         </div>
       </div>
       <div className="input-row">
-        <span className="big">Choices</span>
+        <span className="big spacing-bottom-S">Choices</span>
         <div className="flex-row">
           <button
             aria-label="Add choice"
@@ -178,7 +178,7 @@ function QuestionTask({
       </div>
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-help`}
         >
           Help Text

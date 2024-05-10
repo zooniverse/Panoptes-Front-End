@@ -86,7 +86,7 @@ function DrawingTask({
     <div className="drawing-task">
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
         >
           {title}
@@ -171,7 +171,7 @@ function DrawingTask({
       </div>
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-help`}
         >
           Help Text
