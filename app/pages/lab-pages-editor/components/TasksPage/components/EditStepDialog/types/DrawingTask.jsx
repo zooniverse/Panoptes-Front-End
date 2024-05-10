@@ -46,6 +46,9 @@ function DrawingTask({
       color: '#00ff00',
       details: [],
       label: '',
+      max: undefined,
+      min: undefined,
+      size: undefined,
       type: 'point'
     }];
     setTools(newTools);
@@ -56,10 +59,19 @@ function DrawingTask({
 
   function editTool(e) {
     const index = e?.target?.dataset?.index;
+    const field = e?.target?.dataset?.field;
+    const value = e?.target?.value;
     if (index === undefined || index < 0 || index >= tools.length) return;
 
     const tool = structuredClone(tools[index]) || {};  // Copy target tool.
-    tool.label = e?.target?.value || '';
+
+    switch (field) {
+      case 'label':
+      case 'type':
+      case 'color':
+        tool[field] = value || '';
+        break;
+    }
 
     setTools(tools.with(index, tool));
   }
@@ -80,7 +92,9 @@ function DrawingTask({
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  useEffect(update, [prevMarks]);
+  useEffect(update, [tools, prevMarks]);
+
+  // TODO: DEBOUNCE FOR tools UPDATE, since typing into the Tool Name/Label causes way too many updates!
 
   return (
     <div className="drawing-task">
@@ -118,9 +132,7 @@ function DrawingTask({
             id={`task-${taskKey}-prevMarks`}
             type="checkbox"
             checked={prevMarks}
-            onChange={(e) => {
-              setPrevMarks(!!e?.target?.checked);
-            }}
+            onChange={(e) => { setPrevMarks(!!e?.target?.checked); }}
           />
           <label htmlFor={`task-${taskKey}-prevMarks`}>
             Allow hiding of marks
@@ -129,29 +141,66 @@ function DrawingTask({
       </div>
       <div className="input-row">
         <ul>
-          {tools.map(({ label, next }, index) => (
+          {tools.map(({ color, details, label, max, min, size, type }, index) => (
             <li
-              className="flex-row"
               key={`drawing-task-tool-${index}`}
             >
-              <input
-                aria-label={`Choice ${index}`}
-                className="flex-item"
-                onChange={editTool}
-                onBlur={update}
-                type="text"
-                value={label}
-                data-index={index}
-              />
-              <button
-                aria-label={`Delete choice ${index}`}
-                onClick={deleteTool}
-                className="big"
-                data-index={index}
-                type="button"
-              >
-                <MinusIcon data-index={index} />
-              </button>
+              <label htmlFor={`task-${taskKey}-tool-${index}-label`}>
+                Tool Name
+              </label>
+              <div className="flex-row">
+                <input
+                  id={`task-${taskKey}-tool-${index}-label`}
+                  onChange={editTool}
+                  type="text"
+                  value={label}
+                  data-index={index}
+                  data-field="label"
+                />
+                <button
+                  aria-label={`Delete tool ${index}`}
+                  onClick={deleteTool}
+                  className="big"
+                  data-index={index}
+                  type="button"
+                >
+                  <MinusIcon data-index={index} />
+                </button>
+              </div>
+              <div>
+                <div>
+                  <label htmlFor={`task-${taskKey}-tool-${index}-type`}>Tool Type</label>
+                  <select
+                    id={`task-${taskKey}-tool-${index}-type`}
+                    onChange={editTool}
+                    value={type}
+                    data-index={index}
+                    data-field="type"
+                  >
+                    <option value="point">point</option>
+                    <option value="rectangle">rectangle</option>
+                    <option value="polygon">polygon</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor={`task-${taskKey}-tool-${index}-color`}>Color</label>
+                  <select
+                    id={`task-${taskKey}-tool-${index}-color`}
+                    onChange={editTool}
+                    value={color}
+                    data-index={index}
+                    data-field="color"
+                  >
+                    <option value="#ff0000">Red</option>
+                    <option value="#ffff00">Yellow</option>
+                    <option value="#00ff00">Green</option>
+                    <option value="#00ffff">Cyan</option>
+                    <option value="#0000ff">Blue</option>
+                    <option value="#ff00ff">Magenta</option>
+                  </select>
+                </div>
+              </div>
             </li>
           ))}
         </ul>
