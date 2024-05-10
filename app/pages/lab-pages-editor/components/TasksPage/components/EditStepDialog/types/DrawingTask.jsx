@@ -14,13 +14,39 @@ const TOOL_COLOR_OPTIONS = [
   { value: '#00ffff', label: 'Cyan' },
   { value: '#0000ff', label: 'Blue' },
   { value: '#ff00ff', label: 'Magenta' }
-]
+];
 
 const TOOL_TYPE_OPTIONS = [
+  // Supported in PFE/FEM Lab and works in FEM Classifier:
+  'circle',
+  'ellipse',
+  'line',
   'point',
+  'polygon',
   'rectangle',
-  'polygon'
-]
+  'rotateRectangle',
+
+  // Supported in PFE/FEM Lab, but doesn't work in FEM Classifier:
+  //'bezier',
+  //'column',
+  //'fullWidthLine',
+  //'fullHeightLine',
+  //'triangle',
+  //'pointGrid'
+
+  // Only available via experimental tools 
+  // TODO: figure out which ones of these should be standard.
+  // 'grid',
+  // 'freehandLine',  <-- Maybe this one?
+  // 'freehandShape',
+  // 'freehandSegmentLine',
+  // 'freehandSegmentShape',
+  // 'anchoredEllipse',
+  // 'fan',
+  // 'transcriptionLine',
+  // 'temporalPoint',
+  // 'temporalRotateRectangle'
+];
 
 function DrawingTask({
   deleteTask = DEFAULT_HANDLER,
