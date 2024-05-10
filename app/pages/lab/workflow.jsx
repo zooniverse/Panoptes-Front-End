@@ -1,16 +1,13 @@
 import { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import handleInputChange from '../../lib/handle-input-change.js';
-import TriggeredModalForm from 'modal-form/triggered';
 import ModalFormDialog from 'modal-form/dialog';
 import apiClient from 'panoptes-client/lib/api-client';
-import ChangeListener from '../../components/change-listener.cjsx';
 import RetirementRulesEditor from '../../components/retirement-rules-editor.cjsx';
 import {Link} from 'react-router';
 import MultiImageSubjectOptionsEditor from '../../components/multi-image-subject-options-editor.jsx';
 import taskComponents from '../../classifier/tasks/index.js';
 import AutoSave from '../../components/auto-save.coffee';
-import FileButton from '../../components/file-button.cjsx';
 import WorkflowCreateForm from './workflow-create-form.cjsx';
 import workflowActions from './actions/workflow.js';
 import classnames from 'classnames';
@@ -21,6 +18,7 @@ import Tutorials from './workflow-components/tutorials.jsx';
 import TaskOptions from './workflow-components/task-options.jsx';
 import TaskPicker from './workflow-components/task-picker.jsx';
 import TaskEditor from './workflow-components/task-editor.jsx';
+import removeTaskKeyFromWorkflow from './helpers/removeTaskKeyFromWorkflow.js';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
@@ -807,8 +805,9 @@ class EditWorkflowPage extends Component {
         changes[`tasks.${taskKey}`] = undefined;
         this.props.workflow.update(changes);
       }
+      removeTaskKeyFromWorkflow(this.props.workflow, taskKey);
 
-      return this.updateFirstTask();
+      return this.updateFirstTask().save();
     }
   }
 }
