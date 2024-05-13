@@ -158,6 +158,8 @@ export default function TasksPage() {
     const newSteps = steps.slice();  // Copy Steps.
     const newTasks = tasks ? { ...tasks } : {};  // Copy Tasks.
 
+    // Duplicate tasks of the Step we want to copy.
+    // Each task needs a new task key.
     const tasksToCopy = stepBody?.taskKeys || [];
     const newTaskKeys = [];
     tasksToCopy.forEach(originalKey => {
@@ -167,16 +169,17 @@ export default function TasksPage() {
       newTasks[newTaskKey] = newTask;
     })
 
-    console.log('+++ newTasks: ', newTasks);
+    // Duplicate the Step we want. It needs a new step key.
+    const newStepKey = getNewStepKey(newSteps);
+    const newStep = [ newStepKey, { ...stepBody, taskKeys: newTaskKeys } ];
+    newSteps.push(newStep);
 
     // cleanedupTasksAndSteps() will also remove tasks not associated with any step.
     const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
     if (linkStepsInWorkflow) {
       cleanedTasksAndSteps.steps = linkStepsInWorkflow(cleanedTasksAndSteps.steps, cleanedTasksAndSteps.tasks);
     }
-    // update(cleanedTasksAndSteps);
-
-    console.log('+++ TEST: ', cleanedTasksAndSteps);
+    update(cleanedTasksAndSteps);
   }
 
   function deleteStep(stepIndex) {
