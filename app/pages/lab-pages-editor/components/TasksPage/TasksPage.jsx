@@ -147,6 +147,17 @@ export default function TasksPage() {
     update({ steps });
   }
 
+  function copyStep(stepIndex) {
+    if (!workflow) return;
+    const { steps, tasks } = workflow;
+    const [ stepKey ] = steps[stepIndex] || [];
+
+    const confirmed = confirm(`Copy Page ${stepKey}?`);
+    if (!confirmed) return;
+
+    console.log('+++ TODO');
+  }
+
   function deleteStep(stepIndex) {
     if (!workflow) return;
     const { steps, tasks } = workflow;
@@ -290,6 +301,7 @@ export default function TasksPage() {
               activeDragItem={activeDragItem}
               allSteps={workflow.steps}
               allTasks={workflow.tasks}
+              copyStep={copyStep}
               deleteStep={deleteStep}
               moveStep={moveStep}
               isLinearWorkflow={isLinearWorkflow}

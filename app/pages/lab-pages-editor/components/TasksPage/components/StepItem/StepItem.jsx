@@ -21,10 +21,11 @@ function StepItem({
   activeDragItem = -1,
   allSteps,
   allTasks,
+  copyStep = DEFAULT_HANDLER,
   deleteStep = DEFAULT_HANDLER,
+  isLinearWorkflow = false,
   moveStep = DEFAULT_HANDLER,
   openEditStepDialog = DEFAULT_HANDLER,
-  isLinearWorkflow = false,
   setActiveDragItem = DEFAULT_HANDLER,
   step,
   stepIndex,
@@ -36,6 +37,10 @@ function StepItem({
 
   const isLastItem = stepIndex === allSteps.length - 1;
   const taskKeys = stepBody.taskKeys || [];
+
+  function doCopy() {
+    copyStep(stepIndex);
+  }
 
   function doDelete() {
     deleteStep(stepIndex);
@@ -109,7 +114,12 @@ function StepItem({
             >
               <DeleteIcon />
             </button>
-            <button aria-label={`Copy Page/Step ${stepKey}`} className="disabled plain" type="button">
+            <button
+              aria-label={`Copy Page/Step ${stepKey}`}
+              className="plain"
+              onClick={doCopy}
+              type="button"
+            >
               <CopyIcon />
             </button>
             <button
@@ -164,6 +174,7 @@ StepItem.propTypes = {
   activeDragItem: PropTypes.number,
   allSteps: PropTypes.array,
   allTasks: PropTypes.object,
+  copyStep: PropTypes.func,
   deleteStep: PropTypes.func,
   isLinearWorkflow: PropTypes.bool,
   moveStep: PropTypes.func,
