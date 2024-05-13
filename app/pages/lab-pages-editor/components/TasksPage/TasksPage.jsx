@@ -150,12 +150,33 @@ export default function TasksPage() {
   function copyStep(stepIndex) {
     if (!workflow) return;
     const { steps, tasks } = workflow;
-    const [ stepKey ] = steps[stepIndex] || [];
+    const [ stepKey, stepBody ] = steps[stepIndex] || [];
 
     const confirmed = confirm(`Copy Page ${stepKey}?`);
     if (!confirmed) return;
 
-    console.log('+++ TODO');
+    const newSteps = steps.slice();  // Copy Steps.
+    const newTasks = tasks ? { ...tasks } : {};  // Copy Tasks.
+
+    const tasksToCopy = stepBody?.taskKeys || [];
+    const newTaskKeys = [];
+    tasksToCopy.forEach(originalKey => {
+      const newTaskKey = getNewTaskKey(newTasks);
+      newTaskKeys.push(newTaskKey);
+      const newTask = structuredClone(tasks[originalKey]);  // Copy.
+      newTasks[newTaskKey] = newTask;
+    })
+
+    console.log('+++ newTasks: ', newTasks);
+
+    // cleanedupTasksAndSteps() will also remove tasks not associated with any step.
+    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
+    if (linkStepsInWorkflow) {
+      cleanedTasksAndSteps.steps = linkStepsInWorkflow(cleanedTasksAndSteps.steps, cleanedTasksAndSteps.tasks);
+    }
+    // update(cleanedTasksAndSteps);
+
+    console.log('+++ TEST: ', cleanedTasksAndSteps);
   }
 
   function deleteStep(stepIndex) {
