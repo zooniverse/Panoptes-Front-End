@@ -9,6 +9,7 @@ const DEFAULT_HANDLER = () => {};
 
 function NewTaskDialog({
   addTask = DEFAULT_HANDLER,
+  enforceLimitedBranchingRule,
   openEditStepDialog = DEFAULT_HANDLER,
   stepIndex = -1
 }, forwardedRef) {
@@ -41,14 +42,20 @@ function NewTaskDialog({
 
     closeDialog();
 
-    if (stepIndex < 0) {
+    const addingTaskToNewStep = stepIndex < 0
+    if (addingTaskToNewStep) {
       const newStepIndex = await addTask(tasktype);
       openEditStepDialog(newStepIndex);
-    } else {
+
+    } else {  // Adding task to existing Step
       await addTask(tasktype, stepIndex);
       openEditStepDialog(stepIndex);
     }
   }
+
+  // The Question Task is either a Single Answer Question Task, or a Multiple Answer Question Task.
+  // By default, this is 'single', but under certain conditions, a new Question Task will be created as a Multiple Answer Question Task.
+  const questionTaskType = (!enforceLimitedBranchingRule?.stepHasOneTask) ? 'single' : 'multiple'
 
   return (
     <dialog
@@ -92,11 +99,11 @@ function NewTaskDialog({
           <button
             aria-label="Add new Question Task"
             className="new-task-button"
-            data-tasktype="single"
+            data-tasktype={questionTaskType}
             onClick={handleClickAddTask}
             type="button"
           >
-            <TaskIcon type='single' />
+            <TaskIcon type={questionTaskType} />
             <span>Question</span>
           </button>
           <button
@@ -117,6 +124,11 @@ function NewTaskDialog({
 
 NewTaskDialog.propTypes = {
   addTask: PropTypes.func,
+  enforceLimitedBranchingRule: PropTypes.shape({
+    stepHasBranch: PropTypes.bool,
+    stepHasOneTask: PropTypes.bool,
+    stepHasManyTasks: PropTypes.bool
+  }),
   openEditStepDialog: PropTypes.func,
   stepIndex: PropTypes.number
 };

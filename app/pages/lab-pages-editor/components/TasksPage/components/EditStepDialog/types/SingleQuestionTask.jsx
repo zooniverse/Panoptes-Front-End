@@ -7,15 +7,17 @@ import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 const DEFAULT_HANDLER = () => {};
 
 export default function SingleQuestionTask({
+  enforceLimitedBranchingRule,
+  deleteTask = DEFAULT_HANDLER,
   task,
   taskKey,
-  deleteTask = DEFAULT_HANDLER,
-  updateTask = DEFAULT_HANDLER
+  updateTask = DEFAULT_HANDLER  
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
   const [ help, setHelp ] = useState(task?.help || '');
   const [ question, setQuestion ] = useState(task?.question || '');  // TODO: figure out if FEM is standardising Question vs Instructions
   const [ required, setRequired ] = useState(!!task?.required);
+  const [ isMultiple, setIsMultiple ] = useState(task?.type === 'multiple');
 
   // Update is usually called manually onBlur, after user input is complete.
   function update(optionalStateOverrides) {
@@ -24,6 +26,7 @@ export default function SingleQuestionTask({
 
     const newTask = {
       ...task,
+      type: (!isMultiple) ? 'single' : 'multiple',
       answers: nonEmptyAnswers,
       help,
       question,
@@ -69,7 +72,8 @@ export default function SingleQuestionTask({
 
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
-  useEffect(update, [required]);
+  // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
+  useEffect(update, [required, isMultiple]);
 
   return (
     <div className="single-question-task">
@@ -122,6 +126,20 @@ export default function SingleQuestionTask({
             />
             <label htmlFor={`task-${taskKey}-required`}>
               Required
+            </label>
+          </span>
+          <span className="narrow">
+            <input
+              id={`task-${taskKey}-multiple`}
+              type="checkbox"
+              checked={isMultiple}
+              disabled={enforceLimitedBranchingRule?.stepHasManyTasks && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
+              onChange={(e) => {
+                setIsMultiple(!!e?.target?.checked);
+              }}
+            />
+            <label htmlFor={`task-${taskKey}-multiple`}>
+              Allow multiple
             </label>
           </span>
         </div>

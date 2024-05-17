@@ -6,7 +6,8 @@ import CloseIcon from '../../../../icons/CloseIcon.jsx';
 
 const taskNames = {
   'drawing': 'Drawing',
-  'single': 'Single Question',
+  'multiple': 'Multiple Answer Question',
+  'single': 'Single Answer Question',
   'text': 'Text',
 }
 
@@ -15,6 +16,7 @@ const DEFAULT_HANDLER = () => {};
 function EditStepDialog({
   allTasks = {},
   deleteTask,
+  enforceLimitedBranchingRule,
   onClose = DEFAULT_HANDLER,
   openNewTaskDialog = DEFAULT_HANDLER,
   step = [],
@@ -48,7 +50,9 @@ function EditStepDialog({
 
   const firstTask = allTasks?.[taskKeys?.[0]]
   const taskName = taskNames[firstTask?.type] || '???';
-  const title = `Edit ${taskName} Task`;
+  const title = taskKeys?.length > 1
+    ? 'Edit A Multi-Task Page'
+    : `Edit ${taskName} Task`;
 
   return (
     <dialog
@@ -81,6 +85,7 @@ function EditStepDialog({
             <EditTaskForm
               key={`editTaskForm-${taskKey}`}
               deleteTask={deleteTask}
+              enforceLimitedBranchingRule={enforceLimitedBranchingRule}
               task={task}
               taskKey={taskKey}
               updateTask={updateTask}
@@ -91,6 +96,7 @@ function EditStepDialog({
       <div className="dialog-footer flex-row">
         <button
           className="big flex-item"
+          disabled={!!enforceLimitedBranchingRule?.stepHasBranch}
           onClick={handleClickAddTaskButton}
           type="button"
         >
@@ -111,6 +117,11 @@ function EditStepDialog({
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   deleteTask: PropTypes.func,
+  enforceLimitedBranchingRule: PropTypes.shape({
+    stepHasBranch: PropTypes.bool,
+    stepHasOneTask: PropTypes.bool,
+    stepHasManyTasks: PropTypes.bool
+  }),
   onClose: PropTypes.func,
   step: PropTypes.object,
   stepIndex: PropTypes.number,

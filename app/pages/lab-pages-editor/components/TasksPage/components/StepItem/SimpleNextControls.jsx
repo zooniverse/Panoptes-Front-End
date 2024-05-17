@@ -18,7 +18,7 @@ export default function SimpleNextControls({
 
   return (
     <div className="next-controls vertical-layout">
-      <NextStepArrow className="next-arrow" />
+      <NextStepArrow className="next-arrow" height="10" />
       <select
         className={(!stepBody?.next) ? 'next-is-submit' : ''}
         onChange={onChange}
