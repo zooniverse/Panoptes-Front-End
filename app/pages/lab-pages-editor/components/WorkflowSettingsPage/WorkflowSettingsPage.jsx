@@ -13,9 +13,10 @@ export default function WorkflowSettingsPage() {
   }
 
   function doUpdate(e) {
-    const key = e.target.name;
-    let value = e.target.value || '';
-    const { updaterule } = e.target.dataset;
+    const key = e?.target?.name;
+    let value = e?.target?.value || '';
+    const { updaterule } = e?.target?.dataset || {};
+    if (!key) return;
 
     if (updaterule === 'convert_to_number') value = parseInt(value);
     if (updaterule === 'undefined_if_empty') value = value || undefined;

@@ -5,6 +5,7 @@ export default function ExperimentalPanel({
 }) {
   function experimentalReset() {
     update({
+      first_task: '',
       tasks: {},
       steps: []
     });
@@ -12,6 +13,7 @@ export default function ExperimentalPanel({
 
   function experimentalQuickSetup() {
     update({
+      first_task: '',
       tasks: {
         'T0': {
           answers: [

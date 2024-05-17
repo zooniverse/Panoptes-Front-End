@@ -7,21 +7,20 @@ import getNewStepKey from '../../helpers/getNewStepKey.js';
 import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
-import getPreviewEnv from '../../helpers/getPreviewEnv.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import ExperimentalPanel from './ExperimentalPanel.jsx';
 import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
-import ExternalLinkIcon from '../../icons/ExternalLinkIcon.jsx';
 
 export default function TasksPage() {
-  const { project, workflow, update } = useWorkflowContext();
+  const { workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
+  const firstStepKey = workflow?.steps?.[0]?.[0] || '';
   const isActive = true; // TODO
 
   /*
@@ -156,6 +155,13 @@ export default function TasksPage() {
     setActiveStepIndex(-1);
   }
 
+  function handleChangeStartingPage(e) {
+    const targetStepKey = e?.target?.value || '';
+    const targetStepIndex = workflow?.steps?.findIndex(([stepKey]) => stepKey === targetStepKey) || -1;
+    if (targetStepIndex < 0) return;
+    moveStep(targetStepIndex, 0);
+  }
+
   // Changes the optional "next page" of a step/page
   function updateNextStepForStep(stepKey, next = undefined) {
     if (!workflow || !workflow.steps) return;
@@ -201,15 +207,14 @@ export default function TasksPage() {
     stepHasOneTask: activeStep?.[1]?.taskKeys?.length > 0,
     stepHasManyTasks: activeStep?.[1]?.taskKeys?.length > 1
   }
-  const previewEnv = getPreviewEnv();
-  const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
+
   if (!workflow) return null;
 
   return (
     <div className="tasks-page">
       <div className="workflow-title flex-row">
-        <h2 className="flex-item">{workflow?.display_name}</h2>
-        <span className="workflow-id">{`#${workflow?.id}`}</span>
+        <h2 className="flex-item">{workflow.display_name}</h2>
+        <span className="workflow-id">{`#${workflow.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
       <section aria-labelledby="workflow-tasks-heading">
@@ -222,17 +227,27 @@ export default function TasksPage() {
           >
             Add a new Task
           </button>
-          <a
-            className="flex-item button-link"
-            href={previewUrl}
-            rel="noopener noreferrer"
-            target='_blank'
+          <select
+            aria-label="Choose starting Page"
+            className="flex-item workflow-starting-page"
+            onChange={handleChangeStartingPage}
+            style={(workflow?.steps?.length < 1) ? { display: 'none' } : undefined}
+            value={firstStepKey}
           >
-            Preview Workflow <ExternalLinkIcon />
-          </a>
+            <option value="">Choose starting page</option>
+            {workflow.steps?.map(([stepKey, stepBody]) => (
+              <option
+                key={`choose-starting-page-${stepKey}`}
+                value={stepKey}
+              >
+                {firstStepKey === stepKey && 'Starting page: '}
+                {stepBody?.taskKeys?.join(', ') || `(${stepKey})` /* Note: if you see the stepKey instead of the taskKeys, something's wrong. */}
+              </option>
+            ))}
+          </select>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
-          {workflow.steps.map((step, index) => (
+          {workflow.steps?.map((step, index) => (
             <StepItem
               key={`stepItem-${step[0]}`}
               activeDragItem={activeDragItem}

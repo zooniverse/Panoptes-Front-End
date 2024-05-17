@@ -170,30 +170,41 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .workflow-header
-    border-bottom: 0.5px solid $grey1
+    margin-bottom: $sizeXL
 
     a
-      display: inline-block
-      font-size: $fontSizeS
-      text-decoration: none
+      min-width: 40%
 
-      .icon
-        margin-right: $sizeS
+    .workflow-header-links
+      margin-bottom: $sizeM
 
-    button
-      background: none
-      border: none
-      cursor: pointer
-      font-size: $fontSizeL
-      font-weight: $fontWeightBoldPlus
-      text-transform: uppercase
+      a
+        display: inline-block
+        font-size: $fontSizeS
+        text-decoration: none
 
-      &[aria-selected=true]
-        border-bottom: 4px solid $teal
-      
-      &[aria-selected=false]
-        color: $grey1
-        border-bottom: 4px solid transparent
+        .icon
+          margin-right: $sizeS
+
+    .workflow-header-tabs
+      gap: $sizeXL
+      justify-content: center
+      border-bottom: 0.5px solid $grey1
+
+      button
+        background: none
+        border: none
+        cursor: pointer
+        font-size: $fontSizeL
+        font-weight: $fontWeightBoldPlus
+        text-transform: uppercase
+
+        &[aria-selected=true]
+          border-bottom: 4px solid $teal
+        
+        &[aria-selected=false]
+          color: $grey1
+          border-bottom: 4px solid transparent
 
   // Component: Workflow Settings Page
   // ---------------------------------------------------------------------------
@@ -293,6 +304,11 @@ $fontWeightBoldPlus = 700
 
       .status-inactive
         color: $redBright
+    
+    .workflow-starting-page
+      border: 1.5px solid $grey1
+      border-radius: $sizeXS
+      color: $grey2
     
     dialog
       border: 1px solid $grey1
