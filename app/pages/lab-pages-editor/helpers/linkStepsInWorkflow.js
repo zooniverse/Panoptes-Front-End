@@ -10,14 +10,14 @@ Rules for linking steps:
 - Otherwise, each Step's step.next will be the ID of the next Step in the array.
  */
 
-import canStepBranch from './canStepBranch.js';
+import checkCanStepBranch from './checkCanStepBranch.js';
 
 export default function linkStepsInWorkflow(steps = [], tasks = {}) {
   const newSteps = steps.map((step, index) => {
     const [stepId, stepBody] = step;
 
     const isFinalStepInArray = index === (steps.length - 1);
-    const canBranch = canStepBranch(step, tasks);
+    const canBranch = checkCanStepBranch(step, tasks);
     const nextStep = (isFinalStepInArray || canBranch) ? undefined : steps[index+1]?.[0];
 
     const newStepBody = {

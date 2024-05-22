@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import DropTarget from './DropTarget.jsx';
 import TaskItem from './TaskItem.jsx';
 
-import canStepBranch from '../../../../helpers/canStepBranch.js';
+import checkCanStepBranch from '../../../../helpers/checkCanStepBranch.js';
 
 import SimpleNextControls from './SimpleNextControls.jsx';
 
@@ -64,7 +64,7 @@ function StepItem({
     setActiveDragItem(stepIndex);  // Use state because DropTarget's onDragEnter CAN'T read dragEvent.dataTransfer.getData()
   }
 
-  const branchingTaskKey = canStepBranch(step, allTasks);
+  const branchingTaskKey = checkCanStepBranch(step, allTasks);
   
   return (
     <li className="step-item">

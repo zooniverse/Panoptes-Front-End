@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
-import canStepBranch from '../../helpers/canStepBranch.js';
+import checkCanStepBranch from '../../helpers/checkCanStepBranch.js';
 import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
@@ -267,7 +267,7 @@ export default function TasksPage() {
   // 3. if a Step already has many tasks, any multiple answer question task can't be transformed into a single answer question task. 
   const activeStep = workflow?.steps?.[activeStepIndex]
   const enforceLimitedBranchingRule = {
-    stepHasBranch: !!canStepBranch(activeStep, workflow?.tasks),
+    stepHasBranch: !!checkCanStepBranch(activeStep, workflow?.tasks),
     stepHasOneTask: activeStep?.[1]?.taskKeys?.length > 0,
     stepHasManyTasks: activeStep?.[1]?.taskKeys?.length > 1
   }
