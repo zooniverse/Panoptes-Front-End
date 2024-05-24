@@ -267,9 +267,9 @@ export default function TasksPage() {
   // 3. if a Step already has many tasks, any multiple answer question task can't be transformed into a single answer question task. 
   const activeStep = workflow?.steps?.[activeStepIndex]
   const enforceLimitedBranchingRule = {
-    stepHasBranch: !!checkCanStepBranch(activeStep, workflow?.tasks),
-    stepHasOneTask: activeStep?.[1]?.taskKeys?.length > 0,
-    stepHasManyTasks: activeStep?.[1]?.taskKeys?.length > 1
+    stepHasBranch: false && !!checkCanStepBranch(activeStep, workflow?.tasks),
+    stepHasOneTask: false && activeStep?.[1]?.taskKeys?.length > 0,
+    stepHasManyTasks: false && activeStep?.[1]?.taskKeys?.length > 1
   }
 
   if (!workflow) return null;
