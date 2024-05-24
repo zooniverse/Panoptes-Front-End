@@ -136,7 +136,7 @@ function QuestionTask({
               id={`task-${taskKey}-multiple`}
               type="checkbox"
               checked={isMultiple}
-              disabled={enforceLimitedBranchingRule?.stepHasManyTasks && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
+              disabled={enforceLimitedBranchingRule?.stepHasBranch && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
               onChange={(e) => {
                 setIsMultiple(!!e?.target?.checked);
               }}
