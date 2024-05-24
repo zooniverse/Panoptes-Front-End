@@ -48,9 +48,7 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
 EditTaskForm.propTypes = {
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
-    stepHasBranch: PropTypes.bool,
-    stepHasOneTask: PropTypes.bool,
-    stepHasManyTasks: PropTypes.bool
+    stepHasBranch: PropTypes.bool
   }),
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,

@@ -197,9 +197,7 @@ function QuestionTask({
 QuestionTask.propTypes = {
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
-    stepHasBranch: PropTypes.bool,
-    stepHasOneTask: PropTypes.bool,
-    stepHasManyTasks: PropTypes.bool
+    stepHasBranch: PropTypes.bool
   }),
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,

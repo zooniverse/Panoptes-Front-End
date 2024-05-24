@@ -120,9 +120,7 @@ EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
-    stepHasBranch: PropTypes.bool,
-    stepHasOneTask: PropTypes.bool,
-    stepHasManyTasks: PropTypes.bool
+    stepHasBranch: PropTypes.bool
   }),
   onClose: PropTypes.func,
   step: PropTypes.object,

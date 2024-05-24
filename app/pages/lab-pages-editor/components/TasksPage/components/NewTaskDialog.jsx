@@ -125,9 +125,7 @@ function NewTaskDialog({
 NewTaskDialog.propTypes = {
   addTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
-    stepHasBranch: PropTypes.bool,
-    stepHasOneTask: PropTypes.bool,
-    stepHasManyTasks: PropTypes.bool
+    stepHasBranch: PropTypes.bool
   }),
   openEditStepDialog: PropTypes.func,
   stepIndex: PropTypes.number
