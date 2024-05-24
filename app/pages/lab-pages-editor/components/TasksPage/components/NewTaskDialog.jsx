@@ -55,7 +55,7 @@ function NewTaskDialog({
 
   // The Question Task is either a Single Answer Question Task, or a Multiple Answer Question Task.
   // By default, this is 'single', but under certain conditions, a new Question Task will be created as a Multiple Answer Question Task.
-  const questionTaskType = (!enforceLimitedBranchingRule?.stepHasOneTask) ? 'single' : 'multiple'
+  const questionTaskType = (!enforceLimitedBranchingRule?.stepHasBranch) ? 'single' : 'multiple'
 
   return (
     <dialog
