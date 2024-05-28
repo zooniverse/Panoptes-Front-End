@@ -12,10 +12,10 @@
     "react/prefer-stateless-function": 0,
     "react/no-multi-comp": 0,
     "react/react-in-jsx-scope": 0,
-    "react/require-default-props": {
+    "react/require-default-props": ["warn", {
       "classes": "defaultProps",
       "functions": "ignore"
-    },
+    }],
     "no-console": 0,
     "array-callback-return": "off",
     "arrow-body-style": ["warn", "as-needed"],
