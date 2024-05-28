@@ -143,6 +143,7 @@ function StepItem({
                 allSteps={allSteps}
                 isBranchingTask={branchingTaskKey === taskKey}
                 key={`taskItem-${taskKey}`}
+                stepKey={stepKey}
                 task={task}
                 taskKey={taskKey}
                 updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}

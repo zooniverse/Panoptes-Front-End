@@ -5,13 +5,15 @@ const DEFAULT_HANDLER = () => {};
 
 export default function BranchingNextControls({
   allSteps = [],
+  stepKey,
   task,
   taskKey,
   updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
   if (!task || !taskKey) return null;
 
-  const answers = task.answers || []
+  const answers = task.answers || [];
+  const selectableSteps = allSteps.filter(([otherStepKey]) => otherStepKey !== stepKey);
 
   function onChange(e) {
     const next = e.target?.value;
@@ -36,7 +38,7 @@ export default function BranchingNextControls({
             >
               Submit
             </option>
-            {allSteps.map(([stepKey, stepBody]) => {
+            {selectableSteps.map(([stepKey, stepBody]) => {
               const taskKeys = stepBody?.taskKeys?.toString() || '(none)';
               return (
                 <option
@@ -56,6 +58,7 @@ export default function BranchingNextControls({
 
 BranchingNextControls.propTypes = {
   allSteps: PropTypes.arrayOf(PropTypes.array),
+  stepKey: PropTypes.string,
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateNextStepForTaskAnswer: PropTypes.func

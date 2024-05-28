@@ -17,6 +17,7 @@ const DEFAULT_HANDLER = () => {};
 function TaskItem({
   allSteps = [],
   isBranchingTask = false,
+  stepKey,
   task,
   taskKey,
   updateNextStepForTaskAnswer = DEFAULT_HANDLER
@@ -43,6 +44,7 @@ function TaskItem({
       {isBranchingTask && (
         <BranchingNextControls
           allSteps={allSteps}
+          stepKey={stepKey}
           task={task}
           taskKey={taskKey}
           updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
@@ -58,6 +60,7 @@ function TaskItem({
 TaskItem.propTypes = {
   allSteps: PropTypes.arrayOf(PropTypes.array),
   isBranchingTask: PropTypes.bool,
+  stepKey: PropTypes.string,
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateNextStepForTaskAnswer: PropTypes.func
