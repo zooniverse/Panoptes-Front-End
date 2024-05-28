@@ -102,7 +102,7 @@ function EditStepDialog({
           onClick={handleClickAddTaskButton}
           type="button"
         >
-          Add New Task
+          Add another Task to this Page
         </button>
         <button
           className="big done"
