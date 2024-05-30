@@ -102,6 +102,8 @@ export default function TasksPage() {
   function deleteTask(taskKey) {
     // First check: does the task exist?
     // if (!workflow || !taskKey || !workflow?.tasks?.[taskKey]) return;
+    // UPDATE: DON'T actually check if the task exists.
+    // This is useful if a Step refers to a Task that doesn't exist.
 
     // Second check: is this the only task in the step?
     const activeStepTaskKeys = workflow.steps?.[activeStepIndex]?.[1]?.taskKeys || [];
