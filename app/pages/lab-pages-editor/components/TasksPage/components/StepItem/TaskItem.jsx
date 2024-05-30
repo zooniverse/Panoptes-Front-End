@@ -22,7 +22,18 @@ function TaskItem({
   taskKey,
   updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
-  if (!task || !taskKey) return <li className="task-item">ERROR: could not render Task</li>;
+  if (!task || !taskKey) return (
+    <li className="task-item">
+      <div className="flex-row">
+        <span className="task-key">{taskKey || '???'}</span>
+        <p>
+          ERROR: could not render Task
+          {!task && ' (it doesn\'t exist in workflow.tasks)'}
+          {task?.type && ` of type: ${task.type}`}
+        </p>
+      </div>
+    </li>
+  );
 
   // TODO: use Panoptes Translations API.
   // e.g. pull from workflow.strings['tasks.T0.instruction']
