@@ -4,7 +4,7 @@ createReactClass = require 'create-react-class'
 ArticleList = require './article-list'
 Dialog = require 'modal-form/dialog'
 ArticleEditor = require './article-editor'
-actions = require './actions'
+actions = require('./actions').default
 getAllLinked = require('../../../lib/get-all-linked').default
 
 unless process.env.NODE_ENV is 'production'

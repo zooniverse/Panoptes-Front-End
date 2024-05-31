@@ -52,6 +52,7 @@ import IIIFSubjectSet from './pages/lab/iiif'
 import projectLab from './pages/lab/project.jsx'
 import Collaborators from './pages/lab/collaborators.jsx'
 import PagesEditor from './pages/lab-pages-editor'
+import ProjectStatsPage from './pages/project/stats'
 
 // <Redirect from="home" to="/" /> doesn't work.
 
@@ -205,7 +206,7 @@ export const routes = (
         <Route path=":board" component={require('./talk/board')} />
         <Route path=":board/:discussion" component={require('./talk/discussion')} />
       </Route>
-      <Route path="stats" component={require('./pages/project/stats')} />
+      <Route path="stats" component={ProjectStatsPage} />
       <Route path="favorites" component={require('./pages/collections/index')}>
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
@@ -260,7 +261,7 @@ export const routes = (
         <Route path=":board" component={require('./talk/board')} />
         <Route path=":board/:discussion" component={require('./talk/discussion')} />
       </Route>
-      <Route path="stats" component={require('./pages/project/stats')} />
+      <Route path="stats" component={ProjectStatsPage} />
       <Route path="favorites" component={require('./pages/collections/index')}>
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
