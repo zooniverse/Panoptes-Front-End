@@ -83,12 +83,14 @@ function StepItem({
       setContainerStyle({
         height: `${content.offsetHeight - CONTAINER_HEIGHT_OFFSET}px`,
         marginBottom: `${CONTAINER_HEIGHT_OFFSET}px`,
+        // overflow: 'visible'  // Unnecessary here, as this is already specified in the .styl
       });
     } else {
       setContainerStyle({});
     }
   }
 
+  // TODO: experimentalRestyleContainer() should also trigger when the window resizes.
   useEffect(experimentalRestyleContainer, [step])
   
   return (
