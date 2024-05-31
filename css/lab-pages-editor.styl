@@ -535,11 +535,14 @@ $fontWeightBoldPlus = 700
         background: $grey5
         border: 1px solid $grey1
         border-radius: $sizeXS
-        padding: $sizeS $sizeM
+        overflow: visible
 
         &:active
         &:has(.move-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
           outline: 2px solid $yellow
+        
+        .step-body-inner  // Redundant inner content is used for styling "branching next step extrudes from step-body"
+          padding: $sizeS $sizeM
 
       .step-controls
         cursor: grab
