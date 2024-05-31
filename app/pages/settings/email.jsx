@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
+import { host as apiHost } from 'panoptes-client/lib/config';
 import apiClient from 'panoptes-client/lib/api-client';
+import authClient from 'panoptes-client/lib/auth';
 import talkClient from 'panoptes-client/lib/talk-client';
 import AutoSave from '../../components/auto-save';
 import handleInputChange from '../../lib/handle-input-change';
+import getBearerToken from './helpers/getBearerToken';
 
 function TalkPreferenceOption({ preference, index, digest, onChange }) {
   return (
@@ -200,8 +203,11 @@ class EmailSettingsPage extends React.Component {
     });
   }
 
-  requestConfirmationEmail() {
-    console.log('+++ Send confirmation email!')
+  async requestConfirmationEmail() {
+    const url = `${apiHost}/users/confirmation`;
+    const bearerToken = await getBearerToken(authClient);
+    console.log('+++ Send confirmation email!');
+    console.log('+++ apiHost: ', apiHost, '\n bearertoken: ', bearerToken);
   }
 
   handleProjectPreferenceChange(index, event) {
@@ -292,12 +298,10 @@ class EmailSettingsPage extends React.Component {
                   <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailUnverified" />
-                  {/*
                   {' | '}
                   <a href="#" onClick={this.requestConfirmationEmail}>
                     <Translate content="emailSettings.general.emailUnverifiedPrompt" />
                   </a>
-                  */}
                 </div>
             }
           </div>
