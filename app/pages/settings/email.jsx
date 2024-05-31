@@ -152,7 +152,8 @@ class EmailSettingsPage extends React.Component {
       page: 1,
       projects: [],
       projectPreferences: [],
-      talkPreferences: []
+      talkPreferences: [],
+      requestConfirmationEmailStatus: 'idle'
     };
     this.handleProjectPreferenceChange = this.handleProjectPreferenceChange.bind(this);
     this.handleTalkPreferenceChange = this.handleTalkPreferenceChange.bind(this);
@@ -204,10 +205,16 @@ class EmailSettingsPage extends React.Component {
   }
 
   async requestConfirmationEmail() {
-    const url = `${apiHost}/users/confirmation`;
-    const bearerToken = await getBearerToken(authClient);
-    console.log('+++ Send confirmation email!');
-    console.log('+++ apiHost: ', apiHost, '\n bearertoken: ', bearerToken);
+    try {
+      this.setState({ requestConfirmationEmailStatus: 'posting' });
+      const url = `${apiHost}/users/confirmation`;
+      const bearerToken = await getBearerToken(authClient);
+      console.log('+++ Send confirmation email!');
+      console.log('+++ apiHost: ', apiHost, '\n bearertoken: ', bearerToken);
+      this.setState({ requestConfirmationEmailStatus: 'success' });
+    } catch (err) {
+      this.setState({ requestConfirmationEmailStatus: 'error' });
+    }
   }
 
   handleProjectPreferenceChange(index, event) {
@@ -299,9 +306,26 @@ class EmailSettingsPage extends React.Component {
                   {' '}
                   <Translate content="emailSettings.general.emailUnverified" />
                   {' | '}
-                  <a href="#" onClick={this.requestConfirmationEmail}>
-                    <Translate content="emailSettings.general.emailUnverifiedPrompt" />
-                  </a>
+                  {(this.state.requestConfirmationEmailStatus === 'idle') && (
+                    <a href="#" onClick={this.requestConfirmationEmail}>
+                      <Translate content="emailSettings.general.emailUnverifiedPrompt" />
+                    </a>
+                  )}
+                  {(this.state.requestConfirmationEmailStatus === 'posting') && (
+                    <span>
+                      <Translate content="emailSettings.general.emailUnverifiedRequesting" />
+                    </span>
+                  )}
+                  {(this.state.requestConfirmationEmailStatus === 'success') && (
+                    <span>
+                      <Translate content="emailSettings.general.emailUnverifiedSuccess" />
+                    </span>
+                  )}
+                  {(this.state.requestConfirmationEmailStatus === 'error') && (
+                    <span style={{ color: 'red' }}>
+                      <Translate content="emailSettings.general.emailUnverifiedError" />
+                    </span>
+                  )}
                 </div>
             }
           </div>
