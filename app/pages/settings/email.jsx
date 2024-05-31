@@ -140,6 +140,8 @@ Pagination.defaultProps = {
   page: 1
 };
 
+const FAUX_PARAGRAPH_STYLE = { margin: '1em 0' };
+
 class EmailSettingsPage extends React.Component {
   constructor(props) {
     super(props);
@@ -245,15 +247,21 @@ class EmailSettingsPage extends React.Component {
   
     return (
       <div className="content-container">
-        <p>
+        <div style={FAUX_PARAGRAPH_STYLE}>
           <AutoSave resource={this.props.user}>
-            <span className="form-label">
+            <label
+              className="form-label"
+              htmlFor="user-email"
+            >
               <Translate content="emailSettings.email" />
-            </span>
+            </label>
             <br />
             <input
               type="text"
+              aria-describedby="user-email-valid,user-email-verified"
+              autoComplete="email"
               className="standard-input full"
+              id="user-email"
               name="email"
               value={this.props.user.email}
               onChange={handleInputChange.bind(this.props.user)}
@@ -261,12 +269,12 @@ class EmailSettingsPage extends React.Component {
           </AutoSave>
           <div>
             {(isEmailValid)
-              ? <div>
+              ? <div id="user-email-valid">
                   <i className='fa fa-check-circle' style={{ color: '#51db72' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailValid" />
                 </div>
-              : <div>
+              : <div id="user-email-valid">
                   <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailInvalid" />
@@ -275,12 +283,12 @@ class EmailSettingsPage extends React.Component {
                 </div>
             }
             {(isEmailVerfied)
-              ? <div>
+              ? <div id="user-email-verified">
                   <i className='fa fa-check-circle' style={{ color: '#51db72' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailVerified" />
                 </div>
-              : <div>
+              : <div id="user-email-verified">
                   <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailUnverified" />
@@ -293,7 +301,7 @@ class EmailSettingsPage extends React.Component {
                 </div>
             }
           </div>
-        </p>
+        </div>
         <p>
           <strong>
             <Translate content="emailSettings.general.section" />
