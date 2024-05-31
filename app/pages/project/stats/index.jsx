@@ -121,4 +121,4 @@ ProjectStatsPageController.propTypes = {
   params: PropTypes.object
 };
 
-module.exports = ProjectStatsPageController;
+export default ProjectStatsPageController;
