@@ -7,7 +7,7 @@ import OptionsIcon from '../../../../icons/OptionsIcon.jsx'
 
 const DEFAULT_HANDLER = () => {}
 
-function EditStepDialog({
+function EditStepDialogWithRef({
   allTasks = {},
   copyStep = DEFAULT_HANDLER,
   deleteStep = DEFAULT_HANDLER,
@@ -159,6 +159,8 @@ function EditStepDialog({
   )
 }
 
+const EditStepDialog = forwardRef(EditStepDialogWithRef);
+
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   copyStep:PropTypes.func,
@@ -178,4 +180,4 @@ function onSubmit(e) {
   return false
 }
 
-export default forwardRef(EditStepDialog)
+export default EditStepDialog
