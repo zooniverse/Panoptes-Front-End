@@ -18,7 +18,7 @@ import MoveUpIcon from '../../../../icons/MoveUpIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 const ENABLE_EXPERIMENTAL_CONTAINER_STYLE = true;  // If enabled, and the last Task is a branching Task, then the .step-body container will be restyled so that the "next step" arrows APPEAR OUTSIDE the container.
-const CONTAINER_HEIGHT_OFFSET = 60;  // This value is eyeballed. Adjust as necessary.
+const CONTAINER_HEIGHT_OFFSET = 64;  // This value is eyeballed. Adjust as necessary.
 
 function StepItem({
   activeDragItem = -1,
@@ -77,8 +77,9 @@ function StepItem({
     if (!content || !container || !ENABLE_EXPERIMENTAL_CONTAINER_STYLE) return;
 
     const lastTaskInStep = taskKeys.at(-1);
+    const lastTaskHasAnswers = allTasks?.[lastTaskInStep]?.answers?.length > 0
     const contentHeight = content.offsetHeight;
-    if (lastTaskInStep === branchingTaskKey && contentHeight) {
+    if (lastTaskInStep === branchingTaskKey && lastTaskHasAnswers && contentHeight) {
       setContainerStyle({
         height: `${content.offsetHeight - CONTAINER_HEIGHT_OFFSET}px`,
         marginBottom: `${CONTAINER_HEIGHT_OFFSET}px`,
