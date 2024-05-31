@@ -7,7 +7,7 @@ import TaskIcon from '../../../icons/TaskIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
-function NewTaskDialog({
+function NewTaskDialogWithRef({
   addTask = DEFAULT_HANDLER,
   enforceLimitedBranchingRule,
   openEditStepDialog = DEFAULT_HANDLER,
@@ -122,6 +122,8 @@ function NewTaskDialog({
   );
 }
 
+const NewTaskDialog = forwardRef(NewTaskDialogWithRef);
+
 NewTaskDialog.propTypes = {
   addTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
@@ -136,4 +138,4 @@ function onSubmit(e) {
   return false;
 }
 
-export default forwardRef(NewTaskDialog);
+export default NewTaskDialog;
