@@ -140,6 +140,8 @@ Pagination.defaultProps = {
   page: 1
 };
 
+const FAUX_PARAGRAPH_STYLE = { margin: '1em 0' };
+
 class EmailSettingsPage extends React.Component {
   constructor(props) {
     super(props);
@@ -151,6 +153,7 @@ class EmailSettingsPage extends React.Component {
     };
     this.handleProjectPreferenceChange = this.handleProjectPreferenceChange.bind(this);
     this.handleTalkPreferenceChange = this.handleTalkPreferenceChange.bind(this);
+    this.requestConfirmationEmail = this.requestConfirmationEmail.bind(this);
     this.getProjectForPreferences(props.user);
     this.getTalkPreferences();
   }
@@ -197,6 +200,10 @@ class EmailSettingsPage extends React.Component {
     });
   }
 
+  requestConfirmationEmail() {
+    console.log('+++ Send confirmation email!')
+  }
+
   handleProjectPreferenceChange(index, event) {
     const { projectPreferences } = this.state;
     projectPreferences[index].update({
@@ -235,23 +242,66 @@ class EmailSettingsPage extends React.Component {
   }
 
   render() {
+    const isEmailValid = !!this.props.user?.valid_email;
+    const isEmailVerfied = !!this.props.user?.confirmed_at;
+  
     return (
       <div className="content-container">
-        <p>
+        <div style={FAUX_PARAGRAPH_STYLE}>
           <AutoSave resource={this.props.user}>
-            <span className="form-label">
+            <label
+              className="form-label"
+              htmlFor="user-email"
+            >
               <Translate content="emailSettings.email" />
-            </span>
+            </label>
             <br />
             <input
               type="text"
+              aria-describedby="user-email-valid,user-email-verified"
+              autoComplete="email"
               className="standard-input full"
+              id="user-email"
               name="email"
               value={this.props.user.email}
               onChange={handleInputChange.bind(this.props.user)}
             />
           </AutoSave>
-        </p>
+          <div>
+            {(isEmailValid)
+              ? <div id="user-email-valid">
+                  <i className='fa fa-check-circle' style={{ color: '#51db72' }} />
+                  {' '}
+                  <Translate content="emailSettings.general.emailValid" />
+                </div>
+              : <div id="user-email-valid">
+                  <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
+                  {' '}
+                  <Translate content="emailSettings.general.emailInvalid" />
+                  {' | '}
+                  <Translate content="emailSettings.general.emailInvalidPrompt" />
+                </div>
+            }
+            {(isEmailVerfied)
+              ? <div id="user-email-verified">
+                  <i className='fa fa-check-circle' style={{ color: '#51db72' }} />
+                  {' '}
+                  <Translate content="emailSettings.general.emailVerified" />
+                </div>
+              : <div id="user-email-verified">
+                  <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
+                  {' '}
+                  <Translate content="emailSettings.general.emailUnverified" />
+                  {/*
+                  {' | '}
+                  <a href="#" onClick={this.requestConfirmationEmail}>
+                    <Translate content="emailSettings.general.emailUnverifiedPrompt" />
+                  </a>
+                  */}
+                </div>
+            }
+          </div>
+        </div>
         <p>
           <strong>
             <Translate content="emailSettings.general.section" />
