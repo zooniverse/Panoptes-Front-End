@@ -209,8 +209,16 @@ class EmailSettingsPage extends React.Component {
       this.setState({ requestConfirmationEmailStatus: 'posting' });
       const url = `${apiHost}/users/confirmation`;
       const bearerToken = await getBearerToken(authClient);
-      console.log('+++ Send confirmation email!');
-      console.log('+++ apiHost: ', apiHost, '\n bearertoken: ', bearerToken);
+      const res = await fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          accept: 'application/vnd.api+json; version=1',
+          Authorization: bearerToken,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!res.ok) throw new Error();
       this.setState({ requestConfirmationEmailStatus: 'success' });
     } catch (err) {
       this.setState({ requestConfirmationEmailStatus: 'error' });
