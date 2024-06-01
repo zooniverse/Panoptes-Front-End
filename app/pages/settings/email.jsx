@@ -258,7 +258,7 @@ class EmailSettingsPage extends React.Component {
             <br />
             <input
               type="text"
-              aria-describedby="user-email-valid,user-email-verified"
+              aria-describedby="user-email-valid user-email-verified"
               autoComplete="email"
               className="standard-input full"
               id="user-email"
