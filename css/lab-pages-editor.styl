@@ -80,6 +80,7 @@ $fontWeightBoldPlus = 700
   
   select
     border: 1.5px solid $grey1
+    border-radius: $sizeXS
     color: $black
     font-size: $fontSizeM
     padding: $sizeS
@@ -118,7 +119,7 @@ $fontWeightBoldPlus = 700
   hr
     border-top: 1px solid $grey2
   
-  .disabled, .disabled *
+  .disabled, .disabled *, [disabled]
     color: $grey1
   
   .decoration-plus
@@ -160,11 +161,17 @@ $fontWeightBoldPlus = 700
   .justify-around
     justify-content: space-around
   
+  .position-relative
+    position: relative
+  
   .spacing-bottom-XS
     margin-bottom: $sizeXS
   
   .spacing-bottom-M
     margin-bottom: $sizeM
+  
+  .workflow-version
+    color: $teal
 
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
@@ -212,25 +219,33 @@ $fontWeightBoldPlus = 700
   .workflow-settings-page
     display: grid
     gap: $sizeM
-    grid-template-columns: auto auto
+    grid-template-columns: 50% auto
     grid-template-rows: auto auto
     margin-top: $sizeS
 
     // Workflow Title
-    label[for=display_name]
-      display: block
-      font-size: $fontSizeL
-      font-weight: $fontWeightBoldPlus
+    .workflow-title
       grid-column: 1 / span 2
       grid-row: 1
-      text-transform: uppercase
 
-      input
+      label[for=display_name]
+        display: block
+        font-size: $fontSizeL
+        font-weight: $fontWeightBoldPlus
+        margin-bottom: $sizeXS
+        text-transform: uppercase
+
+      input[name=display_name]
         border-radius: $sizeXS
         display: block
         font-size: $fontSizeL
-        margin-top: $sizeXS
         width: 100%
+      
+      .workflow-id
+        color: $grey2
+        background: $white
+        position: absolute
+        right: $sizeS
     
     // Group of Config Options/Controls
     fieldset
@@ -247,9 +262,12 @@ $fontWeightBoldPlus = 700
       p
         font-size: $fontSizeS
       
-      .small-info
+      p.small-info
         font-size: $fontSizeS
         font-style: italic
+      
+      span.small-info
+        font-size: $fontSizeS
 
     .col-1
       grid-column: 1
@@ -290,10 +308,6 @@ $fontWeightBoldPlus = 700
         font-weight: $fontWeightBoldPlus
         text-transform: uppercase
       
-      .workflow-id
-        color: $grey4
-        font-size: $fontSizeS
-
       .status-active, .status-inactive
         font-size: $fontSizeS
         margin-left: $sizeS
@@ -310,6 +324,17 @@ $fontWeightBoldPlus = 700
       border-radius: $sizeXS
       color: $grey2
     
+    .no-tasks-notice
+      padding: $sizeL
+      text-align: center
+
+      .icon
+        color: $yellow
+        font-size: $sizeXXL
+      
+      p
+        color: $grey1
+
     dialog
       border: 1px solid $grey1
       border-radius: $sizeS
@@ -526,6 +551,7 @@ $fontWeightBoldPlus = 700
         &.next-is-submit
           background: $white
           border: 2px solid $yellow
+          color: $black
 
       &.simple-next-controls
         display: flex
@@ -568,6 +594,14 @@ $fontWeightBoldPlus = 700
     font-size: $fontSizeXS
     padding: $sizeS $sizeM
     text-align: center
+  
+  .fake-submit
+    background: $white
+    border-radius: $sizeM
+    border: 2px solid $yellow
+    color: $black
+    font-size: $fontSizeXS
+    padding: $sizeS $sizeM
   
   .fake-text-input
     background: $white

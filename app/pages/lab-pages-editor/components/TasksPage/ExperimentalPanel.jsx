@@ -5,6 +5,7 @@ export default function ExperimentalPanel({
 }) {
   function experimentalReset() {
     update({
+      configuration: {},
       first_task: '',
       tasks: {},
       steps: []

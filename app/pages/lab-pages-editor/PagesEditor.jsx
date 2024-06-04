@@ -17,9 +17,17 @@ import TasksPage from './components/TasksPage';
 import WorkflowSettingsPage from './components/WorkflowSettingsPage';
 import strings from './strings.json';
 
+function getDefaultTab() {  // Use ?tab=1 or tab='settings' to link directly to Workflow Settings
+  const params = new URLSearchParams(window?.location?.search);
+  const tab = params.get('tab');
+
+  if ([1, '1', 'settings', 'workflowsettings'].includes(tab)) return 1;
+  return 0;
+}
+
 function PagesEditor({ params }) {
   const { workflowID: workflowId, projectID: projectId } = params;
-  const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState(getDefaultTab());  // Default tab is 0
   const tabs = [
     {
       id: 'pages-editor_workflow-header-tab-button_task',

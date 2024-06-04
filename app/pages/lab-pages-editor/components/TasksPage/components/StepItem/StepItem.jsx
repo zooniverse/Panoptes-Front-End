@@ -24,6 +24,7 @@ function StepItem({
   deleteStep = DEFAULT_HANDLER,
   moveStep = DEFAULT_HANDLER,
   openEditStepDialog = DEFAULT_HANDLER,
+  isLinearWorkflow = false,
   setActiveDragItem = DEFAULT_HANDLER,
   step,
   stepIndex,
@@ -33,6 +34,7 @@ function StepItem({
   const [stepKey, stepBody] = step || [];
   if (!stepKey || !stepBody || !allSteps || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
 
+  const isLastItem = stepIndex === allSteps.length - 1;
   const taskKeys = stepBody.taskKeys || [];
 
   function doDelete() {
@@ -142,6 +144,8 @@ function StepItem({
       {!branchingTaskKey && (
         <SimpleNextControls
           allSteps={allSteps}
+          isLastItem={isLastItem}
+          isLinearWorkflow={isLinearWorkflow}
           step={step}
           updateNextStepForStep={updateNextStepForStep}
         />
@@ -161,6 +165,7 @@ StepItem.propTypes = {
   allSteps: PropTypes.array,
   allTasks: PropTypes.object,
   deleteStep: PropTypes.func,
+  isLinearWorkflow: PropTypes.bool,
   moveStep: PropTypes.func,
   openEditStepDialog: PropTypes.func,
   setActiveDragItem: PropTypes.func,

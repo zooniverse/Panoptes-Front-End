@@ -5,6 +5,7 @@ import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
 import getNewTaskKey from '../../helpers/getNewTaskKey.js';
+import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
@@ -13,6 +14,17 @@ import ExperimentalPanel from './ExperimentalPanel.jsx';
 import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
+import WorkflowVersion from '../WorkflowVersion.jsx';
+import WrenchIcon from '../../icons/WrenchIcon.jsx';
+
+// Use ?advanced=true to enable advanced mode.
+// - switches from simpler "linear workflow" to "manual workflow".
+// - enables Experimental Panel.
+// - shows hidden options in workflow settings.
+function getAdvancedMode() {
+  const params = new URLSearchParams(window?.location?.search);
+  return !!params.get('advanced');
+}
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
@@ -22,6 +34,13 @@ export default function TasksPage() {
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const firstStepKey = workflow?.steps?.[0]?.[0] || '';
   const isActive = true; // TODO
+  const advancedMode = getAdvancedMode();
+
+  // A linear workflow means every step (except branching steps) will move into
+  // the next step in the workflow.steps array. e.g. step0.next = step1 
+  // A manual (i.e. non-linear) workflow asks the user to explicity spell out
+  // the next step of each step. 
+  const isLinearWorkflow = !advancedMode;
 
   /*
   Adds a new Task of a specified type (with default settings) to a Step.
@@ -32,7 +51,7 @@ export default function TasksPage() {
     if (!workflow) return;
     const newTaskKey = getNewTaskKey(workflow.tasks);
     const newTask = createTask(taskType);
-    const steps = workflow.steps?.slice() || [];
+    let steps = workflow.steps?.slice() || [];
     
     let step
     if (stepIndex < 0) {
@@ -61,6 +80,10 @@ export default function TasksPage() {
       ...workflow.tasks,
       [newTaskKey]: newTask
     };
+
+    if (linkStepsInWorkflow) {
+      steps = linkStepsInWorkflow(steps, tasks);
+    }
 
     await update({ tasks, steps });
     return (stepIndex < 0) ? steps.length - 1 : stepIndex;
@@ -117,7 +140,10 @@ export default function TasksPage() {
     const oldSteps = workflow.steps || [];
     if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
 
-    const steps = moveItemInArray(oldSteps, from, to);
+    let steps = moveItemInArray(oldSteps, from, to);
+    if (linkStepsInWorkflow) {
+      steps = linkStepsInWorkflow(steps, workflow.tasks);
+    }
     update({ steps });
   }
 
@@ -134,6 +160,9 @@ export default function TasksPage() {
 
     // cleanedupTasksAndSteps() will also remove tasks not associated with any step.
     const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
+    if (linkStepsInWorkflow) {
+      cleanedTasksAndSteps.steps = linkStepsInWorkflow(cleanedTasksAndSteps.steps, cleanedTasksAndSteps.tasks);
+    }
     update(cleanedTasksAndSteps);
   }
 
@@ -214,11 +243,13 @@ export default function TasksPage() {
     <div className="tasks-page">
       <div className="workflow-title flex-row">
         <h2 className="flex-item">{workflow.display_name}</h2>
-        <span className="workflow-id">{`#${workflow.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
       <section aria-labelledby="workflow-tasks-heading">
-        <h3 id="workflow-tasks-heading">Tasks</h3>
+        <div className="flex-row">
+          <h3 id="workflow-tasks-heading" className="flex-item">Tasks</h3>
+          <WorkflowVersion />
+        </div>
         <div className="flex-row">
           <button
             className="flex-item big primary decoration-plus"
@@ -246,6 +277,12 @@ export default function TasksPage() {
             ))}
           </select>
         </div>
+        {!(workflow.steps?.length > 0) && (
+          <div className="no-tasks-notice">
+            <WrenchIcon />
+            <p>Start by adding tasks to build your Task Funnel here.</p>
+          </div>
+        )}
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps?.map((step, index) => (
             <StepItem
@@ -255,6 +292,7 @@ export default function TasksPage() {
               allTasks={workflow.tasks}
               deleteStep={deleteStep}
               moveStep={moveStep}
+              isLinearWorkflow={isLinearWorkflow}
               openEditStepDialog={openEditStepDialog}
               setActiveDragItem={setActiveDragItem}
               step={step}
@@ -285,9 +323,11 @@ export default function TasksPage() {
         />
 
         {/* EXPERIMENTAL */}
-        <ExperimentalPanel
-          update={update}
-        />
+        {advancedMode && (
+          <ExperimentalPanel
+            update={update}
+          />
+        )}
       </section>
     </div>
   );
