@@ -207,7 +207,7 @@ export default function WorkflowSettingsPage() {
             <ul className="input-group">
               <li key="separate-frames-as-col">
                 <input
-                  checked={workflow?.configuration?.multi_image_layout === 'col'}
+                  checked={workflow?.configuration?.multi_image_layout === 'col' || workflow?.configuration?.multi_image_layout === undefined /* Default option */}
                   id="separate-frames-as-col"
                   onChange={doUpdate}
                   name="configuration.multi_image_layout"
