@@ -47,9 +47,7 @@ class LinePlotModel {
             data: {
               x: data.x,
               y: data.y
-            }
-          },
-          {
+            },
             chartOptions: {
               xAxisLabel: 'Days',
               yAxisLabel: 'Brightness'
