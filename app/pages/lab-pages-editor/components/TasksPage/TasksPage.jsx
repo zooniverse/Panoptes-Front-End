@@ -147,6 +147,41 @@ export default function TasksPage() {
     update({ steps });
   }
 
+  function copyStep(stepIndex) {
+    if (!workflow) return;
+    const { steps, tasks } = workflow;
+    const [ stepKey, stepBody ] = steps[stepIndex] || [];
+
+    const confirmed = confirm(`Copy Page ${stepKey}?`);
+    if (!confirmed) return;
+
+    const newSteps = steps.slice();  // Copy Steps.
+    const newTasks = tasks ? { ...tasks } : {};  // Copy Tasks.
+
+    // Duplicate tasks of the Step we want to copy.
+    // Each task needs a new task key.
+    const tasksToCopy = stepBody?.taskKeys || [];
+    const newTaskKeys = [];
+    tasksToCopy.forEach(originalKey => {
+      const newTaskKey = getNewTaskKey(newTasks);
+      newTaskKeys.push(newTaskKey);
+      const newTask = structuredClone(tasks[originalKey]);  // Copy.
+      newTasks[newTaskKey] = newTask;
+    })
+
+    // Duplicate the Step we want. It needs a new step key.
+    const newStepKey = getNewStepKey(newSteps);
+    const newStep = [ newStepKey, { ...stepBody, taskKeys: newTaskKeys } ];
+    newSteps.push(newStep);
+
+    // cleanedupTasksAndSteps() will also remove tasks not associated with any step.
+    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
+    if (linkStepsInWorkflow) {
+      cleanedTasksAndSteps.steps = linkStepsInWorkflow(cleanedTasksAndSteps.steps, cleanedTasksAndSteps.tasks);
+    }
+    update(cleanedTasksAndSteps);
+  }
+
   function deleteStep(stepIndex) {
     if (!workflow) return;
     const { steps, tasks } = workflow;
@@ -290,6 +325,7 @@ export default function TasksPage() {
               activeDragItem={activeDragItem}
               allSteps={workflow.steps}
               allTasks={workflow.tasks}
+              copyStep={copyStep}
               deleteStep={deleteStep}
               moveStep={moveStep}
               isLinearWorkflow={isLinearWorkflow}
