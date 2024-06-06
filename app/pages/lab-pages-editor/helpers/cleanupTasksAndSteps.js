@@ -9,7 +9,7 @@ Clean up tasks and steps.
  */
 
 export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
-  const newTasks = structuredClone(tasks);  // Copy tasks
+  const newTasks = structuredClone(tasks);  // Copy tasks.
   let newSteps = structuredClone(steps);  // Copy steps. This is a deep copy, compared to steps.slice()
 
   // Remove steps without tasks.

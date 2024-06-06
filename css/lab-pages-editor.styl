@@ -6,6 +6,7 @@ $grey5 = #E2E5E9
 $grey6 = #EFF2F5
 $black = #000000
 $teal = #00979D
+$darkGreen = #005D69
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
@@ -166,6 +167,9 @@ $fontWeightBoldPlus = 700
   
   .spacing-bottom-XS
     margin-bottom: $sizeXS
+  
+  .spacing-bottom-S
+    margin-bottom: $sizeS
   
   .spacing-bottom-M
     margin-bottom: $sizeM
@@ -394,14 +398,21 @@ $fontWeightBoldPlus = 700
         background: $white
       
         .dialog-body
-          padding: $sizeS $sizeL
+          max-height: 70vh
+          overflow: auto
       
-        .edit-task-form
+        fieldset.edit-task-form
           // Yup, the form is actually a fieldset, so maybe strip out the default values
-          padding: 0
+          padding: $sizeM $sizeL
           margin: 0
-          border: none
+          border-bottom: none
+          border-left: none
+          border-right: none
+          border-top: 1px solid $grey1
 
+          &:first-child
+            border-top: none
+          
           legend
             display: none  // TODO: reconsider design
 
@@ -412,7 +423,6 @@ $fontWeightBoldPlus = 700
             display: block
             font-weight: $fontWeightBold
             font-size: $fontSizeL
-            margin-bottom: $sizeS
             text-transform: uppercase
           
           label.narrow, span.narrow
@@ -435,7 +445,7 @@ $fontWeightBoldPlus = 700
           textarea
             min-height: 8em
           
-          .single-question-task
+          .question-task
             ul
               list-style: none
               margin: 0
@@ -444,10 +454,68 @@ $fontWeightBoldPlus = 700
             li
               margin: $sizeSM 0
               padding: 0
+          
+          .drawing-task
+            ul
+              list-style: none
+              margin: 0
+              padding: 0
+            
+            li
+              background: $grey6
+              border: 1px solid $darkGreen
+              border-radius: $sizeXS
+              margin: $sizeSM 0
+              padding: $sizeM
+
+            .grid
+              display: grid
+              gap: $sizeM
+              grid-template-columns: auto auto 16.5% 16.5%
+              grid-template-rows: auto auto
+              margin-top: $sizeM
+
+            .grid-item
+              label
+                display: block
+              
+              select, input
+                width: 100%
+              
+              .with-preview
+                .preview-box
+                  border: 1px solid $black
+                  flex: 0 0 auto
+                  height: $sizeL
+                  width: $sizeL
+
+                select, input
+                  flex: 1 1 auto
+                  width: auto
+
+            .grid-item-1
+              grid-column: 1
+              grid-row: 1
+            
+            .grid-item-2
+              grid-column: 2
+              grid-row: 1
+            
+            .grid-item-3
+              grid-column: 3
+              grid-row: 1
+            
+            .grid-item-4
+              grid-column: 4
+              grid-row: 1
+            
+            .grid-item-5
+              grid-column: 3 / span 2
+              grid-row: 2
         
       .dialog-footer
         padding: $sizeXS $sizeL $sizeL $sizeL
-        margin-bottom: $sizeL
+        margin-bottom: $sizeS
 
     section
       h3
@@ -612,6 +680,28 @@ $fontWeightBoldPlus = 700
     font-size: $fontSizeS
     padding: $sizeS $sizeM
     box-shadow: 1px 1px 4px 0px $shadowColour inset
+  
+  .fake-drawing-tools
+    list-style: none
+    margin: 0
+    padding: 0
+
+    li
+      background: $darkGreen
+      border-radius: $sizeXS
+      color: $white
+      font-size: $fontSizeS
+      margin: 0 auto $sizeS auto
+      max-width: 600px
+      padding: $sizeS $sizeL
+
+    .icon-wrapper
+      background: $black
+      border-radius: $sizeXS
+      display: flex
+      justify-content: center
+      align-items: center
+      padding: $sizeS
 
 .debug-0
   width: 6em

@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
-export default function TextTask({
+function TextTask({
+  deleteTask = DEFAULT_HANDLER,
+  stepHasManyTasks = false,
   task,
   taskKey,
-  deleteTask = DEFAULT_HANDLER,
   updateTask = DEFAULT_HANDLER
 }) {
   const [ help, setHelp ] = useState(task?.help || '');
   const [ instruction, setInstruction ] = useState(task?.instruction || '');
   const [ required, setRequired ] = useState(!!task?.required);
-
+  const title = stepHasManyTasks ? 'Text Task' : 'Main Text';
   // Update is usually called manually onBlur, after user input is complete.
   function update() {
     const newTask = {
@@ -37,10 +40,10 @@ export default function TextTask({
     <div className="text-task">
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
         >
-          Main Text
+          {title}
         </label>
         <div className="flex-row">
           <span className="task-key">{taskKey}</span>
@@ -79,7 +82,7 @@ export default function TextTask({
       </div>
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-help`}
         >
           Help Text
@@ -94,3 +97,13 @@ export default function TextTask({
     </div>
   );
 }
+
+TextTask.propTypes = {
+  deleteTask: PropTypes.func,
+  stepHasManyTasks: PropTypes.bool,
+  task: PropTypes.object,
+  taskKey: PropTypes.string,
+  updateTask: PropTypes.func
+};
+
+export default TextTask;

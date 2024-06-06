@@ -23,6 +23,7 @@ function TaskIcon({
 }
 
 TaskIcon.propTypes = {
+  alt: PropTypes.string,
   type: PropTypes.string
 };
 

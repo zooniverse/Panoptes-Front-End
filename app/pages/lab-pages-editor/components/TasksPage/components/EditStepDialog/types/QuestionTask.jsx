@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
 import MinusIcon from '../../../../../icons/MinusIcon.jsx';
@@ -6,18 +7,20 @@ import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
-export default function SingleQuestionTask({
-  enforceLimitedBranchingRule,
+function QuestionTask({
   deleteTask = DEFAULT_HANDLER,
+  enforceLimitedBranchingRule,
+  stepHasManyTasks = false,
   task,
   taskKey,
-  updateTask = DEFAULT_HANDLER  
+  updateTask = DEFAULT_HANDLER
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
   const [ help, setHelp ] = useState(task?.help || '');
   const [ question, setQuestion ] = useState(task?.question || '');  // TODO: figure out if FEM is standardising Question vs Instructions
   const [ required, setRequired ] = useState(!!task?.required);
   const [ isMultiple, setIsMultiple ] = useState(task?.type === 'multiple');
+  const title = stepHasManyTasks ? 'Question Task' : 'Main Text';
 
   // Update is usually called manually onBlur, after user input is complete.
   function update(optionalStateOverrides) {
@@ -61,7 +64,7 @@ export default function SingleQuestionTask({
     const index = e?.target?.dataset?.index;
     if (index === undefined || index < 0 || index >= answers.length) return;
 
-    const newAnswers = answers.slice()
+    const newAnswers = answers.slice();  // Copy answers
     newAnswers.splice(index, 1);
     setAnswers(newAnswers);
     update({ answers: newAnswers });  // Use optional state override, since setAnswers() won't reflect new values in this step of the lifecycle.
@@ -76,13 +79,13 @@ export default function SingleQuestionTask({
   useEffect(update, [required, isMultiple]);
 
   return (
-    <div className="single-question-task">
+    <div className="question-task">
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
         >
-          Main Text
+          {title}
         </label>
         <div className="flex-row">
           <span className="task-key">{taskKey}</span>
@@ -105,7 +108,7 @@ export default function SingleQuestionTask({
         </div>
       </div>
       <div className="input-row">
-        <span className="big">Choices</span>
+        <span className="big spacing-bottom-S">Choices</span>
         <div className="flex-row">
           <button
             aria-label="Add choice"
@@ -149,7 +152,7 @@ export default function SingleQuestionTask({
           {answers.map(({ label, next }, index) => (
             <li
               className="flex-row"
-              key={`single-question-task-answer-${index}`}
+              key={`question-task-answer-${index}`}
             >
               <input
                 aria-label={`Choice ${index}`}
@@ -175,7 +178,7 @@ export default function SingleQuestionTask({
       </div>
       <div className="input-row">
         <label
-          className="big"
+          className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-help`}
         >
           Help Text
@@ -190,3 +193,18 @@ export default function SingleQuestionTask({
     </div>
   );
 }
+
+QuestionTask.propTypes = {
+  deleteTask: PropTypes.func,
+  enforceLimitedBranchingRule: PropTypes.shape({
+    stepHasBranch: PropTypes.bool,
+    stepHasOneTask: PropTypes.bool,
+    stepHasManyTasks: PropTypes.bool
+  }),
+  stepHasManyTasks: PropTypes.bool,
+  task: PropTypes.object,
+  taskKey: PropTypes.string,
+  updateTask: PropTypes.func
+};
+
+export default QuestionTask;
