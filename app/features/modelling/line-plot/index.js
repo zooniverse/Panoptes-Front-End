@@ -30,6 +30,7 @@ function getDatasets(data) {
   if (data.x && data.y) {
     return [getXYData(data)];
   }
+  return [];
 }
 
 // Help at http://www.chartjs.org/docs/latest
