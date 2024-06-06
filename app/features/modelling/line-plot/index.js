@@ -115,10 +115,11 @@ class LinePlotModel {
           }
         }
       );
-    }
     const { height, width } = canvas.getBoundingClientRect()
     onLoad({ height, width })
+    }
   }
+
   update() {
     return null;
   }
