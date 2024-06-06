@@ -1,5 +1,6 @@
 export default {
   ar: require('./ar').default,
+  bn: require('./bn').default,
   cs: require('./cs').default,
   de: require('./de').default,
   en: require('./en').default,

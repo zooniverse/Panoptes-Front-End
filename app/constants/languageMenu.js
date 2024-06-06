@@ -1,7 +1,8 @@
 export default {
-  af: 'Afrikaans',
   en: 'English',
+  af: 'Afrikaans',
   ar: 'العربية',
+  bn: 'বাংলা',
   cs: 'Čeština',
   de: 'Deutsch',
   es: 'Español',
