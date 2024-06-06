@@ -40,6 +40,23 @@ class LinePlotModel {
     this.frame = frame;
     fetch(`${src}?=`)
       .then(response => response.json())
+      .then(data => {
+        if(data.x && data.y) {
+          return {
+            data: {
+              x: data.x,
+              y: data.y
+            }
+          },
+          {
+            chartOptions: {
+              xAxisLabel: 'Days',
+              yAxisLabel: 'Brightness'
+            }
+          };
+        }
+        return data;
+      })
       .then(({ data, chartOptions, ...rest }) => {
         const datasets = getDatasets(data);
         console.log({
