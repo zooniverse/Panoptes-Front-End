@@ -10,6 +10,7 @@ const languages = [
   { value: 'ba-ru', label: 'Bashkir (Russia)' },
   { value: 'eu', label: 'Basque' },
   { value: 'be', label: 'Belarusian' },
+  { value: 'bn', label: 'Bengali' },
   { value: 'bn-bd', label: 'Bengali (Bangladesh)' },
   { value: 'bn-in', label: 'Bengali (India)' },
   { value: 'bs-cyrl-ba', label: 'Bosnian (Cyrillic, Bosnia and Herzegovina)' },
