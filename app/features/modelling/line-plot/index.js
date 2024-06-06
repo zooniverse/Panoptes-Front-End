@@ -27,7 +27,7 @@ function getDatasets(data) {
   if (data?.map) {
     return data.map(getSeriesData);
   }
-  if (data.x && data.y) {
+  if (data?.x && data?.y) {
     return [getXYData(data)];
   }
   return [];
