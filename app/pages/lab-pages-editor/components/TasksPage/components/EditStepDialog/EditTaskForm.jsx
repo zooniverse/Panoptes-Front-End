@@ -4,6 +4,7 @@ import DrawingTask from './types/DrawingTask.jsx';
 import QuestionTask from './types/QuestionTask.jsx';
 import TextTask from './types/TextTask.jsx';
 import UnknownTask from './types/UnknownTask.jsx';
+import DeleteIcon from '../../../../icons/DeleteIcon.jsx';
 
 const taskTypes = {
   'drawing': DrawingTask,
@@ -21,7 +22,28 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
   taskIndexInStep,
   updateTask
 }) {
-  if (!task || !taskKey) return <li>ERROR: could not render Task</li>;
+  if (!task || !taskKey) return (
+    <fieldset
+      className="edit-task-form"
+    >
+      <div className="flex-row">
+        <span className="task-key">{taskKey || '???'}</span>
+        <p className="flex-item">
+          ERROR: could not render Task
+          {!task && ' (it doesn\'t exist in workflow.tasks)'}
+          {task?.type && ` of type: ${task.type}`}
+        </p>
+        <button
+          aria-label={`Delete Task ${taskKey || '???'}`}
+          className="big"
+          onClick={() => { deleteTask(taskKey) }}
+          type="button"
+        >
+          <DeleteIcon />
+        </button>
+      </div>
+    </fieldset>
+  );
 
   const TaskForm = taskTypes[task.type] || UnknownTask;
   
@@ -48,9 +70,7 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
 EditTaskForm.propTypes = {
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
-    stepHasBranch: PropTypes.bool,
-    stepHasOneTask: PropTypes.bool,
-    stepHasManyTasks: PropTypes.bool
+    stepHasBranch: PropTypes.bool
   }),
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,

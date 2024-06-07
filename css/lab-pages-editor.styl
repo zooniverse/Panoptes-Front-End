@@ -85,6 +85,7 @@ $fontWeightBoldPlus = 700
     color: $black
     font-size: $fontSizeM
     padding: $sizeS
+    -webkit-appearance: none  // Remove gradient overlay in Safari
   
   button
     border-radius: $sizeXS
@@ -535,11 +536,14 @@ $fontWeightBoldPlus = 700
         background: $grey5
         border: 1px solid $grey1
         border-radius: $sizeXS
-        padding: $sizeS $sizeM
+        overflow: visible
 
         &:active
         &:has(.move-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
           outline: 2px solid $yellow
+        
+        .step-body-inner  // Redundant inner content is used for styling "branching next step extrudes from step-body"
+          padding: $sizeS $sizeM
 
       .step-controls
         cursor: grab
@@ -594,7 +598,7 @@ $fontWeightBoldPlus = 700
         margin-top: 0
 
       .task-text
-        font-size: $fontSizeS
+        font-size: $fontSizeM
         font-weight: $fontWeightBold
       
     .grab-handle
@@ -614,7 +618,7 @@ $fontWeightBoldPlus = 700
         background: $yellow
         border-radius: $sizeM
         border: 2px solid $grey1
-        font-size: $fontSizeXS
+        font-size: $fontSizeS
 
         &.next-is-submit
           background: $white
@@ -637,7 +641,7 @@ $fontWeightBoldPlus = 700
       li
         display: flex
         flex-direction: column
-        margin: 0 $sizeM
+        margin: 0 $sizeM $sizeS $sizeM
         padding: 0
     
     div.vertical-layout
@@ -659,7 +663,7 @@ $fontWeightBoldPlus = 700
     border-radius: 2px
     color: $black
     font-family: $fontFamilies
-    font-size: $fontSizeXS
+    font-size: $fontSizeS
     padding: $sizeS $sizeM
     text-align: center
   
@@ -668,7 +672,7 @@ $fontWeightBoldPlus = 700
     border-radius: $sizeM
     border: 2px solid $yellow
     color: $black
-    font-size: $fontSizeXS
+    font-size: $fontSizeS
     padding: $sizeS $sizeM
   
   .fake-text-input
@@ -702,6 +706,11 @@ $fontWeightBoldPlus = 700
       justify-content: center
       align-items: center
       padding: $sizeS
+
+  .pfe-workflow-warning
+    border: 1px solid $yellow
+    border-radius: $sizeS
+    padding: $sizeM
 
 .debug-0
   width: 6em

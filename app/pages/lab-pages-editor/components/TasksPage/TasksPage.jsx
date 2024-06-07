@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
-import canStepBranch from '../../helpers/canStepBranch.js';
+import checkCanStepBranch from '../../helpers/checkCanStepBranch.js';
 import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
@@ -100,8 +100,9 @@ export default function TasksPage() {
   }
 
   function deleteTask(taskKey) {
-    // First check: does the task exist?
-    if (!workflow || !taskKey || !workflow?.tasks?.[taskKey]) return;
+    if (!workflow) return;
+    // NOTE: don't check if task actually exists before deleting it.
+    // This is useful if a Step somehow refers to a Task that doesn't exist.
 
     // Second check: is this the only task in the step?
     const activeStepTaskKeys = workflow.steps?.[activeStepIndex]?.[1]?.taskKeys || [];
@@ -262,14 +263,12 @@ export default function TasksPage() {
   
   // Limited Branching Rule:
   // 0. a Step can only have 1 branching task (single answer question task)
-  // 1. if a Step has a branching task, it can't have any other tasks.
-  // 2. if a Step already has at least one task, any added question task must be a multiple answer question task.
-  // 3. if a Step already has many tasks, any multiple answer question task can't be transformed into a single answer question task. 
+  // 1. if a Step has a branching task, it can't have ANOTHER BRANCHING TASK.
+  // 2. if a Step already has at least one BRANCHING task, any added question task must be a multiple answer question task.
+  // 3. if a Step already has many MULTIPLE ANSWER QUESTION tasks AND NO SINGLE ANSWER QUESTION TASK, ONLY ONE multiple answer question task CAN be transformed into a single answer question task.
   const activeStep = workflow?.steps?.[activeStepIndex]
   const enforceLimitedBranchingRule = {
-    stepHasBranch: !!canStepBranch(activeStep, workflow?.tasks),
-    stepHasOneTask: activeStep?.[1]?.taskKeys?.length > 0,
-    stepHasManyTasks: activeStep?.[1]?.taskKeys?.length > 1
+    stepHasBranch: !!checkCanStepBranch(activeStep, workflow?.tasks)
   }
 
   if (!workflow) return null;

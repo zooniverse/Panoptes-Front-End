@@ -136,7 +136,7 @@ function QuestionTask({
               id={`task-${taskKey}-multiple`}
               type="checkbox"
               checked={isMultiple}
-              disabled={enforceLimitedBranchingRule?.stepHasManyTasks && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
+              disabled={enforceLimitedBranchingRule?.stepHasBranch && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
               onChange={(e) => {
                 setIsMultiple(!!e?.target?.checked);
               }}
@@ -197,9 +197,7 @@ function QuestionTask({
 QuestionTask.propTypes = {
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
-    stepHasBranch: PropTypes.bool,
-    stepHasOneTask: PropTypes.bool,
-    stepHasManyTasks: PropTypes.bool
+    stepHasBranch: PropTypes.bool
   }),
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,

@@ -99,11 +99,10 @@ function EditStepDialog({
       <div className="dialog-footer flex-row">
         <button
           className="big flex-item"
-          disabled={!!enforceLimitedBranchingRule?.stepHasBranch}
           onClick={handleClickAddTaskButton}
           type="button"
         >
-          Add New Task
+          Add another Task to this Page
         </button>
         <button
           className="big done"
@@ -121,9 +120,7 @@ EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
-    stepHasBranch: PropTypes.bool,
-    stepHasOneTask: PropTypes.bool,
-    stepHasManyTasks: PropTypes.bool
+    stepHasBranch: PropTypes.bool
   }),
   onClose: PropTypes.func,
   step: PropTypes.object,

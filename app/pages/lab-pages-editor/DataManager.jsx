@@ -17,6 +17,7 @@ import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import { WorkflowContext } from './context.js';
+import checkIsPFEWorkflow from './helpers/checkIsPFEWorkflow.js';
 
 function DataManager({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
@@ -30,6 +31,7 @@ function DataManager({
     status: 'ready'
   });
   const [updateCounter, setUpdateCounter] = useState(0); // Number of updates so far, only used to trigger useMemo.
+  const isPFEWorkflow = checkIsPFEWorkflow(apiData.workflow);
 
   // Fetch workflow when the component loads for the first time.
   // See notes about 'key' prop, to ensure states are reset:
@@ -129,8 +131,24 @@ function DataManager({
       {apiData.status === 'error' && (
         <div className="status-banner error">ERROR: could not fetch data</div>
       )}
-      {children}
+      {isPFEWorkflow ? <PFEWorkflowWarning /> : children }
     </WorkflowContext.Provider>
+  );
+}
+
+/*
+At the moment, we don't fully support PFE workflows in the Pages Editor.
+Reason: the "autocleanup" functionality (see cleanupTasksAndSteps()) would
+annihilate all the tasks in a workflow with no steps (i.e. PFE workflows).
+We'd need to prompt users to convert from a PFE workflow to an FEM workflow
+first before allowing them 
+ */
+function PFEWorkflowWarning() {
+  return (
+    <div className="pfe-workflow-warning">
+      <p>Sorry, but the new workflow editor doesn't support traditional workflows.</p>
+      <p>Please check back with us later, as we improve the workflow editor.</p>
+    </div>
   );
 }
 

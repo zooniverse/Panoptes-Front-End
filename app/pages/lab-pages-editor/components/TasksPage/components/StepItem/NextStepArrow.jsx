@@ -3,7 +3,7 @@ export default function NextStepArrow({
   arrowhead = false,
   className = 'icon',
   color = 'currentColor',
-  height = 48,
+  height = 32,
   pad = 0,
   strokeWidth = 2,
   width = 16

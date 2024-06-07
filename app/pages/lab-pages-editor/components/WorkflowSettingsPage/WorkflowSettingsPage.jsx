@@ -15,7 +15,7 @@ function getAdvancedMode() {
 export default function WorkflowSettingsPage() {
   const { workflow, update, project } = useWorkflowContext();
   const advancedMode = getAdvancedMode();
-  const showSeparateFramesOptions = !!workflow?.configuration?.enable_switching_flipbook_and_separate;
+  const showSeparateFramesOptions = workflow?.configuration?.multi_image_mode === 'separate';
 
   function onSubmit(e) {
     e.preventDefault();
@@ -137,6 +137,20 @@ export default function WorkflowSettingsPage() {
           <p id="multi-image-info">
             Choose how to display subjects with multiple images. If your subjects are in sequence, such as camera trap images, volunteers can play them like a .gif using the Flipbook viewer.
           </p>
+
+          <div className="flex-row align-start spacing-bottom-XS">
+            <select
+              aria-label="Viewer for multiple images"
+              className="flex-item"
+              defaultValue={workflow?.configuration?.multi_image_mode ?? 'flipbook'}
+              id="multi_image_mode"
+              name="configuration.multi_image_mode"
+              onChange={doUpdate}
+            >
+              <option value="flipbook">Flipbook Viewer (default)</option>
+              <option value="separate">Separate Frames Viewer</option>
+            </select>
+          </div>
 
           <div className="flex-row align-start spacing-bottom-XS">
             <select

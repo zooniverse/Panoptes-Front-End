@@ -15,6 +15,7 @@ export default function SimpleNextControls({
   const isLinearItem = isLinearWorkflow && !isLastItem;
   const showFakeSubmit = isLinearWorkflow && isLastItem;
   const showNextPageDropdown = !isLinearWorkflow && !showFakeSubmit;
+  const selectableSteps = allSteps.filter(([otherStepKey]) => otherStepKey !== stepKey);
   
   function onChange(e) {
     const next = e.target?.value;
@@ -38,7 +39,7 @@ export default function SimpleNextControls({
           >
             Submit
           </option>
-          {allSteps.map(([otherStepKey, otherStepBody]) => {
+          {selectableSteps.map(([otherStepKey, otherStepBody]) => {
             const taskKeys = otherStepBody?.taskKeys?.toString() || '(none)';
             return (
               <option
