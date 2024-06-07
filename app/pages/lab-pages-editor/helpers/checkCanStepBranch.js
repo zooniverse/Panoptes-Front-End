@@ -2,10 +2,10 @@
 Checks if a step can branch. We're not asking if the step IS branching, but if it *can.*
 - If yes, returns Task ID of the Task that's causing the branch.
   - If multiple Tasks qualify, only return the FIRST.
+  - NOTE: as of Jun 2024, if a step has multiple single-type tasks, only the first is "actually" a branching task that decides the branching logic of the FEM classifier.
 - If no, returns false.
  */
 export default function checkCanStepBranch(step = [], tasks = {}) {
-  // TODO/QUESTION: what happens when a Step has multiple branching Questions?
   // TODO/CHECK: if a Question Task has 0 answers, is it still considered 'branching'? Check what happens with FEM Classifier
   const [stepId, stepBody] = step;
   const tasksInStep = stepBody?.taskKeys?.map(taskKey => tasks[taskKey] ? [taskKey, tasks[taskKey]]: undefined).filter(task => !!task) || []
