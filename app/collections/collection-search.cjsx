@@ -3,6 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Select = require('react-select').default
 apiClient = require 'panoptes-client/lib/api-client'
+{ collectionsSearch } = require('./searchCollections')
 
 module.exports = createReactClass
   displayName: 'CollectionSearch'
@@ -30,13 +31,7 @@ module.exports = createReactClass
     )
 
   searchCollections: (value) ->
-    query =
-      page_size: 100
-      favorite: false
-      current_user_roles: 'owner,collaborator,contributor'
-    query.search = "#{value}" unless value is ''
-
-    apiClient.type('collections').get query
+    collectionsSearch(value)
       .then (collections) =>
         options = collections.map (collection) =>
           {
