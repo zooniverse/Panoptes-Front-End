@@ -2,7 +2,6 @@ React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Select = require('react-select').default
-apiClient = require 'panoptes-client/lib/api-client'
 { collectionsSearch } = require('./searchCollections')
 
 module.exports = createReactClass
