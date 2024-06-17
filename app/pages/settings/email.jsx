@@ -3,11 +3,9 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import { host as apiHost } from 'panoptes-client/lib/config';
 import apiClient from 'panoptes-client/lib/api-client';
-import authClient from 'panoptes-client/lib/auth';
 import talkClient from 'panoptes-client/lib/talk-client';
 import AutoSave from '../../components/auto-save';
 import handleInputChange from '../../lib/handle-input-change';
-import getBearerToken from './helpers/getBearerToken';
 
 function TalkPreferenceOption({ preference, index, digest, onChange }) {
   return (
@@ -208,15 +206,15 @@ class EmailSettingsPage extends React.Component {
     try {
       this.setState({ requestConfirmationEmailStatus: 'posting' });
       const url = `${apiHost}/users/confirmation`;
-      const bearerToken = await getBearerToken(authClient);
+      const userEmail = this.props.user?.email || ''
       const res = await fetch(url, {
         method: 'POST',
         mode: 'cors',
         headers: {
-          accept: 'application/vnd.api+json; version=1',
-          Authorization: bearerToken,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'charset': 'utf-8',
+        },
+        body: `user%5Bemail%5D=${encodeURIComponent(userEmail)}`
       });
       if (!res.ok) throw new Error();
       this.setState({ requestConfirmationEmailStatus: 'success' });
