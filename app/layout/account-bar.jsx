@@ -62,7 +62,7 @@ export default class AccountBar extends React.Component {
         messageCount: unread_count,
         unread: unread_messages
       });
-    }).catch((err) => { console.error(err) });
+    });
   }
 
   handleSignOutClick() {
