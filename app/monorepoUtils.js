@@ -55,7 +55,8 @@ export const SLUGS = [
   'bcosentino/squirrelmapper',
   'embeller/offal-wildlife-watching',
   'safmcadmin/fishstory',
-  'bethzc/newark-digital-archive'
+  'bethzc/newark-digital-archive',
+  'chloezycheng/science-scribbler-synapse-safari'
 ];
 
 export function usesMonorepo(slug) {
