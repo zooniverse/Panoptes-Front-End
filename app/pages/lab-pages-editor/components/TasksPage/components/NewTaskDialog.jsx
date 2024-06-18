@@ -85,7 +85,7 @@ function NewTaskDialog({
           A task is a unit of work you are asking volunteers to do.
           You can ask them to answer a question or mark an image.
         </p>
-        <div className="flex-row flex-wrap">
+        <div className="flex-row flex-wrap justify-center">
           <button
             aria-label="Add new Text Task"
             className="new-task-button"
