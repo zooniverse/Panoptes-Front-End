@@ -312,26 +312,20 @@ class EmailSettingsPage extends React.Component {
                   {' '}
                   <Translate content="emailSettings.general.emailUnverified" />
                   {' | '}
-                  {(this.state.requestConfirmationEmailStatus === 'idle') && (
-                    <a href="#" onClick={this.requestConfirmationEmail}>
-                      <Translate content="emailSettings.general.emailUnverifiedPrompt" />
-                    </a>
-                  )}
-                  {(this.state.requestConfirmationEmailStatus === 'posting') && (
-                    <span>
-                      <Translate content="emailSettings.general.emailUnverifiedRequesting" />
-                    </span>
-                  )}
-                  {(this.state.requestConfirmationEmailStatus === 'success') && (
-                    <span>
-                      <Translate content="emailSettings.general.emailUnverifiedSuccess" />
-                    </span>
-                  )}
-                  {(this.state.requestConfirmationEmailStatus === 'error') && (
-                    <span style={{ color: 'red' }}>
-                      <Translate content="emailSettings.general.emailUnverifiedError" />
-                    </span>
-                  )}
+                  <button
+                    disabled={this.state.requestConfirmationEmailStatus !== 'idle'}
+                    onClick={this.requestConfirmationEmail}
+                  >
+                    <Translate content="emailSettings.general.emailUnverifiedPrompt" />
+                  </button>
+                  {' '}
+                  <output>
+                    {{
+                      'posting': <Translate content="emailSettings.general.emailUnverifiedRequesting" />,
+                      'success': <Translate content="emailSettings.general.emailUnverifiedSuccess" />,
+                      'error': <Translate content="emailSettings.general.emailUnverifiedError" />,
+                    }[this.state.requestConfirmationEmailStatus] || ''}
+                  </output>
                 </div>
             }
           </div>
