@@ -313,6 +313,7 @@ class EmailSettingsPage extends React.Component {
                   <Translate content="emailSettings.general.emailUnverified" />
                   {' | '}
                   <button
+                    className="button"
                     disabled={this.state.requestConfirmationEmailStatus !== 'idle'}
                     onClick={this.requestConfirmationEmail}
                   >
