@@ -199,6 +199,7 @@ QuestionTask.propTypes = {
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
   }),
+  isFirstTaskInStep: PropTypes.bool,
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,

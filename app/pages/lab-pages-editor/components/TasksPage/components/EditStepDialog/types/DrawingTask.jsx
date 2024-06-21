@@ -51,6 +51,7 @@ const TOOL_TYPE_OPTIONS = [
 
 function DrawingTask({
   deleteTask = DEFAULT_HANDLER,
+  isFirstTaskInStep = true,
   stepHasManyTasks = false,
   task,
   taskKey,
@@ -338,6 +339,7 @@ function DrawingTask({
 
 DrawingTask.propTypes = {
   deleteTask: PropTypes.func,
+  isFirstTaskInStep: PropTypes.bool,
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
