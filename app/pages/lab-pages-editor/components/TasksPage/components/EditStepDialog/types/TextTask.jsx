@@ -18,7 +18,6 @@ function TextTask({
   const [ help, setHelp ] = useState(task?.help || '');
   const [ instruction, setInstruction ] = useState(task?.instruction || '');
   const [ required, setRequired ] = useState(!!task?.required);
-  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0);
   const title = stepHasManyTasks ? 'Text Task' : 'Main Text';
   // Update is usually called manually onBlur, after user input is complete.
   function update() {
@@ -35,6 +34,7 @@ function TextTask({
     deleteTask(taskKey);
   }
 
+  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0);
   function toggleShowHelpField() {
     setShowHelpField(!showHelpField);
   }
@@ -116,7 +116,6 @@ function TextTask({
             onChange={(e) => { setHelp(e?.target?.value) }}
           />
         )}
-        
       </div>
     </div>
   );

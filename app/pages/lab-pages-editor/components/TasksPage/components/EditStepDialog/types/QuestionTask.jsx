@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import CollapseIcon from '../../../../../icons/CollapseIcon.jsx';
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
+import ExpandIcon from '../../../../../icons/ExpandIcon.jsx';
 import MinusIcon from '../../../../../icons/MinusIcon.jsx';
 import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
@@ -10,6 +12,7 @@ const DEFAULT_HANDLER = () => {};
 function QuestionTask({
   deleteTask = DEFAULT_HANDLER,
   enforceLimitedBranchingRule,
+  isFirstTaskInStep = true,
   stepHasManyTasks = false,
   task,
   taskKey,
@@ -71,6 +74,11 @@ function QuestionTask({
     
     e.preventDefault();
     return false;
+  }
+
+  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0);
+  function toggleShowHelpField() {
+    setShowHelpField(!showHelpField);
   }
 
   // For inputs that don't have onBlur, update triggers automagically.
@@ -177,18 +185,33 @@ function QuestionTask({
         </ul>
       </div>
       <div className="input-row">
-        <label
-          className="big spacing-bottom-S"
-          htmlFor={`task-${taskKey}-help`}
-        >
-          Help Text
-        </label>
-        <textarea
-          id={`task-${taskKey}-help`}
-          value={help}
-          onBlur={update}
-          onChange={(e) => { setHelp(e?.target?.value) }}
-        />
+        <div className="flex-row spacing-bottom-S">
+          <label
+            className="big"
+            htmlFor={`task-${taskKey}-help`}
+          >
+            Help Text
+          </label>
+          <button
+            aria-label={`Show/Hide Help field`}
+            className="plain"
+            onClick={toggleShowHelpField}
+            type="button"
+          >
+            {showHelpField
+              ? <CollapseIcon />
+              : <ExpandIcon />
+            }
+          </button>
+        </div>
+        {showHelpField && (
+          <textarea
+            id={`task-${taskKey}-help`}
+            value={help}
+            onBlur={update}
+            onChange={(e) => { setHelp(e?.target?.value) }}
+          />
+        )}
       </div>
     </div>
   );
