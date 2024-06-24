@@ -57,7 +57,8 @@ export const SLUGS = [
   'safmcadmin/fishstory',
   'bethzc/newark-digital-archive',
   'chloezycheng/science-scribbler-synapse-safari',
-  'md68135/notes-from-nature-cas-plants-to-pixels'
+  'md68135/notes-from-nature-cas-plants-to-pixels',
+  'juliehgibb/stereovision'
 ];
 
 export function usesMonorepo(slug) {
