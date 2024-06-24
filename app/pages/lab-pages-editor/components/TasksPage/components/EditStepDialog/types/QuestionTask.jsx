@@ -187,7 +187,7 @@ function QuestionTask({
       <div className="input-row">
         <div className="flex-row spacing-bottom-S">
           <label
-            className="big"
+            className="medium"
             htmlFor={`task-${taskKey}-help`}
           >
             Help Text
