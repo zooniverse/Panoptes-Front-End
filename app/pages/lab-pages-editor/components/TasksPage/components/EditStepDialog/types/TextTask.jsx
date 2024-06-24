@@ -108,14 +108,13 @@ function TextTask({
             }
           </button>
         </div>
-        {showHelpField && (
-          <textarea
-            id={`task-${taskKey}-help`}
-            value={help}
-            onBlur={update}
-            onChange={(e) => { setHelp(e?.target?.value) }}
-          />
-        )}
+        <textarea
+          id={`task-${taskKey}-help`}
+          hidden={!showHelpField}
+          value={help}
+          onBlur={update}
+          onChange={(e) => { setHelp(e?.target?.value) }}
+        />
       </div>
     </div>
   );
