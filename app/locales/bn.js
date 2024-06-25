@@ -1,3 +1,4 @@
+
 export default {
   loading: 'লোডিং',
   aboutPages: {
@@ -81,7 +82,7 @@ export default {
       exploreProject: 'প্রকল্প অন্বেষণ করুন',
       lab: 'ল্যাব',
       recents: 'সাম্প্রতিক',
-      talk: 'টক্',
+      talk: 'কথা বলুন',
       underReview: 'পর্যালোচনার অধীনে',
       zooniverseApproved: 'Zooniverse অনুমোদিত'
     },
