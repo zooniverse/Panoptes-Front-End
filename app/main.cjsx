@@ -3,11 +3,13 @@ ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 { applyRouterMiddleware, Router, browserHistory } = require 'react-router'
 useScroll = require 'react-router-scroll/lib/useScroll'
+require('./monkeypatchNode')
 { routes } = require './router'
 style = require '../css/main.styl'
 { Provider } = require('react-redux')
 initStore = require('./redux/init-store').default
 initSentry = require('./lib/init-sentry').default
+
 
 # register locales
 `import counterpart from 'counterpart';`
