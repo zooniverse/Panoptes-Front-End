@@ -5,7 +5,7 @@ $grey4 = #979797
 $grey5 = #E2E5E9
 $grey6 = #EFF2F5
 $black = #000000
-$teal = #00979D
+$teal = #005D69  // Dark teal. Alternate is #00979D
 $darkGreen = #005D69
 $greenBright = #1ED359
 $redBright = #E45950
@@ -85,7 +85,6 @@ $fontWeightBoldPlus = 700
     color: $black
     font-size: $fontSizeM
     padding: $sizeS
-    -webkit-appearance: none  // Remove gradient overlay in Safari
   
   button
     border-radius: $sizeXS
@@ -162,6 +161,9 @@ $fontWeightBoldPlus = 700
 
   .justify-around
     justify-content: space-around
+  
+  .justify-center
+    justify-content: center
   
   .position-relative
     position: relative
@@ -360,6 +362,7 @@ $fontWeightBoldPlus = 700
 
         &.done
           border: 3px solid $teal
+          min-width: 33%
           padding: $sizeS $sizeXL
         
         &[disabled]
@@ -424,6 +427,11 @@ $fontWeightBoldPlus = 700
             display: block
             font-weight: $fontWeightBold
             font-size: $fontSizeL
+            text-transform: uppercase
+          
+          label.medium
+            display: block
+            font-size: $fontSizeM
             text-transform: uppercase
           
           label.narrow, span.narrow

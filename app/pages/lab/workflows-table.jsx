@@ -2,6 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
+// TEMPORARY HACK: Pages Editor
+// (@shaunanoordin 2024.06.21)
+const TEST_PROJECTS_THAT_SHOULD_USE_PAGES_EDITOR = ['23976'];  // Production IDs.
+// WARNING: doesn't differentiate between production and staging projects
+
 const WorkflowsTable = ({
   handleSetStatsCompletenessType,
   handleWorkflowStatusChange,
@@ -11,6 +16,7 @@ const WorkflowsTable = ({
   project,
   workflows
 }) => {
+  const shouldUsePagesEditor = TEST_PROJECTS_THAT_SHOULD_USE_PAGES_EDITOR.includes(project?.id + '')
   return (
     <table className="standard-table">
       <thead>
@@ -31,10 +37,14 @@ const WorkflowsTable = ({
             statsVisible = !workflow.configuration.stats_hidden;
           }
 
+          const viewWorkflowUrl = shouldUsePagesEditor
+            ? labPath(`/workflows/editor/${workflow.id}`)
+            : labPath(`/workflows/${workflow.id}`);  // Default
+
           return (
             <tr key={workflow.id}>
               <td>
-                <Link key={workflow.id} to={labPath(`/workflows/${workflow.id}`)} activeClassName="active">
+                <Link key={workflow.id} to={viewWorkflowUrl} activeClassName="active">
                   {workflow.display_name}
                   {' '}(#{workflow.id})
                   {(project.configuration && workflow.id === project.configuration.default_workflow) && (
