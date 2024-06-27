@@ -34,7 +34,8 @@ module.exports = createReactClass
   rootTalkPath: ->
     if @props.project
       [owner, name] = @props.project.slug.split('/')
-      "/projects/#{owner}/#{name}/talk"
+      baseURL = @props.project._type._name
+      "/#{baseURL}/#{owner}/#{name}/talk"
     else
       "/talk"
   
