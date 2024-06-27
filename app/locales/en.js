@@ -293,7 +293,10 @@ export default {
       emailInvalidPrompt: 'Please re-enter your email above',
       emailVerified: 'Verified email',
       emailUnverified: 'Unverified email',
-      emailUnverifiedPrompt: 'Resend confirmation email'
+      emailUnverifiedPrompt: 'Resend confirmation email',
+      emailUnverifiedRequesting: 'Requesting...',
+      emailUnverifiedSuccess: 'Confirmation email requested, please check your inbox',
+      emailUnverifiedError: 'ERROR: could not request confirmation email'
     },
     talk: {
       section: 'Talk email preferences',

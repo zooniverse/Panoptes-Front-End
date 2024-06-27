@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
+import { host as apiHost } from 'panoptes-client/lib/config';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import AutoSave from '../../components/auto-save';
@@ -149,7 +150,8 @@ class EmailSettingsPage extends React.Component {
       page: 1,
       projects: [],
       projectPreferences: [],
-      talkPreferences: []
+      talkPreferences: [],
+      requestConfirmationEmailStatus: 'idle'
     };
     this.handleProjectPreferenceChange = this.handleProjectPreferenceChange.bind(this);
     this.handleTalkPreferenceChange = this.handleTalkPreferenceChange.bind(this);
@@ -200,8 +202,25 @@ class EmailSettingsPage extends React.Component {
     });
   }
 
-  requestConfirmationEmail() {
-    console.log('+++ Send confirmation email!')
+  async requestConfirmationEmail() {
+    try {
+      this.setState({ requestConfirmationEmailStatus: 'posting' });
+      const url = `${apiHost}/users/confirmation`;
+      const userEmail = this.props.user?.email || ''
+      const res = await fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'charset': 'utf-8',
+        },
+        body: `user%5Bemail%5D=${encodeURIComponent(userEmail)}`
+      });
+      if (!res.ok) throw new Error();
+      this.setState({ requestConfirmationEmailStatus: 'success' });
+    } catch (err) {
+      this.setState({ requestConfirmationEmailStatus: 'error' });
+    }
   }
 
   handleProjectPreferenceChange(index, event) {
@@ -292,12 +311,22 @@ class EmailSettingsPage extends React.Component {
                   <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailUnverified" />
-                  {/*
                   {' | '}
-                  <a href="#" onClick={this.requestConfirmationEmail}>
+                  <button
+                    className="button"
+                    disabled={this.state.requestConfirmationEmailStatus !== 'idle'}
+                    onClick={this.requestConfirmationEmail}
+                  >
                     <Translate content="emailSettings.general.emailUnverifiedPrompt" />
-                  </a>
-                  */}
+                  </button>
+                  {' '}
+                  <output>
+                    {{
+                      'posting': <Translate content="emailSettings.general.emailUnverifiedRequesting" />,
+                      'success': <Translate content="emailSettings.general.emailUnverifiedSuccess" />,
+                      'error': <Translate content="emailSettings.general.emailUnverifiedError" />,
+                    }[this.state.requestConfirmationEmailStatus] || ''}
+                  </output>
                 </div>
             }
           </div>
