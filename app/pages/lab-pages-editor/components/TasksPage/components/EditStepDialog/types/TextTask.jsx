@@ -97,7 +97,7 @@ function TextTask({
             Help Text
           </label>
           <button
-            aria-label={`Show/Hide Help field`}
+            aria-label={showHelpField ? 'Hide Help field' : 'Show Help field'}
             aria-controls={`task-${taskKey}-help`}
             aria-expanded={showHelpField ? 'true' : 'false'}
             className="plain"
