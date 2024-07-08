@@ -58,7 +58,8 @@ export const SLUGS = [
   'bethzc/newark-digital-archive',
   'chloezycheng/science-scribbler-synapse-safari',
   'md68135/notes-from-nature-cas-plants-to-pixels',
-  'juliehgibb/stereovision'
+  'juliehgibb/stereovision',
+  'alexfitzpatrick/bradfords-industrial-heritage-in-photographs'
 ];
 
 export function usesMonorepo(slug) {
