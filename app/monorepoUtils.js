@@ -60,7 +60,7 @@ export const SLUGS = [
   'md68135/notes-from-nature-cas-plants-to-pixels',
   'juliehgibb/stereovision',
   'alexfitzpatrick/bradfords-industrial-heritage-in-photographs',
-  'talkietoaster/void-orchestra-test'
+  'talkietoaster/void-orchestra'
 ];
 
 export function usesMonorepo(slug) {
