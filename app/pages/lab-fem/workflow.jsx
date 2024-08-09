@@ -49,6 +49,7 @@ class EditWorkflowPage extends Component {
     this.showCreateWorkflow = this.showCreateWorkflow.bind(this);
     this.showTaskAddButtons = this.showTaskAddButtons.bind(this);
     this.handleTaskDelete = this.handleTaskDelete.bind(this);
+    this.toggleCaesarDataFetching = this.toggleCaesarDataFetching.bind(this);
 
     this.state = {
       selectedTaskKey: props.workflow.first_task,
@@ -118,6 +119,11 @@ class EditWorkflowPage extends Component {
     return this.setState(prevState => ({ showTaskAddButtons: !prevState.showTaskAddButtons }));
   }
 
+  toggleCaesarDataFetching(e) {
+    return this.props.workflow.update({
+      'configuration.enable_caesar_data_fetching': e.target.checked
+    }).save()
+  }
 
   render() {
     let definition;
@@ -145,6 +151,8 @@ class EditWorkflowPage extends Component {
     } = this.props.workflow.configuration;
     if (hide_classification_summaries === undefined) { hide_classification_summaries = true; }
 
+	  const isCaesarDataFetchingEnabled = this.props.workflow?.configuration?.enable_caesar_data_fetching ?? false;
+  
     return (
       <div className="edit-workflow-page">
         <h3>{this.props.workflow.display_name} #{this.props.workflow.id}{' '}
@@ -505,6 +513,26 @@ class EditWorkflowPage extends Component {
             </p>
 
             <hr />
+
+            {Array.from(this.props.project.experimental_tools).includes('caesarDataFetching') ?
+              <div>
+                <p>
+                  <label>
+                    <input
+                      type='checkbox'
+                      checked={isCaesarDataFetchingEnabled}
+                      onChange={this.toggleCaesarDataFetching}
+                    />
+                    Enable Caesar Data Fetching
+                  </label>
+                  <br />
+                  <small className="form-help">Enabling Caesar data fetching allows the website to pull in subject reductions when the subject loads in the classifier.</small>
+                </p>
+
+                <hr />
+
+              </div> : undefined}
+            
 
             {Array.from(this.props.project.experimental_tools).includes('worldwide telescope') ?
               <div>

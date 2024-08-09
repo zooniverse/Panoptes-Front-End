@@ -5,6 +5,7 @@ import AutoSave from '../../../components/auto-save';
 const experimentalFeatures = [
   'allow workflow query',
   'anchoredEllipse',
+  'caesarDataFetching',  // Indicates that the Project should pull data from Caesar
   'combo',
   'crop',
   'dropdown',
