@@ -1,7 +1,7 @@
 import apiClient from 'panoptes-client/lib/api-client';
 
 // Tune this value to determine when a search term is long enough to use Panoptes full-text search.
-const MIN_SEARCH_LENGTH = 3;
+const MIN_SEARCH_LENGTH = 1;
 
 /**
  * Query the Panoptes collections search API
