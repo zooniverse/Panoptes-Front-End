@@ -60,7 +60,8 @@ export const SLUGS = [
   'md68135/notes-from-nature-cas-plants-to-pixels',
   'juliehgibb/stereovision',
   'alexfitzpatrick/bradfords-industrial-heritage-in-photographs',
-  'talkietoaster/void-orchestra'
+  'talkietoaster/void-orchestra',
+  'hjsmith/the-material-culture-of-wills-england-1540-1790'
 ];
 
 export function usesMonorepo(slug) {
