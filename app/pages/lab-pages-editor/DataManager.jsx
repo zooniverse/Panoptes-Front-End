@@ -118,8 +118,24 @@ function DataManager({
     };
   }, [apiData.project, apiData.workflow, apiData.status, updateCounter]);
 
+  // Safety check: did this component receive its minimum input?
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
-  // if (!workflow) return null
+
+  // Safety check: does this workflow belong to this project?
+  if (apiData.workflow && apiData.project) {
+    const isWorkflowPartOfProject = false
+    if (isWorkflowPartOfProject) {
+      return (
+        <div className="status-banner error">
+          ERROR: workflow {apiData.workflow.id} doesn't belong to project {apiData.project.id}
+        </div>
+      )
+    }
+  }
+
+  // NOTE: no need to check for !workflow.
+  // This is automatically handled by "Error: could not fetch data"
+  // // if (!workflow) return null
 
   return (
     <WorkflowContext.Provider
