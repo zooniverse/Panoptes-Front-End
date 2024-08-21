@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import { WorkflowContext } from './context.js';
 import checkIsPFEWorkflow from './helpers/checkIsPFEWorkflow.js';
+import checkIsWorkflowPartOfProject from './helpers/checkIsWorkflowPartOfProject.js';
 
 function DataManager({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
@@ -123,13 +124,13 @@ function DataManager({
 
   // Safety check: does this workflow belong to this project?
   if (apiData.workflow && apiData.project) {
-    const isWorkflowPartOfProject = false
-    if (isWorkflowPartOfProject) {
+    const isWorkflowPartOfProject = checkIsWorkflowPartOfProject(apiData.workflow, apiData.project);
+    if (!isWorkflowPartOfProject) {
       return (
         <div className="status-banner error">
           ERROR: workflow {apiData.workflow.id} doesn't belong to project {apiData.project.id}
         </div>
-      )
+      );
     }
   }
 
