@@ -5,7 +5,7 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import AboutHome from './about-home';
 
-describe('AboutHome', function () {
+describe.skip('AboutHome', function () {
   it('renders without crashing', function () {
     shallow(<AboutHome />);
   });

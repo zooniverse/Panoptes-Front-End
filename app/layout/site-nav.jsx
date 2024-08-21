@@ -106,7 +106,7 @@ const SiteNav = createReactClass({
           <Translate content="siteNav.projects" />
         </Link>{' '}
         <Link
-          to="/about"
+          to="https://www.zooniverse.org/about"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.about') : null}
@@ -114,7 +114,7 @@ const SiteNav = createReactClass({
           <Translate content="siteNav.about" />
         </Link>{' '}
         <Link
-          to="/get-involved"
+          to="https://www.zooniverse.org/get-involved"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.getInvolved') : null}

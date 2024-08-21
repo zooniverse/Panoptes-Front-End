@@ -106,7 +106,7 @@ class AppFooter extends React.Component {
                 </a>, 'footer.discover.projectBuilderPolicies')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/about/faq">
+                {this.loggableLink(<Link to="https://www.zooniverse.org/about/faq">
                   <Translate content="footer.discover.faq" />
                 </Link>, 'footer.discover.faq')}
               </li>
@@ -118,32 +118,27 @@ class AppFooter extends React.Component {
 
             <ul className="app-footer__nav-list">
               <li>
-                {this.loggableLink(<Link to="/about">
+                {this.loggableLink(<Link to="https://www.zooniverse.org/about">
                   <Translate content="footer.about.aboutUs" />
                 </Link>, 'footer.about.aboutUs')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/get-involved/education">
+                {this.loggableLink(<Link to="https://www.zooniverse.org/get-involved/educate">
                   <Translate content="footer.about.education" />
                 </Link>, 'footer.about.education')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/about/team">
+                {this.loggableLink(<Link to="https://www.zooniverse.org/about/team">
                   <Translate content="footer.about.ourTeam" />
                 </Link>, 'footer.about.ourTeam')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/about/publications">
+                {this.loggableLink(<Link to="https://www.zooniverse.org/about/publications">
                   <Translate content="footer.about.publications" />
                 </Link>, 'footer.about.publications')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/about/acknowledgements">
-                    <Translate content="footer.about.acknowledgements" />
-                    </Link>, 'footer.about.acknowledgements')}
-              </li>
-              <li>
-                {this.loggableLink(<Link to="/about/contact">
+                {this.loggableLink(<Link to="https://www.zooniverse.org/about#contact">
                   <Translate content="footer.boilerplate.contact" />
                 </Link>, 'footer.boilerplate.contact')}
               </li>

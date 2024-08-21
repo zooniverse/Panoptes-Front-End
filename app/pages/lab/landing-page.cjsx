@@ -56,7 +56,7 @@ module.exports = createReactClass
           <a href="https://help.zooniverse.org"><Translate content="labLanding.links.buildHelp" /></a>
           <a href="https://help.zooniverse.org/getting-started/lab-policies"><Translate content="labLanding.links.policies"></Translate></a>
           <a href="https://help.zooniverse.org/best-practices"><Translate content="labLanding.links.bestPractices" /></a>
-          <Link to="/about/acknowledgements"><Translate content="labLanding.links.acknowledgements" /></Link>
+          <Link to="https://www.zooniverse.org/get-involved/collaborate"><Translate content="labLanding.links.acknowledgements" /></Link>
           <Link to="/talk/18"><Translate content="labLanding.links.buildTalk" /></Link>
           <a href="https://help.zooniverse.org/getting-started/glossary"><Translate content="labLanding.links.glossary" /></a>
         </div>
