@@ -265,7 +265,9 @@ export default class HomePageForUser extends React.Component {
     const { featuredProjects, OpenSectionComponent } = this.state;
     return (
       <div className="on-home-page" ref={(node) => { this.node = node; }}>
+        <div className="signed-in-banner"><p>We’re freshening up the homepage experience. Check out our <a className='blog-link' href=''>blog post</a> for details of upcoming changes.</p></div>
         <div className="home-page-for-user">
+
           <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
 
           {!!this.state.error && (
