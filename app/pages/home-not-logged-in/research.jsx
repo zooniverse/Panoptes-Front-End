@@ -44,7 +44,7 @@ const OTHERS_COUNT = 8680290
 const OUROBOROS_USER_COUNT = 124921
 
 /* TEMPORARY - Aug 2024: freezing classification count until FEM homepage launch */
-const PANOPTES_COUNT = 584492482
+const PANOPTES_COUNT = 580300364
 
 const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =>
   <section className="home-research">
