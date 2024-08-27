@@ -67,7 +67,8 @@ module.exports = createReactClass
         @setState subject: null, content: '', error: '', loading: false
         @setFeedback @props.submitFeedback
       .catch (e) =>
-        @setState(error: e.message, loading: false)
+        errorMessage = e?.message || 'Unknown Error'
+        @setState(error: errorMessage, loading: false)
 
   onInputChange: (e) ->
     @setState content: e.target.value
