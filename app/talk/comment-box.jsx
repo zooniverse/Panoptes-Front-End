@@ -11,6 +11,31 @@ import alert from '../lib/alert';
 import {Markdown, MarkdownEditor, MarkdownHelp} from 'markdownz';
 import Suggester from './suggester';
 
+const ERROR_MESSAGES = {
+  BANNED: 'You are banned. Email contact@zooniverse.org for further information.',
+  EMAIL_NOT_CONFIRMED: 'Your account email address is not yet confirmed. Please check your email for confirmation instructions, or visit https://www.zooniverse.org/settings/email to request new confirmation email.'
+};
+
+function getErrorMessage(error, user) {
+  if (!error) return '';
+
+  if (
+    error.message?.match?.(/not allowed to create this Comment/i)
+    || error.message?.match?.(/not allowed to create this Discussion/i)
+    || error.message?.match?.(/You must confirm your account/i)
+  ) {
+    if (!user?.confirmed_at) {
+      return ERROR_MESSAGES.EMAIL_NOT_CONFIRMED;
+    }
+  } else if (
+    error.message?.match?.(/You are banned/i)
+  ) {
+    return ERROR_MESSAGES.BANNED;
+  }
+
+  return error.message || 'Unknown error';
+}
+
 const CommentBox = createReactClass({
   displayName: 'Commentbox',
   mixins: [ToggleChildren, Feedback],
@@ -80,7 +105,7 @@ const CommentBox = createReactClass({
         this.setState({subject: null, content: '', error: '', loading: false});
         return this.setFeedback(this.props.submitFeedback);
     }).catch(e => {
-        const errorMessage = e?.message || 'Unknown Error';
+        const errorMessage = getErrorMessage(e, this.props.user);
         return this.setState({error: errorMessage, loading: false});
     });
   },
