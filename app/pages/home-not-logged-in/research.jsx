@@ -38,18 +38,13 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const GZ123_COUNT = 98989226
-const OUROBOROS_COUNT = 142800311
-const OTHERS_COUNT = 8680290
-const OUROBOROS_USER_COUNT = 124921
-
-/* TEMPORARY - Aug 2024: freezing classification count until FEM homepage launch */
-const PANOPTES_COUNT = 580300364
+const PREPANOPTES_COUNT = 25284786
+const OUROBOROS_USER_COUNT = 114576
 
 const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =>
   <section className="home-research">
     <Translate className="tertiary-kicker" component="h2" content="researchHomePage.works" />
-    <span className="class-counter">{(PANOPTES_COUNT + GZ123_COUNT + OUROBOROS_COUNT + OTHERS_COUNT).toLocaleString()}</span>
+    <span className="class-counter">{(count + PREPANOPTES_COUNT).toLocaleString()}</span>
     <Translate className="main-kicker" component="h3" content="researchHomePage.classifications" />
     <div className="home-research__classification-count">
       <h3 className="main-kicker">{(volunteerCount + OUROBOROS_USER_COUNT).toLocaleString()}</h3>{' '}
