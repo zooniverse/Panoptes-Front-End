@@ -11,6 +11,7 @@ export default {
   he: 'עברית',
   hi: 'हिन्दी',
   hr: 'Hrvatski',
+  hu: 'Magyar',
   hy: 'հայերեն',
   xh: 'isiXhosa',
   zu: 'isiZulu',
