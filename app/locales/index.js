@@ -9,6 +9,7 @@ export default {
   he: require('./he').default,
   hi: require('./hi').default,
   hr: require('./hr').default,
+  hy: require('./hy').default,
   it: require('./it').default,
   ja: require('./ja').default,
   kn: require('./kn').default,
