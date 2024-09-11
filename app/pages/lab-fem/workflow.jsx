@@ -152,7 +152,7 @@ class EditWorkflowPage extends Component {
     if (hide_classification_summaries === undefined) { hide_classification_summaries = true; }
 
 	  const isCaesarDataFetchingEnabled = this.props.workflow?.configuration?.enable_caesar_data_fetching ?? false;
-  
+
     return (
       <div className="edit-workflow-page">
         <h3>{this.props.workflow.display_name} #{this.props.workflow.id}{' '}
@@ -509,7 +509,7 @@ class EditWorkflowPage extends Component {
               <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
               <br />
               <br />
-              <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='/about/contact'>Contact Us</a> page.</small>
+              <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='https://www.zooniverse.org/about#contact'>Contact Us</a> page.</small>
             </p>
 
             <hr />
@@ -532,7 +532,7 @@ class EditWorkflowPage extends Component {
                 <hr />
 
               </div> : undefined}
-            
+
 
             {Array.from(this.props.project.experimental_tools).includes('worldwide telescope') ?
               <div>

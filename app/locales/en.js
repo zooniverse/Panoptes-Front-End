@@ -1059,7 +1059,7 @@ export default {
         },
         furtherHelp: {
           title: '## Further Help',
-          body: 'If you\'d like some further information, check out the [documentation behind building Kitteh Zoo](https://help.zooniverse.org/getting-started/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](/about/contact).',
+          body: 'If you\'d like some further information, check out the [documentation behind building Kitteh Zoo](https://help.zooniverse.org/getting-started/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](https://www.zooniverse.org/about#contact).',
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         }
       }

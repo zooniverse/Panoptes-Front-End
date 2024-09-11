@@ -460,7 +460,7 @@ class EditWorkflowPage extends Component {
               <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
               <br />
               <br />
-              <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='/about/contact'>Contact Us</a> page.</small>
+              <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='https://www.zooniverse.org/about#contact'>Contact Us</a> page.</small>
             </p>
 
             <hr />
