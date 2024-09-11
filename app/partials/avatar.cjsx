@@ -2,7 +2,7 @@ React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 
-DEFAULT_AVATAR = '/assets/simple-avatar.png'
+DEFAULT_AVATAR = 'https://static.zooniverse.org/pfe-assets/simple-avatar.png'
 
 module.exports = createReactClass
   displayName: 'Avatar'

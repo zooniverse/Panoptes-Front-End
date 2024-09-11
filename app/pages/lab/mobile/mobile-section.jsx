@@ -158,7 +158,7 @@ class MobileSection extends Component {
           </div>
 
           <div className="workflow-mobile-form-right-panel">
-            <img alt="mobile-sample" src="/assets/mobile-sample.png" />
+            <img alt="mobile-sample" src="https://static.zooniverse.org/pfe-assets/mobile-sample.png" />
           </div>
 
         </div>

@@ -89,7 +89,7 @@ class OrganizationPage extends React.Component {
     const finishedProjects = projects.filter(project => project.state === 'finished');
     const pausedProjects = projects.filter(project => project.state === 'paused');
 
-    const researcherAvatarSrc = quoteObject.researcherAvatar || '/assets/simple-avatar.png';
+    const researcherAvatarSrc = quoteObject.researcherAvatar || 'https://static.zooniverse.org/pfe-assets/simple-avatar.png';
 
     const [aboutPage] = organizationPages.filter(page => page.url_key === 'about');
 

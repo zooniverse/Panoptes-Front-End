@@ -31,7 +31,7 @@ class CircleRibbon extends React.Component {
     data: [],
     hrefTemplate: defaultHREFTemplate,
     onClick: () => {},
-    user: { avatar_src: '/assets/simple-avatar.png' }
+    user: { avatar_src: 'https://static.zooniverse.org/pfe-assets/simple-avatar.png' }
   };
 
   state = {
@@ -175,7 +175,7 @@ class CircleRibbon extends React.Component {
       tooltipPosition = this.getTooltipPoint(hoveredArc, 50);
     }
 
-    const avatar = this.props.user.avatar_src ? this.props.user.avatar_src : '/assets/simple-avatar.png';
+    const avatar = this.props.user.avatar_src ? this.props.user.avatar_src : 'https://static.zooniverse.org/pfe-assets/simple-avatar.png';
 
     return (
       <div ref="container" className="circle-ribbon" style={{ position: 'relative' }}>

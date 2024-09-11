@@ -11,7 +11,7 @@ import { expect } from 'chai';
 
 import Background, { BackgroundWrapper, ImgBackground } from './Background';
 
-const MOCK_SRC = '../../../../../assets/default-project-background.jpg';
+const MOCK_SRC = 'https://static.zooniverse.org/pfe-assets/default-project-background.jpg';
 
 describe('Background', function () {
   let wrapper;
