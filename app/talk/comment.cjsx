@@ -19,7 +19,7 @@ SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
 CommentContextIcon = require './lib/comment-context-icon'
 `import WrappedMarkdown from '../components/wrapped-markdown';`
-DEFAULT_AVATAR = '/assets/simple-avatar.png'
+DEFAULT_AVATAR = 'https://static.zooniverse.org/pfe-assets/simple-avatar.png'
 
 module.exports = createReactClass
   displayName: 'TalkComment'

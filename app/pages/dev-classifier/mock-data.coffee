@@ -534,19 +534,19 @@ subject = apiClient.type('subjects').create
   locations: if navigator?.onLine
     if labs1715QueryPresent()
       [
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/1715_labs/london_street_view.jpeg"}
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/1715_labs/greenwich_satellite_image.jpeg"}
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/1715_labs/building_plans.jpeg"}
-        {'text/plain': "#{window.location.origin}/assets/dev-classifier/algernon.txt"}
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/1715_labs/london_street_view.jpeg"}
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/1715_labs/greenwich_satellite_image.jpeg"}
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/1715_labs/building_plans.jpeg"}
+        {'text/plain': "https://static.zooniverse.org/pfe-assets/dev-classifier/algernon.txt"}
       ]
     else
       [
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/landscape.jpeg"} # //lorempixel.com/900/600/animals/1
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/portrait.jpeg"} # //lorempixel.com/600/900/animals/2
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-wide.jpeg"} # //lorempixel.com/1900/1000/animals/3
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-tall.jpeg"} # //lorempixel.com/1000/1900/animals/4
-        {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
-        {'text/plain': "#{window.location.origin}/assets/dev-classifier/algernon.txt"}
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/landscape.jpeg"} # //lorempixel.com/900/600/animals/1
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/portrait.jpeg"} # //lorempixel.com/600/900/animals/2
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/very-wide.jpeg"} # //lorempixel.com/1900/1000/animals/3
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/very-tall.jpeg"} # //lorempixel.com/1000/1900/animals/4
+        {'image/jpeg': "https://static.zooniverse.org/pfe-assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
+        {'text/plain': "https://static.zooniverse.org/pfe-assets/dev-classifier/algernon.txt"}
       ]
   else
     [

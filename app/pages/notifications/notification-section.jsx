@@ -166,7 +166,7 @@ export default class NotificationSection extends Component {
   }
 
   avatarFor() {
-    const src = this.state.avatar || '/assets/simple-avatar.jpg';
+    const src = this.state.avatar || 'https://static.zooniverse.org/pfe-assets/simple-avatar.png';
     let avatar;
 
     if (this.state.unread > 0) return this.unreadCircle();

@@ -239,7 +239,7 @@ describe('ProjectHome', function() {
     });
 
     it('should use the default avatar if props.researcherAvatar is not defined', function() {
-      expect(wrapper.find({ src: '/assets/simple-avatar.png' })).to.have.lengthOf(1);
+      expect(wrapper.find({ src: 'https://static.zooniverse.org/pfe-assets/simple-avatar.png' })).to.have.lengthOf(1);
     });
 
     it('should use props.researcherAvatar if it is defined', function() {
