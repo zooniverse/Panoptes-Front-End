@@ -70,7 +70,7 @@ class ONE_UP_REDIRECT extends React.Component {
 function redirectAboutPage (nextState, replace, done) {
   try {
     const { pathname } = nextState.location
-    const newUrl = `https://fe-root.preview.zooniverse.org${pathname}`
+    let newUrl = `https://fe-root.preview.zooniverse.org${pathname}`
     if (window.location.hostname === 'www.zooniverse.org') {
       newUrl = `https://www.zooniverse.org${pathname}`
     }
