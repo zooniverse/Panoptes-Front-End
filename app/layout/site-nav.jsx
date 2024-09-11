@@ -105,22 +105,12 @@ const SiteNav = createReactClass({
         >
           <Translate content="siteNav.projects" />
         </Link>{' '}
-        <Link
-          to="https://www.zooniverse.org/about"
-          className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.about') : null}
-        >
+        <a href='https://www.zooniverse.org/about' className="site-nav__link">
           <Translate content="siteNav.about" />
-        </Link>{' '}
-        <Link
-          to="https://www.zooniverse.org/get-involved"
-          className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.getInvolved') : null}
-        >
+        </a>{' '}
+        <a href='https://www.zooniverse.org/get-involved' className="site-nav__link">
           <Translate content="siteNav.getInvolved" />
-        </Link>{' '}
+        </a>{' '}
         <Link
           to="/talk"
           className="site-nav__link"
