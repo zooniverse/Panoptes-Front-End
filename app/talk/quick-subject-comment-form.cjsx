@@ -1,7 +1,7 @@
 React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
-CommentBox = require './comment-box'
+CommentBox = require('./comment-box').default
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 projectSection = require './lib/project-section'
