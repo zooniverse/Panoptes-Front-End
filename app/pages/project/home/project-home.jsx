@@ -16,7 +16,7 @@ import ExternalLinksBlock from '../../../components/ExternalLinksBlock';
 const ProjectHomePage = (props) => {
   const projectIsNotRedirected = props.project && !props.project.redirect;
   const canClassify = props.project.links.active_workflows && props.project.links.active_workflows.length > 0;
-  const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
+  const avatarSrc = props.researcherAvatar || 'https://static.zooniverse.org/pfe-assets/simple-avatar.png';
 
   const descriptionClass = classnames(
     'project-home-page__description',

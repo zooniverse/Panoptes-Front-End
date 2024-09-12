@@ -99,11 +99,11 @@ export default class HomePage extends React.Component {
       <div className="on-home-page home-page-not-logged-in">
         <div className="flex-container">
           <section className="home-intro">
-            <img role="presentation" className="home-mobile-video-image" src="./assets/home-video.jpg" />
+            <img role="presentation" className="home-mobile-video-image" src="https://static.zooniverse.org/pfe-assets/home-video.jpg" />
             <video className="home-video" autoPlay={true} loop={true}>
-              <source type="video/ogg" src="./assets/home-video.ogv" />
-              <source type="video/webm" src="./assets/home-video.webm" />
-              <source type="video/mp4" src="./assets/home-video.mp4" />
+              <source type="video/ogg" src="https://static.zooniverse.org/pfe-assets/home-video.ogv" />
+              <source type="video/webm" src="https://static.zooniverse.org/pfe-assets/home-video.webm" />
+              <source type="video/mp4" src="https://static.zooniverse.org/pfe-assets/home-video.mp4" />
             </video>
 
             <Translate className="main-kicker" component="h1" content="notLoggedInHomePage.welcome" />

@@ -197,7 +197,7 @@ EditSubjectSetPage = createReactClass
       <p className="form-help">A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the “manifest”) defining their properties, and the images themselves.</p>
       <p className="form-help">Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it’s best to just have all their subjects in 1 set, but not all.</p>
       <p className="form-help">
-        {@subjectLimitMessage(@props.project.subjects_count, @props.user)} Please <a href='https://www.zooniverse.org/about/contact'> contact us</a> to request changes to your allowance.
+        {@subjectLimitMessage(@props.project.subjects_count, @props.user)} Please <a href='https://www.zooniverse.org/about#contact'> contact us</a> to request changes to your allowance.
       </p>
       <p className="form-help"><strong>We strongly recommend uploading subjects in batches of 500 - 1,000 at a time. When uploading large numbers of subjects, we recommend using our <a href="https://github.com/zooniverse/panoptes-cli#installation"> Panoptes command line interface </a> or our <a href="http://panoptes-python-client.readthedocs.io/"> Panoptes Client package for Python </a> rather than the web portal.</strong></p>
 

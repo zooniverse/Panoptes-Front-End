@@ -42,22 +42,7 @@ import Recents from './pages/profile/recents';
 import AccountInformationPage from './pages/settings/AccountInformationPage';
 import CustomiseProfile from './pages/settings/CustomiseProfile';
 import EmailSettingsPage from './pages/settings/email';
-import AboutPage from './pages/about/index';
-import AboutHome from './pages/about/about-home';
-import PublicationsPage from './pages/about/publications-page';
-import TeamPage from './pages/about/team-page';
-import Acknowledgements from './pages/about/acknowledgements';
-import Contact from './pages/about/contact';
-import Faq from './pages/about/faq';
-import Highlights from './pages/about/highlights';
-import MobileAppPage from './pages/about/mobile-app';
-import Donate from './pages/about/donate';
-import GetInvolved from './pages/get-involved/index';
-import CallForProjects from './pages/get-involved/call-for-projects';
-import Education from './pages/get-involved/education';
-import Volunteering from './pages/get-involved/volunteering';
 import DevClassifierPage from './pages/dev-classifier';
-import Resources from './pages/about/resources-page';
 import DataExports from './pages/lab/data-exports';
 import TalkTags from './talk/tags';
 import MonorepoRoutes from './MonorepoRoutes';
@@ -85,7 +70,7 @@ class ONE_UP_REDIRECT extends React.Component {
 function redirectAboutPage (nextState, replace, done) {
   try {
     const { pathname } = nextState.location
-    const newUrl = `https://fe-content-pages.zooniverse.org${pathname}`
+    let newUrl = `https://fe-root.preview.zooniverse.org${pathname}`
     if (window.location.hostname === 'www.zooniverse.org') {
       newUrl = `https://www.zooniverse.org${pathname}`
     }
@@ -114,24 +99,22 @@ export const routes = (
     <Route path="home" component={ONE_UP_REDIRECT} />
     <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
-    <Route path="about" component={AboutPage} ignoreScrollBehavior>
-      <IndexRoute component={AboutHome} />
+    <Route path="about" onEnter={redirectAboutPage} ignoreScrollBehavior>
       <Route path="team" onEnter={redirectAboutPage} />
       <Route path="publications" onEnter={redirectAboutPage} />
-      <Route path="acknowledgements" component={Acknowledgements} />
-      <Route path="resources" component={Resources} />
-      <Route path="contact" component={Contact} />
-      <Route path="faq" component={Faq} />
-      <Route path="highlights" component={Highlights} />
-      <Route path="mobile-app" component={MobileAppPage} />
-      <Route path="donate" component={Donate} />
+      <Route path="acknowledgements" onEnter={redirectAboutPage} />
+      <Route path="resources" onEnter={redirectAboutPage} />
+      <Route path="contact" onEnter={redirectAboutPage} />
+      <Route path="faq" onEnter={redirectAboutPage} />
+      <Route path="highlights" onEnter={redirectAboutPage} />
+      <Route path="mobile-app" onEnter={redirectAboutPage} />
+      <Route path="donate" onEnter={redirectAboutPage} />
     </Route>
 
 
-    <Route path="get-involved" component={GetInvolved} ignoreScrollBehavior>
-      <IndexRoute component={Volunteering} />
-      <Route path="call-for-projects" component={CallForProjects} />
-      <Route path="education" component={Education} />
+    <Route path="get-involved" onEnter={redirectAboutPage} ignoreScrollBehavior>
+      <Route path="call-for-projects" onEnter={redirectAboutPage} />
+      <Route path="education" onEnter={redirectAboutPage} />
       <Redirect from="callForProjects" to="call-for-projects" />
     </Route>
 
