@@ -143,14 +143,13 @@ export default class AccountBar extends React.Component {
                 <Translate content="accountMenu.profile" />
               </Link>
               <br />
-              <Link
+              <a
                 role="menuitem"
-                to="/"
+                href="https://www.zooniverse.org"
                 className="site-nav__link"
-                onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.home') : null}
               >
                 <Translate content="accountMenu.home" />
-              </Link>
+              </a>
               <br />
               <Link
                 role="menuitem"

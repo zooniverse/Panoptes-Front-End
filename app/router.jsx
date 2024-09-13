@@ -95,9 +95,8 @@ class ExternalRedirect extends React.Component {
 
 export const routes = (
   <Route path="/" component={require('./partials/app')}>
-    <IndexRoute component={HomePageRoot} />
+    <IndexRoute component={() => <ExternalRedirect newUrl='https://www.zooniverse.org' />} />
     <Route path="home" component={ONE_UP_REDIRECT} />
-    <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
     <Route path="about" onEnter={redirectAboutPage} ignoreScrollBehavior>
       <Route path="team" onEnter={redirectAboutPage} />

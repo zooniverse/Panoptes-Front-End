@@ -87,15 +87,12 @@ const SiteNav = createReactClass({
         })}
       >
         {!!this.state.isMobile &&
-          <Link
-            to="/"
+          <a
+            href="https://www.zooniverse.org"
             className="site-nav__link"
-            activeClassName="site-nav__link--active"
-            onlyActiveOnIndex={true}
-            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
           >
             <Translate content="siteNav.home" />
-          </Link>
+          </a>
         }
         <Link
           to="/projects"
@@ -191,14 +188,12 @@ const SiteNav = createReactClass({
   render() {
     return (
       <nav className="site-nav">
-        <IndexLink
-          to="/"
+        <a
+          href="https://www.zooniverse.org"
           className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
           {ZOO_LOGO}
-        </IndexLink>
+        </a>
 
         {!this.state.isMobile && this.renderLinks()}
 
