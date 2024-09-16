@@ -62,7 +62,8 @@ export const SLUGS = [
   'alexfitzpatrick/bradfords-industrial-heritage-in-photographs',
   'talkietoaster/void-orchestra',
   'hjsmith/the-material-culture-of-wills-england-1540-1790',
-  'effeli/node-code-breakers-looking-for-patterns-in-lymph-nodes'
+  'effeli/node-code-breakers-looking-for-patterns-in-lymph-nodes',
+  'md68135/notes-from-nature-ranges-mammal-traits-from-western-north-america'
 ];
 
 export function usesMonorepo(slug) {
