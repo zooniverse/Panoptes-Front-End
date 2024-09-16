@@ -177,9 +177,9 @@ export default class NotificationSection extends Component {
       avatar = <img src={src} className="notification-section__img" alt="Project Avatar" />;
     }
     return (
-      <a href={this.props.slug ? `https://www.zooniverse.org/projects/${this.props.slug}` : 'https://www.zooniverse.org'}>
+      <Link to={this.props.slug ? `/projects/${this.props.slug}` : '/'}>
         {avatar}
-      </a>
+      </Link>
     );
   }
 
