@@ -82,9 +82,9 @@ class ProfileUser extends Component {
       );
     } else {
       return (
-        <Link to="/#projects" className={classes} onClick={this.logClick.bind(this, 'stats')}>
+        <a href={`https://www.zooniverse.org/users/${this.props.profileUser.login}/stats`} className={classes}>
           <Translate content="profile.nav.stats" />
-        </Link>
+        </a>
       );
     }
   }
