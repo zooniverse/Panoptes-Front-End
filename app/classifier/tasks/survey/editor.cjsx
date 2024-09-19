@@ -311,12 +311,7 @@ module.exports = createReactClass
           </label>
           <p>
             <small>
-              <strong>Default</strong> - will show thumbnails as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. Note that volunteer-selected filters change the number of choices shown.
-            </small>
-          </p>
-          <p>
-            <small>
-              <strong>Show Small</strong> - will always show thumbnails as small, regardless of the number of choices shown.
+              <strong>Default</strong> - thumbnails will show when there are 30 choices or less, otherwise no thumbnails will be shown.
             </small>
           </p>
           <p>
@@ -331,7 +326,6 @@ module.exports = createReactClass
           >
             <option value="default">Default</option>
             <option value="hide">Hide</option>
-            <option value="show">Show</option>
           </select>
         </AutoSave>
       </div>
