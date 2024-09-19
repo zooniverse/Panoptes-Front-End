@@ -322,7 +322,7 @@ module.exports = createReactClass
           <select
             name="#{@props.taskPrefix}.thumbnails"
             onChange={handleInputChange.bind @props.workflow}
-            value={if @props.task.thumbnails then @props.task.thumbnails else if @props.task.alwaysShowThumbnails then "show" else "default"}
+            value={if @props.task.thumbnails then @props.task.thumbnails else "default"}
           >
             <option value="default">Default</option>
             <option value="hide">Hide</option>
