@@ -80,10 +80,7 @@ PanoptesApp = createReactClass
 
   render: ->
     <div className="panoptes-main">
-      <Helmet defaultTitle={counterpart 'mainApp.title'} titleTemplate="%s \u2014 #{counterpart 'mainApp.title'}">
-        <link rel="icon" href="/icon.svg">
-        <link rel="apple-touch-icon" href="/touch-icon.png">
-      </Helmet>
+      <Helmet defaultTitle={counterpart 'mainApp.title'} titleTemplate="%s \u2014 #{counterpart 'mainApp.title'}" />
       <AppStatus />
       <IOStatus />
       <AppLayout {...@props}>
