@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import { WorkflowContext } from './context.js';
 import checkIsPFEWorkflow from './helpers/checkIsPFEWorkflow.js';
+import checkIsWorkflowPartOfProject from './helpers/checkIsWorkflowPartOfProject.js';
 
 function DataManager({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
@@ -118,8 +119,24 @@ function DataManager({
     };
   }, [apiData.project, apiData.workflow, apiData.status, updateCounter]);
 
+  // Safety check: did this component receive its minimum input?
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
-  // if (!workflow) return null
+
+  // Safety check: does this workflow belong to this project?
+  if (apiData.workflow && apiData.project) {
+    const isWorkflowPartOfProject = checkIsWorkflowPartOfProject(apiData.workflow, apiData.project);
+    if (!isWorkflowPartOfProject) {
+      return (
+        <div className="status-banner error">
+          ERROR: workflow {apiData.workflow.id} doesn't belong to project {apiData.project.id}
+        </div>
+      );
+    }
+  }
+
+  // NOTE: no need to check for !workflow.
+  // This is automatically handled by "Error: could not fetch data"
+  // // if (!workflow) return null
 
   return (
     <WorkflowContext.Provider
