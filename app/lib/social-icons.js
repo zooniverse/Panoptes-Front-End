@@ -10,7 +10,9 @@ const SOCIAL_ICONS = {
   'wordpress.com/': 'wordpress',
   'youtube.com/': 'youtube',
   'instagram.com/': 'instagram',
-  'medium.com/': 'medium'
+  'medium.com/': 'medium',
+  'bsky.app/': 'bluesky',
+  'mastodon.social/': 'mastodon'
 };
 
 export default SOCIAL_ICONS;
