@@ -70,5 +70,17 @@
     "ariaLabel": "Link to Medium article",
     "label": "Medium",
     "pathBeforeSite": false
+  },
+  "bsky.app/": {
+    "icon": "fa-external-link",
+    "ariaLabel": "Link to BlueSky page",
+    "label": "BlueSky",
+    "pathBeforeSite": false
+  },
+  "mastodon.social/": {
+    "icon": "fa-external-link",
+    "ariaLabel": "Link to Mastodon page",
+    "label": "Mastodon",
+    "pathBeforeSite": false
   }
 }
