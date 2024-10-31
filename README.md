@@ -36,9 +36,11 @@ Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage yo
 
 ### Viewing the Website
 
-Open your web browser of choice and go to `https://localhost:3735/`
+The root `/` is redirected to www.zooniverse.org because this frontend app is no longer used for the homepage. Point your browser to a subpath to view this app run locally.
 
-If you want to _login_ via the Panoptes API and _view authenticated pages,_ then you'll need to set up and use `https://local.zooniverse.org:3735` instead of using localhost:3735. Otherwise, you'll run into CORS errors. (You need to add the hostname to your hosts file, pointing to local. Instructions are on [our Stackoverflow](https://stackoverflow.com/c/zooniverse/questions/109).)
+Open your web browser of choice and go to `https://localhost:3735/lab`
+
+If you want to _login_ via the Panoptes API and _view authenticated pages,_ then you'll need to set up and use `https://local.zooniverse.org:3735/lab` instead of using localhost:3735. Otherwise, you'll run into CORS errors. (You need to add the hostname to your hosts file, pointing to local. Instructions are on [our Stackoverflow](https://stackoverflow.com/c/zooniverse/questions/109).)
 
 **Troubleshooting: web browser blocks local website**
 

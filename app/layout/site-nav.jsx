@@ -87,15 +87,12 @@ const SiteNav = createReactClass({
         })}
       >
         {!!this.state.isMobile &&
-          <Link
-            to="/"
+          <a
+            href="https://www.zooniverse.org"
             className="site-nav__link"
-            activeClassName="site-nav__link--active"
-            onlyActiveOnIndex={true}
-            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
           >
             <Translate content="siteNav.home" />
-          </Link>
+          </a>
         }
         <Link
           to="/projects"
@@ -105,22 +102,12 @@ const SiteNav = createReactClass({
         >
           <Translate content="siteNav.projects" />
         </Link>{' '}
-        <Link
-          to="/about"
-          className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.about') : null}
-        >
+        <a href='https://www.zooniverse.org/about' className="site-nav__link">
           <Translate content="siteNav.about" />
-        </Link>{' '}
-        <Link
-          to="/get-involved"
-          className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.getInvolved') : null}
-        >
+        </a>{' '}
+        <a href='https://www.zooniverse.org/get-involved' className="site-nav__link">
           <Translate content="siteNav.getInvolved" />
-        </Link>{' '}
+        </a>{' '}
         <Link
           to="/talk"
           className="site-nav__link"
@@ -201,14 +188,12 @@ const SiteNav = createReactClass({
   render() {
     return (
       <nav className="site-nav">
-        <IndexLink
-          to="/"
+        <a
+          href="https://www.zooniverse.org"
           className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
           {ZOO_LOGO}
-        </IndexLink>
+        </a>
 
         {!this.state.isMobile && this.renderLinks()}
 

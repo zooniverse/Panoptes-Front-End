@@ -6,7 +6,7 @@ ToggleChildren = require './mixins/toggle-children'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
 Feedback = require './mixins/feedback'
-CommentBox = require './comment-box'
+CommentBox = require('./comment-box').default
 CommentReportForm = require './comment-report-form'
 CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
@@ -19,7 +19,7 @@ SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
 CommentContextIcon = require './lib/comment-context-icon'
 `import WrappedMarkdown from '../components/wrapped-markdown';`
-DEFAULT_AVATAR = '/assets/simple-avatar.png'
+DEFAULT_AVATAR = 'https://static.zooniverse.org/pfe-assets/simple-avatar.png'
 
 module.exports = createReactClass
   displayName: 'TalkComment'

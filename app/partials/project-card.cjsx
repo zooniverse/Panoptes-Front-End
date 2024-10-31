@@ -30,7 +30,7 @@ ProjectCard = createReactClass
     else if !!@props.project.avatar_src
       conditionalStyle.backgroundImage = "url('#{ @props.project.avatar_src }')"
     else
-      conditionalStyle.background = "url('/assets/simple-pattern.png') center center repeat"
+      conditionalStyle.background = "url('https://static.zooniverse.org/pfe-assets/simple-pattern.png') center center repeat"
 
     if conditionalStyle.backgroundImage?
       conditionalStyle.backgroundSize = "contain"

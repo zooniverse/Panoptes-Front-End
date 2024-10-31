@@ -6,7 +6,7 @@ UserSearch = require '../components/user-search'
 {getErrors} = require './lib/validations'
 subjectValidations = require './lib/message-subject-validations'
 messageValidations = require './lib/message-validations'
-CommentBox = require './comment-box'
+CommentBox = require('./comment-box').default
 
 module.exports = createReactClass
   displayName: 'InboxForm'

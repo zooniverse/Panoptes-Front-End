@@ -47,10 +47,6 @@ describe('Notification Section', function() {
       assert.equal(wrapper.find('.notification-section__title').text(), 'Zooniverse');
     });
 
-    it('should link to the home page', function () {
-      assert.equal(wrapper.find('Link').prop('to'), '/');
-    });
-
     it('shows the Zooniverse logo', function () {
       assert.equal(wrapper.find('ZooniverseLogo').length, 1);
     });
@@ -147,7 +143,7 @@ describe('Notification Section', function() {
           user={{ id: '1' }}
         />,
         {
-          context: { notificationsCounter }, 
+          context: { notificationsCounter },
           disableLifeCycleMethods: true
         }
       );
