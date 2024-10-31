@@ -102,8 +102,8 @@
     "whatwg-url": "~14.0.0"
   },
   "engines": {
-    "node": ">=18",
-    "npm": ">=8"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "license": "Apache-2.0",
   "nyc": {
