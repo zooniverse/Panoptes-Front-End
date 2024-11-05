@@ -4,7 +4,7 @@
     "@babel/runtime": "~7.23.9",
     "@sentry/browser": "~7.100.1",
     "animated-scrollto": "~1.1.0",
-    "chart.js": "~4.4.1",
+    "chart.js": "~4.4.6",
     "chartist": "~0.11.0",
     "classnames": "~2.5.1",
     "counterpart": "~0.18.6",
