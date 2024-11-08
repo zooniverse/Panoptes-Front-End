@@ -16,7 +16,7 @@ class Task extends React.Component {
     const index = findLastIndex(annotations, annotation => annotation.task === newAnnotation.task);
     if (index > -1) {
       annotations[index] = newAnnotation;
-      this.props.updateAnnotations(annotations);
+      this.props.updateAnnotations(annotations, true);
     }
   }
 

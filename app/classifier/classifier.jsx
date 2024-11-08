@@ -141,9 +141,15 @@ class Classifier extends React.Component {
       });
   }
 
-  updateAnnotations(annotations) {
+  updateAnnotations(annotations, fromUserAction = false) {
     this.setState({ annotations });
     this.props.actions.classify.saveAnnotations(annotations);
+    if (fromUserAction && !this.props.classification?.metadata._inProgress) {
+      this.props.actions.classify.updateMetadata({ 
+        _inProgress: true,
+        started_at: new Date().toISOString()
+       });
+    }
   }
 
   updateFeedback(taskId) {
@@ -203,12 +209,13 @@ class Classifier extends React.Component {
     actions.classify.updateMetadata({ subject_dimensions });
   }
 
+  // handle annotation changes from the subject viewer eg. drawing tasks
   handleAnnotationChange(classification, newAnnotation) {
     const { annotations } = this.state;
     const index = findLastIndex(annotations, annotation => annotation.task === newAnnotation.task);
     if (index > -1) {
       annotations[index] = newAnnotation;
-      this.updateAnnotations(annotations);
+      this.updateAnnotations(annotations, true);
     }
   }
 

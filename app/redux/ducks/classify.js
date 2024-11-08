@@ -51,6 +51,7 @@ function createNewClassification(project, workflow, subject, goldStandardMode, l
   // Delete the metadata key because we don't want volunteers to see it.
   subject.update({ 'metadata.intervention': undefined });
   const newMetadata = {
+    _inProgress: false,
     workflow_version: workflow.version,
     started_at: (new Date()).toISOString(),
     user_agent: navigator.userAgent,
