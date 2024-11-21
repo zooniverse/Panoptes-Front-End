@@ -84,7 +84,12 @@ module.exports = {
       use: [{
         loader:'babel-loader'
       }, {
-        loader: 'coffee-loader'
+        loader: 'coffee-loader',
+        options: {
+          transpile: {
+            presets: ['@babel/env'],
+          },
+        },
       }, {
         loader: path.resolve('./webpack/cjsx-loader.js')
       }],
@@ -93,7 +98,12 @@ module.exports = {
       use: [{
         loader: 'babel-loader'
       }, {
-        loader: 'coffee-loader'
+        loader: 'coffee-loader',
+        options: {
+          transpile: {
+            presets: ['@babel/env'],
+          },
+        },
       }],
     }, {
       test: /\.css$/,
