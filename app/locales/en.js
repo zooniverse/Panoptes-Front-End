@@ -289,7 +289,7 @@ export default {
       partnerPreferences: 'Zooniverse partner email preferences',
       nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts',
       emailValid: 'Valid email',
-      emailInvalid: 'Verified email',
+      emailInvalid: 'Invalid email',
       emailInvalidPrompt: 'Please re-enter your email above',
       emailVerified: 'Verified email',
       emailUnverified: 'Unverified email',
