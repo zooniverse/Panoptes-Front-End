@@ -151,7 +151,7 @@ class EditWorkflowPage extends Component {
     } = this.props.workflow.configuration;
     if (hide_classification_summaries === undefined) { hide_classification_summaries = true; }
 
-	  const isCaesarDataFetchingEnabled = this.props.workflow?.configuration?.enable_caesar_data_fetching ?? false;
+    const isCaesarDataFetchingEnabled = this.props.workflow?.configuration?.enable_caesar_data_fetching ?? false;
 
     return (
       <div className="edit-workflow-page">
@@ -299,6 +299,14 @@ class EditWorkflowPage extends Component {
                             <i className="fa fa-i-cursor fa-2x"></i>
                             <br />
                             <small><strong>Data annotation</strong></small>
+                          </button>
+                        </AutoSave> : undefined}{' '}
+                      {this.canUseTask(this.props.project, "volumetricProject") ?
+                        <AutoSave resource={this.props.workflow}>
+                          <button type="button" className="minor-button" onClick={this.addNewTask.bind(this, 'volumetric')} title="Volumetric Task: the volunteer looks at a volumetric viewer, and selects the point of the volume to be annotated.">
+                            <i className="fa fa-th fa-2x"></i>
+                            <br />
+                            <small><strong>Volumetric Task</strong></small>
                           </button>
                         </AutoSave> : undefined}{' '}
                       </div> : undefined}
