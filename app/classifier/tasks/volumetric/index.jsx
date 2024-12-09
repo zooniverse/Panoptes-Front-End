@@ -3,11 +3,8 @@ import React from "react";
 import GenericTaskEditor from "../generic-editor";
 
 export default class VolumetricTask extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
-    return <div>{"VolumetricTask Tool"}</div>;
+    return <div>This is a placeholder for the Volumetric Task, which is only visible in the FEM Classifier</div>;
   }
 }
 
@@ -21,12 +18,13 @@ VolumetricTask.getDefaultTask = () => ({
 
 VolumetricTask.getTaskText = (task) => task.instruction;
 
-VolumetricTask.getDefaultAnnotation = () => ({ _toolIndex: 0, value: [] });
+VolumetricTask.getDefaultAnnotation = () => ({ value: [] });
 
 VolumetricTask.defaultProps = {
   showRequiredNotice: false,
   task: {
     help: "",
+    required: false,
     type: "volumetric",
     instruction: "Describe how to use this tool",
   },
@@ -41,10 +39,6 @@ VolumetricTask.propTypes = {
     help: PropTypes.string,
     instruction: PropTypes.string,
     required: PropTypes.bool,
-    tools: PropTypes.array,
     type: PropTypes.string,
-  }),
-  workflow: PropTypes.shape({
-    tasks: PropTypes.object,
-  }),
+  })
 };
