@@ -13,6 +13,7 @@ import Highlighter from './highlighter';
 import TranscriptionTask from './transcription';
 import SubjectGroupComparisonTask from './subjectGroupComparison';
 import DataVisAnnotationTask from './dataVisAnnotation'
+import VolumetricTask from './volumetric';
 
 const tasks = {
   combo: ComboTask,
@@ -29,7 +30,8 @@ const tasks = {
   highlighter: Highlighter,
   transcription: TranscriptionTask,
   subjectGroupComparison: SubjectGroupComparisonTask,
-  dataVisAnnotation: DataVisAnnotationTask
+  dataVisAnnotation: DataVisAnnotationTask,
+  volumetric: VolumetricTask
 };
 
 export default tasks;
