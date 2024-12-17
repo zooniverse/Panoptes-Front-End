@@ -41,6 +41,7 @@ module.exports = createReactClass
         task: JSON.parse JSON.stringify nextProps.task
 
   render: ->
+    [root, taskKey] = @props.taskPrefix.split '.'
     contentWarnings = @checkContentWarnings()
 
     <div className="workflow-task-editor">
@@ -223,7 +224,7 @@ module.exports = createReactClass
         <AutoSave resource={@props.workflow}>
           <span className="form-label">Next task</span>
           <br />
-          <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
+          <NextTaskSelector taskKey={taskKey} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
         </AutoSave>
       </p>
 
