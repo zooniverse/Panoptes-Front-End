@@ -48,7 +48,7 @@ export default function WorkflowHeader({
 
   return (
     <div className="workflow-header">
-      <div className="workflow-header-links flex-row">
+      <div className="workflow-header-top">
         <a href={returnUrl}> {/* Formerly <Link> from 'react-router', but React was throwing Legacy Context errors. */}
           <ReturnIcon />
           {strings.PagesEditor.components.WorkflowHeader.return}

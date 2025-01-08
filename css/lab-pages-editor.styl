@@ -141,15 +141,18 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   main-content()
-    border: 2px dashed blue
+    border: 1px dashed blue
     max-width: 840px
     margin: 0 auto
 
-  .flex-row
+  flex-row()
     align-items: center
     display: flex
     flex-direction: row
     gap: $sizeS
+
+  .flex-row
+    flex-row()
   
   .flex-wrap
     flex-wrap: wrap
@@ -193,11 +196,16 @@ $fontWeightBoldPlus = 700
     a
       min-width: 40%
 
-    .workflow-header-links
+    .workflow-header-top
+      flex-row()
+      background: $teal
+      color: $white
       margin-bottom: $sizeM
+      padding: $sizeXS
 
       a
         display: inline-block
+        color: $white
         font-size: $fontSizeS
         text-decoration: none
 
