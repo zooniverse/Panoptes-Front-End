@@ -48,7 +48,6 @@ $fontWeightBoldPlus = 700
   font-family: $fontFamilies
   font-size: $fontSizeM
   margin: 0 auto
-  padding: $sizeM $sizeM
 
   // General UI
   // ---------------------------------------------------------------------------
@@ -187,30 +186,35 @@ $fontWeightBoldPlus = 700
   .workflow-version
     color: $teal
 
-  // Component: Workflow Header
+  // Component: Workflow Top Links and Workflow Tabs
+  // Formerly grouped as "Workflow Header"
   // ---------------------------------------------------------------------------
+
+  .workflow-top-links
+    flex-row()
+    background: $teal
+    color: $white
+    margin-bottom: $sizeM
+    padding: $sizeS
+
+    a
+      display: inline-block
+      color: $white
+      font-size: $fontSizeS
+      text-decoration: none
+      min-width: 40%
+
+      .icon
+        margin-right: $sizeS
+    
+    .zooniverse-logo
+      max-width: 160px
 
   .workflow-header
     margin-bottom: $sizeXL
 
     a
       min-width: 40%
-
-    .workflow-header-top
-      flex-row()
-      background: $teal
-      color: $white
-      margin-bottom: $sizeM
-      padding: $sizeXS
-
-      a
-        display: inline-block
-        color: $white
-        font-size: $fontSizeS
-        text-decoration: none
-
-        .icon
-          margin-right: $sizeS
 
     .workflow-header-tabs
       main-content()
