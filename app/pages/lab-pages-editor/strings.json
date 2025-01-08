@@ -1,7 +1,7 @@
 {
   "PagesEditor": {
     "components": {
-      "WorkflowTabs": {
+      "WorkflowHeaderTabs": {
         "tasks": "Tasks",
         "workflow_settings": "Workflow Settings"
       },

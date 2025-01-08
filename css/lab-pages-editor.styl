@@ -210,32 +210,27 @@ $fontWeightBoldPlus = 700
     .zooniverse-logo
       max-width: 160px
 
-  .workflow-header
-    margin-bottom: $sizeXL
+  .workflow-header-tabs
+    main-content()
+    flex-row()
+    justify-content: center
+    gap: $sizeXL
+    border-bottom: 0.5px solid $grey1
 
-    a
-      min-width: 40%
+    button
+      background: none
+      border: none
+      cursor: pointer
+      font-size: $fontSizeL
+      font-weight: $fontWeightBoldPlus
+      text-transform: uppercase
 
-    .workflow-header-tabs
-      main-content()
-      gap: $sizeXL
-      justify-content: center
-      border-bottom: 0.5px solid $grey1
-
-      button
-        background: none
-        border: none
-        cursor: pointer
-        font-size: $fontSizeL
-        font-weight: $fontWeightBoldPlus
-        text-transform: uppercase
-
-        &[aria-selected=true]
-          border-bottom: 4px solid $teal
-        
-        &[aria-selected=false]
-          color: $grey1
-          border-bottom: 4px solid transparent
+      &[aria-selected=true]
+        border-bottom: 4px solid $teal
+      
+      &[aria-selected=false]
+        color: $grey1
+        border-bottom: 4px solid transparent
 
   // Component: Workflow Settings Page
   // ---------------------------------------------------------------------------
