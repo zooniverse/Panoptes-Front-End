@@ -3,7 +3,7 @@ import { useWorkflowContext } from '../context.js';
 
 const DEFAULT_HANDLER = () => {};
 
-export default function WorkflowHeader({
+export default function WorkflowHeaderTabs({
   currentTab = 0,
   setCurrentTab = DEFAULT_HANDLER,
   tabs = []
@@ -59,7 +59,7 @@ export default function WorkflowHeader({
   );
 }
 
-WorkflowHeader.propTypes = {
+WorkflowHeaderTabs.propTypes = {
   currentTab: PropTypes.number,
   setCurrentTab: PropTypes.func,
   tabs: PropTypes.arrayOf(

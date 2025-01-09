@@ -12,6 +12,7 @@ import { StrictMode, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import DataManager from './DataManager.jsx';
+import WorkflowHeaderTitle from './components/WorkflowHeaderTitle.jsx';
 import WorkflowHeaderTabs from './components/WorkflowHeaderTabs.jsx';
 import WorkflowTopLinks from './components/WorkflowTopLinks.jsx';
 import TasksPage from './components/TasksPage';
@@ -50,6 +51,7 @@ function PagesEditor({ params }) {
           workflowId={workflowId}
         >
           <WorkflowTopLinks />
+          <WorkflowHeaderTitle />
           <WorkflowHeaderTabs
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
