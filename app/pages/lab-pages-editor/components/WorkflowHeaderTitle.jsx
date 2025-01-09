@@ -14,6 +14,7 @@ export default function WorkflowHeaderTitle() {
   return (
     <div className="workflow-header-title">
       <h2>{workflowTitle}</h2>
+      <span className="spacer" />
       <a
         className="button-link"
         href={previewUrl}

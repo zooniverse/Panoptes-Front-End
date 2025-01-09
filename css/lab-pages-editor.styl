@@ -143,6 +143,7 @@ $fontWeightBoldPlus = 700
     border: 1px dashed blue
     max-width: 840px
     margin: 0 auto
+    padding: 0 $sizeS
 
   flex-row()
     align-items: center
@@ -159,7 +160,7 @@ $fontWeightBoldPlus = 700
   .small-width
     width: 60px
 
-  .flex-item
+  .flex-item, .spacer
     flex: 1 1 auto
   
   .align-start
@@ -186,8 +187,7 @@ $fontWeightBoldPlus = 700
   .workflow-version
     color: $teal
 
-  // Component: Workflow Top Links and Workflow Tabs
-  // Formerly grouped as "Workflow Header"
+  // Component: Workflow "Header" components
   // ---------------------------------------------------------------------------
 
   .workflow-top-links
@@ -209,6 +209,10 @@ $fontWeightBoldPlus = 700
     
     .zooniverse-logo
       max-width: 160px
+
+  .workflow-header-title
+    main-content()
+    flex-row()
 
   .workflow-header-tabs
     main-content()
