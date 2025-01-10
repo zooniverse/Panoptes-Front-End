@@ -10,6 +10,7 @@ $darkGreen = #005D69
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
+$orange = #D47811
 $white = #FFFFFF
 $backdropColour = #80808080
 $shadowColour = #00000080
@@ -140,7 +141,6 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   main-content()
-    border: 1px dashed blue
     max-width: 840px
     margin: 0 auto
     padding: 0 $sizeS
@@ -224,13 +224,14 @@ $fontWeightBoldPlus = 700
     button
       background: none
       border: none
+      border-radius: 0
       cursor: pointer
       font-size: $fontSizeL
       font-weight: $fontWeightBoldPlus
       text-transform: uppercase
 
       &[aria-selected=true]
-        border-bottom: 4px solid $teal
+        border-bottom: 4px solid $orange
       
       &[aria-selected=false]
         color: $grey1
