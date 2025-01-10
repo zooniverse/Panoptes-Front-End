@@ -185,7 +185,7 @@ $fontWeightBoldPlus = 700
     margin-bottom: $sizeM
   
   .workflow-version
-    color: $teal
+    color: $orange
 
   // Component: Workflow "Header" components
   // ---------------------------------------------------------------------------
@@ -194,8 +194,9 @@ $fontWeightBoldPlus = 700
     flex-row()
     background: $teal
     color: $white
-    margin-bottom: $sizeM
-    padding: $sizeS
+    margin-bottom: 30px
+    min-height: 60px
+    padding: $sizeS $sizeM
 
     a
       display: inline-block
@@ -213,6 +214,16 @@ $fontWeightBoldPlus = 700
   .workflow-header-title
     main-content()
     flex-row()
+    margin-bottom: 30px
+
+    h2
+      font-size: 24px
+      font-weight: 700
+
+    .preview-link
+      font-size: 12px
+      line-height: 16px
+      color: $grey3
 
   .workflow-header-tabs
     main-content()
@@ -323,29 +334,24 @@ $fontWeightBoldPlus = 700
   .tasks-page
     main-content()
 
-    .workflow-title
-      border-bottom: 1.5px solid $grey1
-      margin-bottom: $sizeS
-      margin-top: $sizeM
+    .tasks-page-overview
+      flex-row()
+      font-size: 12px
+      margin: 10px 0
 
-      h2
-        color: $grey3
-        font-size: $fontSizeXL
-        font-weight: $fontWeightBoldPlus
-        text-transform: uppercase
-      
-      .status-active, .status-inactive
-        font-size: $fontSizeS
-        margin-left: $sizeS
-        text-transform: uppercase
+    .status-active, .status-inactive
+      margin-left: $sizeS
+      padding-right: $sizeS
+      text-transform: uppercase
+      border-right: 1px solid $grey1
 
-      .status-active
-        color: $greenBright
+    .status-active
+      color: $greenBright
 
-      .status-inactive
-        color: $redBright
+    .status-inactive
+      color: $redBright
     
-    .workflow-starting-page
+    .workflow-start-selector
       border: 1.5px solid $grey1
       border-radius: $sizeXS
       color: $grey2

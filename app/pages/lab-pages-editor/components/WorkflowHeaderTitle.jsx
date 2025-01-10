@@ -16,7 +16,7 @@ export default function WorkflowHeaderTitle() {
       <h2>{workflowTitle}</h2>
       <span className="spacer" />
       <a
-        className="button-link"
+        className="preview-link"
         href={previewUrl}
         rel="noopener noreferrer"
         target='_blank'

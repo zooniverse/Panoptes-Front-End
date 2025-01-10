@@ -275,16 +275,34 @@ export default function TasksPage() {
 
   return (
     <div className="tasks-page">
-      <div className="workflow-title flex-row">
-        <h2 className="flex-item">{workflow.display_name}</h2>
+      <div className="tasks-page-overview">
+        <select
+          aria-label="Choose starting Page"
+          className="workflow-start-selector"
+          onChange={handleChangeStartingPage}
+          style={(workflow?.steps?.length < 1) ? { visibility: 'hidden' } : undefined}
+          value={firstStepKey}
+        >
+          <option value="">Choose starting page</option>
+          {workflow.steps?.map(([stepKey, stepBody]) => (
+            <option
+              key={`choose-starting-page-${stepKey}`}
+              value={stepKey}
+            >
+              {firstStepKey === stepKey && 'Starting page: '}
+              {stepBody?.taskKeys?.join(', ') || `(${stepKey})` /* Note: if you see the stepKey instead of the taskKeys, something's wrong. */}
+            </option>
+          ))}
+        </select>
+        <span className="spacer" />
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
+        <WorkflowVersion />
       </div>
       <section aria-labelledby="workflow-tasks-heading">
-        <div className="flex-row">
-          <h3 id="workflow-tasks-heading" className="flex-item">Tasks</h3>
-          <WorkflowVersion />
-        </div>
-        <div className="flex-row">
+        <div
+          className="flex-row"
+          style={{ opacity: '0.25' }}
+        >
           <button
             className="flex-item big primary decoration-plus"
             onClick={handleClickAddTaskButton}
@@ -292,24 +310,8 @@ export default function TasksPage() {
           >
             Add a new Task
           </button>
-          <select
-            aria-label="Choose starting Page"
-            className="flex-item workflow-starting-page"
-            onChange={handleChangeStartingPage}
-            style={(workflow?.steps?.length < 1) ? { visibility: 'hidden' } : undefined}
-            value={firstStepKey}
-          >
-            <option value="">Choose starting page</option>
-            {workflow.steps?.map(([stepKey, stepBody]) => (
-              <option
-                key={`choose-starting-page-${stepKey}`}
-                value={stepKey}
-              >
-                {firstStepKey === stepKey && 'Starting page: '}
-                {stepBody?.taskKeys?.join(', ') || `(${stepKey})` /* Note: if you see the stepKey instead of the taskKeys, something's wrong. */}
-              </option>
-            ))}
-          </select>
+          <span className="spacer" />
+          <span className="flex-item">// Temporary for PR 7245</span>
         </div>
         {!(workflow.steps?.length > 0) && (
           <div className="no-tasks-notice">
