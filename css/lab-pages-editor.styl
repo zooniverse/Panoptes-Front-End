@@ -366,6 +366,31 @@ $fontWeightBoldPlus = 700
       
       p
         color: $grey1
+    
+    .task-inbetween
+      display: flex
+      align-items: center
+
+      .decoration-line
+        flex: 1 1 auto
+        height: 1px
+        border-bottom: 1px solid $yellow
+
+    .add-task-button
+      background: $white
+      border: none
+      color: $yellow
+      display: block
+      margin: 0 auto
+      padding: $sizeS
+      text-transform: uppercase
+
+      &:hover
+        color: $white
+        text-shadow: $yellow 1px 0 10px
+      
+      &:active
+        color: $orange
 
     dialog
       border: 1px solid $grey1
@@ -561,7 +586,7 @@ $fontWeightBoldPlus = 700
     
     .steps-list
       list-style: none
-      margin: $sizeS 0 0 0
+      margin: 0 0 30px 0
       padding: 0
 
     .step-item

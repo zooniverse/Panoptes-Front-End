@@ -299,20 +299,6 @@ export default function TasksPage() {
         <WorkflowVersion />
       </div>
       <section aria-labelledby="workflow-tasks-heading">
-        <div
-          className="flex-row"
-          style={{ opacity: '0.25' }}
-        >
-          <button
-            className="flex-item big primary decoration-plus"
-            onClick={handleClickAddTaskButton}
-            type="button"
-          >
-            Add a new Task
-          </button>
-          <span className="spacer" />
-          <span className="flex-item">// Temporary for PR 7245</span>
-        </div>
         {!(workflow.steps?.length > 0) && (
           <div className="no-tasks-notice">
             <WrenchIcon />
@@ -339,6 +325,17 @@ export default function TasksPage() {
               updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
             />
           ))}
+          <li className="task-inbetween">
+            <span className="decoration-line" />
+            <button
+              className="add-task-button decoration-plus"
+              onClick={handleClickAddTaskButton}
+              type="button"
+            >
+              Add a new Task
+            </button>
+            <span className="decoration-line" />
+          </li>
         </ul>
         <NewTaskDialog
           ref={newTaskDialog}
