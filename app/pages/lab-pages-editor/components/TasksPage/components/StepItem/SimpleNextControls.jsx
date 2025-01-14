@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import NextStepArrow from './NextStepArrow.jsx';
+import ArrowDownIcon from '../../../../icons/ArrowDownIcon.jsx'
 
 const DEFAULT_HANDLER = () => {};
 
@@ -22,41 +23,51 @@ export default function SimpleNextControls({
     updateNextStepForStep(stepKey, next);
   }
 
-  return (
-    <div className="next-controls vertical-layout">
-      <NextStepArrow
-        arrowhead={isLinearItem}
-        className="next-arrow"
-        height={isLinearItem ? 24 : 10}
-      />
-      {showNextPageDropdown && (<select
-          className={(!stepBody?.next) ? 'next-is-submit' : ''}
-          onChange={onChange}
-          value={stepBody?.next || ''}
-        >
-          <option
-            value={''}
+  if (showNextPageDropdown || showFakeSubmit) {
+    return (
+      <div className="next-controls vertical-layout">
+        <NextStepArrow
+          arrowhead={isLinearItem}
+          className="next-arrow"
+          height={isLinearItem ? 24 : 10}
+        />
+        {showNextPageDropdown && (<select
+            className={(!stepBody?.next) ? 'next-is-submit' : ''}
+            onChange={onChange}
+            value={stepBody?.next || ''}
           >
-            Submit
-          </option>
-          {selectableSteps.map(([otherStepKey, otherStepBody]) => {
-            const taskKeys = otherStepBody?.taskKeys?.toString() || '(none)';
-            return (
-              <option
-                key={`simple-next-controls-option-${otherStepKey}`}
-                value={otherStepKey}
-              >
-                {taskKeys}
-              </option>
-            );
-          })}
-        </select>
-      )}
-      {showFakeSubmit && (
-        <div className="fake-submit">Submit</div>
-      )}
-    </div>
-  );
+            <option
+              value={''}
+            >
+              Submit
+            </option>
+            {selectableSteps.map(([otherStepKey, otherStepBody]) => {
+              const taskKeys = otherStepBody?.taskKeys?.toString() || '(none)';
+              return (
+                <option
+                  key={`simple-next-controls-option-${otherStepKey}`}
+                  value={otherStepKey}
+                >
+                  {taskKeys}
+                </option>
+              );
+            })}
+          </select>
+        )}
+        {showFakeSubmit && (
+          <div className="fake-submit">Submit</div>
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <div className="task-inbetween">
+        <span className="decoration-line" />
+        <ArrowDownIcon className="next-task-icon" />
+        <span className="decoration-line" />
+      </div>
+    );
+  }
 }
 
 SimpleNextControls.propTypes = {
