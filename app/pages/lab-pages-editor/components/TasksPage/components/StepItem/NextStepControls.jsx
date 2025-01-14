@@ -4,7 +4,7 @@ import ArrowDownIcon from '../../../../icons/ArrowDownIcon.jsx'
 
 const DEFAULT_HANDLER = () => {};
 
-export default function SimpleNextControls({
+export default function NextStepControls({
   allSteps = [],
   isLastItem = false,
   isLinearWorkflow = false,
@@ -70,7 +70,7 @@ export default function SimpleNextControls({
   }
 }
 
-SimpleNextControls.propTypes = {
+NextStepControls.propTypes = {
   allSteps: PropTypes.arrayOf(PropTypes.array),
   isLastItem: PropTypes.bool,
   isLinearWorkflow: PropTypes.bool,
