@@ -4,6 +4,7 @@ $grey3 = #5C5C5C
 $grey4 = #979797
 $grey5 = #E2E5E9
 $grey6 = #EFF2F5
+$nearBlack = #404040
 $black = #000000
 $teal = #005D69  // Dark teal. Alternate is #00979D
 $darkGreen = #005D69
@@ -237,16 +238,19 @@ $fontWeightBoldPlus = 700
       border: none
       border-radius: 0
       cursor: pointer
-      font-size: $fontSizeL
-      font-weight: $fontWeightBoldPlus
+      font-size: 18px
+      padding: 4px 20px
       text-transform: uppercase
 
       &[aria-selected=true]
         border-bottom: 4px solid $orange
+        color: $nearBlack
+        font-weight: 700
       
       &[aria-selected=false]
-        color: $grey1
+        color: $grey3
         border-bottom: 4px solid transparent
+        font-weight: 500
 
   // Component: Workflow Settings Page
   // ---------------------------------------------------------------------------
