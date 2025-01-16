@@ -220,13 +220,6 @@ export default function TasksPage() {
     setActiveStepIndex(-1);
   }
 
-  function handleChangeStartingPage(e) {
-    const targetStepKey = e?.target?.value || '';
-    const targetStepIndex = workflow?.steps?.findIndex(([stepKey]) => stepKey === targetStepKey) || -1;
-    if (targetStepIndex < 0) return;
-    moveStep(targetStepIndex, 0);
-  }
-
   // Changes the optional "next page" of a step/page
   function updateNextStepForStep(stepKey, next = undefined) {
     if (!workflow || !workflow.steps) return;
@@ -276,24 +269,6 @@ export default function TasksPage() {
   return (
     <div className="tasks-page">
       <div className="tasks-page-overview">
-        <select
-          aria-label="Choose starting Page"
-          className="workflow-start-selector"
-          onChange={handleChangeStartingPage}
-          style={(workflow?.steps?.length < 1) ? { visibility: 'hidden' } : undefined}
-          value={firstStepKey}
-        >
-          <option value="">Choose starting page</option>
-          {workflow.steps?.map(([stepKey, stepBody]) => (
-            <option
-              key={`choose-starting-page-${stepKey}`}
-              value={stepKey}
-            >
-              {firstStepKey === stepKey && 'Starting page: '}
-              {stepBody?.taskKeys?.join(', ') || `(${stepKey})` /* Note: if you see the stepKey instead of the taskKeys, something's wrong. */}
-            </option>
-          ))}
-        </select>
         <span className="spacer" />
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
         <WorkflowVersion />

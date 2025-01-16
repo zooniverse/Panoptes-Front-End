@@ -342,7 +342,7 @@ $fontWeightBoldPlus = 700
     .tasks-page-overview
       flex-row()
       font-size: 12px
-      margin: 10px 0
+      margin: 10px 0 0 0
 
     .status-active, .status-inactive
       margin-left: $sizeS
@@ -355,11 +355,6 @@ $fontWeightBoldPlus = 700
 
     .status-inactive
       color: $redBright
-    
-    .workflow-start-selector
-      border: 1.5px solid $grey1
-      border-radius: $sizeXS
-      color: $grey2
     
     .no-tasks-notice
       padding: $sizeL
@@ -649,7 +644,7 @@ $fontWeightBoldPlus = 700
               background: $grey2
 
       .step-drop-target
-        padding: $sizeS
+        padding: 5px  // In practice, the drop target is twice the height of the padding. 
 
         &.active
           background: $greenBright
