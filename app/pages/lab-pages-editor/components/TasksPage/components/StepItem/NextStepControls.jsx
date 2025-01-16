@@ -63,7 +63,7 @@ export default function NextStepControls({
     return (
       <div className="task-inbetween">
         <span className="decoration-line" />
-        <ArrowDownIcon className="next-task-icon" />
+        <ArrowDownIcon className="next-step-icon" />
         <span className="decoration-line" />
       </div>
     );

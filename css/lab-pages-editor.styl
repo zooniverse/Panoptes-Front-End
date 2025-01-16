@@ -12,6 +12,7 @@ $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
 $orange = #D47811
+$darkOrange = #70481C
 $white = #FFFFFF
 $backdropColour = #80808080
 $shadowColour = #00000080
@@ -378,28 +379,28 @@ $fontWeightBoldPlus = 700
       .decoration-line
         flex: 1 1 auto
         height: 1px
-        border-bottom: 1px solid $yellow
+        border-bottom: 1px solid $orange
       
-      .next-task-icon
+      .next-step-icon
         font-size: 20px
-        color: $yellow
+        color: $orange
         padding: 0 10px
 
     .add-task-button
       background: none
       border: none
-      color: $yellow
+      color: $orange
       display: block
       margin: 0 auto
       padding: $sizeS
       text-transform: uppercase
 
       &:hover
-        color: $white
+        color: $yellow
         text-shadow: $yellow 1px 0 10px
       
       &:active
-        color: $orange
+        color: $darkOrange
 
     dialog
       border: 1px solid $grey1
