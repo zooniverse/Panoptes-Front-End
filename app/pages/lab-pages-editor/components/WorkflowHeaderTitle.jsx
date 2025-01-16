@@ -13,7 +13,7 @@ export default function WorkflowHeaderTitle() {
 
   return (
     <div className="workflow-header-title">
-      <h2>{workflowTitle}</h2>
+      <h1>{workflowTitle}</h1>
       <span className="spacer" />
       <a
         className="preview-link"
