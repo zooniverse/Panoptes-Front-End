@@ -44,6 +44,7 @@ function StepItem({
   const isLastItem = stepIndex === allSteps.length - 1;
   const taskKeys = stepBody.taskKeys || [];
   const branchingTaskKey = checkCanStepBranch(step, allTasks);
+  const stepLabel = `Page ${ stepIndex + 1 }`
 
   function doCopy() {
     copyStep(stepIndex);
@@ -116,7 +117,9 @@ function StepItem({
           ref={htmlContent}
         >
           <div className="step-controls flex-row spacing-bottom-XS">
-            <span className="step-controls-left" />
+            <div className="step-controls-left">
+              <span className="step-label">{stepLabel}</span>
+            </div>
             <div className="step-controls-center">
               <button
                 aria-label={`Rearrange Page ${stepKey} upwards`}
