@@ -15,6 +15,8 @@ import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
 import WorkflowVersion from '../WorkflowVersion.jsx';
+
+import AddItemIcon from '../../icons/AddItemIcon.jsx';
 import WrenchIcon from '../../icons/WrenchIcon.jsx';
 
 // Use ?advanced=true to enable advanced mode.
@@ -303,11 +305,12 @@ export default function TasksPage() {
           <li className="task-inbetween">
             <span className="decoration-line" />
             <button
-              className="add-task-button decoration-plus"
+              className="add-task-button"
               onClick={handleClickAddTaskButton}
               type="button"
             >
               Add a new Task
+              <AddItemIcon />
             </button>
             <span className="decoration-line" />
           </li>

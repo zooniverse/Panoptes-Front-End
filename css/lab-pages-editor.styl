@@ -124,10 +124,6 @@ $fontWeightBoldPlus = 700
   .disabled, .disabled *, [disabled]
     color: $grey1
   
-  .decoration-plus
-    &::after
-      content: ' +'
-  
   .status-banner
     display: flex
     flex-direction: column
@@ -384,12 +380,14 @@ $fontWeightBoldPlus = 700
         margin: 0 10px
 
     .add-task-button
+      align-items: center
       background: none
       border: none
       color: $orange
-      display: block
+      display: flex
+      font-size: 18px
       margin: 0 auto
-      padding: $sizeS
+      padding: 10px
       text-transform: uppercase
 
       &:hover
@@ -398,6 +396,9 @@ $fontWeightBoldPlus = 700
       
       &:active
         color: $darkOrange
+      
+      .icon
+        margin-left: 10px
 
     dialog
       border: 1px solid $grey1

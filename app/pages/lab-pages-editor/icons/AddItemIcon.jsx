@@ -1,19 +1,17 @@
-export default function NextStepIcon({ alt, className = '', width = 30, height = 30 }) {
+export default function AddItemIcon({ alt, className = '', width = 12, height = 12 }) {
   return (
     <svg
       className={`icon ${className}`}
       aria-label={alt}
       width={width}
       height={height}
-      viewBox="0 0 30 30"
+      viewBox="0 0 12 12"
       fill="none"
     >
       <path
-        d="M27 9L15 21L3 9"
+        d="M6 12V0M0 6H12"
         stroke="currentColor"
         stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
       />
     </svg>
   );
