@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import NextStepArrow from './NextStepArrow.jsx';
-import ArrowDownIcon from '../../../../icons/ArrowDownIcon.jsx'
+import NextStepIcon from '../../../../icons/NextStepIcon.jsx'
 
 const DEFAULT_HANDLER = () => {};
 
@@ -63,7 +63,7 @@ export default function NextStepControls({
     return (
       <div className="task-inbetween">
         <span className="decoration-line" />
-        <ArrowDownIcon className="next-step-icon" />
+        <NextStepIcon className="next-step-icon" />
         <span className="decoration-line" />
       </div>
     );
