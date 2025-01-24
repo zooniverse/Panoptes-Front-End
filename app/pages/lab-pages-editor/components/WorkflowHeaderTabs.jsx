@@ -47,7 +47,7 @@ export default function WorkflowHeaderTabs({
         <TabButton
           id={tab.id}
           index={index}
-          key={`${tab.id}`}
+          key={`workflow-header-tab-${tab.id}`}
           label={tab.label}
           onClick={onClick}
           onKeyUp={onKeyUp}
