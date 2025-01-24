@@ -13,7 +13,7 @@ Quick notes:
 A note about the naming:
 - When this project started in late 2023, the new UI for editing workflows was called "Pages Editor", because it was a workflow editor that organised workflows into discrete pages (steps).
 - In late 2024, the project name was changed to "Workflow Editor". This is the equivalent of renaming your third cat, who was originally called "Kitty" to differentiate her from older siblings "Feline" and "Feline 2", to simply "Cat".
-- To (hopefully?) minimuse confusion, the code itself will continue to use "Pages Editor" naming scheme, e.g. `lab-pages-editor.styl`
+- To (hopefully?) minimise confusion, the code itself will continue to use "Pages Editor" naming scheme, e.g. `lab-pages-editor.styl`
 
 ### Dev Notes: Changes to Other PFE Files
 
