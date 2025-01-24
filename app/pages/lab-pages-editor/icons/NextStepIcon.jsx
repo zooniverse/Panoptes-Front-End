@@ -3,6 +3,7 @@ export default function NextStepIcon({ alt, className = '', width = 30, height =
     <svg
       className={`icon ${className}`}
       aria-label={alt}
+      role="img"
       width={width}
       height={height}
       viewBox="0 0 30 30"

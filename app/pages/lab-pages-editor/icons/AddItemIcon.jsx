@@ -3,6 +3,7 @@ export default function AddItemIcon({ alt, className = '', width = 12, height = 
     <svg
       className={`icon ${className}`}
       aria-label={alt}
+      role="img"
       width={width}
       height={height}
       viewBox="0 0 12 12"
