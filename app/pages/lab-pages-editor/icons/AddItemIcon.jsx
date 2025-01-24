@@ -11,7 +11,7 @@ export default function AddItemIcon({ alt, className = '', width = 12, height = 
       <path
         d="M6 12V0M0 6H12"
         stroke="currentColor"
-        stroke-width="2"
+        strokeWidth="2"
       />
     </svg>
   );
