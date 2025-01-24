@@ -222,7 +222,13 @@ export default function TasksPage() {
     setActiveStepIndex(-1);
   }
 
-  // Changes the optional "next page" of a step/page
+  /*
+  Changes the optional "next page" of a step/page
+  - stepKey must be a key/id that matches an item in workflow.steps
+  - next must be EITHER undefined OR another step key.
+
+  TODO: document what it means when 'next' is undefined.
+   */
   function updateNextStepForStep(stepKey, next = undefined) {
     if (!workflow || !workflow.steps) return;
 
@@ -230,6 +236,9 @@ export default function TasksPage() {
     const stepIndex = workflow.steps.findIndex(step => step[0] === stepKey);
     const stepBody = workflow.steps[stepIndex]?.[1];
     if (!stepBody) return;
+
+    // TODO: check if 'next' is either undefined, or a valid step key.
+    // TODO: if (stepKey && stepKey === next), return. (This is invalid)
 
     const newSteps = workflow.steps.slice();
     newSteps[stepIndex] = [stepKey, { ...stepBody, next }];
