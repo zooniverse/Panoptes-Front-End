@@ -1,24 +1,15 @@
 import PropTypes from 'prop-types';
-
-import getPreviewEnv from '../helpers/getPreviewEnv.js';
-import ExternalLinkIcon from '../icons/ExternalLinkIcon.jsx';
-import ReturnIcon from '../icons/ReturnIcon.jsx';
 import { useWorkflowContext } from '../context.js';
-import strings from '../strings.json';
 
 const DEFAULT_HANDLER = () => {};
 
-export default function WorkflowHeader({
+export default function WorkflowHeaderTabs({
   currentTab = 0,
-  projectId = '',
   setCurrentTab = DEFAULT_HANDLER,
   tabs = []
 }) {
-  const { project, workflow } = useWorkflowContext();
-  const returnUrl = `/lab/${projectId}/workflows`;
-  const previewEnv = getPreviewEnv();
-  const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
-
+  const { workflow } = useWorkflowContext();
+  
   // When clicking a tab button, make that tab active. This is pretty straightforward.
   function onClick(e) {
     const { tab } = e?.target?.dataset || {};
@@ -47,46 +38,29 @@ export default function WorkflowHeader({
   if (!workflow) return null;
 
   return (
-    <div className="workflow-header">
-      <div className="workflow-header-links flex-row">
-        <a href={returnUrl}> {/* Formerly <Link> from 'react-router', but React was throwing Legacy Context errors. */}
-          <ReturnIcon />
-          {strings.PagesEditor.components.WorkflowHeader.return}
-        </a>
-        <span className="flex-item" />
-        <a
-          className="button-link"
-          href={previewUrl}
-          rel="noopener noreferrer"
-          target='_blank'
-        >
-          Preview Workflow <ExternalLinkIcon />
-        </a>
-      </div>
-      <div
-        role="tablist"
-        className="workflow-header-tabs flex-row flex-item justify-around"
-      >
-        {tabs.map((tab, index) => (
-          <TabButton
-            id={tab.id}
-            index={index}
-            key={`${tab.id}`}
-            label={tab.label}
-            onClick={onClick}
-            onKeyUp={onKeyUp}
-            selected={(currentTab === index)}
-            targetPanel={tab.targetPanel}
-          />
-        ))}
-      </div>
+
+    <div
+      role="tablist"
+      className="workflow-header-tabs"
+    >
+      {tabs.map((tab, index) => (
+        <TabButton
+          id={tab.id}
+          index={index}
+          key={`workflow-header-tab-${tab.id}`}
+          label={tab.label}
+          onClick={onClick}
+          onKeyUp={onKeyUp}
+          selected={(currentTab === index)}
+          targetPanel={tab.targetPanel}
+        />
+      ))}
     </div>
   );
 }
 
-WorkflowHeader.propTypes = {
+WorkflowHeaderTabs.propTypes = {
   currentTab: PropTypes.number,
-  projectId: PropTypes.string,
   setCurrentTab: PropTypes.func,
   tabs: PropTypes.arrayOf(
     PropTypes.shape({

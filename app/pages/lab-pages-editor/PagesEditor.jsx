@@ -12,7 +12,9 @@ import { StrictMode, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import DataManager from './DataManager.jsx';
-import WorkflowHeader from './components/WorkflowHeader.jsx';
+import WorkflowHeaderTitle from './components/WorkflowHeaderTitle.jsx';
+import WorkflowHeaderTabs from './components/WorkflowHeaderTabs.jsx';
+import WorkflowTopLinks from './components/WorkflowTopLinks.jsx';
 import TasksPage from './components/TasksPage';
 import WorkflowSettingsPage from './components/WorkflowSettingsPage';
 import strings from './strings.json';
@@ -31,11 +33,11 @@ function PagesEditor({ params }) {
   const tabs = [
     {
       id: 'pages-editor_workflow-header-tab-button_task',
-      label: strings.PagesEditor.components.WorkflowHeader.tasks,
+      label: strings.PagesEditor.components.WorkflowHeaderTabs.tasks,
       targetPanel: 'pages-editor_tab-panel_task'
     }, {
       id: 'pages-editor_workflow-header-tab-button_settings',
-      label: strings.PagesEditor.components.WorkflowHeader.workflow_settings,
+      label: strings.PagesEditor.components.WorkflowHeaderTabs.workflow_settings,
       targetPanel: 'pages-editor_tab-panel_settings'
     }
   ];
@@ -48,9 +50,10 @@ function PagesEditor({ params }) {
           projectId={projectId}
           workflowId={workflowId}
         >
-          <WorkflowHeader
+          <WorkflowTopLinks />
+          <WorkflowHeaderTitle />
+          <WorkflowHeaderTabs
             currentTab={currentTab}
-            projectId={projectId}
             setCurrentTab={setCurrentTab}
             tabs={tabs}
           />
