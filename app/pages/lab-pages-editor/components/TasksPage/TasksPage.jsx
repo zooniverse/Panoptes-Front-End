@@ -225,9 +225,9 @@ export default function TasksPage() {
   /*
   Changes the optional "next page" of a step/page
   - stepKey must be a key/id that matches an item in workflow.steps
-  - next must be EITHER undefined OR another step key.
-
-  TODO: document what it means when 'next' is undefined.
+  - next must be EITHER undefined/blank OR another step key.
+    - On the FEM Classifier, if the next step is undefined or '', it means 
+      submit Classification". 
    */
   function updateNextStepForStep(stepKey, next = undefined) {
     if (!workflow || !workflow.steps) return;
