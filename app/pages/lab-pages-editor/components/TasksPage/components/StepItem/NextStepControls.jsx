@@ -42,13 +42,13 @@ export default function NextStepControls({
               Submit
             </option>
             {selectableSteps.map(([otherStepKey, otherStepBody]) => {
-              const taskKeys = otherStepBody?.taskKeys?.toString() || '(none)';
+              const taskKeysAsLabel = otherStepBody?.taskKeys?.toString() || '(none)';
               return (
                 <option
                   key={`simple-next-controls-option-${otherStepKey}`}
                   value={otherStepKey}
                 >
-                  {taskKeys}
+                  {taskKeysAsLabel}
                 </option>
               );
             })}
