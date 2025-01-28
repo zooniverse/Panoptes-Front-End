@@ -15,6 +15,8 @@ import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
 import WorkflowVersion from '../WorkflowVersion.jsx';
+
+import AddItemIcon from '../../icons/AddItemIcon.jsx';
 import WrenchIcon from '../../icons/WrenchIcon.jsx';
 
 // Use ?advanced=true to enable advanced mode.
@@ -220,14 +222,13 @@ export default function TasksPage() {
     setActiveStepIndex(-1);
   }
 
-  function handleChangeStartingPage(e) {
-    const targetStepKey = e?.target?.value || '';
-    const targetStepIndex = workflow?.steps?.findIndex(([stepKey]) => stepKey === targetStepKey) || -1;
-    if (targetStepIndex < 0) return;
-    moveStep(targetStepIndex, 0);
-  }
-
-  // Changes the optional "next page" of a step/page
+  /*
+  Changes the optional "next page" of a step/page
+  - stepKey must be a key/id that matches an item in workflow.steps
+  - next must be EITHER undefined/blank OR another step key.
+    - On the FEM Classifier, if the next step is undefined or '', it means 
+      submit Classification". 
+   */
   function updateNextStepForStep(stepKey, next = undefined) {
     if (!workflow || !workflow.steps) return;
 
@@ -235,6 +236,9 @@ export default function TasksPage() {
     const stepIndex = workflow.steps.findIndex(step => step[0] === stepKey);
     const stepBody = workflow.steps[stepIndex]?.[1];
     if (!stepBody) return;
+
+    // TODO: check if 'next' is either undefined, or a valid step key.
+    // TODO: if (stepKey && stepKey === next), return. (This is invalid)
 
     const newSteps = workflow.steps.slice();
     newSteps[stepIndex] = [stepKey, { ...stepBody, next }];
@@ -275,42 +279,12 @@ export default function TasksPage() {
 
   return (
     <div className="tasks-page">
-      <div className="workflow-title flex-row">
-        <h2 className="flex-item">{workflow.display_name}</h2>
+      <div className="tasks-page-overview">
+        <span className="spacer" />
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
+        <WorkflowVersion />
       </div>
       <section aria-labelledby="workflow-tasks-heading">
-        <div className="flex-row">
-          <h3 id="workflow-tasks-heading" className="flex-item">Tasks</h3>
-          <WorkflowVersion />
-        </div>
-        <div className="flex-row">
-          <button
-            className="flex-item big primary decoration-plus"
-            onClick={handleClickAddTaskButton}
-            type="button"
-          >
-            Add a new Task
-          </button>
-          <select
-            aria-label="Choose starting Page"
-            className="flex-item workflow-starting-page"
-            onChange={handleChangeStartingPage}
-            style={(workflow?.steps?.length < 1) ? { visibility: 'hidden' } : undefined}
-            value={firstStepKey}
-          >
-            <option value="">Choose starting page</option>
-            {workflow.steps?.map(([stepKey, stepBody]) => (
-              <option
-                key={`choose-starting-page-${stepKey}`}
-                value={stepKey}
-              >
-                {firstStepKey === stepKey && 'Starting page: '}
-                {stepBody?.taskKeys?.join(', ') || `(${stepKey})` /* Note: if you see the stepKey instead of the taskKeys, something's wrong. */}
-              </option>
-            ))}
-          </select>
-        </div>
         {!(workflow.steps?.length > 0) && (
           <div className="no-tasks-notice">
             <WrenchIcon />
@@ -337,6 +311,18 @@ export default function TasksPage() {
               updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
             />
           ))}
+          <li className="task-inbetween">
+            <span className="decoration-line" />
+            <button
+              className="add-task-button"
+              onClick={handleClickAddTaskButton}
+              type="button"
+            >
+              Add a new Task
+              <AddItemIcon />
+            </button>
+            <span className="decoration-line" />
+          </li>
         </ul>
         <NewTaskDialog
           ref={newTaskDialog}

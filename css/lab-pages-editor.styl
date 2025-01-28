@@ -4,12 +4,15 @@ $grey3 = #5C5C5C
 $grey4 = #979797
 $grey5 = #E2E5E9
 $grey6 = #EFF2F5
+$nearBlack = #404040
 $black = #000000
 $teal = #005D69  // Dark teal. Alternate is #00979D
 $darkGreen = #005D69
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
+$orange = #D47811
+$darkOrange = #70481C
 $white = #FFFFFF
 $backdropColour = #80808080
 $shadowColour = #00000080
@@ -47,9 +50,7 @@ $fontWeightBoldPlus = 700
   color: $black
   font-family: $fontFamilies
   font-size: $fontSizeM
-  max-width: 840px
   margin: 0 auto
-  padding: $sizeM $sizeM
 
   // General UI
   // ---------------------------------------------------------------------------
@@ -123,10 +124,6 @@ $fontWeightBoldPlus = 700
   .disabled, .disabled *, [disabled]
     color: $grey1
   
-  .decoration-plus
-    &::after
-      content: ' +'
-  
   .status-banner
     display: flex
     flex-direction: column
@@ -141,11 +138,19 @@ $fontWeightBoldPlus = 700
   // General Layout
   // ---------------------------------------------------------------------------
 
-  .flex-row
+  main-content()
+    max-width: 840px
+    margin: 0 auto
+    padding: 0 $sizeS
+
+  flex-row()
     align-items: center
     display: flex
     flex-direction: row
     gap: $sizeS
+
+  .flex-row
+    flex-row()
   
   .flex-wrap
     flex-wrap: wrap
@@ -153,7 +158,7 @@ $fontWeightBoldPlus = 700
   .small-width
     width: 60px
 
-  .flex-item
+  .flex-item, .spacer
     flex: 1 1 auto
   
   .align-start
@@ -178,52 +183,81 @@ $fontWeightBoldPlus = 700
     margin-bottom: $sizeM
   
   .workflow-version
-    color: $teal
+    color: $orange
 
-  // Component: Workflow Header
+  // Component: Workflow "Header" components
   // ---------------------------------------------------------------------------
 
-  .workflow-header
-    margin-bottom: $sizeXL
+  .workflow-top-links
+    flex-row()
+    background: $teal
+    color: $white
+    margin-bottom: 30px
+    min-height: 60px
+    padding: $sizeS $sizeM
 
     a
+      display: inline-block
+      color: $white
+      font-size: $fontSizeS
+      text-decoration: none
       min-width: 40%
 
-    .workflow-header-links
-      margin-bottom: $sizeM
+      .icon
+        margin-right: $sizeS
+    
+    .zooniverse-logo
+      max-width: 160px
 
-      a
-        display: inline-block
-        font-size: $fontSizeS
-        text-decoration: none
+  .workflow-header-title
+    main-content()
+    flex-row()
+    margin-bottom: 30px
 
-        .icon
-          margin-right: $sizeS
+    h1
+      font-size: 24px
+      font-weight: 700
 
-    .workflow-header-tabs
-      gap: $sizeXL
-      justify-content: center
-      border-bottom: 0.5px solid $grey1
+    .preview-link
+      font-size: 12px
+      line-height: 16px
+      color: $grey3
 
-      button
-        background: none
-        border: none
-        cursor: pointer
-        font-size: $fontSizeL
-        font-weight: $fontWeightBoldPlus
-        text-transform: uppercase
+  .workflow-header-tabs
+    main-content()
+    flex-row()
+    justify-content: center
+    gap: $sizeXL
+    border-bottom: 0.5px solid $grey1
 
-        &[aria-selected=true]
-          border-bottom: 4px solid $teal
-        
-        &[aria-selected=false]
-          color: $grey1
-          border-bottom: 4px solid transparent
+    button
+      background: none
+      border: none
+      border-radius: 0
+      cursor: pointer
+      font-size: 18px
+      padding: 4px 20px
+      text-transform: uppercase
+
+      &[aria-selected=true]
+        border-bottom: 4px solid $orange
+        color: $nearBlack
+        font-weight: 700
+      
+      &[aria-selected=false]
+        color: $grey3
+        border-bottom: 4px solid transparent
+        font-weight: 500
+
+        &:hover
+          color: $nearBlack
+          border-bottom: 4px solid $nearBlack
 
   // Component: Workflow Settings Page
   // ---------------------------------------------------------------------------
 
   .workflow-settings-page
+    main-content()
     display: grid
     gap: $sizeM
     grid-template-columns: 50% auto
@@ -303,33 +337,24 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .tasks-page
+    main-content()
 
-    .workflow-title
-      border-bottom: 1.5px solid $grey1
-      margin-bottom: $sizeS
-      margin-top: $sizeM
+    .tasks-page-overview
+      flex-row()
+      font-size: 12px
+      margin: 10px 0 0 0
 
-      h2
-        color: $grey3
-        font-size: $fontSizeXL
-        font-weight: $fontWeightBoldPlus
-        text-transform: uppercase
-      
-      .status-active, .status-inactive
-        font-size: $fontSizeS
-        margin-left: $sizeS
-        text-transform: uppercase
+    .status-active, .status-inactive
+      margin-left: $sizeS
+      padding-right: $sizeS
+      text-transform: uppercase
+      border-right: 1px solid $grey1
 
-      .status-active
-        color: $greenBright
+    .status-active
+      color: $greenBright
 
-      .status-inactive
-        color: $redBright
-    
-    .workflow-starting-page
-      border: 1.5px solid $grey1
-      border-radius: $sizeXS
-      color: $grey2
+    .status-inactive
+      color: $redBright
     
     .no-tasks-notice
       padding: $sizeL
@@ -341,6 +366,40 @@ $fontWeightBoldPlus = 700
       
       p
         color: $grey1
+    
+    .task-inbetween
+      display: flex
+      align-items: center
+
+      .decoration-line
+        flex: 1 1 auto
+        height: 1px
+        border-bottom: 1px solid $orange
+      
+      .next-step-icon
+        color: $orange
+        margin: 0 10px
+
+    .add-task-button
+      align-items: center
+      background: none
+      border: none
+      color: $orange
+      display: flex
+      font-size: 18px
+      margin: 0 auto
+      padding: 10px
+      text-transform: uppercase
+
+      &:hover
+        color: $yellow
+        text-shadow: $yellow 1px 0 10px
+      
+      &:active
+        color: $darkOrange
+      
+      .icon
+        margin-left: 10px
 
     dialog
       border: 1px solid $grey1
@@ -536,7 +595,7 @@ $fontWeightBoldPlus = 700
     
     .steps-list
       list-style: none
-      margin: $sizeS 0 0 0
+      margin: 0 0 30px 0
       padding: 0
 
     .step-item
@@ -589,11 +648,14 @@ $fontWeightBoldPlus = 700
               background: $grey2
 
       .step-drop-target
-        padding: $sizeS
+        padding: 5px  // In practice, the drop target is twice the height of the padding. 
 
         &.active
           background: $greenBright
           padding: $sizeL $sizeS
+      
+      .task-inbetween
+        margin-top: 10px
 
     .tasks-list
       list-style: none

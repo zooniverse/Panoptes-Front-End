@@ -7,7 +7,7 @@ import TaskItem from './TaskItem.jsx';
 
 import checkCanStepBranch from '../../../../helpers/checkCanStepBranch.js';
 
-import SimpleNextControls from './SimpleNextControls.jsx';
+import NextStepControls from './NextStepControls.jsx';
 
 import CopyIcon from '../../../../icons/CopyIcon.jsx';
 import DeleteIcon from '../../../../icons/DeleteIcon.jsx';
@@ -188,7 +188,7 @@ function StepItem({
         </div>
       </div>
       {!branchingTaskKey && (
-        <SimpleNextControls
+        <NextStepControls
           allSteps={allSteps}
           isLastItem={isLastItem}
           isLinearWorkflow={isLinearWorkflow}

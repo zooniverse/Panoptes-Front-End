@@ -1,10 +1,12 @@
 {
   "PagesEditor": {
     "components": {
-      "WorkflowHeader": {
-        "return": "Back to Workflows",
+      "WorkflowHeaderTabs": {
         "tasks": "Tasks",
         "workflow_settings": "Workflow Settings"
+      },
+      "WorkflowTopLinks": {
+        "return": "Back to Workflows"
       }
     }
   }
