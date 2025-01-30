@@ -127,9 +127,6 @@ $fontWeightBoldPlus = 700
   // Common Components
   // ---------------------------------------------------------------------------
 
-  .step-label
-    background: $orange
-  
   .workflow-version
     color: $orange
 
@@ -143,6 +140,15 @@ $fontWeightBoldPlus = 700
     &.error
       background: $redBright
       color: $white
+  
+  .step-label
+    border-radius: 8px 0px 16px 0px;
+    background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), #F6D885;
+    background: $yellow
+    color: $black
+    font-size: 10px
+    font-weight: 500
+    padding: 9px 29px
 
   // General Layout
   // ---------------------------------------------------------------------------
@@ -616,7 +622,7 @@ $fontWeightBoldPlus = 700
           outline: 2px solid $yellow
         
         .step-body-inner  // Redundant inner content is used for styling "branching next step extrudes from step-body"
-          padding: $sizeS $sizeM
+          padding: 0
 
       .step-controls
         cursor: grab
@@ -665,7 +671,7 @@ $fontWeightBoldPlus = 700
 
     .tasks-list
       list-style: none
-      padding: 0
+      padding: $sizeS $sizeM
     
     .task-item
       margin-top: $sizeL
