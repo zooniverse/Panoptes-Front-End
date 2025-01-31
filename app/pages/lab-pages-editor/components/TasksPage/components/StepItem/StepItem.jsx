@@ -133,7 +133,7 @@ function StepItem({
           className="step-body-inner"
           ref={htmlContent}
         >
-          <div className="step-controls flex-row spacing-bottom-XS">
+          <div className="step-controls">
             <div className="step-controls-left">
               <span className="step-label">{stepLabel}</span>
             </div>
