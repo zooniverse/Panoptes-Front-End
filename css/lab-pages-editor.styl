@@ -616,7 +616,7 @@ $fontWeightBoldPlus = 700
         border: 0.5px solid $grey1
         border-radius: 8px
         box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
-        overflow: visible
+        overflow: visible  // Required for StepItem's experimentalRestyleContainer(), which makes the "next step" arrows for branching tasks appear "outside" the step container.
 
         &:active
         &:has(.move-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
