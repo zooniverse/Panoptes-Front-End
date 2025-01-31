@@ -44,6 +44,7 @@ function StepItem({
   const isLastItem = stepIndex === allSteps.length - 1;
   const taskKeys = stepBody.taskKeys || [];
   const branchingTaskKey = checkCanStepBranch(step, allTasks);
+  const stepLabel = `Page ${ stepIndex + 1 }`
 
   function doCopy() {
     copyStep(stepIndex);
@@ -71,6 +72,23 @@ function StepItem({
     setActiveDragItem(stepIndex);  // Use state because DropTarget's onDragEnter CAN'T read dragEvent.dataTransfer.getData()
   }
 
+  /*
+  Experimental: restyle the Step Item in such a way that - if the last Task in
+  a Step is a branching Task - that Task's answers' "next Step" arrow
+  appear outside the Step Item container.
+
+  Look, it's hard describe in words, so please appreciate this ASCII diagram:
+
+    +--StepItem--------------+
+    |                        |  Note how the arrow joining [Yes] with [T1], and
+    |  T0 Do you see a Cat?  |  the arrow joining [No] with [T7], both sit
+    |                        |  outside the StepItem's boundary box.
+    |    [ Yes ]    [ No ]   |
+    |      |          |      |
+    +------|----------|------+
+           v          v
+         [ T1  ]    [ T7 ]
+   */
   function experimentalRestyleContainer() {
     const container = htmlContainer?.current;
     const content = htmlContent?.current;
@@ -115,24 +133,25 @@ function StepItem({
           className="step-body-inner"
           ref={htmlContent}
         >
-          <div className="step-controls flex-row spacing-bottom-XS">
-            <span className="step-controls-left" />
+          <div className="step-controls">
+            <div className="step-controls-left">
+              <span className="step-label">{stepLabel}</span>
+            </div>
             <div className="step-controls-center">
               <button
                 aria-label={`Rearrange Page ${stepKey} upwards`}
-                className="move-button plain"
+                className="control-button"
                 onClick={moveStepUp}
                 type="button"
               >
                 <MoveUpIcon />
               </button>
-              {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
               <GripIcon
                 className="grab-handle"
               />
               <button
                 aria-label={`Rearrange Page/Step ${stepKey} downwards`}
-                className="move-button plain"
+                className="control-button"
                 onClick={moveStepDown}
                 type="button"
               >
@@ -141,28 +160,28 @@ function StepItem({
             </div>
             <div className="step-controls-right">
               <button
-                aria-label={`Delete Page/Step ${stepKey}`}
-                className="plain"
-                onClick={doDelete}
+                aria-label={`Edit Page/Step ${stepKey}`}
+                className="control-button"
+                onClick={doEdit}
                 type="button"
               >
-                <DeleteIcon />
+                <EditIcon />
               </button>
               <button
                 aria-label={`Copy Page/Step ${stepKey}`}
-                className="plain"
+                className="control-button"
                 onClick={doCopy}
                 type="button"
               >
                 <CopyIcon />
               </button>
               <button
-                aria-label={`Edit Page/Step ${stepKey}`}
-                className="plain"
-                onClick={doEdit}
+                aria-label={`Delete Page/Step ${stepKey}`}
+                className="control-button"
+                onClick={doDelete}
                 type="button"
               >
-                <EditIcon />
+                <DeleteIcon />
               </button>
             </div>
           </div>

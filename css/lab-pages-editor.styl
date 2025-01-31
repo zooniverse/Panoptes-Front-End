@@ -11,6 +11,7 @@ $darkGreen = #005D69
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
+$lightYellow = #F6D885
 $orange = #D47811
 $darkOrange = #70481C
 $white = #FFFFFF
@@ -105,25 +106,43 @@ $fontWeightBoldPlus = 700
     &.plain
       background: none
       border: none
-  
-  a.button-link
-    border: 1px solid $yellow
-    border-radius: $sizeXS
-    color: $black
-    cursor: pointer
-    display: inline-block
-    font-family: $fontFamilies
-    font-size: $fontSizeS
-    line-height: 1em
-    padding: $sizeSM
-    text-align: center
+    
+    &.control-button
+      background: none
+      border: none
+      color: $grey3
+      width: 40px
+      height: 40px
+      border-radius: 40px
+      padding: 0
+      display: flex
+      justify-content: center
+      align-items: center
 
+      &:hover
+      &:focus
+        background: $lightYellow
+        color: $yellow
+      
+      &:active
+        background: $yellow
+        color: $orange
+      
+      .icon
+        display: block
+  
   hr
     border-top: 1px solid $grey2
   
   .disabled, .disabled *, [disabled]
     color: $grey1
   
+  // Common Components
+  // ---------------------------------------------------------------------------
+
+  .workflow-version
+    color: $orange
+
   .status-banner
     display: flex
     flex-direction: column
@@ -134,14 +153,31 @@ $fontWeightBoldPlus = 700
     &.error
       background: $redBright
       color: $white
+  
+  .step-label
+    border-radius: 8px 0px 16px 0px;
+    background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow;
+    background: $yellow
+    color: $black
+    font-size: 10px
+    font-weight: 500
+    padding: 9px 29px
+    text-transform: uppercase
+  
+  .grab-handle
+    color: $grey3
+    cursor: grab
+
+    &:active
+      cursor: grabbing
 
   // General Layout
   // ---------------------------------------------------------------------------
 
-  main-content()
-    max-width: 840px
+  .workflow-main-content
+    max-width: calc(800px + 2 * 16px)
     margin: 0 auto
-    padding: 0 $sizeS
+    padding: 0 16px
 
   flex-row()
     align-items: center
@@ -182,9 +218,6 @@ $fontWeightBoldPlus = 700
   .spacing-bottom-M
     margin-bottom: $sizeM
   
-  .workflow-version
-    color: $orange
-
   // Component: Workflow "Header" components
   // ---------------------------------------------------------------------------
 
@@ -210,7 +243,6 @@ $fontWeightBoldPlus = 700
       max-width: 160px
 
   .workflow-header-title
-    main-content()
     flex-row()
     margin-bottom: 30px
 
@@ -224,7 +256,6 @@ $fontWeightBoldPlus = 700
       color: $grey3
 
   .workflow-header-tabs
-    main-content()
     flex-row()
     justify-content: center
     gap: $sizeXL
@@ -257,7 +288,6 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .workflow-settings-page
-    main-content()
     display: grid
     gap: $sizeM
     grid-template-columns: 50% auto
@@ -337,7 +367,6 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .tasks-page
-    main-content()
 
     .tasks-page-overview
       flex-row()
@@ -600,50 +629,41 @@ $fontWeightBoldPlus = 700
 
     .step-item
       .step-body
-        background: $grey5
-        border: 1px solid $grey1
-        border-radius: $sizeXS
-        overflow: visible
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white;
+        border: 0.5px solid $grey1
+        border-radius: 8px
+        box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+        overflow: visible  // Required for StepItem's experimentalRestyleContainer(), which makes the "next step" arrows for branching tasks appear "outside" the step container.
 
         &:active
-        &:has(.move-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
+        &:has(.control-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
           outline: 2px solid $yellow
         
         .step-body-inner  // Redundant inner content is used for styling "branching next step extrudes from step-body"
-          padding: $sizeS $sizeM
+          padding: 0
 
       .step-controls
+        flex-row()
         cursor: grab
+        margin-bottom: 8px
 
         &:active
           cursor: grabbing
         
-        .move-button:focus
-          outline: 1px solid $yellow
-        
         .step-controls-left
+          align-self: flex-start
           min-width: 5rem
         
         .step-controls-center
+          display: flex
           margin: auto
-
-          > *
-            vertical-align: middle
-            color: $grey1
+          align-items: center
         
         .step-controls-right
-          text-align: right
+          display: flex
           min-width: 5rem
 
-          button
-            background: $white
-            border: 1px solid $yellow
-            border-radius: $sizeS
-            margin-left: $sizeXS
-
-            .fa
-              color: $grey3
-            
+          .control-button            
             &.disabled
               background: $grey2
 
@@ -659,7 +679,7 @@ $fontWeightBoldPlus = 700
 
     .tasks-list
       list-style: none
-      padding: 0
+      padding: $sizeS $sizeM
     
     .task-item
       margin-top: $sizeL
@@ -670,12 +690,6 @@ $fontWeightBoldPlus = 700
       .task-text
         font-size: $fontSizeM
         font-weight: $fontWeightBold
-      
-    .grab-handle
-      cursor: grab
-
-      &:active
-        cursor: grabbing
 
     .next-controls
 
