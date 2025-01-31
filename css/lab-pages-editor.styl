@@ -167,10 +167,10 @@ $fontWeightBoldPlus = 700
   // General Layout
   // ---------------------------------------------------------------------------
 
-  main-content()
-    max-width: 840px
+  .workflow-main-content
+    max-width: calc(800px + 2 * 16px)
     margin: 0 auto
-    padding: 0 $sizeS
+    padding: 0 16px
 
   flex-row()
     align-items: center
@@ -236,7 +236,6 @@ $fontWeightBoldPlus = 700
       max-width: 160px
 
   .workflow-header-title
-    main-content()
     flex-row()
     margin-bottom: 30px
 
@@ -250,7 +249,6 @@ $fontWeightBoldPlus = 700
       color: $grey3
 
   .workflow-header-tabs
-    main-content()
     flex-row()
     justify-content: center
     gap: $sizeXL
@@ -283,7 +281,6 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .workflow-settings-page
-    main-content()
     display: grid
     gap: $sizeM
     grid-template-columns: 50% auto
@@ -363,7 +360,6 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .tasks-page
-    main-content()
 
     .tasks-page-overview
       flex-row()
