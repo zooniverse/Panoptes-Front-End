@@ -155,7 +155,7 @@ export default function TasksPage() {
     const { steps, tasks } = workflow;
     const [ stepKey, stepBody ] = steps[stepIndex] || [];
 
-    const confirmed = confirm(`Copy Page ${stepKey}?`);
+    const confirmed = confirm(`Copy Page ${stepIndex + 1}?`);
     if (!confirmed) return;
 
     const newSteps = steps.slice();  // Copy Steps.
@@ -190,7 +190,7 @@ export default function TasksPage() {
     const { steps, tasks } = workflow;
     const [ stepKey ] = steps[stepIndex] || [];
 
-    const confirmed = confirm(`Delete Page ${stepKey}?`);
+    const confirmed = confirm(`Delete Page ${stepIndex + 1}?`);
     if (!confirmed) return;
 
     const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
