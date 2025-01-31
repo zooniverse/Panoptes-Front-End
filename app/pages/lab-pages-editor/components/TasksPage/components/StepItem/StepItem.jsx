@@ -72,6 +72,23 @@ function StepItem({
     setActiveDragItem(stepIndex);  // Use state because DropTarget's onDragEnter CAN'T read dragEvent.dataTransfer.getData()
   }
 
+  /*
+  Experimental: restyle the Step Item in such a way that - if the last Task in
+  a Step is a branching Task - that Task's answers' "next Step" arrow
+  appear outside the Step Item container.
+
+  Look, it's hard describe in words, so please appreciate this ASCII diagram:
+
+    +--StepItem--------------+
+    |                        |  Note how the arrow joining [Yes] with [T1], and
+    |  T0 Do you see a Cat?  |  the arrow joining [No] with [T7], both sit
+    |                        |  outside the StepItem's boundary box.
+    |    [ Yes ]    [ No ]   |
+    |      |          |      |
+    +------|----------|------+
+           v          v
+         [ T1  ]    [ T7 ]
+   */
   function experimentalRestyleContainer() {
     const container = htmlContainer?.current;
     const content = htmlContent?.current;
