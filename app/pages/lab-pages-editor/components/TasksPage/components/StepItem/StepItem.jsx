@@ -140,19 +140,18 @@ function StepItem({
             <div className="step-controls-center">
               <button
                 aria-label={`Rearrange Page ${stepKey} upwards`}
-                className="move-button plain"
+                className="control-button"
                 onClick={moveStepUp}
                 type="button"
               >
                 <MoveUpIcon />
               </button>
-              {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
               <GripIcon
                 className="grab-handle"
               />
               <button
                 aria-label={`Rearrange Page/Step ${stepKey} downwards`}
-                className="move-button plain"
+                className="control-button"
                 onClick={moveStepDown}
                 type="button"
               >
