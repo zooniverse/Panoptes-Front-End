@@ -161,7 +161,7 @@ function StepItem({
             <div className="step-controls-right">
               <button
                 aria-label={`Delete Page/Step ${stepKey}`}
-                className="plain"
+                className="control-button"
                 onClick={doDelete}
                 type="button"
               >
@@ -169,7 +169,7 @@ function StepItem({
               </button>
               <button
                 aria-label={`Copy Page/Step ${stepKey}`}
-                className="plain"
+                className="control-button"
                 onClick={doCopy}
                 type="button"
               >
@@ -177,7 +177,7 @@ function StepItem({
               </button>
               <button
                 aria-label={`Edit Page/Step ${stepKey}`}
-                className="plain"
+                className="control-button"
                 onClick={doEdit}
                 type="button"
               >

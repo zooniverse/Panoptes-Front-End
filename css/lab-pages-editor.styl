@@ -114,6 +114,10 @@ $fontWeightBoldPlus = 700
       width: 40px
       height: 40px
       border-radius: 40px
+      padding: 0
+      display: flex
+      justify-content: center
+      align-items: center
 
       &:hover
       &:focus
@@ -123,6 +127,9 @@ $fontWeightBoldPlus = 700
       &:active
         background: $yellow
         color: $orange
+      
+      .icon
+        display: block
   
   hr
     border-top: 1px solid $grey2
@@ -653,18 +660,10 @@ $fontWeightBoldPlus = 700
           align-items: center
         
         .step-controls-right
-          text-align: right
+          display: flex
           min-width: 5rem
 
-          button
-            background: $white
-            border: 1px solid $yellow
-            border-radius: $sizeS
-            margin-left: $sizeXS
-
-            .fa
-              color: $grey3
-            
+          .control-button            
             &.disabled
               background: $grey2
 
