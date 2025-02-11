@@ -63,7 +63,8 @@ export const SLUGS = [
   'talkietoaster/void-orchestra',
   'hjsmith/the-material-culture-of-wills-england-1540-1790',
   'effeli/node-code-breakers-looking-for-patterns-in-lymph-nodes',
-  'md68135/notes-from-nature-ranges-mammal-traits-from-western-north-america'
+  'md68135/notes-from-nature-ranges-mammal-traits-from-western-north-america',
+  'cmcbrain/axonal-pathfinders'
 ];
 
 export function usesMonorepo(slug) {
