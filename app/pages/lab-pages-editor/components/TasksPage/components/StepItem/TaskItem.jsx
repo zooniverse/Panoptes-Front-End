@@ -102,7 +102,7 @@ function PlaceholderAnswers({
   if (task.type === 'text') {
     return (
       <div>
-        <div className="fake-text-input">Participant text here</div>
+        <div className="fake-text-input">Contributor text here</div>
       </div>
     );
   }
