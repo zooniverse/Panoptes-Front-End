@@ -85,6 +85,7 @@ $fontWeightBoldPlus = 700
     border: 1.5px solid $grey1
     border-radius: $sizeXS
     color: $black
+    font-family: $fontFamilies
     font-size: $fontSizeM
     padding: $sizeS
   
@@ -701,6 +702,7 @@ $fontWeightBoldPlus = 700
         background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow
         border-radius: 32px;
         border: none
+        color: $black
         font-size: 14px
         font-weight: 600
         text-align: center
@@ -712,8 +714,7 @@ $fontWeightBoldPlus = 700
 
         &.next-is-submit
           background: $white
-          border: 2px solid $yellow
-          color: $black
+          border: 0.5px solid $orange
 
       &.simple-next-controls
         display: flex
@@ -761,11 +762,14 @@ $fontWeightBoldPlus = 700
   
   .fake-submit
     background: $white
-    border-radius: $sizeM
-    border: 2px solid $yellow
+    border: 0.5px solid $orange
+    border-radius: 32px
     color: $black
-    font-size: $fontSizeS
+    font-size: 14px
+    font-weight: 600
     padding: $sizeS $sizeM
+    min-width: 120px
+    text-align: center
   
   .fake-text-input
     border-radius: 4px
