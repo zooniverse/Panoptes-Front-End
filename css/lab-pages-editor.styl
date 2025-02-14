@@ -743,7 +743,7 @@ $fontWeightBoldPlus = 700
   .fake-button
     background: $white
     border: 1px solid $grey1
-    border-radius: 2px
+    border-radius: 4px
     color: $black
     font-family: $fontFamilies
     font-size: $fontSizeS
@@ -761,7 +761,7 @@ $fontWeightBoldPlus = 700
   .fake-text-input
     background: $white
     border: 1px solid $grey1
-    border-radius: 2px
+    border-radius: 4px
     color: $grey4
     font-family: $fontFamilies
     font-size: $fontSizeS
@@ -774,13 +774,23 @@ $fontWeightBoldPlus = 700
     padding: 0
 
     li
-      background: $darkGreen
-      border-radius: $sizeXS
-      color: $white
-      font-size: $fontSizeS
-      margin: 0 auto $sizeS auto
-      max-width: 600px
-      padding: $sizeS $sizeL
+      flex-row()
+      border-radius: 4px
+      border: 0.5px solid $teal
+      background: $white
+      box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+      color: $black
+      font-size: 14px
+      font-weight: 400
+      margin: 0 auto 10px auto
+      max-width: 500px
+      padding: 14px 25px
+
+      span:nth-child(2)
+        flex: 1 1 auto
+      
+      span:nth-child(3)
+        color: $grey1
 
     .icon-wrapper
       background: $black

@@ -115,12 +115,11 @@ function PlaceholderAnswers({
         {tools.map((tool, index) => (
           <li
             key={`placeholder-answer-${taskKey}-${index}`}
-            className="flex-row"
           >
             <span className="icon-wrapper">
               <DrawingToolIcon type={tool?.type} color={tool?.color} />
             </span>
-            <span className="flex-item">{tool?.label}</span>
+            <span>{tool?.label}</span>
             <span>0 drawn</span>
           </li>
         ))}
