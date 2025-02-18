@@ -35,6 +35,7 @@ Eventually, we want to move the Pages Editor from the PFE codebase into the FEM 
   - Update the `imports`.
 - Modify the following files:
   - `helpers/createTask.js`: create our own definitions of default task data, instead of relying on PFE's .getDefaultTask()
+  - `icons/*`: replace any FontAwesome icons. Icons should use standard Grommet icons or custom SVGs; check with our designer as to what's appropriate.
   - TODO
 - ❗️⚠️ TODO: figure out how we're going to get the CSS across into FEM.
 - Cleanup:
