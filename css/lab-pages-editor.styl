@@ -724,6 +724,7 @@ $fontWeightBoldPlus = 700
         margin: 0 auto
       
       select
+        // Note: <select> style goes out the window on Safari
         background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow
         border-radius: 32px;
         border: none
@@ -732,8 +733,8 @@ $fontWeightBoldPlus = 700
         font-weight: 600
         text-align: center
         min-width: 110px
-        width: 100%
         min-height: 40px
+        margin: 0 auto
 
         &:after
           content: 'v'
@@ -784,7 +785,7 @@ $fontWeightBoldPlus = 700
     padding: $sizeS $sizeM
     text-align: center
     min-width: 110px
-    width: 100%
+    margin: 0 auto
   
   .fake-submit
     background: $white
