@@ -5,11 +5,19 @@ import DrawingToolIcon from '../../../../icons/DrawingToolIcon.jsx';
 import TaskIcon from '../../../../icons/TaskIcon.jsx';
 import BranchingNextControls from './BranchingNextControls.jsx';
 
-const TaskLabels = {
-  'drawing': 'Drawing Task',
-  'multiple': 'Question Task',  // Multiple question
-  'single': 'Question Task',  // Single question
-  'text': 'Text Task'
+const TaskTypes = {
+  'drawing': {
+    name: 'Drawing Task',
+  },
+  'multiple': {  // Multiple question
+    name: 'Question Task',
+  },
+  'single': {  // Single question
+    name: 'Question Task',
+  },
+  'text': {
+    name: 'Text Task',
+  }
 };
 
 const DEFAULT_HANDLER = () => {};
@@ -43,14 +51,14 @@ function TaskItem({
   return (
     <li className="task-item">
       <div className="flex-row spacing-bottom-M">
-        <span className="task-key">{taskKey}</span>
         <span className="task-icon">
           <TaskIcon
-            alt={TaskLabels[task.type] || 'Unknown Task Type'}
+            alt={TaskTypes[task.type].name || 'Unknown Task Type'}
             type={task.type}
           />
         </span>
-        <span className="task-text flex-item">{taskText}</span>
+        <span className="task-key">{taskKey}</span>
+        <span className="task-text">{taskText}</span>
       </div>
       {isBranchingTask && (
         <BranchingNextControls
