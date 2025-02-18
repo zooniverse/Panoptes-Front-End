@@ -50,7 +50,7 @@ function TaskItem({
 
   return (
     <li className="task-item">
-      <div className="flex-row spacing-bottom-M">
+      <div className="task-general-details">
         <span className="task-icon">
           <TaskIcon
             alt={TaskTypes[task.type].name || 'Unknown Task Type'}
