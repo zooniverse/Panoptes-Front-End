@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import DrawingToolIcon from '../../../../icons/DrawingToolIcon.jsx';
 import TaskIcon from '../../../../icons/TaskIcon.jsx';
 import BranchingNextControls from './BranchingNextControls.jsx';
+import { Markdown } from 'markdownz'
 
 const TaskTypes = {
   'drawing': {
@@ -58,7 +59,11 @@ function TaskItem({
           />
         </span>
         <span className="task-key">{taskKey}</span>
-        <span className="task-text">{taskText}</span>
+        <span className="task-text">
+          <Markdown>
+            {taskText}
+          </Markdown>
+        </span>
       </div>
       {isBranchingTask && (
         <BranchingNextControls

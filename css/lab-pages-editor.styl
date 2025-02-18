@@ -689,20 +689,32 @@ $fontWeightBoldPlus = 700
       
       .task-general-details
         flex-row()
+        align-items: flex-start
+        gap: 10px
         margin-bottom: 16px
 
         .task-icon
+          flex: 0 0 auto
+          margin-top: 3px
+
           .icon
             display: block
         
         .task-key
-          margin-top: 0
+          flex: 0 0 auto
+          margin-top: 5px
 
         .task-text
           display: inline-block
           flex: 1 1 auto
           font-size: 16px
           font-weight: 600
+
+          p:first-child
+            margin-top: 0
+          
+          p:last-child
+            margin-bottom: 0
 
     .next-controls
 
