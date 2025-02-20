@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 
-import drawingTaskSvg from './svg/drawing-task.svg'
-import questionTaskSvg from './svg/question-task.svg'
-import textTaskSvg from './svg/text-task.svg'
-import undefinedTaskSvg from './svg/undefined-task.svg'
+import drawingTaskSvg from './images/drawing-task.png'
+import questionTaskSvg from './images/question-task.png'
+import textTaskSvg from './images/text-task.png'
+import undefinedTaskSvg from './images/undefined-task.png'
 
 function TaskIcon({
   alt,
