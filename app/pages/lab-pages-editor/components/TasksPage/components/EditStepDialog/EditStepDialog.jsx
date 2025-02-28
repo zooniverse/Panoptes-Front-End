@@ -48,25 +48,17 @@ function EditStepDialog({
     openNewTaskDialog(stepIndex);
   }
 
-  const firstTask = allTasks?.[taskKeys?.[0]]
-  const taskName = taskNames[firstTask?.type] || '???';
   const stepHasManyTasks = taskKeys?.length > 1
-  const title = stepHasManyTasks
-    ? 'Edit A Multi-Task Page'
-    : `Edit ${taskName} Task`;
 
   return (
     <dialog
-      aria-labelledby="dialog-title"
       className="edit-step"
       ref={editStepDialog}
       /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
     >
-      <div className="dialog-header flex-row">
-        <span className="step-key">{stepKey}</span>
-        <h4 id="dialog-title" className="flex-item">
-          {title}
-        </h4>
+      <div className="dialog-header">
+        <span className="step-label">Page {stepIndex + 1}</span>
+        <span className="spacer" />
         <button
           aria-label="Close dialog"
           className="plain"

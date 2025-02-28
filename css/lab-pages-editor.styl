@@ -432,9 +432,10 @@ $fontWeightBoldPlus = 700
         margin-left: 10px
 
     dialog
-      border: 1px solid $grey1
-      border-radius: $sizeS
-      box-shadow: 1px 1px 6px 0px $shadowColour
+      border: none
+      border-radius: 8px
+      background: $white
+      box-shadow: 1px 1px 6px 0px rgba(0, 0, 0, 0.50)
       padding: 0
       width: 800px
       max-width: 90vw
@@ -458,10 +459,7 @@ $fontWeightBoldPlus = 700
           color: $grey1
       
       .dialog-header
-        background: $teal
-        color: $white
-        padding: $sizeXS $sizeM
-        text-transform: uppercase
+        flex-row()
 
         button
           color: $white
@@ -488,7 +486,11 @@ $fontWeightBoldPlus = 700
               font-size: $fontSizeXL
         
       &.edit-step
-        background: $white
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white
+        
+        .dialog-header
+          .step-label
+            border-top-left-radius: 0px  // Make flush to container
       
         .dialog-body
           max-height: 70vh
