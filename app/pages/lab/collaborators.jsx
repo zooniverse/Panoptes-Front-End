@@ -32,12 +32,11 @@ export default function EditProjectCollaborators({
   const [projectOwner, setProjectOwner] = useState(null);
   const [projectRoleSets, setProjectRoleSets] = useState([]);
 
-  if (project?.experimental_tools.includes('translator-role') || isAdmin()) {
-    possibleRoles = {
-      ...possibleRoles,
-      translator: 'translator'
-    };
-  }
+  possibleRoles = {
+    ...possibleRoles,
+    translator: 'translator'
+  };
+
   if (project?.experimental_tools.includes('museum-role') || isAdmin()) {
     possibleRoles = {
       ...possibleRoles,
