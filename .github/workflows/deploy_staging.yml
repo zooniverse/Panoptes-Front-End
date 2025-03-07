@@ -15,6 +15,7 @@ jobs:
       node_version: 'lts/iron'
       output: 'dist'
       script: 'build-production'
+
   deploy_staging:
     name: Deploy staging
     uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
@@ -24,3 +25,19 @@ jobs:
       target: 'preview.zooniverse.org/panoptes-front-end/master'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
+
+  remove_branch_deploy:
+    runs-on: ubuntu-latest
+    needs: deploy_staging
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Get Pull Request Number
+      id: pr
+      run: echo "::set-output name=pr_number::$(gh pr view --json number -q .number || echo "")"
+
+    - name: Remove branch deploy
+      uses: zooniverse/ci-cd/.github/workflows/delete_blobs.yaml@main
+      with:
+        target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ steps.pr.outputs.pr_number }}'
