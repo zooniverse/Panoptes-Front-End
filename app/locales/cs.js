@@ -1,5 +1,5 @@
 export default {
-  loading: '(načítá se)',
+  loading: 'načítá se',
   classifier: {
     back: 'Zpět',
     backButtonWarning: 'Krokem zpět ztratíte započatou práci na tomto úkolu.',
@@ -9,41 +9,71 @@ export default {
     done: 'Dokončit',
     doneAndTalk: 'Dokončit & Komentovat',
     dontShowMinicourse: 'Mini-kurz již v budoucnu nezobrazovat',
+    interventions: {
+      optOut: 'Tyto zprávy již nezobrazovat.',
+      studyInfo: 'Nechci se účastnit této [studie](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
+    },
     letsGo: 'Pojďme na to!',
+    miniCourseButton: 'Znovu spustit Mini-kurz',
     next: 'Další',
     optOut: 'Zrušit účast',
+    recents: 'Tvé nedávné klasifikace',
+    talk: 'Diskuze',
+    taskHelpButton: 'Potřebuješ pomoct s tímto úkolem?',
     taskTabs: {
       taskTab: 'Úkol',
       tutorialTab: 'Tutorial/Návod'
     },
-    recents: 'Tvé nedávné klasifikace',
-    talk: 'Diskuze',
-    taskHelpButton: 'Potřebuješ pomoct s tímto úkolem?',
-    miniCourseButton: 'Znovu spustit Mini-kurz',
     workflowAssignmentDialog: {
-      promotionMessage: "Gratulujeme! Otevřela se ti další úroveň s úkoly. Pokud si přeješ zůstat v té současné, můžeš.",
       acceptButton: 'Jít do další úrovně!',
-      declineButton: 'Ne, děkuji'
-    },
-    interventions: {
-      optOut: "Tyto zprávy již nezobrazovat."
+      declineButton: 'Ne, děkuji',
+      promotionMessage: 'Gratulujeme! Otevřela se ti další úroveň s úkoly. Pokud si přeješ zůstat v té současné, můžeš.'
     }
   },
   project: {
-    language: 'Jazyk',
-    loading: 'Projekt se načítá',
-    disclaimer: 'Tento projekt byl vybudován za pomoci aplikace Zooniverse Project Builder, ale zatím není oficiálním projektem Zooniverse. Dotazy a připomínky týkající se tohoto projektu směřované na tým Zooniverse se nemusí dočkat odezvy.',
-    fieldGuide: 'Field Guide',
     about: {
       header: 'O projektu',
       nav: {
+        education: 'Výuka',
+        faq: 'FAQ - Často kladené dotazy',
         research: 'Výzkum',
         results: 'Výsledky',
-        faq: 'FAQ - Často kladené dotazy',
-        education: 'Výuka',
-        team: 'Tým',
+        team: 'Tým'
       }
     },
+    classifyPage: {
+      dark: 'tmavého',
+      light: 'světlého',
+      themeToggle: 'Přepnout do %(theme)s prostředí',
+      title: 'klasifikovat'
+    },
+    disclaimer: 'Tento projekt byl vybudován za pomoci aplikace Zooniverse Project Builder, ale zatím není oficiálním projektem Zooniverse. Dotazy a připomínky týkající se tohoto projektu směřované na tým Zooniverse se nemusí dočkat odezvy.',
+    fieldGuide: 'Field Guide',
+    home: {
+      about: 'O projektu %(title)s',
+      getStarted: 'Začít',
+      joinIn: 'Zapojit se',
+      learnMore: 'Dozvědět se více',
+      links: 'Externí odkazy k projektu',
+      metadata: {
+        classifications: 'Klasifikací',
+        completedSubjects: 'Dokončených objektů',
+        statistics: 'Statistiky projektu %(title)s',
+        subjects: 'Objektů',
+        volunteers: 'Dobrovolníků'
+      },
+      organization: 'Organizace',
+      researcher: 'Slovy vědců',
+      talk: {
+        one: '1 člověk mluví o projektu %(title)s právě teď.',
+        other: '%(count)s lidí mluví o projektu %(title)s právě teď.',
+        zero: 'Momentálně o projektu %(title)s nikdo nemluví.'
+      },
+      visitLink: 'Navštivte projekt',
+      workflowAssignment: 'Otevřela se ti další úroveň s úkoly - %(workflowDisplayName)s'
+    },
+    language: 'Jazyk',
+    loading: 'Projekt se načítá',
     nav: {
       about: 'O projektu',
       adminPage: 'Admin stránka',
@@ -55,36 +85,26 @@ export default {
       talk: 'Diskuze',
       underReview: 'Probíhá revize',
       zooniverseApproved: 'Schváleno Zooniverse'
-    },
-    classifyPage: {
-      dark: 'tmavého',
-      light: 'světlého',
-      title: 'klasifikovat',
-      themeToggle: 'Přepnout do %(theme)s prostředí'
-    },
-    home: {
-      organization: 'Organizace',
-      researcher: 'Slovy vědců',
-      about: 'O projektu %(title)s',
-      metadata: {
-        statistics: 'Statistiky projektu %(title)s',
-        classifications: 'Klasifikací',
-        volunteers: 'Dobrovolníků',
-        completedSubjects: 'Dokončených objektů',
-        subjects: 'Objektů'
-      },
-      talk: {
-        zero: 'Momentálně o projektu **%(title)s** nikdo nemluví.',
-        one: '**1** člověk mluví o projektu **%(title)s** právě teď.',
-        other: '**%(count)s** lidí mluví o projektu **%(title)s** právě teď.'
-      },
-      joinIn: 'Zapojit se',
-      learnMore: 'Dozvědět se více',
-      getStarted: 'Začít',
-      workflowAssignment: 'Otevřela se ti další úroveň s úkoly - %(workflowDisplayName)s',
-      visitLink: 'Navštivte projekt',
-      links: 'Externí odkazy k projektu'
     }
+  },
+  projects: {
+    welcome: {
+      heading: 'Vítejte! Jsme moc rádi, že jste tady',
+      scrollDown: 'Sjeďte dolů a přečtěte si ještě více',
+      talk: 'Nezapomeňte se také podívat na [Diskuse](/talk), kde si můžete popovídat s dalšími podobně smýšlejícími dobrovolníky.',
+      thanks: 'Děkujeme vám za váš zájem o pomoc skutečnému výzkumu. Zde jsme shromáždili několik projektů, na kterých by se nám vaše pomoc právě teď hodila. Pro více možností stačí sjet dolů a projít si všechny naše aktivní projekty.'
+    }
+  },
+  projectRoles: {
+    collaborator: 'Spolupracovník',
+    expert: 'Expert',
+    moderator: 'Moderátor',
+    museum: 'Muzeum',
+    owner: 'Vlastník',
+    scientist: 'Výzkumník',
+    tester: 'Testovací člověk',
+    title: 'Tým',
+    translator: 'Překladatel'
   },
   organization: {
     error: 'Došlo k chybě během načítání organizace',
@@ -146,14 +166,11 @@ export default {
     notSignedInMessage: 'Nejste přihlášeni'
   },
   signIn: {
-    title: 'Přihlásit se/Zaregistrovat se',
-    withZooniverse: 'Přihlásit se pomocí svého Zooniverse účtu',
-    whyHaveAccount: 'Přihlášení dobrovolníci mohou sledovat vlastní pokrok a ve výsledné publikaci budou uvedeni v kreditech.',
-    signIn: 'Přihlásit se',
     register: 'Zaregistrovat se',
-    orThirdParty: 'Nebo se přihlásit pod jinou službou',
-    withFacebook: 'Přihlásit se pomocí Facebooku',
-    withGoogle: 'Přihlásit se pomocí Googlu'
+    signIn: 'Přihlásit se',
+    title: 'Přihlásit se/Zaregistrovat se',
+    whyHaveAccount: 'Přihlášení dobrovolníci mohou sledovat vlastní pokrok a ve výsledné publikaci budou uvedeni v kreditech.',
+    withZooniverse: 'Přihlásit se pomocí svého Zooniverse účtu'
   },
   notFoundPage: {
     message: 'Nenalezeno'
