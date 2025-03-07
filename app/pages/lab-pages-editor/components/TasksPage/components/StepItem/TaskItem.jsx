@@ -105,7 +105,7 @@ function PlaceholderAnswers({
       <ul className="horizontal-list">
         {answers.map((answer, index) => (
           <li key={`placeholder-answer-${taskKey}-${index}`}>
-            <div className="fake-button">{answer.label}</div>
+            <div className="mock-button">{answer.label}</div>
           </li>
         ))}
       </ul>
@@ -115,7 +115,7 @@ function PlaceholderAnswers({
   if (task.type === 'text') {
     return (
       <div>
-        <div className="fake-text-input">Volunteer text here</div>
+        <div className="mock-text-input">Volunteer text here</div>
       </div>
     );
   }
@@ -124,7 +124,7 @@ function PlaceholderAnswers({
     const tools = task.tools || [];
 
     return (
-      <ul className="fake-drawing-tools">
+      <ul className="mock-drawing-tools">
         {tools.map((tool, index) => (
           <li
             key={`placeholder-answer-${taskKey}-${index}`}
