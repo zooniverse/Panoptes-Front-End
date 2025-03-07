@@ -25,7 +25,7 @@ export default function BranchingNextControls({
     <ul className="next-controls horizontal-list">
       {answers.map((answer, index) => (
         <li key={`branching-next-controls-answer-${index}`}>
-          <div className="fake-button">{answer.label}</div>
+          <div className="mock-button">{answer.label}</div>
           <NextStepArrow className="next-arrow" />
           <select
             className={(!answer?.next) ? 'next-is-submit' : ''}

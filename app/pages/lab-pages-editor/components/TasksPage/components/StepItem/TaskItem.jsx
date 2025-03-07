@@ -4,12 +4,21 @@ import PropTypes from 'prop-types';
 import DrawingToolIcon from '../../../../icons/DrawingToolIcon.jsx';
 import TaskIcon from '../../../../icons/TaskIcon.jsx';
 import BranchingNextControls from './BranchingNextControls.jsx';
+import { Markdown } from 'markdownz'
 
-const TaskLabels = {
-  'drawing': 'Drawing Task',
-  'multiple': 'Question Task',  // Multiple question
-  'single': 'Question Task',  // Single question
-  'text': 'Text Task'
+const TaskTypes = {
+  'drawing': {
+    name: 'Drawing Task',
+  },
+  'multiple': {  // Multiple question
+    name: 'Question Task',
+  },
+  'single': {  // Single question
+    name: 'Question Task',
+  },
+  'text': {
+    name: 'Text Task',
+  }
 };
 
 const DEFAULT_HANDLER = () => {};
@@ -42,15 +51,19 @@ function TaskItem({
 
   return (
     <li className="task-item">
-      <div className="flex-row spacing-bottom-M">
-        <span className="task-key">{taskKey}</span>
+      <div className="task-general-details">
         <span className="task-icon">
           <TaskIcon
-            alt={TaskLabels[task.type] || 'Unknown Task Type'}
+            alt={TaskTypes[task.type].name || 'Unknown Task Type'}
             type={task.type}
           />
         </span>
-        <span className="task-text flex-item">{taskText}</span>
+        <span className="task-key">{taskKey}</span>
+        <span className="task-text">
+          <Markdown>
+            {taskText}
+          </Markdown>
+        </span>
       </div>
       {isBranchingTask && (
         <BranchingNextControls
@@ -92,7 +105,7 @@ function PlaceholderAnswers({
       <ul className="horizontal-list">
         {answers.map((answer, index) => (
           <li key={`placeholder-answer-${taskKey}-${index}`}>
-            <div className="fake-button">{answer.label}</div>
+            <div className="mock-button">{answer.label}</div>
           </li>
         ))}
       </ul>
@@ -102,7 +115,7 @@ function PlaceholderAnswers({
   if (task.type === 'text') {
     return (
       <div>
-        <div className="fake-text-input">Participant text here</div>
+        <div className="mock-text-input">Volunteer text here</div>
       </div>
     );
   }
@@ -111,16 +124,15 @@ function PlaceholderAnswers({
     const tools = task.tools || [];
 
     return (
-      <ul className="fake-drawing-tools">
+      <ul className="mock-drawing-tools">
         {tools.map((tool, index) => (
           <li
             key={`placeholder-answer-${taskKey}-${index}`}
-            className="flex-row"
           >
             <span className="icon-wrapper">
               <DrawingToolIcon type={tool?.type} color={tool?.color} />
             </span>
-            <span className="flex-item">{tool?.label}</span>
+            <span>{tool?.label}</span>
             <span>0 drawn</span>
           </li>
         ))}

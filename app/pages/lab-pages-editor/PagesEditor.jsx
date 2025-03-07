@@ -51,30 +51,32 @@ function PagesEditor({ params }) {
           workflowId={workflowId}
         >
           <WorkflowTopLinks />
-          <WorkflowHeaderTitle />
-          <WorkflowHeaderTabs
-            currentTab={currentTab}
-            setCurrentTab={setCurrentTab}
-            tabs={tabs}
-          />
-          {(currentTab === 0) && (
-            <div
-              aria-labelledby={tabs[0].id}
-              id={tabs[0].targetPanel}
-              role="tabpanel"
-            >
-              <TasksPage />
-            </div>
-          )}
-          {(currentTab === 1) && (
-            <div
-              aria-labelledby={tabs[1].id}
-              id={tabs[1].targetPanel}
-              role="tabpanel"
-            >
-              <WorkflowSettingsPage />
-            </div>
-          )}
+          <div className="workflow-main-content">
+            <WorkflowHeaderTitle />
+            <WorkflowHeaderTabs
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
+              tabs={tabs}
+            />
+            {(currentTab === 0) && (
+              <div
+                aria-labelledby={tabs[0].id}
+                id={tabs[0].targetPanel}
+                role="tabpanel"
+              >
+                <TasksPage />
+              </div>
+            )}
+            {(currentTab === 1) && (
+              <div
+                aria-labelledby={tabs[1].id}
+                id={tabs[1].targetPanel}
+                role="tabpanel"
+              >
+                <WorkflowSettingsPage />
+              </div>
+            )}
+          </div>
         </DataManager>
       </div>
     </StrictMode>

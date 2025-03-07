@@ -11,6 +11,7 @@ $darkGreen = #005D69
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
+$lightYellow = #F6D885
 $orange = #D47811
 $darkOrange = #70481C
 $white = #FFFFFF
@@ -84,6 +85,7 @@ $fontWeightBoldPlus = 700
     border: 1.5px solid $grey1
     border-radius: $sizeXS
     color: $black
+    font-family: $fontFamilies
     font-size: $fontSizeM
     padding: $sizeS
   
@@ -105,25 +107,43 @@ $fontWeightBoldPlus = 700
     &.plain
       background: none
       border: none
-  
-  a.button-link
-    border: 1px solid $yellow
-    border-radius: $sizeXS
-    color: $black
-    cursor: pointer
-    display: inline-block
-    font-family: $fontFamilies
-    font-size: $fontSizeS
-    line-height: 1em
-    padding: $sizeSM
-    text-align: center
+    
+    &.control-button
+      background: none
+      border: none
+      color: $grey3
+      width: 40px
+      height: 40px
+      border-radius: 40px
+      padding: 0
+      display: flex
+      justify-content: center
+      align-items: center
 
+      &:hover
+      &:focus
+        background: $lightYellow
+        color: $yellow
+      
+      &:active
+        background: $yellow
+        color: $orange
+      
+      .icon
+        display: block
+  
   hr
     border-top: 1px solid $grey2
   
   .disabled, .disabled *, [disabled]
     color: $grey1
   
+  // Common Components
+  // ---------------------------------------------------------------------------
+
+  .workflow-version
+    color: $orange
+
   .status-banner
     display: flex
     flex-direction: column
@@ -134,14 +154,31 @@ $fontWeightBoldPlus = 700
     &.error
       background: $redBright
       color: $white
+  
+  .step-label
+    border-radius: 8px 0px 16px 0px;
+    background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow;
+    color: $black
+    font-size: 10px
+    font-weight: 500
+    letter-spacing: 0.05em
+    padding: 9px 29px
+    text-transform: uppercase
+  
+  .grab-handle
+    color: $grey3
+    cursor: grab
+
+    &:active
+      cursor: grabbing
 
   // General Layout
   // ---------------------------------------------------------------------------
 
-  main-content()
-    max-width: 840px
+  .workflow-main-content
+    max-width: calc(800px + 2 * 16px)
     margin: 0 auto
-    padding: 0 $sizeS
+    padding: 0 16px
 
   flex-row()
     align-items: center
@@ -182,9 +219,6 @@ $fontWeightBoldPlus = 700
   .spacing-bottom-M
     margin-bottom: $sizeM
   
-  .workflow-version
-    color: $orange
-
   // Component: Workflow "Header" components
   // ---------------------------------------------------------------------------
 
@@ -210,7 +244,6 @@ $fontWeightBoldPlus = 700
       max-width: 160px
 
   .workflow-header-title
-    main-content()
     flex-row()
     margin-bottom: 30px
 
@@ -224,7 +257,6 @@ $fontWeightBoldPlus = 700
       color: $grey3
 
   .workflow-header-tabs
-    main-content()
     flex-row()
     justify-content: center
     gap: $sizeXL
@@ -257,7 +289,6 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .workflow-settings-page
-    main-content()
     display: grid
     gap: $sizeM
     grid-template-columns: 50% auto
@@ -337,7 +368,6 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .tasks-page
-    main-content()
 
     .tasks-page-overview
       flex-row()
@@ -600,50 +630,41 @@ $fontWeightBoldPlus = 700
 
     .step-item
       .step-body
-        background: $grey5
-        border: 1px solid $grey1
-        border-radius: $sizeXS
-        overflow: visible
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white;
+        border: 0.5px solid $grey1
+        border-radius: 8px
+        box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+        overflow: visible  // Required for StepItem's experimentalRestyleContainer(), which makes the "next step" arrows for branching tasks appear "outside" the step container.
 
         &:active
-        &:has(.move-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
+        &:has(.control-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
           outline: 2px solid $yellow
         
         .step-body-inner  // Redundant inner content is used for styling "branching next step extrudes from step-body"
-          padding: $sizeS $sizeM
+          padding: 0
 
       .step-controls
+        flex-row()
         cursor: grab
+        margin-bottom: 8px
 
         &:active
           cursor: grabbing
         
-        .move-button:focus
-          outline: 1px solid $yellow
-        
         .step-controls-left
+          align-self: flex-start
           min-width: 5rem
         
         .step-controls-center
+          display: flex
           margin: auto
-
-          > *
-            vertical-align: middle
-            color: $grey1
+          align-items: center
         
         .step-controls-right
-          text-align: right
+          display: flex
           min-width: 5rem
 
-          button
-            background: $white
-            border: 1px solid $yellow
-            border-radius: $sizeS
-            margin-left: $sizeXS
-
-            .fa
-              color: $grey3
-            
+          .control-button            
             &.disabled
               background: $grey2
 
@@ -659,41 +680,69 @@ $fontWeightBoldPlus = 700
 
     .tasks-list
       list-style: none
-      padding: 0
+      padding: $sizeS $sizeM
     
     .task-item
       margin-top: $sizeL
 
       &:first-child
         margin-top: 0
-
-      .task-text
-        font-size: $fontSizeM
-        font-weight: $fontWeightBold
       
-    .grab-handle
-      cursor: grab
+      .task-general-details
+        flex-row()
+        align-items: flex-start
+        gap: 10px
+        margin-bottom: 16px
 
-      &:active
-        cursor: grabbing
+        .task-icon
+          flex: 0 0 auto
+          margin-top: 3px
+
+          .icon
+            display: block
+        
+        .task-key
+          flex: 0 0 auto
+          margin-top: 5px
+
+        .task-text
+          display: inline-block
+          flex: 1 1 auto
+          font-size: 16px
+          font-weight: 500
+
+          p:first-child
+            margin-top: 0
+          
+          p:last-child
+            margin-bottom: 0
 
     .next-controls
 
       .next-arrow
-        color: $yellow
+        color: $orange
         display: block
         margin: 0 auto
       
       select
-        background: $yellow
-        border-radius: $sizeM
-        border: 2px solid $grey1
-        font-size: $fontSizeS
+        // Note: <select> style goes out the window on Safari
+        background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow
+        border-radius: 32px;
+        border: none
+        color: $black
+        font-size: 14px
+        font-weight: 600
+        text-align: center
+        min-width: 110px
+        min-height: 40px
+        margin: 0 auto
+
+        &:after
+          content: 'v'
 
         &.next-is-submit
           background: $white
-          border: 2px solid $yellow
-          color: $black
+          border: 0.5px solid $orange
 
       &.simple-next-controls
         display: flex
@@ -721,53 +770,69 @@ $fontWeightBoldPlus = 700
   
   .task-key
   .step-key
-    background: $grey3
-    border-radius: $sizeM
+    background: $nearBlack
+    border-radius: 1em
     color: $white
-    font-size: $fontSizeXS
-    padding: 0 $sizeS
+    font-size: 10px
+    padding: 0 5px
   
-  .fake-button
-    background: $white
-    border: 1px solid $grey1
-    border-radius: 2px
-    color: $black
-    font-family: $fontFamilies
-    font-size: $fontSizeS
+  .mock-button
+    border-radius: 4px
+    border: 0.5px solid $grey1
+    background: #FFF
+    color: $grey3
+    font-size: 14px
+    font-weight: 500
     padding: $sizeS $sizeM
     text-align: center
+    min-width: 110px
+    margin: 0 auto
   
-  .fake-submit
+  .mock-submit
     background: $white
-    border-radius: $sizeM
-    border: 2px solid $yellow
+    border: 0.5px solid $orange
+    border-radius: 32px
     color: $black
-    font-size: $fontSizeS
+    font-size: 14px
+    font-weight: 600
+    padding: $sizeS $sizeM
+    min-width: 110px
+    min-height: 40px
+    text-align: center
+  
+  .mock-text-input
+    border-radius: 4px
+    border: 0.5px solid $grey1
+    background: #FFF
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25) inset
+    color: $grey1
+    font-size: 14px
+    font-weight: 500
     padding: $sizeS $sizeM
   
-  .fake-text-input
-    background: $white
-    border: 1px solid $grey1
-    border-radius: 2px
-    color: $grey4
-    font-family: $fontFamilies
-    font-size: $fontSizeS
-    padding: $sizeS $sizeM
-    box-shadow: 1px 1px 4px 0px $shadowColour inset
-  
-  .fake-drawing-tools
+  .mock-drawing-tools
     list-style: none
     margin: 0
     padding: 0
 
     li
-      background: $darkGreen
-      border-radius: $sizeXS
-      color: $white
-      font-size: $fontSizeS
-      margin: 0 auto $sizeS auto
-      max-width: 600px
-      padding: $sizeS $sizeL
+      flex-row()
+      border-radius: 4px
+      border: 0.5px solid $teal
+      background: $white
+      box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+      color: $black
+      font-size: 14px
+      font-weight: 400
+      margin: 0 auto 10px auto
+      max-width: 500px
+      padding: 14px 25px
+
+      span:nth-child(2)
+        flex: 1 1 auto
+      
+      span:nth-child(3)
+        color: $grey1
 
     .icon-wrapper
       background: $black
