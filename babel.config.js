@@ -1,6 +1,7 @@
 module.exports = function (api) {
   api.cache(true);
   return {
+    sourceType: 'module',
     plugins: [
       [
         '@babel/plugin-transform-runtime',
@@ -14,34 +15,10 @@ module.exports = function (api) {
       ['@babel/preset-react', { runtime: 'automatic' }]
     ],
     env: {
-      development: {
-        plugins: [
-          [
-            'transform-es2015-modules-commonjs'
-          ]
-        ]
-      },
-      staging: {
-        plugins: [
-          [
-            'transform-es2015-modules-commonjs'
-          ]
-        ]
-      },
-      production: {
-        plugins: [
-          [
-            'transform-es2015-modules-commonjs'
-          ]
-        ]
-      },
       test: {
         plugins: [
           [
             'babel-plugin-rewire'
-          ],
-          [
-            'transform-es2015-modules-commonjs'
           ]
         ]
       }

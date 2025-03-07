@@ -13,7 +13,7 @@ const taskNames = {
 
 const DEFAULT_HANDLER = () => {};
 
-function EditStepDialog({
+function EditStepDialogWithRef({
   allTasks = {},
   deleteTask,
   enforceLimitedBranchingRule,
@@ -117,6 +117,8 @@ function EditStepDialog({
   );
 }
 
+const EditStepDialog = forwardRef(EditStepDialogWithRef);
+
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   deleteTask: PropTypes.func,
@@ -134,4 +136,4 @@ function onSubmit(e) {
   return false;
 }
 
-export default forwardRef(EditStepDialog);
+export default EditStepDialog;
