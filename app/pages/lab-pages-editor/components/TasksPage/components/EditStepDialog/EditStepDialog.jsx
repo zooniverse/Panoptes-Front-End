@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 
 import EditTaskForm from './EditTaskForm.jsx';
 import CloseIcon from '../../../../icons/CloseIcon.jsx';
-
-const taskNames = {
-  'drawing': 'Drawing',
-  'multiple': 'Question',
-  'single': 'Question',
-  'text': 'Text',
-}
+import OptionsIcon from '../../../../icons/OptionsIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
@@ -59,6 +53,14 @@ function EditStepDialog({
       <div className="dialog-header">
         <span className="step-label">Page {stepIndex + 1}</span>
         <span className="spacer" />
+        <button
+          aria-label="Options"
+          className="plain"
+          onClick={null}
+          type="button"
+        >
+          <OptionsIcon />
+        </button>
         <button
           aria-label="Close dialog"
           className="plain"

@@ -1,16 +1,16 @@
-import closeIcon from './images/close-icon.png'
+import optionsIcon from './images/options-icon.png'
 
-export default function CloseIcon({
+export default function OptionsIcon({
   alt,
   className = '',
-  width = 16,
-  height = 16,
+  width = 22,
+  height = 8,
 }) {
   return (
     <img
       alt={alt}
       className={`icon ${className}`}
-      src={closeIcon}
+      src={optionsIcon}
       width={width}
       height={height}
     />
