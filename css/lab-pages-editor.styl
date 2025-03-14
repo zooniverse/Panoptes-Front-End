@@ -397,7 +397,7 @@ $fontWeightBoldPlus = 700
       p
         color: $grey1
     
-    .task-inbetween
+    .decorated-prompt
       display: flex
       align-items: center
 
@@ -410,31 +410,32 @@ $fontWeightBoldPlus = 700
         color: $orange
         margin: 0 10px
 
-    .add-task-button
-      align-items: center
-      background: none
-      border: none
-      color: $orange
-      display: flex
-      font-size: 18px
-      margin: 0 auto
-      padding: 10px
-      text-transform: uppercase
+      button
+        align-items: center
+        background: none
+        border: none
+        color: $orange
+        display: flex
+        font-size: 18px
+        margin: 0 auto
+        padding: 10px
+        text-transform: uppercase
 
-      &:hover
-        color: $yellow
-        text-shadow: $yellow 1px 0 10px
-      
-      &:active
-        color: $darkOrange
-      
-      .icon
-        margin-left: 10px
+        &:hover
+          color: $yellow
+          text-shadow: $yellow 1px 0 10px
+        
+        &:active
+          color: $darkOrange
+        
+        .icon
+          margin-left: 10px
 
     dialog
-      border: 1px solid $grey1
-      border-radius: $sizeS
-      box-shadow: 1px 1px 6px 0px $shadowColour
+      border: none
+      border-radius: 8px
+      background: $white
+      box-shadow: 1px 1px 6px 0px rgba(0, 0, 0, 0.50)
       padding: 0
       width: 800px
       max-width: 90vw
@@ -442,29 +443,12 @@ $fontWeightBoldPlus = 700
       &::backdrop
         background: $backdropColour
       
-      button.big
-        border: 3px solid $grey1
-        font-size: $fontSizeM
-        padding: $sizeS $sizeM
-        box-shadow: none
-        text-transform: uppercase
-
-        &.done
-          border: 3px solid $teal
-          min-width: 33%
-          padding: $sizeS $sizeXL
-        
-        &[disabled]
-          color: $grey1
-      
       .dialog-header
-        background: $teal
-        color: $white
-        padding: $sizeXS $sizeM
-        text-transform: uppercase
+        flex-row()
 
         button
-          color: $white
+          width: 40px
+          height: 40px
       
       &.new-task
         .dialog-body
@@ -488,7 +472,12 @@ $fontWeightBoldPlus = 700
               font-size: $fontSizeXL
         
       &.edit-step
-        background: $white
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white
+        
+        .dialog-header
+          .step-label
+            align-self: flex-start
+            border-top-left-radius: 0px  // Make flush to container
       
         .dialog-body
           max-height: 70vh
@@ -496,7 +485,7 @@ $fontWeightBoldPlus = 700
       
         fieldset.edit-task-form
           // Yup, the form is actually a fieldset, so maybe strip out the default values
-          padding: $sizeM $sizeL
+          padding: 20px
           margin: 0
           border-bottom: none
           border-left: none
@@ -612,8 +601,47 @@ $fontWeightBoldPlus = 700
               grid-row: 2
         
       .dialog-footer
-        padding: $sizeXS $sizeL $sizeL $sizeL
-        margin-bottom: $sizeS
+        display: flex
+        flex-direction: row
+        gap: 10px
+        padding: 10px 20px 30px 20px
+
+        button
+          flex: 1 1 50%
+          color: $black
+          background: $white
+          border: 0.5px solid $grey1
+          font-size: 16px
+          font-weight: 400
+          padding: 10px 20px
+          text-transform: uppercase
+
+          &:hover
+          &.button:hover
+            color: $yellow
+            border: 0.5px solid $yellow
+
+          &:active
+          &.button:active
+            color: $orange
+            background: linear-gradient(180deg, #F6D885 0%, #F0B200 100%)
+          
+          &.add-task-button
+            color: $grey3
+            text-transform: none
+
+          &.done-button
+            font-weight: 600
+
+            &:hover
+              background: linear-gradient(180deg, #FFF 0%, #F6D885 100%), #F6D885
+
+          &.apply-button
+            font-weight: 600
+            background: linear-gradient(180deg, #F0B200 0%, #D47811 100%), #D47811
+
+            &:hover
+              background: $lightYellow
 
     section
       h3
@@ -675,7 +703,7 @@ $fontWeightBoldPlus = 700
           background: $greenBright
           padding: $sizeL $sizeS
       
-      .task-inbetween
+      .decorated-prompt
         margin-top: 10px
 
     .tasks-list
