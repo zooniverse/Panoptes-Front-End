@@ -34,7 +34,6 @@ export default function TasksPage() {
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
-  const firstStepKey = workflow?.steps?.[0]?.[0] || '';
   const isActive = true; // TODO
   const advancedMode = getAdvancedMode();
 
