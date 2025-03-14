@@ -310,10 +310,9 @@ export default function TasksPage() {
               updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
             />
           ))}
-          <li className="task-inbetween">
+          <li className="decorated-prompt">
             <span className="decoration-line" />
             <button
-              className="add-task-button"
               onClick={handleClickAddTaskButton}
               type="button"
             >
