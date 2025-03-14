@@ -93,18 +93,38 @@ function EditStepDialog({
       </form>
       <div className="dialog-footer">
         <button
+          className="button add-task-button"
           onClick={handleClickAddTaskButton}
           type="button"
         >
           Add another Task to this Page
         </button>
         <button
+          className="button done-button"
           onClick={closeDialog}
           type="button"
         >
           Done
         </button>
       </div>
+      {/*
+      <div className="dialog-footer">
+        <button
+          className="button cancel-button"
+          onClick={handleClickAddTaskButton}
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          className="button apply-button"
+          onClick={closeDialog}
+          type="button"
+        >
+          Apply
+        </button>
+      </div>
+      */}
     </dialog>
   );
 }

@@ -613,15 +613,35 @@ $fontWeightBoldPlus = 700
           border: 0.5px solid $grey1
           font-size: 16px
           font-weight: 400
+          padding: 10px 20px
           text-transform: uppercase
 
           &:hover
+          &.button:hover
             color: $yellow
             border: 0.5px solid $yellow
 
           &:active
+          &.button:active
             color: $orange
-            background: linear-gradient(180deg, #F6D885 0%, #F0B200 100%);
+            background: linear-gradient(180deg, #F6D885 0%, #F0B200 100%)
+          
+          &.add-task-button
+            color: $grey3
+            text-transform: none
+
+          &.done-button
+            font-weight: 600
+
+            &:hover
+              background: linear-gradient(180deg, #FFF 0%, #F6D885 100%), #F6D885
+
+          &.apply-button
+            font-weight: 600
+            background: linear-gradient(180deg, #F0B200 0%, #D47811 100%), #D47811
+
+            &:hover
+              background: $lightYellow
 
     section
       h3
