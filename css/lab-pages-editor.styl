@@ -443,21 +443,6 @@ $fontWeightBoldPlus = 700
       &::backdrop
         background: $backdropColour
       
-      button.big
-        border: 3px solid $grey1
-        font-size: $fontSizeM
-        padding: $sizeS $sizeM
-        box-shadow: none
-        text-transform: uppercase
-
-        &.done
-          border: 3px solid $teal
-          min-width: 33%
-          padding: $sizeS $sizeXL
-        
-        &[disabled]
-          color: $grey1
-      
       .dialog-header
         flex-row()
 
@@ -618,6 +603,20 @@ $fontWeightBoldPlus = 700
       .dialog-footer
         padding: $sizeXS $sizeL $sizeL $sizeL
         margin-bottom: $sizeS
+
+        button
+          color: $black
+          background: $white
+          border: 0.5px solid $grey1
+          text-transform: uppercase
+
+          &:hover
+            color: $yellow
+            border: 0.5px solid $yellow
+
+          &:active
+            color: $orange
+            background: linear-gradient(180deg, #F6D885 0%, #F0B200 100%);
 
     section
       h3
