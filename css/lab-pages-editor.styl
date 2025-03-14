@@ -397,7 +397,7 @@ $fontWeightBoldPlus = 700
       p
         color: $grey1
     
-    .task-inbetween
+    .decorated-prompt
       display: flex
       align-items: center
 
@@ -410,26 +410,26 @@ $fontWeightBoldPlus = 700
         color: $orange
         margin: 0 10px
 
-    .add-task-button
-      align-items: center
-      background: none
-      border: none
-      color: $orange
-      display: flex
-      font-size: 18px
-      margin: 0 auto
-      padding: 10px
-      text-transform: uppercase
+      button
+        align-items: center
+        background: none
+        border: none
+        color: $orange
+        display: flex
+        font-size: 18px
+        margin: 0 auto
+        padding: 10px
+        text-transform: uppercase
 
-      &:hover
-        color: $yellow
-        text-shadow: $yellow 1px 0 10px
-      
-      &:active
-        color: $darkOrange
-      
-      .icon
-        margin-left: 10px
+        &:hover
+          color: $yellow
+          text-shadow: $yellow 1px 0 10px
+        
+        &:active
+          color: $darkOrange
+        
+        .icon
+          margin-left: 10px
 
     dialog
       border: none
@@ -608,6 +608,8 @@ $fontWeightBoldPlus = 700
           color: $black
           background: $white
           border: 0.5px solid $grey1
+          font-size: 16px
+          font-weight: 400
           text-transform: uppercase
 
           &:hover
@@ -678,7 +680,7 @@ $fontWeightBoldPlus = 700
           background: $greenBright
           padding: $sizeL $sizeS
       
-      .task-inbetween
+      .decorated-prompt
         margin-top: 10px
 
     .tasks-list
