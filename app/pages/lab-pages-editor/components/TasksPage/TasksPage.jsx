@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useWorkflowContext } from '../../context.js';
 import checkCanStepBranch from '../../helpers/checkCanStepBranch.js';
 import createStep from '../../helpers/createStep.js';
@@ -26,6 +26,12 @@ import WrenchIcon from '../../icons/WrenchIcon.jsx';
 function getAdvancedMode() {
   const params = new URLSearchParams(window?.location?.search);
   return !!params.get('advanced');
+}
+
+// Use ?page=123 to open a specific page, when the workflow loads.
+function getInitialPage() {
+  const params = new URLSearchParams(window?.location?.search);
+  return params.get('page') ?? -1;
 }
 
 export default function TasksPage() {
@@ -273,6 +279,15 @@ export default function TasksPage() {
   const enforceLimitedBranchingRule = {
     stepHasBranch: !!checkCanStepBranch(activeStep, workflow?.tasks)
   }
+
+  // Dev Helper: open a specific page, when the workflow loads.
+  // Warning: this will trigger even when switching between Workflow Settings
+  // tab and Tasks tab.
+  function openInitialPage () {
+    const page = getInitialPage()
+    if (page > 0) openEditStepDialog(page - 1)
+  }
+  useEffect(openInitialPage, [workflow])
 
   if (!workflow) return null;
 
