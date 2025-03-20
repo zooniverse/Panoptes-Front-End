@@ -54,10 +54,10 @@ class TranslationsManager extends React.Component {
         <p>
           Follow the steps below to add language translations to your project.
           <ol>
-            <li><b>Grant Access:</b> Assign the "translator" role to individuals who will use the Zooniverse project translations interface (https://translations.zooniverse.org) to translate project-specific content into non-English languages. Assignment can be made via your project's <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link>. Note: owners and collaborators already have access via their existing roles.
-            <li><b>Translate:</b> A translator logs on to the translations interface (https://translations.zooniverse.org) and creates an element-by-element translation of your project.
-            <li><b>View and Validate:</b> Once a translation is complete, the project team can preview the translation using the "Preview" link provided below. Alternatively, the translation can be viewed by adding a language query param to the end of any project URL: e.g., https://www.zooniverse.org/projects/OWNER/PROJECT?language=fr"
-            <li><b>Publish:</b> When a translation is ready to be made available to participants via a dropdown language selector, it can be "published" by clicking the checkbox in the list below.
+            <li><b>Grant Access:</b> Assign the "translator" role to individuals who will use the Zooniverse project translations interface (https://translations.zooniverse.org) to translate project-specific content into non-English languages. Assignment can be made via your project's <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link>. Note: owners and collaborators already have access via their existing roles.</li>
+            <li><b>Translate:</b> A translator logs on to the translations interface (https://translations.zooniverse.org) and creates an element-by-element translation of your project.</li>
+            <li><b>View and Validate:</b> Once a translation is complete, the project team can preview the translation using the "Preview" link provided below. Alternatively, the translation can be viewed by adding a language query param to the end of any project URL: e.g., https://www.zooniverse.org/projects/OWNER/PROJECT?language=fr"</li>
+            <li><b>Publish:</b> When a translation is ready to be made available to participants via a dropdown language selector, it can be "published" by clicking the checkbox in the list below.</li>
           </ol>
           As a project owner, it is your responsibility to review the translation and confirm its quality. Owners have previously done this by previewing the translated content in their web browser, and use the browser's built-in translation tool to transform the translated content back to English for the purpose of checking its accuracy.
         </p>
@@ -69,7 +69,7 @@ class TranslationsManager extends React.Component {
         }
         <h2>Project language menu</h2>
         <p>
-          Check which languages you’d like to make available to your volunteers. If you created a project translation that does not appear in the checkbox list, the reason is because that language does not currently have platform-level translations available. In this case, please email <a href="mailto:contact@zooniverse.org">contact@zooniverse.org</a> with your project ID to discuss next steps for adding a platform-level translations for that language.
+          Check which languages you want to make available to your volunteers. If you created a project translation that does not appear in the checkbox list, the reason is because that language does not currently have platform-level translations available. In this case, please email <a href="mailto:contact@zooniverse.org">contact@zooniverse.org</a> with your project ID to discuss next steps for adding a platform-level translations for that language.
         </p>
         <table>
           <tr>
