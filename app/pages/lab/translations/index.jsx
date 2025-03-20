@@ -54,8 +54,8 @@ class TranslationsManager extends React.Component {
         <p>
           Follow the steps below to add language translations to your project.
           <ol>
-            <li><b>Grant Access:</b> Assign the "translator" role to individuals who will use the Zooniverse project translations interface (https://translations.zooniverse.org) to translate project-specific content into non-English languages. Assignment can be made via your project's <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link>. Note: owners and collaborators already have access via their existing roles.</li>
-            <li><b>Translate:</b> A translator logs on to the translations interface (https://translations.zooniverse.org) and creates an element-by-element translation of your project.</li>
+            <li><b>Grant Access:</b> Assign the "translator" role to individuals who will use the Zooniverse project translations interface (<a href="https://translations.zooniverse.org">https://translations.zooniverse.org</a>) to translate project-specific content into non-English languages. Assignment can be made via your project's <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link>. Note: owners and collaborators already have access via their existing roles.</li>
+            <li><b>Translate:</b> A translator logs on to the translations interface (<a href="https://translations.zooniverse.org">https://translations.zooniverse.org</a>) and creates an element-by-element translation of your project.</li>
             <li><b>View and Validate:</b> Once a translation is complete, the project team can preview the translation using the "Preview" link provided below. Alternatively, the translation can be viewed by adding a language query param to the end of any project URL: e.g., https://www.zooniverse.org/projects/OWNER/PROJECT?language=fr"</li>
             <li><b>Publish:</b> When a translation is ready to be made available to participants via a dropdown language selector, it can be "published" by clicking the checkbox in the list below.</li>
           </ol>
