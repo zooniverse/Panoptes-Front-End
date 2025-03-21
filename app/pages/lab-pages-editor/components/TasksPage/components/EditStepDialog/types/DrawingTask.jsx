@@ -156,7 +156,7 @@ function DrawingTask({
 
   return (
     <div className="drawing-task">
-      <div className="input-row">
+      <div className="field-block">
         <label
           className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
@@ -183,7 +183,7 @@ function DrawingTask({
           </button>
         </div>
       </div>
-      <div className="input-row flex-row">
+      <div className="field-block flex-row">
         <span className="big">Tool Configuration</span>
         <span className="narrow">
           <input
@@ -197,7 +197,7 @@ function DrawingTask({
           </label>
         </span>
       </div>
-      <div className="input-row">
+      <div className="field-block">
         <ul>
           {tools.map(({ color, details, label, max, min, size, type }, index) => (
             <li
@@ -312,7 +312,7 @@ function DrawingTask({
           ))}
         </ul>
       </div>
-      <div className="input-row flex-row">
+      <div className="field-block flex-row">
         <button
           aria-label="Add tool"
           className="big"
