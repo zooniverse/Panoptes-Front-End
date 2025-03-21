@@ -1,4 +1,4 @@
-import closeIcon from './images/close-icon.png'
+import closeIcon from './assets/close-icon.png'
 
 export default function CloseIcon({
   alt,
