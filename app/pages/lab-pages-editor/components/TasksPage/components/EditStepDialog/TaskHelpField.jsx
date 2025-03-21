@@ -12,10 +12,10 @@ export default function TaskHelpField ({
   update = DEFAULT_HANDLER,  // Update the workflow resource
 }) {
   return (
-    <div className="input-row">
-      <div className="flex-row spacing-bottom-S">
+    <div className="field-block">
+      <div className="field-header">
         <label
-          className="medium"
+          className="small-label"
           htmlFor={`task-${taskKey}-help`}
         >
           Help Text

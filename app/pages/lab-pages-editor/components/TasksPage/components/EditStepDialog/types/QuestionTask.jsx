@@ -87,7 +87,7 @@ function QuestionTask({
 
   return (
     <div className="question-task">
-      <div className="input-row">
+      <div className="field-block">
         <label
           className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
@@ -114,7 +114,7 @@ function QuestionTask({
           </button>
         </div>
       </div>
-      <div className="input-row">
+      <div className="field-block">
         <span className="big spacing-bottom-S">Choices</span>
         <div className="flex-row">
           <button
@@ -154,7 +154,7 @@ function QuestionTask({
           </span>
         </div>
       </div>
-      <div className="input-row">
+      <div className="field-block">
         <ul>
           {answers.map(({ label, next }, index) => (
             <li

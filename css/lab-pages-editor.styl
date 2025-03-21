@@ -479,9 +479,6 @@ $fontWeightBoldPlus = 700
             align-self: flex-start
             border-top-left-radius: 0px  // Make flush to container
       
-        .dialog-body
-          // No specifici styles
-      
         fieldset.edit-task-form
           // Yup, the form is actually a fieldset, so maybe strip out the default values
           padding: 20px
@@ -497,8 +494,12 @@ $fontWeightBoldPlus = 700
           legend
             display: none  // TODO: reconsider design
 
-          .input-row
-            margin-bottom: $sizeSM
+          .field-block
+            margin-bottom: 10px
+
+            field-header
+              flex-row()
+              margin-bottom: 10px
           
           label.big, span.big
             display: block
@@ -509,6 +510,15 @@ $fontWeightBoldPlus = 700
           label.medium
             display: block
             font-size: $fontSizeM
+            text-transform: uppercase
+          
+          .small-label  // Small labels, mostly used for the "Help" field.
+            color: $nearBlack
+            font-family: Karla
+            font-size: 12px
+            font-style: normal
+            font-weight: 400
+            line-height: normal
             text-transform: uppercase
           
           label.narrow, span.narrow

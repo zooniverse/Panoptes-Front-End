@@ -45,7 +45,7 @@ function TextTask({
 
   return (
     <div className="text-task">
-      <div className="input-row">
+      <div className="field-block">
         <label
           className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
@@ -72,7 +72,7 @@ function TextTask({
           </button>
         </div>
       </div>
-      <div className="input-row">
+      <div className="field-block">
         <span className="narrow">
           <input
             id={`task-${taskKey}-required`}
