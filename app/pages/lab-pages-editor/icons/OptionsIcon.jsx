@@ -1,4 +1,4 @@
-import optionsIcon from './images/options-icon.png'
+import optionsIcon from './assets/options-icon.png'
 
 export default function OptionsIcon({
   alt,
