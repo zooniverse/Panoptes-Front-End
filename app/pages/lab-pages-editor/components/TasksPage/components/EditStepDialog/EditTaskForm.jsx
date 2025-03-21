@@ -20,7 +20,6 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
   stepHasManyTasks,
   task,
   taskKey,
-  taskIndexInStep,
   updateTask
 }) {
   if (!task || !taskKey) return (
@@ -78,7 +77,6 @@ EditTaskForm.propTypes = {
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
-  taskIndexInStep: PropTypes.number,
   updateTask: PropTypes.func
 }              
 
