@@ -85,7 +85,6 @@ function EditStepDialog({
               stepHasManyTasks={stepHasManyTasks}
               task={task}
               taskKey={taskKey}
-              taskIndexInStep={index}
               updateTask={updateTask}
             />
           );
