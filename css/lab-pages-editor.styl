@@ -76,6 +76,7 @@ $fontWeightBoldPlus = 700
     flex: 0 0 auto
     width: $fontSizeM
     height: $fontSizeM
+    cursor: pointer
   
   textarea
     border: 1.5px solid $grey1
@@ -500,7 +501,7 @@ $fontWeightBoldPlus = 700
 
       // Dialog type: Add New Task
       // -----------------------------------------------------------------------
-      
+
       &.new-task
         .dialog-body
           padding: $sizeS $sizeL
@@ -575,16 +576,19 @@ $fontWeightBoldPlus = 700
             flex-row()
             margin-bottom: 10px
           
-          label.big, span.big
-            display: block
-            font-weight: $fontWeightBold
-            font-size: $fontSizeL
-            text-transform: uppercase
+          .task-field-checkbox-set 
+            color: #5C5C5C
+            font-size: 12px
+            font-style: normal
+            font-weight: 400
+            line-height: normal
+            gap: 10px
+
+            > *
+              vertical-align: middle
           
-          label.medium
-            display: block
-            font-size: $fontSizeM
-            text-transform: uppercase
+          label[for]
+            cursor: pointer
           
           .big-label  // Used to identify field task-fields, e.g. the label "Instructions" for the Instructions field
             color: $nearBlack
@@ -604,10 +608,6 @@ $fontWeightBoldPlus = 700
             line-height: normal
             text-transform: uppercase
           
-          label.narrow, span.narrow
-            > *
-              vertical-align: middle
-          
           input[type=text]
           textarea
             border-radius: 4px
@@ -620,6 +620,17 @@ $fontWeightBoldPlus = 700
             font-style: normal
             font-weight: 400
             line-height: normal
+          
+          input[type=checkbox]
+            border-radius: 2px
+            border: 2px solid $grey1
+            background: $white
+
+            &:checked
+              accent-color: $yellow
+              border: 2px solid $white
+              color: $white
+              box-shadow: 0 0 4px 0 $yellow
 
           textarea
             min-height: 3em
