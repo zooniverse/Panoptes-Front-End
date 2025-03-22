@@ -156,8 +156,8 @@ $fontWeightBoldPlus = 700
       color: $white
   
   .step-label
-    border-radius: 8px 0px 16px 0px;
-    background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow;
+    border-radius: 8px 0px 16px 0px
+    background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow
     color: $black
     font-size: 10px
     font-weight: 500
@@ -493,13 +493,30 @@ $fontWeightBoldPlus = 700
           
           legend
             display: none  // TODO: reconsider design
+          
+          h5
+            color: #404040
+            leading-trim: both
+            text-edge: cap
+            font-family: Karla
+            font-size: 18px
+            font-style: normal
+            font-weight: 500
+            line-height: normal
+            letter-spacing: 0.9px
+            text-transform: uppercase
 
-          .field-block
+          .task-header  // General details the Task, specifying the Task ID, Task Type, etc
+            flex-row()
             margin-bottom: 10px
 
-            field-header
-              flex-row()
-              margin-bottom: 10px
+          .task-field  // Specific field for a Task, e.g. the question field, or choices field.
+            margin-bottom: 10px
+          
+          .task-field-subheader
+          .task-field-row
+            flex-row()
+            margin-bottom: 10px
           
           label.big, span.big
             display: block
@@ -512,6 +529,15 @@ $fontWeightBoldPlus = 700
             font-size: $fontSizeM
             text-transform: uppercase
           
+          .big-label  // Used to identify field task-fields, e.g. the label "Instructions" for the Instructions field
+            color: $nearBlack
+            font-size: 16px
+            font-style: normal
+            font-weight: 500
+            line-height: normal
+            letter-spacing: 0.8px
+            text-transform: uppercase
+
           .small-label  // Small labels, mostly used for the "Help" field.
             color: $nearBlack
             font-family: Karla
@@ -532,9 +558,20 @@ $fontWeightBoldPlus = 700
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.60) 100%), $white
             box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25) inset
             width: 100%
+            color: $black
+            font-size: 16px
+            font-style: normal
+            font-weight: 400
+            line-height: normal
 
           textarea
-            min-height: 8em
+            min-height: 3em
+          
+          .delete-button
+            background: $white
+            border: 0.5px solid $grey1
+            border-radius: 4px
+            box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
           
           .question-task
             ul
@@ -662,10 +699,10 @@ $fontWeightBoldPlus = 700
 
     .step-item
       .step-body
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white
         border: 0.5px solid $grey1
         border-radius: 8px
-        box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
         overflow: visible  // Required for StepItem's experimentalRestyleContainer(), which makes the "next step" arrows for branching tasks appear "outside" the step container.
 
         &:active
@@ -759,7 +796,7 @@ $fontWeightBoldPlus = 700
       select
         // Note: <select> style goes out the window on Safari
         background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow
-        border-radius: 32px;
+        border-radius: 32px
         border: none
         color: $black
         font-size: 14px

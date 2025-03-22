@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
-import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
-import MinusIcon from '../../../../../icons/MinusIcon.jsx';
-import PlusIcon from '../../../../../icons/PlusIcon.jsx';
+import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
+import MinusIcon from '../../../../../icons/MinusIcon.jsx'
+import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
+import TaskIcon from '../../../../../icons/TaskIcon.jsx'
+
 import TaskHelpField from '../TaskHelpField.jsx'
 
-const DEFAULT_HANDLER = () => {};
+const DEFAULT_HANDLER = () => {}
 
 function QuestionTask({
   deleteTask = DEFAULT_HANDLER,
@@ -17,17 +19,17 @@ function QuestionTask({
   taskKey,
   updateTask = DEFAULT_HANDLER
 }) {
-  const [ answers, setAnswers ] = useState(task?.answers || []);
-  const [ help, setHelp ] = useState(task?.help || '');
-  const [ question, setQuestion ] = useState(task?.question || '');  // TODO: figure out if FEM is standardising Question vs Instructions
-  const [ required, setRequired ] = useState(!!task?.required);
-  const [ isMultiple, setIsMultiple ] = useState(task?.type === 'multiple');
-  const title = stepHasManyTasks ? 'Question Task' : 'Main Text';
+  const [ answers, setAnswers ] = useState(task?.answers || [])
+  const [ help, setHelp ] = useState(task?.help || '')
+  const [ question, setQuestion ] = useState(task?.question || '')  // TODO: figure out if FEM is standardising Question vs Instructions
+  const [ required, setRequired ] = useState(!!task?.required)
+  const [ isMultiple, setIsMultiple ] = useState(task?.type === 'multiple')
+  const title = 'Question Task'
 
   // Update is usually called manually onBlur, after user input is complete.
   function update(optionalStateOverrides) {
     const _answers = optionalStateOverrides?.answers || answers
-    const nonEmptyAnswers = _answers.filter(({ label }) => label.trim().length > 0);
+    const nonEmptyAnswers = _answers.filter(({ label }) => label.trim().length > 0)
 
     const newTask = {
       ...task,
@@ -36,67 +38,76 @@ function QuestionTask({
       help,
       question,
       required
-    };
-    updateTask(taskKey, newTask);
+    }
+    updateTask(taskKey, newTask)
   }
 
   function doDelete() {
-    deleteTask(taskKey);
+    deleteTask(taskKey)
   }
 
   function addAnswer(e) {
-    const newAnswers = [ ...answers, { label: '', next: undefined }];
-    setAnswers(newAnswers);
+    const newAnswers = [ ...answers, { label: '', next: undefined }]
+    setAnswers(newAnswers)
 
-    e.preventDefault();
-    return false;
+    e.preventDefault()
+    return false
   }
 
   function editAnswer(e) {
-    const index = e?.target?.dataset?.index;
-    if (index === undefined || index < 0 || index >= answers.length) return;
+    const index = e?.target?.dataset?.index
+    if (index === undefined || index < 0 || index >= answers.length) return
 
-    const answer = answers[index];
-    const newLabel = e?.target?.value || '';
+    const answer = answers[index]
+    const newLabel = e?.target?.value || ''
 
-    setAnswers(answers.with(index, { ...answer, label: newLabel }));
+    setAnswers(answers.with(index, { ...answer, label: newLabel }))
   }
 
   function deleteAnswer(e) {
-    const index = e?.target?.dataset?.index;
-    if (index === undefined || index < 0 || index >= answers.length) return;
+    const index = e?.target?.dataset?.index
+    if (index === undefined || index < 0 || index >= answers.length) return
 
-    const newAnswers = answers.slice();  // Copy answers
-    newAnswers.splice(index, 1);
-    setAnswers(newAnswers);
-    update({ answers: newAnswers });  // Use optional state override, since setAnswers() won't reflect new values in this step of the lifecycle.
+    const newAnswers = answers.slice()  // Copy answers
+    newAnswers.splice(index, 1)
+    setAnswers(newAnswers)
+    update({ answers: newAnswers })  // Use optional state override, since setAnswers() won't reflect new values in this step of the lifecycle.
     
-    e.preventDefault();
-    return false;
+    e.preventDefault()
+    return false
   }
 
-  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0);
+  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)
   function toggleShowHelpField() {
-    setShowHelpField(!showHelpField);
+    setShowHelpField(!showHelpField)
   }
 
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  useEffect(update, [required, isMultiple]);
+  useEffect(update, [required, isMultiple])
 
   return (
-    <div className="question-task">
-      <div className="field-block">
-        <label
-          className="big spacing-bottom-S"
-          htmlFor={`task-${taskKey}-instruction`}
-        >
-          {title}
-        </label>
-        <div className="flex-row">
-          <span className="task-key">{taskKey}</span>
-          <input
+    <div className="question-task task">
+      <div className="task-header">
+        <TaskIcon type={task.type} />
+        <h5>{title}</h5>
+        <span className="task-key">{taskKey}</span>
+        <span className="spacer" />
+        <span>See more</span>
+      </div>
+
+      <div className="task-field">
+        <div className="task-field-subheader">
+          <label
+            className="big-label"
+            htmlFor={`task-${taskKey}-instruction`}
+          >
+            Instructions
+          </label>
+        </div>
+        <div className="task-field-row">
+          <textarea
             className="flex-item"
             id={`task-${taskKey}-instruction`}
             type="text"
@@ -106,7 +117,7 @@ function QuestionTask({
           />
           <button
             aria-label={`Delete Task ${taskKey}`}
-            className="big"
+            className="delete-button"
             onClick={doDelete}
             type="button"
           >
@@ -114,24 +125,18 @@ function QuestionTask({
           </button>
         </div>
       </div>
-      <div className="field-block">
-        <span className="big spacing-bottom-S">Choices</span>
-        <div className="flex-row">
-          <button
-            aria-label="Add choice"
-            className="big"
-            onClick={addAnswer}
-            type="button"
-          >
-            <PlusIcon />
-          </button>
-          <span className="narrow">
+
+      <div className="task-field">
+        <div className="task-field-subheader">
+          <label className="big-label">Choices</label>
+          <span className="spacer" />
+          <span>
             <input
               id={`task-${taskKey}-required`}
               type="checkbox"
               checked={required}
               onChange={(e) => {
-                setRequired(!!e?.target?.checked);
+                setRequired(!!e?.target?.checked)
               }}
             />
             <label htmlFor={`task-${taskKey}-required`}>
@@ -145,7 +150,7 @@ function QuestionTask({
               checked={isMultiple}
               disabled={enforceLimitedBranchingRule?.stepHasBranch && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
               onChange={(e) => {
-                setIsMultiple(!!e?.target?.checked);
+                setIsMultiple(!!e?.target?.checked)
               }}
             />
             <label htmlFor={`task-${taskKey}-multiple`}>
@@ -154,7 +159,8 @@ function QuestionTask({
           </span>
         </div>
       </div>
-      <div className="field-block">
+
+      <div className="task-field">
         <ul>
           {answers.map(({ label, next }, index) => (
             <li
@@ -181,8 +187,20 @@ function QuestionTask({
               </button>
             </li>
           ))}
+          <li className="decorated-prompt">
+            <span className="decoration-line" />
+            <button
+              onClick={addAnswer}
+              type="button"
+            >
+              Add a choice
+              <AddItemIcon />
+            </button>
+            <span className="decoration-line" />
+          </li>
         </ul>
       </div>
+
       <TaskHelpField
         help={help}
         setHelp={setHelp}
@@ -192,7 +210,7 @@ function QuestionTask({
         update={update}
       />
     </div>
-  );
+  )
 }
 
 QuestionTask.propTypes = {
@@ -205,6 +223,6 @@ QuestionTask.propTypes = {
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateTask: PropTypes.func
-};
+}
 
-export default QuestionTask;
+export default QuestionTask
