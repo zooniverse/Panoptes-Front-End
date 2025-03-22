@@ -66,7 +66,7 @@ function QuestionTask({
   }
 
   function deleteAnswer(e) {
-    const index = e?.target?.dataset?.index
+    const index = e?.currentTarget?.dataset?.index
     if (index === undefined || index < 0 || index >= answers.length) return
 
     const newAnswers = answers.slice()  // Copy answers
