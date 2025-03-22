@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import CollapseIcon from '../../../../../icons/CollapseIcon.jsx'
+import ExpandIcon from '../../../../../icons/ExpandIcon.jsx'
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 import MinusIcon from '../../../../../icons/MinusIcon.jsx'
 import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
@@ -82,6 +84,11 @@ function QuestionTask({
     setShowHelpField(!showHelpField)
   }
 
+  const [ showInfoPanel, setShowInfoPanel ] = useState(false)
+  function toggleShowInfoPanel() {
+    setShowInfoPanel(!showInfoPanel)
+  }
+
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
@@ -94,7 +101,19 @@ function QuestionTask({
         <h5>{title}</h5>
         <span className="task-key">{taskKey}</span>
         <span className="spacer" />
-        <span>See more</span>
+        <button
+          className="info-button"
+          onClick={toggleShowInfoPanel}
+        >
+          See more {showInfoPanel? <CollapseIcon /> : <ExpandIcon />}
+        </button>
+      </div>
+
+      <div
+        className="info-panel"
+        hidden={!showInfoPanel}
+      >
+        <p>The volunteer chooses from among a list of your provided choices. You can use a question task by itself, or add one to the end of a sequence of other tasks on a page.</p>
       </div>
 
       <div className="task-field">
