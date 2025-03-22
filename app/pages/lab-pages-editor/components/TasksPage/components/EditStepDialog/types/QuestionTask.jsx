@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import CollapseIcon from '../../../../../icons/CollapseIcon.jsx'
 import ExpandIcon from '../../../../../icons/ExpandIcon.jsx'
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
-import MinusIcon from '../../../../../icons/MinusIcon.jsx'
 import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
 import TaskIcon from '../../../../../icons/TaskIcon.jsx'
 
@@ -198,11 +197,11 @@ function QuestionTask({
               <button
                 aria-label={`Delete choice ${index}`}
                 onClick={deleteAnswer}
-                className="big"
+                className="delete-button"
                 data-index={index}
                 type="button"
               >
-                <MinusIcon data-index={index} />
+                <DeleteIcon data-index={index} />
               </button>
             </li>
           ))}
