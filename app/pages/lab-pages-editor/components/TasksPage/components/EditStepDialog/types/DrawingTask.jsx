@@ -130,7 +130,7 @@ function DrawingTask({
   }
 
   function deleteTool(e) {
-    const index = e?.target?.dataset?.index;
+    const index = e?.currentTarget?.dataset?.index;
     if (index === undefined || index < 0 || index >= tools.length) return;
 
     const newTools = tools.slice();  // Copy tools.
