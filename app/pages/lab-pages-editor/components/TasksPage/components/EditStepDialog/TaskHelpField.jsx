@@ -17,6 +17,7 @@ export default function TaskHelpField ({
         <label
           className="small-label"
           htmlFor={`task-${taskKey}-help`}
+          onClick={toggleShowHelpField}
         >
           Help Text
         </label>
