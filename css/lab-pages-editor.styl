@@ -397,6 +397,7 @@ $fontWeightBoldPlus = 700
       p
         color: $grey1
     
+    // An accented button, e.g. "Add a Choice", decorated with yellow lines to the left & right
     .decorated-prompt
       display: flex
       align-items: center
@@ -431,6 +432,7 @@ $fontWeightBoldPlus = 700
         .icon
           margin-left: 10px
 
+    // Dialog for adding new tasks, and editing pages.
     dialog
       border: none
       border-radius: 8px
@@ -449,6 +451,55 @@ $fontWeightBoldPlus = 700
         button
           width: 40px
           height: 40px
+      
+      .dialog-body
+        // null
+
+      .dialog-footer
+        display: flex
+        flex-direction: row
+        gap: 10px
+        padding: 10px 20px 30px 20px
+
+        button
+          flex: 1 1 50%
+          color: $black
+          background: $white
+          border: 0.5px solid $grey1
+          font-size: 16px
+          font-weight: 400
+          padding: 10px 20px
+          text-transform: uppercase
+
+          &:hover
+          &.button:hover
+            color: $yellow
+            border: 0.5px solid $yellow
+
+          &:active
+          &.button:active
+            color: $orange
+            background: linear-gradient(180deg, #F6D885 0%, #F0B200 100%)
+          
+          &.add-task-button
+            color: $grey3
+            text-transform: none
+
+          &.done-button
+            font-weight: 600
+
+            &:hover
+              background: linear-gradient(180deg, #FFF 0%, #F6D885 100%), #F6D885
+
+          &.apply-button
+            font-weight: 600
+            background: linear-gradient(180deg, #F0B200 0%, #D47811 100%), #D47811
+
+            &:hover
+              background: $lightYellow
+
+      // Dialog type: Add New Task
+      // -----------------------------------------------------------------------
       
       &.new-task
         .dialog-body
@@ -470,7 +521,10 @@ $fontWeightBoldPlus = 700
 
             .fa
               font-size: $fontSizeXL
-        
+      
+      // Dialog type: Edit Step
+      // -----------------------------------------------------------------------
+
       &.edit-step
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white
         
@@ -490,11 +544,14 @@ $fontWeightBoldPlus = 700
 
           &:first-child
             border-top: none
+
+          // Common Elements for Tasks
+          // -------------------------------------------------------------------
           
           legend
             display: none  // TODO: reconsider design
           
-          h5
+          h5  // Task title, e.g. "Question Task"
             color: #404040
             leading-trim: both
             text-edge: cap
@@ -508,10 +565,10 @@ $fontWeightBoldPlus = 700
 
           .task-header  // General details the Task, specifying the Task ID, Task Type, etc
             flex-row()
-            margin-bottom: 10px
+            margin-bottom: 20px
 
           .task-field  // Specific field for a Task, e.g. the question field, or choices field.
-            margin-bottom: 10px
+            margin-bottom: 20px
           
           .task-field-subheader
           .task-field-row
@@ -572,6 +629,9 @@ $fontWeightBoldPlus = 700
             border: 0.5px solid $grey1
             border-radius: 4px
             box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+          
+          // Specific Tasks
+          // -------------------------------------------------------------------
           
           .question-task
             ul
@@ -640,49 +700,6 @@ $fontWeightBoldPlus = 700
             .grid-item-5
               grid-column: 3 / span 2
               grid-row: 2
-        
-      .dialog-footer
-        display: flex
-        flex-direction: row
-        gap: 10px
-        padding: 10px 20px 30px 20px
-
-        button
-          flex: 1 1 50%
-          color: $black
-          background: $white
-          border: 0.5px solid $grey1
-          font-size: 16px
-          font-weight: 400
-          padding: 10px 20px
-          text-transform: uppercase
-
-          &:hover
-          &.button:hover
-            color: $yellow
-            border: 0.5px solid $yellow
-
-          &:active
-          &.button:active
-            color: $orange
-            background: linear-gradient(180deg, #F6D885 0%, #F0B200 100%)
-          
-          &.add-task-button
-            color: $grey3
-            text-transform: none
-
-          &.done-button
-            font-weight: 600
-
-            &:hover
-              background: linear-gradient(180deg, #FFF 0%, #F6D885 100%), #F6D885
-
-          &.apply-button
-            font-weight: 600
-            background: linear-gradient(180deg, #F0B200 0%, #D47811 100%), #D47811
-
-            &:hover
-              background: $lightYellow
 
     section
       h3
