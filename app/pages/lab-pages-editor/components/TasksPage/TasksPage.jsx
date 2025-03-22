@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useWorkflowContext } from '../../context.js';
 import checkCanStepBranch from '../../helpers/checkCanStepBranch.js';
 import createStep from '../../helpers/createStep.js';
@@ -28,13 +28,18 @@ function getAdvancedMode() {
   return !!params.get('advanced');
 }
 
+// Use ?page=123 to open a specific page, when the workflow loads.
+function getInitialPage() {
+  const params = new URLSearchParams(window?.location?.search);
+  return params.get('page') ?? -1;
+}
+
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
-  const firstStepKey = workflow?.steps?.[0]?.[0] || '';
   const isActive = true; // TODO
   const advancedMode = getAdvancedMode();
 
@@ -275,6 +280,15 @@ export default function TasksPage() {
     stepHasBranch: !!checkCanStepBranch(activeStep, workflow?.tasks)
   }
 
+  // Dev Helper: open a specific page, when the workflow loads.
+  // Warning: this will trigger even when switching between Workflow Settings
+  // tab and Tasks tab.
+  function openInitialPage () {
+    const page = getInitialPage()
+    if (page > 0) openEditStepDialog(page - 1)
+  }
+  useEffect(openInitialPage, [workflow])
+
   if (!workflow) return null;
 
   return (
@@ -311,10 +325,9 @@ export default function TasksPage() {
               updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
             />
           ))}
-          <li className="task-inbetween">
+          <li className="decorated-prompt">
             <span className="decoration-line" />
             <button
-              className="add-task-button"
               onClick={handleClickAddTaskButton}
               type="button"
             >

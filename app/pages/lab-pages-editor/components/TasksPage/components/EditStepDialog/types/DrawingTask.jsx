@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
-import CollapseIcon from '../../../../../icons/CollapseIcon.jsx';
-import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
-import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx';
-import ExpandIcon from '../../../../../icons/ExpandIcon.jsx';
-import MinusIcon from '../../../../../icons/MinusIcon.jsx';
-import PlusIcon from '../../../../../icons/PlusIcon.jsx';
+import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
+import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx'
+import MinusIcon from '../../../../../icons/MinusIcon.jsx'
+import PlusIcon from '../../../../../icons/PlusIcon.jsx'
+import TaskHelpField from '../TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {};
 
@@ -131,7 +130,7 @@ function DrawingTask({
   }
 
   function deleteTool(e) {
-    const index = e?.target?.dataset?.index;
+    const index = e?.currentTarget?.dataset?.index;
     if (index === undefined || index < 0 || index >= tools.length) return;
 
     const newTools = tools.slice();  // Copy tools.
@@ -157,7 +156,7 @@ function DrawingTask({
 
   return (
     <div className="drawing-task">
-      <div className="input-row">
+      <div className="task-field">
         <label
           className="big spacing-bottom-S"
           htmlFor={`task-${taskKey}-instruction`}
@@ -184,7 +183,7 @@ function DrawingTask({
           </button>
         </div>
       </div>
-      <div className="input-row flex-row">
+      <div className="task-field flex-row">
         <span className="big">Tool Configuration</span>
         <span className="narrow">
           <input
@@ -198,7 +197,7 @@ function DrawingTask({
           </label>
         </span>
       </div>
-      <div className="input-row">
+      <div className="task-field">
         <ul>
           {tools.map(({ color, details, label, max, min, size, type }, index) => (
             <li
@@ -313,7 +312,7 @@ function DrawingTask({
           ))}
         </ul>
       </div>
-      <div className="input-row flex-row">
+      <div className="task-field flex-row">
         <button
           aria-label="Add tool"
           className="big"
@@ -326,36 +325,14 @@ function DrawingTask({
           Add another tool
         </span>
       </div>
-      <div className="input-row">
-        <div className="flex-row spacing-bottom-S">
-          <label
-            className="medium"
-            htmlFor={`task-${taskKey}-help`}
-          >
-            Help Text
-          </label>
-          <button
-            aria-label={showHelpField ? 'Hide Help field' : 'Show Help field'}
-            aria-controls={`task-${taskKey}-help`}
-            aria-expanded={showHelpField ? 'true' : 'false'}
-            className="plain"
-            onClick={toggleShowHelpField}
-            type="button"
-          >
-            {showHelpField
-              ? <CollapseIcon />
-              : <ExpandIcon />
-            }
-          </button>
-        </div>
-        <textarea
-          id={`task-${taskKey}-help`}
-          hidden={!showHelpField}
-          value={help}
-          onBlur={update}
-          onChange={(e) => { setHelp(e?.target?.value) }}
-        />
-      </div>
+      <TaskHelpField
+        help={help}
+        setHelp={setHelp}
+        showHelpField={showHelpField}
+        taskKey={taskKey}
+        toggleShowHelpField={toggleShowHelpField}
+        update={update}
+      />
     </div>
   );
 }

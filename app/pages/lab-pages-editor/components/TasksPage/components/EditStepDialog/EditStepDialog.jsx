@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 
 import EditTaskForm from './EditTaskForm.jsx';
 import CloseIcon from '../../../../icons/CloseIcon.jsx';
-
-const taskNames = {
-  'drawing': 'Drawing',
-  'multiple': 'Question',
-  'single': 'Question',
-  'text': 'Text',
-}
+import OptionsIcon from '../../../../icons/OptionsIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
@@ -48,25 +42,25 @@ function EditStepDialog({
     openNewTaskDialog(stepIndex);
   }
 
-  const firstTask = allTasks?.[taskKeys?.[0]]
-  const taskName = taskNames[firstTask?.type] || '???';
   const stepHasManyTasks = taskKeys?.length > 1
-  const title = stepHasManyTasks
-    ? 'Edit A Multi-Task Page'
-    : `Edit ${taskName} Task`;
 
   return (
     <dialog
-      aria-labelledby="dialog-title"
       className="edit-step"
       ref={editStepDialog}
       /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
     >
-      <div className="dialog-header flex-row">
-        <span className="step-key">{stepKey}</span>
-        <h4 id="dialog-title" className="flex-item">
-          {title}
-        </h4>
+      <div className="dialog-header">
+        <span className="step-label">Page {stepIndex + 1}</span>
+        <span className="spacer" />
+        <button
+          aria-label="Options"
+          className="plain"
+          onClick={null}
+          type="button"
+        >
+          <OptionsIcon />
+        </button>
         <button
           aria-label="Close dialog"
           className="plain"
@@ -91,28 +85,45 @@ function EditStepDialog({
               stepHasManyTasks={stepHasManyTasks}
               task={task}
               taskKey={taskKey}
-              taskIndexInStep={index}
               updateTask={updateTask}
             />
           );
         })}
       </form>
-      <div className="dialog-footer flex-row">
+      <div className="dialog-footer">
         <button
-          className="big flex-item"
+          className="button add-task-button"
           onClick={handleClickAddTaskButton}
           type="button"
         >
-          Add another Task to this Page
+          Add another task to this page
         </button>
         <button
-          className="big done"
+          className="button done-button"
           onClick={closeDialog}
           type="button"
         >
           Done
         </button>
       </div>
+      {/*
+      <div className="dialog-footer">
+        <button
+          className="button cancel-button"
+          onClick={handleClickAddTaskButton}
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          className="button apply-button"
+          onClick={closeDialog}
+          type="button"
+        >
+          Apply
+        </button>
+      </div>
+      */}
     </dialog>
   );
 }
