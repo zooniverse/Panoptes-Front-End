@@ -130,7 +130,7 @@ function QuestionTask({
         <div className="task-field-subheader">
           <label className="big-label">Choices</label>
           <span className="spacer" />
-          <span>
+          <span className="task-field-checkbox-set">
             <input
               id={`task-${taskKey}-required`}
               type="checkbox"
@@ -143,7 +143,7 @@ function QuestionTask({
               Required
             </label>
           </span>
-          <span className="narrow">
+          <span className="task-field-checkbox-set">
             <input
               id={`task-${taskKey}-multiple`}
               type="checkbox"
