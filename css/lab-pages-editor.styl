@@ -592,6 +592,9 @@ $fontWeightBoldPlus = 700
           .task-field-row
             flex-row()
             margin-bottom: 10px
+
+            > *
+              align-self: start
           
           .task-field-checkbox-set 
             color: #5C5C5C
@@ -638,6 +641,14 @@ $fontWeightBoldPlus = 700
             font-weight: 400
             line-height: normal
           
+          input[type=text]
+            height: 40px
+            padding: 9px 20px
+
+          textarea
+            min-height: 3em
+            padding: 9px 10px
+
           input[type=checkbox]
             border-radius: 2px
             border: 2px solid $grey1
@@ -648,15 +659,17 @@ $fontWeightBoldPlus = 700
               border: 2px solid $white
               color: $white
               box-shadow: 0 0 4px 0 $yellow
-
-          textarea
-            min-height: 3em
           
           .delete-button
             background: $white
             border: 0.5px solid $grey1
             border-radius: 4px
             box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+            display: block
+            width: 40px
+            height: 40px
+            padding: 0
+            margin: 0
           
           // Specific Tasks
           // -------------------------------------------------------------------
