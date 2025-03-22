@@ -13,7 +13,7 @@ export default function UnknownTask({
 
   return (
     <div className="unknown-task">
-      <div className="field-block">
+      <div className="task-field">
         <span className="big">
           Unknown Task
         </span>

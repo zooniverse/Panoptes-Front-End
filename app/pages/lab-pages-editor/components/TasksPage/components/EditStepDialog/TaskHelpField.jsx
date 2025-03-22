@@ -12,8 +12,8 @@ export default function TaskHelpField ({
   update = DEFAULT_HANDLER,  // Update the workflow resource
 }) {
   return (
-    <div className="field-block">
-      <div className="field-header">
+    <div className="task-field">
+      <div className="task-field-subheader">
         <label
           className="small-label"
           htmlFor={`task-${taskKey}-help`}
