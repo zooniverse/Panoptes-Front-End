@@ -65,7 +65,8 @@ export const SLUGS = [
   'effeli/node-code-breakers-looking-for-patterns-in-lymph-nodes',
   'md68135/notes-from-nature-ranges-mammal-traits-from-western-north-america',
   'cmcbrain/axonal-pathfinders',
-  'met-rhonda/irish-weather-rescue'
+  'met-rhonda/irish-weather-rescue',
+  'pmason/woodpecker-cavity-cam-learning'
 ];
 
 export function usesMonorepo(slug) {
