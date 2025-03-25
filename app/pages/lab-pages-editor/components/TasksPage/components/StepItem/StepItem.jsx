@@ -46,11 +46,11 @@ function StepItem({
   const branchingTaskKey = checkCanStepBranch(step, allTasks);
   const stepLabel = `Page ${ stepIndex + 1 }`
 
-  function doCopy() {
+  function doCopyStep() {
     copyStep(stepIndex);
   }
 
-  function doDelete() {
+  function doDeleteStep() {
     deleteStep(stepIndex);
   }
 
@@ -170,7 +170,7 @@ function StepItem({
               <button
                 aria-label={`Copy Page/Step ${stepKey}`}
                 className="control-button"
-                onClick={doCopy}
+                onClick={doCopyStep}
                 type="button"
               >
                 <CopyIcon />
@@ -178,7 +178,7 @@ function StepItem({
               <button
                 aria-label={`Delete Page/Step ${stepKey}`}
                 className="control-button"
-                onClick={doDelete}
+                onClick={doDeleteStep}
                 type="button"
               >
                 <DeleteIcon />
