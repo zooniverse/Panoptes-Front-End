@@ -537,24 +537,29 @@ $fontWeightBoldPlus = 700
             border-top-left-radius: 0px  // Make flush to container
           
           .edit-step-options
-            border: 1px dashed blue
+            // Layout: anchor for popup
             position: relative
 
             .edit-step-options-submenu
-              border: 1px dashed red
+              // Layout: popup
               position: absolute
               top: 40px
               right: 0
+              // Presentation
+              border-radius: 8px
+              background: $white
+              box-shadow: 1px 1px 6px 0px rgba(0, 0, 0, 0.50)
               list-style: none
-              padding: 0
               margin: 0
-
+              padding: 5px 10px
+              width: 140px
+      
               li
                 padding: 0
                 margin: 0
 
               button
-                width: auto
+                width: 100%
                 height: auto
       
         fieldset.edit-task-form

@@ -20,7 +20,7 @@ function EditStepDialog({
   updateTask
 }, forwardedRef) {
   const [ stepKey, stepBody ] = step
-  const [ showOptions, setShowOptions] = useState(true)
+  const [ showOptions, setShowOptions] = useState(false)
   const taskKeys = stepBody?.taskKeys || []
   const editStepDialog = useRef(null)
 
@@ -78,7 +78,7 @@ function EditStepDialog({
           >
             <OptionsIcon />
           </button>
-          <ul className="edit-step-options-submenu" hidden={showOptions}>
+          <ul className="edit-step-options-submenu" hidden={!showOptions}>
             <li>
               <button onClick={doDeleteStep} type="button">
                 Delete Page
