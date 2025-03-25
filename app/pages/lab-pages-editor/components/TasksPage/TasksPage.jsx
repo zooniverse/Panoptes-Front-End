@@ -347,12 +347,14 @@ export default function TasksPage() {
         <EditStepDialog
           ref={editStepDialog}
           allTasks={workflow.tasks}
+          copyStep={copyStep}
+          deleteStep={deleteStep}
+          deleteTask={deleteTask}
           enforceLimitedBranchingRule={enforceLimitedBranchingRule}
           onClose={handleCloseEditStepDialog}
           openNewTaskDialog={openNewTaskDialog}
           step={workflow.steps[activeStepIndex]}
           stepIndex={activeStepIndex}
-          deleteTask={deleteTask}
           updateTask={updateTask}
         />
 
