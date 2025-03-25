@@ -78,7 +78,8 @@ function QuestionTask({
     return false
   }
 
-  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)
+  // Help field is collapsed by default, unless there's already content in it.
+  const [ showHelpField, setShowHelpField ] = useState(task?.help?.length > 0)
   function toggleShowHelpField() {
     setShowHelpField(!showHelpField)
   }
