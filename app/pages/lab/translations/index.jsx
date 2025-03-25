@@ -70,7 +70,7 @@ class TranslationsManager extends React.Component {
         }
         <h2>Project language menu</h2>
         <p>
-          Use the checkboxes below to make a translation available to project volunteers. If you created a project translation that does not appear in the checkbox list, the reason is typically because that language does not currently have platform-level translations available. In this case, please email <a href="mailto:contact@zooniverse.org">contact@zooniverse.org</a> with your project ID to discuss next steps for adding a platform-level translations for that language.
+          Use the checkboxes below to make a translation available to project volunteers. If you created a project translation that does not appear in the checkbox list, the reason is typically because that language does not currently have platform-level translations available. In this case, please email <a href="mailto:contact@zooniverse.org">contact@zooniverse.org</a> to discuss options and next steps for adding platform-level translations for that language.
         </p>
         <table>
           <tr>
