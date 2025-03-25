@@ -134,14 +134,16 @@ function QuestionTask({
             onBlur={update}
             onChange={(e) => { setQuestion(e?.target?.value) }}
           />
-          <button
-            aria-label={`Delete Task ${taskKey}`}
-            className="delete-button"
-            onClick={doDelete}
-            type="button"
-          >
-            <DeleteIcon />
-          </button>
+          {stepHasManyTasks && (
+            <button
+              aria-label={`Delete Task ${taskKey}`}
+              className="delete-button"
+              onClick={doDelete}
+              type="button"
+            >
+              <DeleteIcon />
+            </button>)
+          }
         </div>
       </div>
 
