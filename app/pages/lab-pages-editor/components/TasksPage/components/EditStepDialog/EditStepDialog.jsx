@@ -9,6 +9,8 @@ const DEFAULT_HANDLER = () => {}
 
 function EditStepDialog({
   allTasks = {},
+  copyStep = DEFAULT_HANDLER,
+  deleteStep = DEFAULT_HANDLER,
   deleteTask,
   enforceLimitedBranchingRule,
   onClose = DEFAULT_HANDLER,
@@ -21,10 +23,6 @@ function EditStepDialog({
   const [ showOptions, setShowOptions] = useState(true)
   const taskKeys = stepBody?.taskKeys || []
   const editStepDialog = useRef(null)
-
-  function toggleShowOptions () {
-    setShowOptions(!showOptions)
-  }
 
   useImperativeHandle(forwardedRef, () => {
     return {
@@ -43,8 +41,22 @@ function EditStepDialog({
     editStepDialog.current?.close()
   }
 
-  function handleClickAddTaskButton() {
+  function doAddTask() {
     openNewTaskDialog(stepIndex)
+  }
+
+  function doCopyStep() {
+    copyStep(stepIndex)
+    closeDialog()
+  }
+
+  function doDeleteStep() {
+    deleteStep(stepIndex)
+    closeDialog()
+  }
+
+  function toggleShowOptions () {
+    setShowOptions(!showOptions)
   }
 
   const stepHasManyTasks = taskKeys?.length > 1
@@ -68,12 +80,12 @@ function EditStepDialog({
           </button>
           <ul className="edit-step-options-submenu" hidden={showOptions}>
             <li>
-              <button onClick={null} type="button">
+              <button onClick={doDeleteStep} type="button">
                 Delete Page
               </button>  
             </li>
             <li>
-              <button onClick={null} type="button">
+              <button onClick={doCopyStep} type="button">
                 Duplicate Page
               </button>  
             </li>
@@ -110,7 +122,7 @@ function EditStepDialog({
       <div className="dialog-footer">
         <button
           className="button add-task-button"
-          onClick={handleClickAddTaskButton}
+          onClick={doAddTask}
           type="button"
         >
           Add another task to this page
@@ -127,7 +139,7 @@ function EditStepDialog({
       <div className="dialog-footer">
         <button
           className="button cancel-button"
-          onClick={handleClickAddTaskButton}
+          onClick={doAddTask}
           type="button"
         >
           Cancel
@@ -147,6 +159,8 @@ function EditStepDialog({
 
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
+  copyStep:PropTypes.func,
+  deleteStep: PropTypes.func,
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
