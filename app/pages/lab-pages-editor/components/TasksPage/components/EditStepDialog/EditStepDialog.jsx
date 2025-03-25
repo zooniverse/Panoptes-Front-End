@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState, useImperativeHandle } from 'react'
+import { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 
 import EditTaskForm from './EditTaskForm.jsx'
@@ -31,6 +31,11 @@ function EditStepDialog({
     }
   })
 
+  function onLoad () {
+    setShowOptions(false)
+  }
+  useEffect(onLoad, [stepIndex])
+
   // the dialog is opened via the parent TasksPage.
   function openDialog() {
     editStepDialog.current?.showModal()
@@ -47,12 +52,10 @@ function EditStepDialog({
 
   function doCopyStep() {
     copyStep(stepIndex)
-    closeDialog()
   }
 
   function doDeleteStep() {
     deleteStep(stepIndex)
-    closeDialog()
   }
 
   function toggleShowOptions () {
