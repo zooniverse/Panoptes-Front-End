@@ -46,3 +46,5 @@ jobs:
     uses: zooniverse/ci-cd/.github/workflows/delete_blobs.yaml@main
     with:
       target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ needs.get_pr_number.outputs.pr_number }}'
+    secrets:
+      creds: ${{ secrets.AZURE_STATIC_SITES }}
