@@ -1,11 +1,11 @@
-import { forwardRef, useRef, useImperativeHandle } from 'react';
-import PropTypes from 'prop-types';
+import { forwardRef, useRef, useState, useImperativeHandle } from 'react'
+import PropTypes from 'prop-types'
 
-import EditTaskForm from './EditTaskForm.jsx';
-import CloseIcon from '../../../../icons/CloseIcon.jsx';
-import OptionsIcon from '../../../../icons/OptionsIcon.jsx';
+import EditTaskForm from './EditTaskForm.jsx'
+import CloseIcon from '../../../../icons/CloseIcon.jsx'
+import OptionsIcon from '../../../../icons/OptionsIcon.jsx'
 
-const DEFAULT_HANDLER = () => {};
+const DEFAULT_HANDLER = () => {}
 
 function EditStepDialog({
   allTasks = {},
@@ -17,29 +17,34 @@ function EditStepDialog({
   stepIndex = -1,
   updateTask
 }, forwardedRef) {
-  const [ stepKey, stepBody ] = step;
-  const taskKeys = stepBody?.taskKeys || [];
-  const editStepDialog = useRef(null);
+  const [ stepKey, stepBody ] = step
+  const [ showOptions, setShowOptions] = useState(true)
+  const taskKeys = stepBody?.taskKeys || []
+  const editStepDialog = useRef(null)
+
+  function toggleShowOptions () {
+    setShowOptions(!showOptions)
+  }
 
   useImperativeHandle(forwardedRef, () => {
     return {
       closeDialog,
       openDialog
-    };
-  });
+    }
+  })
 
   // the dialog is opened via the parent TasksPage.
   function openDialog() {
-    editStepDialog.current?.showModal();
+    editStepDialog.current?.showModal()
   }
 
   function closeDialog() {
-    onClose();
-    editStepDialog.current?.close();
+    onClose()
+    editStepDialog.current?.close()
   }
 
   function handleClickAddTaskButton() {
-    openNewTaskDialog(stepIndex);
+    openNewTaskDialog(stepIndex)
   }
 
   const stepHasManyTasks = taskKeys?.length > 1
@@ -53,17 +58,29 @@ function EditStepDialog({
       <div className="dialog-header">
         <span className="step-label">Page {stepIndex + 1}</span>
         <span className="spacer" />
-        <button
-          aria-label="Options"
-          className="plain"
-          onClick={null}
-          type="button"
-        >
-          <OptionsIcon />
-        </button>
+        <span className="edit-step-options">
+          <button
+            aria-label="Options"
+            onClick={toggleShowOptions}
+            type="button"
+          >
+            <OptionsIcon />
+          </button>
+          <ul className="edit-step-options-submenu" hidden={showOptions}>
+            <li>
+              <button onClick={null} type="button">
+                Delete Page
+              </button>  
+            </li>
+            <li>
+              <button onClick={null} type="button">
+                Duplicate Page
+              </button>  
+            </li>
+          </ul>
+        </span>
         <button
           aria-label="Close dialog"
-          className="plain"
           onClick={closeDialog}
           type="button"
         >
@@ -75,7 +92,7 @@ function EditStepDialog({
         onSubmit={onSubmit}
       >
         {taskKeys.map((taskKey, index) => {
-          const task = allTasks[taskKey];
+          const task = allTasks[taskKey]
           return (
             <EditTaskForm
               key={`editTaskForm-${taskKey}`}
@@ -87,7 +104,7 @@ function EditStepDialog({
               taskKey={taskKey}
               updateTask={updateTask}
             />
-          );
+          )
         })}
       </form>
       <div className="dialog-footer">
@@ -125,7 +142,7 @@ function EditStepDialog({
       </div>
       */}
     </dialog>
-  );
+  )
 }
 
 EditStepDialog.propTypes = {
@@ -138,11 +155,11 @@ EditStepDialog.propTypes = {
   step: PropTypes.object,
   stepIndex: PropTypes.number,
   updateTask: PropTypes.func
-};
-
-function onSubmit(e) {
-  e.preventDefault();
-  return false;
 }
 
-export default forwardRef(EditStepDialog);
+function onSubmit(e) {
+  e.preventDefault()
+  return false
+}
+
+export default forwardRef(EditStepDialog)
