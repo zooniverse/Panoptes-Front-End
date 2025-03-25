@@ -38,7 +38,7 @@ jobs:
 
     - name: Get Pull Request Number
       id: pr
-      run: echo "pr_number=$(gh pr view --json number -q .number || echo "")" >> $GITHUB_OUTPUT
+      run: echo "pr_number=$(git log -1 --pretty=%B | grep -oP '(#\K\d+)' || echo "")" >> $GITHUB_OUTPUT
 
   remove_branch_deploy:
     name: Remove branch deploy
