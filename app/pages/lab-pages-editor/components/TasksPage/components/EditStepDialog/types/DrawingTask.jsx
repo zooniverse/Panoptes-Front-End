@@ -5,7 +5,7 @@ import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx'
 import MinusIcon from '../../../../../icons/MinusIcon.jsx'
 import PlusIcon from '../../../../../icons/PlusIcon.jsx'
-import TaskHelpField from '../TaskHelpField.jsx'
+import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {};
 
