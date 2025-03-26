@@ -1,5 +1,5 @@
-import CollapseIcon from '../../../../icons/CollapseIcon.jsx';
-import ExpandIcon from '../../../../icons/ExpandIcon.jsx';
+import CollapseIcon from '../../../../../icons/CollapseIcon.jsx';
+import ExpandIcon from '../../../../../icons/ExpandIcon.jsx';
 
 const DEFAULT_HANDLER = () => {}
 

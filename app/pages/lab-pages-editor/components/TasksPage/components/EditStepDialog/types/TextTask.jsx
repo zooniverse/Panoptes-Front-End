@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
-import TaskHelpField from '../TaskHelpField.jsx'
+import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {};
 
