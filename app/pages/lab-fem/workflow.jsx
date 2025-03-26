@@ -20,6 +20,7 @@ import TaskOptions from '../lab/workflow-components/task-options.jsx';
 import TaskEditor from '../lab/workflow-components/task-editor.jsx';
 import TaskPicker from '../lab/workflow-components/task-picker.jsx';
 import { isThisProjectUsingFEMLab, isWorkflowUsingJSONSubjects, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
+import removeTaskKeyFromWorkflow from '../lab/helpers/removeTaskKeyFromWorkflow.js';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
@@ -884,8 +885,9 @@ class EditWorkflowPage extends Component {
         changes[`tasks.${taskKey}`] = undefined;
         this.props.workflow.update(changes);
       }
+      removeTaskKeyFromWorkflow(this.props.workflow, taskKey);
 
-      return this.updateFirstTask();
+      return this.updateFirstTask().save();
     }
   }
 };
