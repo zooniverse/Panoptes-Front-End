@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import CollapseIcon from '../../../../../icons/CollapseIcon.jsx'
-import ExpandIcon from '../../../../../icons/ExpandIcon.jsx'
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
-import TaskIcon from '../../../../../icons/TaskIcon.jsx'
 
+import TaskHeader from '../components/TaskHeader.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {}
@@ -84,11 +82,6 @@ function QuestionTask({
     setShowHelpField(!showHelpField)
   }
 
-  const [ showInfoPanel, setShowInfoPanel ] = useState(false)
-  function toggleShowInfoPanel() {
-    setShowInfoPanel(!showInfoPanel)
-  }
-
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
@@ -96,25 +89,13 @@ function QuestionTask({
 
   return (
     <div className="question-task task">
-      <div className="task-header">
-        <TaskIcon type={task.type} />
-        <h5>{title}</h5>
-        <span className="task-key">{taskKey}</span>
-        <span className="spacer" />
-        <button
-          className="info-button"
-          onClick={toggleShowInfoPanel}
-        >
-          See more {showInfoPanel? <CollapseIcon /> : <ExpandIcon />}
-        </button>
-      </div>
-
-      <div
-        className="info-panel"
-        hidden={!showInfoPanel}
+      <TaskHeader
+        task={task}
+        taskKey={taskKey}
+        title={title}
       >
         <p>The volunteer chooses from among a list of your provided choices. You can use a question task by itself, or add one to the end of a sequence of other tasks on a page.</p>
-      </div>
+      </TaskHeader>
 
       <div className="task-field">
         <div className="task-field-subheader">
