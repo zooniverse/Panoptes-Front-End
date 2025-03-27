@@ -5,6 +5,7 @@ import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
 
 import TaskHeader from '../components/TaskHeader.jsx'
+import TaskInstructionField from '../components/TaskInstructionField.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {}
@@ -39,10 +40,6 @@ function QuestionTask({
       required
     }
     updateTask(taskKey, newTask)
-  }
-
-  function doDelete() {
-    deleteTask(taskKey)
   }
 
   function addAnswer(e) {
@@ -97,37 +94,15 @@ function QuestionTask({
         <p>The volunteer chooses from among a list of your provided choices. You can use a question task by itself, or add one to the end of a sequence of other tasks on a page.</p>
       </TaskHeader>
 
-      <div className="task-field">
-        <div className="task-field-subheader">
-          <label
-            className="big-label"
-            htmlFor={`task-${taskKey}-instruction`}
-          >
-            Instructions
-          </label>
-        </div>
-        <div className="task-field-row">
-          <textarea
-            className="flex-item"
-            id={`task-${taskKey}-instruction`}
-            type="text"
-            value={question}
-            onBlur={update}
-            onChange={(e) => { setQuestion(e?.target?.value) }}
-          />
-          {stepHasManyTasks && (
-            <button
-              aria-label={`Delete Task ${taskKey}`}
-              className="delete-button"
-              onClick={doDelete}
-              type="button"
-            >
-              <DeleteIcon />
-            </button>)
-          }
-        </div>
-      </div>
-
+      <TaskInstructionField
+        deleteTask={deleteTask}
+        setValue={setQuestion}
+        showDeleteButton={stepHasManyTasks}
+        taskKey={taskKey}
+        update={update}
+        value={question}
+      />
+      
       <div className="task-field">
         <div className="task-field-subheader">
           <label className="big-label">Choices</label>
