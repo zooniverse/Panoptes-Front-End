@@ -6,7 +6,7 @@ import ExpandIcon from '../../../../../icons/ExpandIcon.jsx'
 import TaskIcon from '../../../../../icons/TaskIcon.jsx'
 
 function TaskHeader({
-  children,
+  children,  // Children will appear in the info panel. Used for explaining what this Task does.
   task,
   taskKey,
   title,
