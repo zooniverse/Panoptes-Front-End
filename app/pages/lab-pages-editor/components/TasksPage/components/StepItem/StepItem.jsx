@@ -101,6 +101,7 @@ function StepItem({
       setContainerStyle({
         height: `${content.offsetHeight - CONTAINER_HEIGHT_OFFSET}px`,
         marginBottom: `${CONTAINER_HEIGHT_OFFSET}px`,
+        paddingBottom: '0',
         // overflow: 'visible'  // Unnecessary here, as this is already specified in the .styl
       });
     } else {
