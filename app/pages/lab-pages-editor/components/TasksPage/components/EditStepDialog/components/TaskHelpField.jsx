@@ -1,16 +1,24 @@
+import { useState } from 'react'
+import PropTypes from 'prop-types'
+
 import CollapseIcon from '../../../../../icons/CollapseIcon.jsx';
 import ExpandIcon from '../../../../../icons/ExpandIcon.jsx';
 
 const DEFAULT_HANDLER = () => {}
 
-export default function TaskHelpField ({
+function TaskHelpField ({
   help = '',  // Help text written by user
   setHelp = DEFAULT_HANDLER,
-  showHelpField = false,
   taskKey = '',
-  toggleShowHelpField = DEFAULT_HANDLER,
   update = DEFAULT_HANDLER,  // Update the workflow resource
 }) {
+
+  // Help field is collapsed by default, unless there's already content in it.
+  const [ showHelpField, setShowHelpField ] = useState(help?.length > 0)
+  function toggleShowHelpField() {
+    setShowHelpField(!showHelpField)
+  }
+
   return (
     <div className="task-field">
       <div className="task-field-subheader">
@@ -45,3 +53,12 @@ export default function TaskHelpField ({
     </div>
   )
 }
+
+TaskHelpField.propTypes = {
+  help: PropTypes.string,
+  setHelp: PropTypes.func,
+  taskKey: PropTypes.string,
+  update: PropTypes.func
+}
+
+export default TaskHelpField

@@ -35,12 +35,6 @@ function TextTask({
     deleteTask(taskKey)
   }
 
-  // Help field is collapsed by default, unless there's already content in it.
-  const [ showHelpField, setShowHelpField ] = useState(task?.help?.length > 0)
-  function toggleShowHelpField() {
-    setShowHelpField(!showHelpField)
-  }
-
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
@@ -84,9 +78,7 @@ function TextTask({
       <TaskHelpField
         help={help}
         setHelp={setHelp}
-        showHelpField={showHelpField}
         taskKey={taskKey}
-        toggleShowHelpField={toggleShowHelpField}
         update={update}
       />
     </div>
