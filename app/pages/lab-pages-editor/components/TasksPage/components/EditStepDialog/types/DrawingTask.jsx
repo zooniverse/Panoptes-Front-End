@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
-import CollapseIcon from '../../../../../icons/CollapseIcon.jsx';
-import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
-import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx';
-import ExpandIcon from '../../../../../icons/ExpandIcon.jsx';
-import MinusIcon from '../../../../../icons/MinusIcon.jsx';
-import PlusIcon from '../../../../../icons/PlusIcon.jsx';
+import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
+import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx'
+import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
+
+import TaskHeader from '../components/TaskHeader.jsx'
+import TaskInstructionField from '../components/TaskInstructionField.jsx'
+import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {};
 
@@ -131,7 +132,7 @@ function DrawingTask({
   }
 
   function deleteTool(e) {
-    const index = e?.target?.dataset?.index;
+    const index = e?.currentTarget?.dataset?.index;
     if (index === undefined || index < 0 || index >= tools.length) return;
 
     const newTools = tools.slice();  // Copy tools.
@@ -157,53 +158,45 @@ function DrawingTask({
 
   return (
     <div className="drawing-task">
-      <div className="input-row">
-        <label
-          className="big spacing-bottom-S"
-          htmlFor={`task-${taskKey}-instruction`}
-        >
-          {title}
-        </label>
-        <div className="flex-row">
-          <span className="task-key">{taskKey}</span>
-          <input
-            className="flex-item"
-            id={`task-${taskKey}-instruction`}
-            type="text"
-            value={instruction}
-            onBlur={update}
-            onChange={(e) => { setInstruction(e?.target?.value) }}
-          />
-          <button
-            aria-label={`Delete Task ${taskKey}`}
-            className="big"
-            onClick={doDelete}
-            type="button"
-          >
-            <DeleteIcon />
-          </button>
-        </div>
-      </div>
-      <div className="input-row flex-row">
-        <span className="big">Tool Configuration</span>
-        <span className="narrow">
-          <input
-            id={`task-${taskKey}-prevMarks`}
-            type="checkbox"
-            checked={prevMarks}
-            onChange={(e) => { setPrevMarks(!!e?.target?.checked); }}
-          />
-          <label htmlFor={`task-${taskKey}-prevMarks`}>
-            Allow hiding of marks
+      <TaskHeader
+        task={task}
+        taskKey={taskKey}
+        title={title}
+      >
+        <p>...</p>
+      </TaskHeader>
+
+      <TaskInstructionField
+        deleteTask={deleteTask}
+        setValue={setInstruction}
+        showDeleteButton={stepHasManyTasks}
+        taskKey={taskKey}
+        update={update}
+        value={instruction}
+      />
+
+      <div className="task-field">
+        <div className="task-field-subheader">
+          <label className="big-label">
+            Tool Configuration
           </label>
-        </span>
-      </div>
-      <div className="input-row">
+          <span className="spacer" />
+          <span className="task-field-checkbox-set">
+            <input
+              id={`task-${taskKey}-prevMarks`}
+              type="checkbox"
+              checked={prevMarks}
+              onChange={(e) => { setPrevMarks(!!e?.target?.checked); }}
+            />
+            <label htmlFor={`task-${taskKey}-prevMarks`}>
+              Allow hiding of marks
+            </label>
+          </span>
+        </div>
+      
         <ul>
           {tools.map(({ color, details, label, max, min, size, type }, index) => (
-            <li
-              key={`drawing-task-tool-${index}`}
-            >
+            <li key={`drawing-task-tool-${index}`}>
               <label htmlFor={`task-${taskKey}-tool-${index}-label`}>
                 Tool Name
               </label>
@@ -219,11 +212,11 @@ function DrawingTask({
                 <button
                   aria-label={`Delete tool ${index}`}
                   onClick={deleteTool}
-                  className="big"
+                  className="delete-button"
                   data-index={index}
                   type="button"
                 >
-                  <MinusIcon data-index={index} />
+                  <DeleteIcon data-index={index} />
                 </button>
               </div>
               <div className="grid">
@@ -311,51 +304,28 @@ function DrawingTask({
               </div>
             </li>
           ))}
+          <li className="decorated-prompt">
+            <span className="decoration-line" />
+            <button
+              onClick={addTool}
+              type="button"
+            >
+              Add a tool
+              <AddItemIcon />
+            </button>
+            <span className="decoration-line" />
+          </li>
         </ul>
       </div>
-      <div className="input-row flex-row">
-        <button
-          aria-label="Add tool"
-          className="big"
-          onClick={addTool}
-          type="button"
-        >
-          <PlusIcon />
-        </button>
-        <span>
-          Add another tool
-        </span>
-      </div>
-      <div className="input-row">
-        <div className="flex-row spacing-bottom-S">
-          <label
-            className="medium"
-            htmlFor={`task-${taskKey}-help`}
-          >
-            Help Text
-          </label>
-          <button
-            aria-label={showHelpField ? 'Hide Help field' : 'Show Help field'}
-            aria-controls={`task-${taskKey}-help`}
-            aria-expanded={showHelpField ? 'true' : 'false'}
-            className="plain"
-            onClick={toggleShowHelpField}
-            type="button"
-          >
-            {showHelpField
-              ? <CollapseIcon />
-              : <ExpandIcon />
-            }
-          </button>
-        </div>
-        <textarea
-          id={`task-${taskKey}-help`}
-          hidden={!showHelpField}
-          value={help}
-          onBlur={update}
-          onChange={(e) => { setHelp(e?.target?.value) }}
-        />
-      </div>
+
+      <TaskHelpField
+        help={help}
+        setHelp={setHelp}
+        showHelpField={showHelpField}
+        taskKey={taskKey}
+        toggleShowHelpField={toggleShowHelpField}
+        update={update}
+      />
     </div>
   );
 }
