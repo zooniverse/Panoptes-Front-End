@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
 import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx'
-import MinusIcon from '../../../../../icons/MinusIcon.jsx'
-import PlusIcon from '../../../../../icons/PlusIcon.jsx'
+import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 
 import TaskHeader from '../components/TaskHeader.jsx'
 import TaskInstructionField from '../components/TaskInstructionField.jsx'
@@ -196,9 +196,7 @@ function DrawingTask({
       
         <ul>
           {tools.map(({ color, details, label, max, min, size, type }, index) => (
-            <li
-              key={`drawing-task-tool-${index}`}
-            >
+            <li key={`drawing-task-tool-${index}`}>
               <label htmlFor={`task-${taskKey}-tool-${index}-label`}>
                 Tool Name
               </label>
@@ -214,11 +212,11 @@ function DrawingTask({
                 <button
                   aria-label={`Delete tool ${index}`}
                   onClick={deleteTool}
-                  className="big"
+                  className="delete-button"
                   data-index={index}
                   type="button"
                 >
-                  <MinusIcon data-index={index} />
+                  <DeleteIcon data-index={index} />
                 </button>
               </div>
               <div className="grid">
@@ -306,21 +304,20 @@ function DrawingTask({
               </div>
             </li>
           ))}
+          <li className="decorated-prompt">
+            <span className="decoration-line" />
+            <button
+              onClick={addTool}
+              type="button"
+            >
+              Add a tool
+              <AddItemIcon />
+            </button>
+            <span className="decoration-line" />
+          </li>
         </ul>
       </div>
-      <div className="task-field flex-row">
-        <button
-          aria-label="Add tool"
-          className="big"
-          onClick={addTool}
-          type="button"
-        >
-          <PlusIcon />
-        </button>
-        <span>
-          Add another tool
-        </span>
-      </div>
+
       <TaskHelpField
         help={help}
         setHelp={setHelp}

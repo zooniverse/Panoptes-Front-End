@@ -128,9 +128,7 @@ function QuestionTask({
             </label>
           </span>
         </div>
-      </div>
-
-      <div className="task-field">
+      
         <ul>
           {answers.map(({ label, next }, index) => (
             <li
