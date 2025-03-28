@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
+
+import TaskHeader from '../components/TaskHeader.jsx'
+import TaskInstructionField from '../components/TaskInstructionField.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {}
 
 function TextTask({
   deleteTask = DEFAULT_HANDLER,
-  isFirstTaskInStep = true,
   stepHasManyTasks = false,
   task,
   taskKey,
@@ -33,7 +35,8 @@ function TextTask({
     deleteTask(taskKey)
   }
 
-  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)
+  // Help field is collapsed by default, unless there's already content in it.
+  const [ showHelpField, setShowHelpField ] = useState(task?.help?.length > 0)
   function toggleShowHelpField() {
     setShowHelpField(!showHelpField)
   }
@@ -45,35 +48,25 @@ function TextTask({
 
   return (
     <div className="text-task">
+      <TaskHeader
+        task={task}
+        taskKey={taskKey}
+        title={title}
+      >
+        <p>The volunteer adds free-form text to an entry field. You can add multiple text tasks to a single page.</p>
+      </TaskHeader>
+
+      <TaskInstructionField
+        deleteTask={deleteTask}
+        setValue={setInstruction}
+        showDeleteButton={stepHasManyTasks}
+        taskKey={taskKey}
+        update={update}
+        value={instruction}
+      />
+
       <div className="task-field">
-        <label
-          className="big spacing-bottom-S"
-          htmlFor={`task-${taskKey}-instruction`}
-        >
-          {title}
-        </label>
-        <div className="flex-row">
-          <span className="task-key">{taskKey}</span>
-          <input
-            className="flex-item"
-            id={`task-${taskKey}-instruction`}
-            type="text"
-            value={instruction}
-            onBlur={update}
-            onChange={(e) => { setInstruction(e?.target?.value) }}
-          />
-          <button
-            aria-label={`Delete Task ${taskKey}`}
-            className="big"
-            onClick={doDelete}
-            type="button"
-          >
-            <DeleteIcon />
-          </button>
-        </div>
-      </div>
-      <div className="task-field">
-        <span className="narrow">
+        <span className="task-field-checkbox-set">
           <input
             id={`task-${taskKey}-required`}
             type="checkbox"
@@ -87,6 +80,7 @@ function TextTask({
           </label>
         </span>
       </div>
+
       <TaskHelpField
         help={help}
         setHelp={setHelp}
@@ -101,7 +95,6 @@ function TextTask({
 
 TextTask.propTypes = {
   deleteTask: PropTypes.func,
-  isFirstTaskInStep: PropTypes.bool,
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
