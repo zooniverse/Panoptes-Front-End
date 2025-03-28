@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
-
 import TaskHeader from '../components/TaskHeader.jsx'
 import TaskInstructionField from '../components/TaskInstructionField.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
