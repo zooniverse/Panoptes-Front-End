@@ -113,7 +113,6 @@ function EditStepDialog({
               key={`editTaskForm-${taskKey}`}
               deleteTask={deleteTask}
               enforceLimitedBranchingRule={enforceLimitedBranchingRule}
-              isFirstTaskInStep={index === 0}
               stepHasManyTasks={stepHasManyTasks}
               task={task}
               taskKey={taskKey}
