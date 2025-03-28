@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
 
-const DEFAULT_HANDLER = () => {};
+const DEFAULT_HANDLER = () => {}
 
 function TextTask({
   deleteTask = DEFAULT_HANDLER,
@@ -14,10 +14,10 @@ function TextTask({
   taskKey,
   updateTask = DEFAULT_HANDLER
 }) {
-  const [ help, setHelp ] = useState(task?.help || '');
-  const [ instruction, setInstruction ] = useState(task?.instruction || '');
-  const [ required, setRequired ] = useState(!!task?.required);
-  const title = stepHasManyTasks ? 'Text Task' : 'Main Text';
+  const [ help, setHelp ] = useState(task?.help || '')
+  const [ instruction, setInstruction ] = useState(task?.instruction || '')
+  const [ required, setRequired ] = useState(!!task?.required)
+  const title = stepHasManyTasks ? 'Text Task' : 'Main Text'
   // Update is usually called manually onBlur, after user input is complete.
   function update() {
     const newTask = {
@@ -25,23 +25,23 @@ function TextTask({
       help,
       instruction,
       required
-    };
-    updateTask(taskKey, newTask);
+    }
+    updateTask(taskKey, newTask)
   }
 
   function doDelete() {
-    deleteTask(taskKey);
+    deleteTask(taskKey)
   }
 
-  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0);
+  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)
   function toggleShowHelpField() {
-    setShowHelpField(!showHelpField);
+    setShowHelpField(!showHelpField)
   }
 
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  useEffect(update, [required]);
+  useEffect(update, [required])
 
   return (
     <div className="text-task">
@@ -79,7 +79,7 @@ function TextTask({
             type="checkbox"
             checked={required}
             onChange={(e) => {
-              setRequired(!!e?.target?.checked);
+              setRequired(!!e?.target?.checked)
             }}
           />
           <label htmlFor={`task-${taskKey}-required`}>
@@ -96,7 +96,7 @@ function TextTask({
         update={update}
       />
     </div>
-  );
+  )
 }
 
 TextTask.propTypes = {
@@ -106,6 +106,6 @@ TextTask.propTypes = {
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateTask: PropTypes.func
-};
+}
 
-export default TextTask;
+export default TextTask

@@ -13,7 +13,6 @@ const DEFAULT_HANDLER = () => {}
 function QuestionTask({
   deleteTask = DEFAULT_HANDLER,
   enforceLimitedBranchingRule,
-  isFirstTaskInStep = true,
   stepHasManyTasks = false,
   task,
   taskKey,
@@ -195,7 +194,6 @@ QuestionTask.propTypes = {
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
   }),
-  isFirstTaskInStep: PropTypes.bool,
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
