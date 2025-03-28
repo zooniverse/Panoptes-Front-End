@@ -10,6 +10,7 @@ import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 const DEFAULT_HANDLER = () => {}
 
 function TaskInstructionField ({
+  children,  // Children will appear next to the "Instructions" label. Used normally to add the "required" checkbox.
   deleteTask = DEFAULT_HANDLER,
   setValue = DEFAULT_HANDLER,
   showDeleteButton = false,
@@ -31,6 +32,7 @@ function TaskInstructionField ({
         >
           Instructions
         </label>
+        {children}
       </div>
       <div className="task-field-row">
         <textarea
