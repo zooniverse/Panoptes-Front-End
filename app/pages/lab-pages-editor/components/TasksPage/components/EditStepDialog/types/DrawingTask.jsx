@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
 import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx'
 import MinusIcon from '../../../../../icons/MinusIcon.jsx'
 import PlusIcon from '../../../../../icons/PlusIcon.jsx'
+
+import TaskHeader from '../components/TaskHeader.jsx'
+import TaskInstructionField from '../components/TaskInstructionField.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {};
@@ -156,48 +158,42 @@ function DrawingTask({
 
   return (
     <div className="drawing-task">
+      <TaskHeader
+        task={task}
+        taskKey={taskKey}
+        title={title}
+      >
+        <p>...</p>
+      </TaskHeader>
+
+      <TaskInstructionField
+        deleteTask={deleteTask}
+        setValue={setInstruction}
+        showDeleteButton={stepHasManyTasks}
+        taskKey={taskKey}
+        update={update}
+        value={instruction}
+      />
+
       <div className="task-field">
-        <label
-          className="big spacing-bottom-S"
-          htmlFor={`task-${taskKey}-instruction`}
-        >
-          {title}
-        </label>
-        <div className="flex-row">
-          <span className="task-key">{taskKey}</span>
-          <input
-            className="flex-item"
-            id={`task-${taskKey}-instruction`}
-            type="text"
-            value={instruction}
-            onBlur={update}
-            onChange={(e) => { setInstruction(e?.target?.value) }}
-          />
-          <button
-            aria-label={`Delete Task ${taskKey}`}
-            className="big"
-            onClick={doDelete}
-            type="button"
-          >
-            <DeleteIcon />
-          </button>
-        </div>
-      </div>
-      <div className="task-field flex-row">
-        <span className="big">Tool Configuration</span>
-        <span className="narrow">
-          <input
-            id={`task-${taskKey}-prevMarks`}
-            type="checkbox"
-            checked={prevMarks}
-            onChange={(e) => { setPrevMarks(!!e?.target?.checked); }}
-          />
-          <label htmlFor={`task-${taskKey}-prevMarks`}>
-            Allow hiding of marks
+        <div className="task-field-subheader">
+          <label className="big-label">
+            Tool Configuration
           </label>
-        </span>
-      </div>
-      <div className="task-field">
+          <span className="spacer" />
+          <span className="task-field-checkbox-set">
+            <input
+              id={`task-${taskKey}-prevMarks`}
+              type="checkbox"
+              checked={prevMarks}
+              onChange={(e) => { setPrevMarks(!!e?.target?.checked); }}
+            />
+            <label htmlFor={`task-${taskKey}-prevMarks`}>
+              Allow hiding of marks
+            </label>
+          </span>
+        </div>
+      
         <ul>
           {tools.map(({ color, details, label, max, min, size, type }, index) => (
             <li
