@@ -57,9 +57,8 @@ function TextTask({
         taskKey={taskKey}
         update={update}
         value={instruction}
-      />
-
-      <div className="task-field">
+      >
+        <span className="spacer" />
         <span className="task-field-checkbox-set">
           <input
             id={`task-${taskKey}-required`}
@@ -73,7 +72,7 @@ function TextTask({
             Required
           </label>
         </span>
-      </div>
+      </TaskInstructionField>
 
       <TaskHelpField
         help={help}
