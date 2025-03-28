@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types
+import PropTypes from 'prop-types'
 
 import DrawingTask from './types/DrawingTask.jsx'
 import QuestionTask from './types/QuestionTask.jsx'
