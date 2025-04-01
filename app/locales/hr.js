@@ -1,25 +1,5 @@
 export default {
   loading: '(Učitava se)',
-  aboutPages: {
-    missingContent: {
-      education: 'This project has no educational resources yet.',
-      faq: 'This project has no frequently asked questions yet.',
-      research: 'This project has no science case yet.',
-      results: 'This project has no results to report yet.',
-      team: 'This project has no team information.',
-    }
-  },
-  projectRoles: {
-    title: 'The Team',
-    owner: 'Owner',
-    collaborator: 'Collaborator',
-    translator: 'Translator',
-    scientist: 'Researcher',
-    moderator: 'Moderator',
-    tester: 'Tester',
-    expert: 'Expert',
-    museum: 'Museum',
-  },
   classifier: {
     back: 'Natrag',
     backButtonWarning: 'Vraćanje natrag će obrisati Vaš rad za trenutni zadatak',
@@ -185,68 +165,6 @@ export default {
     createForm: {
       private: 'Privatno',
       submit: 'Dodaj zbirku'
-    }
-  },
-  emailSettings: {
-    email: 'Email address',
-    general: {
-      section: 'Zooniverse email preferences',
-      updates: 'Get general Zooniverse email updates',
-      classify: 'Get email updates when you first classify on a project',
-      note: 'Note: Unticking the box will not unsubscribe you from any of the projects',
-      manual: 'Manage projects individually',
-      beta: 'Get beta project email updates and become a beta tester',
-      partnerPreferences: 'Zooniverse partner email preferences',
-      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
-    },
-    talk: {
-      section: 'Talk email preferences',
-      header: 'Send me an email',
-      frequency: {
-        immediate: 'Immediately',
-        day: 'Daily',
-        week: 'Weekly',
-        never: 'Never'
-      },
-      options: {
-        participating_discussions: 'When discussions I\'m participating in are updated',
-        followed_discussions: 'When discussions I\'m following are updated',
-        mentions: 'When I\'m mentioned',
-        group_mentions: 'When I\'m mentioned by group (@admins, @team, etc.)',
-        messages: 'When I receive a private message',
-        started_discussions: 'When a discussion is started in a board I\'m following'
-      }
-    },
-    project: {
-      section: 'Project email preferences',
-      header: 'Project',
-    }
-  },
-  about: {
-    index: {
-      header: 'O Zooniversu',
-      title: 'O Zooniversu',
-      nav: {
-        about: 'O Zooniversu',
-        publications: 'Publikacije',
-        ourTeam: 'Naš tim',
-        acknowledgements: 'Citiranje',
-        contact: 'Kontaktirajte nas',
-        faq: 'Često postavljana pitanja',
-        resources: 'Materijali'
-      }
-    }
-  },
-  getInvolved: {
-    index: {
-      title: 'Uključi se',
-      nav: {
-        volunteering: 'Volontiranje',
-        education: 'Edukacija',
-        callForProjects: 'Poziv za projekte',
-        collections: 'Zbirke',
-        favorites: 'Omiljeno'
-      }
     }
   }
 }

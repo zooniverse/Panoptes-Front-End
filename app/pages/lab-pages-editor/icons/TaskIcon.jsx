@@ -1,30 +1,51 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-const faTaskIcons = {
-  'drawing': 'fa-pencil',
-  'multiple': 'fa-question-circle',  // Multiple answer question
-  'single': 'fa-question-circle',  // Single answer question
-  'text': 'fa-file-text-o'
-};
+import drawingTaskSvg from './images/drawing-task.png'
+import questionTaskSvg from './images/question-task.png'
+import textTaskSvg from './images/text-task.png'
+import undefinedTaskSvg from './images/undefined-task.png'
 
 function TaskIcon({
   alt,
-  type
+  className = '',
+  type,
+  width = 19,
+  height = 19,
 }) {
-  const faTaskIcon = faTaskIcons[type] || 'fa-times-circle';
+  let iconSrc = undefinedTaskSvg
+
+  switch (type) {
+    case 'drawing':
+      iconSrc = drawingTaskSvg
+      break
+    
+    case 'multiple':  // Multiple answer question
+    case 'single':  // Single answer question
+      iconSrc = questionTaskSvg
+      break
+    
+    case 'text':
+      iconSrc = textTaskSvg
+      break
+  }
 
   return (
-    <span
-      className={`fa fa-fw ${faTaskIcon}`}
-      aria-label={alt}
-      role={!!alt ? 'img' : undefined}
+    <img
+      alt={alt}
+      className={`icon ${className}`}
+      src={iconSrc}
+      width={width}
+      height={height}
     />
-  );
+  )
 }
 
 TaskIcon.propTypes = {
   alt: PropTypes.string,
-  type: PropTypes.string
-};
+  className: PropTypes.string,
+  type: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
+}
 
-export default TaskIcon;
+export default TaskIcon
