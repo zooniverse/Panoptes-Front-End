@@ -17,7 +17,7 @@ function TextTask({
   const [ help, setHelp ] = useState(task?.help || '')
   const [ instruction, setInstruction ] = useState(task?.instruction || '')
   const [ required, setRequired ] = useState(!!task?.required)
-  const title = stepHasManyTasks ? 'Text Task' : 'Main Text'
+  const title = 'Text Task'
   // Update is usually called manually onBlur, after user input is complete.
   function update() {
     const newTask = {
