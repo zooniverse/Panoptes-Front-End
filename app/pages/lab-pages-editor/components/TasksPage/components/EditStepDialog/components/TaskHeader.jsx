@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import CollapseIcon from '../../../../../icons/CollapseIcon.jsx'
 import ExpandIcon from '../../../../../icons/ExpandIcon.jsx'
 import TaskIcon from '../../../../../icons/TaskIcon.jsx'
+import { TaskTypes } from '../../../../../helpers/constants.js'
 
 function TaskHeader({
   children,  // Children will appear in the info panel. Used for explaining what this Task does.
@@ -19,7 +20,7 @@ function TaskHeader({
   return (
     <>
       <div className="task-header">
-        <TaskIcon type={task.type} />
+        <TaskIcon alt={TaskTypes[task.type]?.name || 'Unknown Task Type'} type={task.type} />
         <h5>{title}</h5>
         <span className="task-key">{taskKey}</span>
         <span className="spacer" />
