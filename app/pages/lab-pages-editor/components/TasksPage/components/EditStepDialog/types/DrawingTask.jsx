@@ -52,6 +52,22 @@ const TOOL_TYPE_OPTIONS = [
   // 'temporalRotateRectangle'
 ]
 
+function randomlySelectColor() {
+  return TOOL_COLOR_OPTIONS[Math.floor(Math.random() * TOOL_COLOR_OPTIONS.length)]
+}
+
+// Checks if a selected colour is in the list of colours. (Or color.) This is
+// used in the fallback in case a tool uses a colour that's not in the list of
+// colours. (Or colors.)
+function isSelectedColorInListOfOptions(color) {
+  return !!TOOL_COLOR_OPTIONS.find(listedColor => listedColor.value?.toLowerCase?.() === color?.toLowerCase?.())
+}
+
+// Vive la langue Anglaise Britannique!
+function isSelectedColourInListOfOptions(colour) { return isSelectedColorInListOfOptions(colour) }
+function randomlySelectColour() { return randomlySelectColor() }
+const TOOL_COLOUR_OPTIONS = TOOL_COLOR_OPTIONS
+
 function DrawingTask({
   deleteTask = DEFAULT_HANDLER,
   isFirstTaskInStep = true,
@@ -83,13 +99,9 @@ function DrawingTask({
     updateTask(taskKey, newTask)
   }
 
-  function doDelete() {
-    deleteTask(taskKey)
-  }
-
   function addTool(e) {
     const newTools = [ ...tools, {
-      color: '#00ff00',
+      color: randomlySelectColor().value,
       details: [],
       label: 'Tool name',
       max: undefined,
@@ -147,12 +159,6 @@ function DrawingTask({
   const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)
   function toggleShowHelpField() {
     setShowHelpField(!showHelpField)
-  }
-
-  // This is a fallback in case a tool uses a colour that's not in the list of colours. Or colors.
-  function isSelectedColorInListOfOptions(color) {
-    console.log('+++ color: ', color, '\n', TOOL_COLOR_OPTIONS.find(listedColor => listedColor.value?.toLowerCase?.() === color?.toLowerCase?.()))
-    return !!TOOL_COLOR_OPTIONS.find(listedColor => listedColor.value?.toLowerCase?.() === color?.toLowerCase?.())
   }
 
   // For inputs that don't have onBlur, update triggers automagically.
