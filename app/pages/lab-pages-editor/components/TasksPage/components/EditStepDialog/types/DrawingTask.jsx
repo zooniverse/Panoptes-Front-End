@@ -196,7 +196,7 @@ function DrawingTask({
       
         <ul>
           {tools.map(({ color, details, label, max, min, size, type }, index) => (
-            <li key={`drawing-task-tool-${index}`}>
+            <li className='task-tool' key={`drawing-task-tool-${index}`}>
               <label htmlFor={`task-${taskKey}-tool-${index}-label`}>
                 Tool Name
               </label>
@@ -222,7 +222,7 @@ function DrawingTask({
               <div className="grid">
                 <div className="grid-item grid-item-1">
                   <label htmlFor={`task-${taskKey}-tool-${index}-type`}>Tool Type</label>
-                  <div className="flex-row with-preview">
+                  <div>
                     <DrawingToolIcon type={type} />
                     <select
                       id={`task-${taskKey}-tool-${index}-type`}
@@ -241,7 +241,7 @@ function DrawingTask({
                 </div>
                 <div className="grid-item grid-item-2">
                   <label htmlFor={`task-${taskKey}-tool-${index}-color`}>Color</label>
-                  <div className="flex-row with-preview">
+                  <div>
                     <div className="preview-box" style={{ background: color }}>&nbsp;</div>
                     <select
                       id={`task-${taskKey}-tool-${index}-color`}
