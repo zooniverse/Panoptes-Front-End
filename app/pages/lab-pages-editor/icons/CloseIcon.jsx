@@ -14,5 +14,5 @@ export default function CloseIcon({
       width={width}
       height={height}
     />
-  );
+  )
 }

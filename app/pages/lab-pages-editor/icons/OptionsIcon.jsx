@@ -14,5 +14,5 @@ export default function OptionsIcon({
       width={width}
       height={height}
     />
-  );
+  )
 }

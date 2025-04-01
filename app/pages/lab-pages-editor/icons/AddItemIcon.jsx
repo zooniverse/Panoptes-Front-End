@@ -15,5 +15,5 @@ export default function AddItemIcon({ alt, className = '', width = 12, height = 
         strokeWidth="2"
       />
     </svg>
-  );
+  )
 }
