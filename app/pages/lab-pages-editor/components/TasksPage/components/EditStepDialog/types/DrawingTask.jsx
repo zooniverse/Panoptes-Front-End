@@ -349,7 +349,6 @@ function DrawingTask({
                     value={''}
                     data-index={index}
                     data-field="subtask"
-                    disabled
                   >
                     <option value="">Add a sub-task +</option>
                     <option value="single">Question sub-task</option>
