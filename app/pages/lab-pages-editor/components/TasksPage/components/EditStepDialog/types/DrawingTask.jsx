@@ -301,6 +301,22 @@ function DrawingTask({
                     </select>
                   </div>
                 )}
+                <div className="grid-item grid-item-6">
+                  <label htmlFor={`task-${taskKey}-tool-${index}-subtask`}>Sub-task</label>
+                  <select
+                    id={`task-${taskKey}-tool-${index}-subtask`}
+                    onChange={DEFAULT_HANDLER}
+                    value={''}
+                    data-index={index}
+                    data-field="subtask"
+                    disabled
+                  >
+                    <option value="">Add a sub-task +</option>
+                    <option value="single">Question sub-task</option>
+                    <option value="text">Text sub-task</option>
+                    <option value="dropdown">Dropdown sub-task</option>
+                  </select>
+                </div>
               </div>
             </li>
           ))}

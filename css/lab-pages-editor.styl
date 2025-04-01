@@ -745,6 +745,10 @@ $fontWeightBoldPlus = 700
               font-style: normal
               font-weight: 400
               line-height: normal
+
+              &[disabled]
+                color: $grey3
+                background: $grey6
             
             .preview-box
               border: 1px solid $black
@@ -755,7 +759,7 @@ $fontWeightBoldPlus = 700
             .grid
               display: grid
               gap: 10px
-              grid-template-columns: auto auto 16.5% 16.5%
+              grid-template-columns: auto auto 18% 18%
               grid-template-rows: auto auto
               margin-top: 10px
 
@@ -780,7 +784,11 @@ $fontWeightBoldPlus = 700
               grid-row: 1
             
             .grid-item-5
-              grid-column: 2 / span 1
+              grid-column: 2
+              grid-row: 2
+            
+            .grid-item-6
+              grid-column: 3 / span 2
               grid-row: 2
 
     section
