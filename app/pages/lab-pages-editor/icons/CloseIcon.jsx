@@ -1,10 +1,10 @@
-import closeIcon from './assets/close-icon.png'
+import closeIcon from './assets/close-icon.svg'
 
 export default function CloseIcon({
   alt,
   className = '',
-  width = 16,
-  height = 16,
+  width,
+  height,
 }) {
   return (
     <img
