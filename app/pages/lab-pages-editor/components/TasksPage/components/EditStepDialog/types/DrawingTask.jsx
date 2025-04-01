@@ -149,6 +149,12 @@ function DrawingTask({
     setShowHelpField(!showHelpField);
   }
 
+  // This is a fallback in case a tool uses a colour that's not in the list of colours. Or colors.
+  function isSelectedColorInListOfOptions(color) {
+    console.log('+++ color: ', color, '\n', TOOL_COLOR_OPTIONS.find(listedColor => listedColor.value?.toLowerCase?.() === color?.toLowerCase?.()))
+    return !!TOOL_COLOR_OPTIONS.find(listedColor => listedColor.value?.toLowerCase?.() === color?.toLowerCase?.())
+  }
+
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
@@ -261,6 +267,12 @@ function DrawingTask({
                           {colorOption.label}
                         </option>
                       ))}
+                      {/* Fallback: in case colour selected is not in list */}
+                      {!isSelectedColorInListOfOptions(color) && (
+                        <option value={color} key={color}>
+                          {color}
+                        </option>
+                      )}
                     </select>
                   </div>
                 </div>
