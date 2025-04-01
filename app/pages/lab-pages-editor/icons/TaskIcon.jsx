@@ -1,15 +1,9 @@
 import PropTypes from 'prop-types'
 
-import smallTaskIconForDrawing from './assets/task-19x19-drawing.png'
-import smallTaskIconForQuestion from './assets/task-19x19-question.png'
-import smallTaskIconForText from './assets/task-19x19-text.png'
-import smallTaskIconForUndefined from './assets/task-19x19-undefined.png'
-
-// TMP
-const largeTaskIconForDrawing = smallTaskIconForDrawing
-const largeTaskIconForQuestion = smallTaskIconForQuestion
-const largeTaskIconForText = smallTaskIconForText
-const largeTaskIconForUndefined = smallTaskIconForUndefined
+import taskIconForDrawing from './assets/task-drawing.svg'
+import taskIconForQuestion from './assets/task-question.svg'
+import taskIconForText from './assets/task-text.svg'
+import taskIconForUndefined from './assets/task-undefined.svg'
 
 function TaskIcon({
   alt,
@@ -21,20 +15,20 @@ function TaskIcon({
   const width =  isLarge ? 40 : 19
   const height = isLarge ? 40 : 19
 
-  let iconSrc = isLarge ? largeTaskIconForUndefined : smallTaskIconForUndefined
+  let iconSrc = taskIconForUndefined
 
   switch (type) {
     case 'drawing':
-      iconSrc = isLarge ? largeTaskIconForDrawing : smallTaskIconForDrawing
+      iconSrc = taskIconForDrawing
       break
     
     case 'multiple':  // Multiple answer question
     case 'single':  // Single answer question
-    iconSrc = isLarge ? largeTaskIconForQuestion : smallTaskIconForQuestion
+    iconSrc = taskIconForQuestion
       break
     
     case 'text':
-      iconSrc = isLarge ? largeTaskIconForText : smallTaskIconForText
+      iconSrc = taskIconForText
       break
   }
 
