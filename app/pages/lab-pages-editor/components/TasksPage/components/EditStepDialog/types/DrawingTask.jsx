@@ -201,29 +201,31 @@ function DrawingTask({
               key={`drawing-task-tool-${index}`}
               style={(color) ? { borderTopColor: color } : null}
             >
-              <label htmlFor={`task-${taskKey}-tool-${index}-label`}>
-                Tool {index+1}
-              </label>
-              <div className="flex-row">
-                <input
-                  id={`task-${taskKey}-tool-${index}-label`}
-                  onChange={editTool}
-                  type="text"
-                  value={label}
-                  data-index={index}
-                  data-field="label"
-                />
-                <button
-                  aria-label={`Delete tool ${index}`}
-                  onClick={deleteTool}
-                  className="delete-button"
-                  data-index={index}
-                  type="button"
-                >
-                  <DeleteIcon data-index={index} />
-                </button>
-              </div>
               <div className="grid">
+                <div className="grid-item grid-item-0">
+                  <label htmlFor={`task-${taskKey}-tool-${index}-label`}>
+                    Tool {index+1}
+                  </label>
+                  <div>
+                    <input
+                      id={`task-${taskKey}-tool-${index}-label`}
+                      onChange={editTool}
+                      type="text"
+                      value={label}
+                      data-index={index}
+                      data-field="label"
+                    />
+                    <button
+                      aria-label={`Delete tool ${index}`}
+                      onClick={deleteTool}
+                      className="delete-button"
+                      data-index={index}
+                      type="button"
+                    >
+                      <DeleteIcon data-index={index} />
+                    </button>
+                  </div>
+                </div>
                 <div className="grid-item grid-item-1">
                   <label htmlFor={`task-${taskKey}-tool-${index}-type`}>Tool Type</label>
                   <div>
