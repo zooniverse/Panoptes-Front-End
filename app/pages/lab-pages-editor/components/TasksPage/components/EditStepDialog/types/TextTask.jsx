@@ -45,7 +45,7 @@ function TextTask({
         taskKey={taskKey}
         title={title}
       >
-        <p>The volunteer adds free-form text to an entry field. You can add multiple text tasks to a single page.</p>
+        <p>The volunteer types into a free-text entry field. Can be combined with other tasks on a page.</p>
       </TaskHeader>
 
       <TaskInstructionField
