@@ -196,9 +196,13 @@ function DrawingTask({
       
         <ul>
           {tools.map(({ color, details, label, max, min, size, type }, index) => (
-            <li className='task-tool' key={`drawing-task-tool-${index}`}>
+            <li
+              className='task-tool'
+              key={`drawing-task-tool-${index}`}
+              style={(color) ? { borderTopColor: color } : null}
+            >
               <label htmlFor={`task-${taskKey}-tool-${index}-label`}>
-                Tool Name
+                Tool {index+1}
               </label>
               <div className="flex-row">
                 <input
