@@ -40,7 +40,7 @@ function TaskItem({
       <div className="task-general-details">
         <span className="task-icon">
           <TaskIcon
-            alt={TaskTypes[task.type].name || 'Unknown Task Type'}
+            alt={TaskTypes[task.type]?.name || 'Unknown Task Type'}
             type={task.type}
           />
         </span>
