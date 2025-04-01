@@ -1,10 +1,10 @@
-import optionsIcon from './assets/options-icon.png'
+import optionsIcon from './assets/options-icon.svg'
 
 export default function OptionsIcon({
   alt,
   className = '',
-  width = 22,
-  height = 8,
+  width,
+  height,
 }) {
   return (
     <img
