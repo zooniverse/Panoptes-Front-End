@@ -12,12 +12,28 @@ import TaskHelpField from '../components/TaskHelpField.jsx'
 const DEFAULT_HANDLER = () => {}
 
 const TOOL_COLOR_OPTIONS = [
+  // Here are the new FEM colours.
+  { value: '#E65252', label: 'Red Orange' },
+  { value: '#F1AE45', label: 'Goldenrod' },
+  { value: '#FCED54', label: 'Laser Lemon' },
+  { value: '#EE7BCF', label: 'Cotton Candy' },
+  { value: '#C7F55B', label: 'Granny Smith Apple' },
+  { value: '#65EECA', label: 'Jungle Green' },
+  { value: '#52DB72', label: 'Screamin\' Green' },
+  { value: '#7CDFF2', label: 'Robin\'s Egg Blue' },
+  { value: '#8AA0D3', label: 'Indigo' },
+  { value: '#C17DDF', label: 'Violet' },
+  { value: '#E7BBE3', label: 'Wisteria' },
+
+  /*
+  // And here are the old PFE colours.
   { value: '#ff0000', label: 'Red' },
   { value: '#ffff00', label: 'Yellow' },
   { value: '#00ff00', label: 'Green' },
   { value: '#00ffff', label: 'Cyan' },
   { value: '#0000ff', label: 'Blue' },
   { value: '#ff00ff', label: 'Magenta' }
+  */
 ]
 
 const TOOL_TYPE_OPTIONS = [
@@ -60,7 +76,7 @@ function randomlySelectColor() {
 // used in the fallback in case a tool uses a colour that's not in the list of
 // colours. (Or colors.)
 function isSelectedColorInListOfOptions(color) {
-  return !!TOOL_COLOR_OPTIONS.find(listedColor => listedColor.value?.toLowerCase?.() === color?.toLowerCase?.())
+  return !!TOOL_COLOR_OPTIONS.find(listedColor => listedColor.value.toLowerCase() === color?.toLowerCase())
 }
 
 // Vive la langue Anglaise Britannique!
@@ -101,7 +117,7 @@ function DrawingTask({
 
   function addTool(e) {
     const newTools = [ ...tools, {
-      color: randomlySelectColor().value,
+      color: randomlySelectColor().value.toLowerCase(),
       details: [],
       label: 'Tool name',
       max: undefined,
@@ -264,18 +280,18 @@ function DrawingTask({
                     <select
                       id={`task-${taskKey}-tool-${index}-color`}
                       onChange={editTool}
-                      value={color}
+                      value={color?.toLowerCase()}
                       data-index={index}
                       data-field="color"
                     >
                       {TOOL_COLOR_OPTIONS.map(colorOption => (
-                        <option value={colorOption.value} key={colorOption.value}>
+                        <option value={colorOption.value.toLowerCase()} key={colorOption.value.toLowerCase()}>
                           {colorOption.label}
                         </option>
                       ))}
                       {/* Fallback: in case colour selected is not in list */}
                       {!isSelectedColorInListOfOptions(color) && (
-                        <option value={color} key={color}>
+                        <option value={color?.toLowerCase()} key={color?.toLowerCase()}>
                           {color}
                         </option>
                       )}
