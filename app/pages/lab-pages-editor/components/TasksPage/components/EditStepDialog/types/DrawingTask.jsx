@@ -9,7 +9,7 @@ import TaskHeader from '../components/TaskHeader.jsx'
 import TaskInstructionField from '../components/TaskInstructionField.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
 
-const DEFAULT_HANDLER = () => {};
+const DEFAULT_HANDLER = () => {}
 
 const TOOL_COLOR_OPTIONS = [
   { value: '#ff0000', label: 'Red' },
@@ -18,7 +18,7 @@ const TOOL_COLOR_OPTIONS = [
   { value: '#00ffff', label: 'Cyan' },
   { value: '#0000ff', label: 'Blue' },
   { value: '#ff00ff', label: 'Magenta' }
-];
+]
 
 const TOOL_TYPE_OPTIONS = [
   // Supported in PFE/FEM Lab and works in FEM Classifier:
@@ -50,7 +50,7 @@ const TOOL_TYPE_OPTIONS = [
   // 'transcriptionLine',
   // 'temporalPoint',
   // 'temporalRotateRectangle'
-];
+]
 
 function DrawingTask({
   deleteTask = DEFAULT_HANDLER,
@@ -60,16 +60,16 @@ function DrawingTask({
   taskKey,
   updateTask = DEFAULT_HANDLER
 }) {
-  const [ tools, setTools ] = useState(task?.tools || []);
-  const [ help, setHelp ] = useState(task?.help || '');
-  const [ instruction, setInstruction ] = useState(task?.instruction || '');  // TODO: figure out if FEM is standardising Question vs Instructions
-  const [ prevMarks, setPrevMarks ] = useState(!!task?.enableHidePrevMarks);
-  const title = stepHasManyTasks ? 'Drawing Task' : 'Main Text';
+  const [ tools, setTools ] = useState(task?.tools || [])
+  const [ help, setHelp ] = useState(task?.help || '')
+  const [ instruction, setInstruction ] = useState(task?.instruction || '')  // TODO: figure out if FEM is standardising Question vs Instructions
+  const [ prevMarks, setPrevMarks ] = useState(!!task?.enableHidePrevMarks)
+  const title = stepHasManyTasks ? 'Drawing Task' : 'Main Text'
 
   // Update is usually called manually onBlur, after user input is complete.
   function update(optionalStateOverrides) {
     const _tools = optionalStateOverrides?.tools || tools
-    // const nonEmptyTools = _tools.filter(({ label }) => label.trim().length > 0);
+    // const nonEmptyTools = _tools.filter(({ label }) => label.trim().length > 0)
 
     const newTask = {
       ...task,
@@ -79,12 +79,12 @@ function DrawingTask({
       instruction,
       required: false,  // On PFE/FEM Lab, this can't be changed.
       enableHidePrevMarks: prevMarks
-    };
-    updateTask(taskKey, newTask);
+    }
+    updateTask(taskKey, newTask)
   }
 
   function doDelete() {
-    deleteTask(taskKey);
+    deleteTask(taskKey)
   }
 
   function addTool(e) {
@@ -96,57 +96,57 @@ function DrawingTask({
       min: undefined,
       size: undefined,
       type: 'point'
-    }];
-    setTools(newTools);
+    }]
+    setTools(newTools)
 
-    e.preventDefault();
-    return false;
+    e.preventDefault()
+    return false
   }
 
   function editTool(e) {
-    const index = e?.target?.dataset?.index;
-    const field = e?.target?.dataset?.field;
-    const value = e?.target?.value;
-    if (index === undefined || index < 0 || index >= tools.length) return;
+    const index = e?.target?.dataset?.index
+    const field = e?.target?.dataset?.field
+    const value = e?.target?.value
+    if (index === undefined || index < 0 || index >= tools.length) return
 
-    const tool = structuredClone(tools[index]) || {};  // Copy target tool.
+    const tool = structuredClone(tools[index]) || {}  // Copy target tool.
 
     switch (field) {
       case 'label':
       case 'type':
       case 'color':
       case 'size':
-        tool[field] = value || '';
-        break;
+        tool[field] = value || ''
+        break
       
       case 'min':
       case 'max':
-        tool[field] = parseInt(value) || undefined;
+        tool[field] = parseInt(value) || undefined
         if (tool.min !== undefined && tool.max !== undefined && tool.max < tool.min) {
-          tool.max = tool.min;
+          tool.max = tool.min
         }
-        break;
+        break
     }
 
-    setTools(tools.with(index, tool));
+    setTools(tools.with(index, tool))
   }
 
   function deleteTool(e) {
-    const index = e?.currentTarget?.dataset?.index;
-    if (index === undefined || index < 0 || index >= tools.length) return;
+    const index = e?.currentTarget?.dataset?.index
+    if (index === undefined || index < 0 || index >= tools.length) return
 
-    const newTools = tools.slice();  // Copy tools.
-    newTools.splice(index, 1);
-    setTools(newTools);
-    update({ tools: newTools });  // Use optional state override, since setTools() won't reflect new values in this step of the lifecycle.
+    const newTools = tools.slice()  // Copy tools.
+    newTools.splice(index, 1)
+    setTools(newTools)
+    update({ tools: newTools })  // Use optional state override, since setTools() won't reflect new values in this step of the lifecycle.
     
-    e.preventDefault();
-    return false;
+    e.preventDefault()
+    return false
   }
 
-  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0);
+  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)
   function toggleShowHelpField() {
-    setShowHelpField(!showHelpField);
+    setShowHelpField(!showHelpField)
   }
 
   // This is a fallback in case a tool uses a colour that's not in the list of colours. Or colors.
@@ -158,7 +158,7 @@ function DrawingTask({
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  useEffect(update, [tools, prevMarks]);
+  useEffect(update, [tools, prevMarks])
 
   // TODO: DEBOUNCE FOR tools UPDATE, since typing into the Tool Name/Label causes way too many updates!
 
@@ -192,7 +192,7 @@ function DrawingTask({
               id={`task-${taskKey}-prevMarks`}
               type="checkbox"
               checked={prevMarks}
-              onChange={(e) => { setPrevMarks(!!e?.target?.checked); }}
+              onChange={(e) => { setPrevMarks(!!e?.target?.checked) }}
             />
             <label htmlFor={`task-${taskKey}-prevMarks`}>
               Allow hiding of marks
@@ -361,7 +361,7 @@ function DrawingTask({
         update={update}
       />
     </div>
-  );
+  )
 }
 
 DrawingTask.propTypes = {
@@ -371,6 +371,6 @@ DrawingTask.propTypes = {
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateTask: PropTypes.func
-};
+}
 
-export default DrawingTask;
+export default DrawingTask
