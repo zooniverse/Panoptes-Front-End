@@ -84,7 +84,11 @@ function QuestionTask({
         taskKey={taskKey}
         title={title}
       >
-        <p>The volunteer chooses from among a list of your provided choices. You can use a question task by itself, or add one to the end of a sequence of other tasks on a page.</p>
+        <p>
+          Single choice (default):<br/>
+          The volunteer reads a question and selects one response from a list of choices. Cannot be combined with other tasks on a page.
+        </p>
+        <p>To allow volunteers to select multiple responses, check the ‘Allow multiple’ option in the task editor. When selected, the question task can be combined with other tasks on a page. </p>
       </TaskHeader>
 
       <TaskInstructionField

@@ -191,7 +191,7 @@ function DrawingTask({
         taskKey={taskKey}
         title={title}
       >
-        <p>...</p>
+        <p>The volunteer draws or marks directly on the subject using the specified tools. Can be used in tandem with a sub-task. Can be combined with other tasks on a page.</p>
       </TaskHeader>
 
       <TaskInstructionField
