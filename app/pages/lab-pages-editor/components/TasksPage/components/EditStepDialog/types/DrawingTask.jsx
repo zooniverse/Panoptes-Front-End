@@ -96,7 +96,7 @@ function DrawingTask({
   const [ help, setHelp ] = useState(task?.help || '')
   const [ instruction, setInstruction ] = useState(task?.instruction || '')  // TODO: figure out if FEM is standardising Question vs Instructions
   const [ prevMarks, setPrevMarks ] = useState(!!task?.enableHidePrevMarks)
-  const title = stepHasManyTasks ? 'Drawing Task' : 'Main Text'
+  const title = 'Drawing Task'
 
   // Update is usually called manually onBlur, after user input is complete.
   function update(optionalStateOverrides) {
