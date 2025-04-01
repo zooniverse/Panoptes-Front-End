@@ -720,31 +720,48 @@ $fontWeightBoldPlus = 700
             
             li
               // TODO
+          
+          .task-tool
+            border-radius: 4px
+            border-top: 3px solid $grey1
+            background: linear-gradient(0deg, rgba(166, 167, 169, 0.05) 0%, rgba(255, 255, 255, 0.05) 2.42%, rgba(255, 255, 255, 0.05) 98.03%, rgba(166, 167, 169, 0.05) 100%), #FFF
+            box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+            padding: 10px 20px 20px 20px
+
+            label
+              display: block
+              color: $grey3
+              font-size: 12px
+              font-style: normal
+              font-weight: 500
+              line-height: normal
+              margin-bottom: 5px
+            
+            select, input
+              flex: 1 1 auto
+              width: 100%
+              color: $black
+              font-size: 16px
+              font-style: normal
+              font-weight: 400
+              line-height: normal
+            
+            .preview-box
+              border: 1px solid $black
+              flex: 0 0 auto
+              height: 20px
+              width: 20px
 
             .grid
               display: grid
-              gap: $sizeM
+              gap: 10px
               grid-template-columns: auto auto 16.5% 16.5%
               grid-template-rows: auto auto
-              margin-top: $sizeM
+              margin-top: 10px
 
             .grid-item
-              label
-                display: block
-              
-              select, input
-                width: 100%
-              
-              .with-preview
-                .preview-box
-                  border: 1px solid $black
-                  flex: 0 0 auto
-                  height: $sizeL
-                  width: $sizeL
-
-                select, input
-                  flex: 1 1 auto
-                  width: auto
+              div
+                flex-row()
 
             .grid-item-1
               grid-column: 1
@@ -763,7 +780,7 @@ $fontWeightBoldPlus = 700
               grid-row: 1
             
             .grid-item-5
-              grid-column: 3 / span 2
+              grid-column: 2 / span 1
               grid-row: 2
 
     section
