@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import apiClient from 'panoptes-client/lib/api-client';
+import { useEffect, useState } from 'react';
 import talkClient from 'panoptes-client/lib/talk-client';
 
 import CollaboratorCreator from './collaborators/CollaboratorCreator.jsx';
@@ -14,7 +13,8 @@ const POSSIBLE_ROLES = {
   expert: 'team',
   scientist: 'scientist',
   moderator: 'moderator',
-  tester: 'team'
+  tester: 'team',
+  translator: 'translator'
 };
 
 /*
@@ -31,11 +31,6 @@ export default function EditProjectCollaborators({
   const [saving, setSaving] = useState([]);
   const [projectOwner, setProjectOwner] = useState(null);
   const [projectRoleSets, setProjectRoleSets] = useState([]);
-
-  possibleRoles = {
-    ...possibleRoles,
-    translator: 'translator'
-  };
 
   if (project?.experimental_tools.includes('museum-role') || isAdmin()) {
     possibleRoles = {
