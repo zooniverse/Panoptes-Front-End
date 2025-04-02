@@ -28,7 +28,6 @@ export default {
     detailsSubTaskFormSubmitButton: 'OK',
     done: '完了',
     doneAndTalk: '完了とトーク',
-    dontShowMinicourse: 'Do not show mini-course in the future',
     letsGo: 'さあ、やってみましょう！',
     next: '次へ',
     optOut: '中止',
@@ -39,7 +38,6 @@ export default {
     recents: '最近行った分類',
     talk: 'トーク',
     taskHelpButton: 'このタスクに関するヘルプが必要ですか?',
-    miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: 'おめでとうございます！ 次のワークフローのロックを解除しました。 このワークフローを継続したい場合は、継続を選択することも可能です。',
       acceptButton: '次のレベルに進みます',
@@ -47,7 +45,6 @@ export default {
     },
     interventions: {
       optOut: '今後メッセージを表示しない',
-      studyInfo: 'I do not want to take part in this messaging [study](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
     }
   },
   projects: {
@@ -188,12 +185,7 @@ export default {
       clearFilters: 'フィルターを消去',
       makeSelection: '選択する',
       showing: '%(max)sのうち%(count)s件を表示',
-      confused: 'Often confused with',
-      dismiss: 'Dismiss',
-      itsThis: 'I think it’s this',
       cancel: 'キャンセル',
-      identify: 'Identify',
-      surveyOf: 'Survey of %(count)s',
       identifications: {
         zero: '未検証',
         one: '1件の検証',

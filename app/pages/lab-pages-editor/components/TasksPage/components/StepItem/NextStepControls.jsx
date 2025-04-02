@@ -14,8 +14,8 @@ export default function NextStepControls({
   if (!step) return null;
   const [ stepKey, stepBody ] = step;
   const isLinearItem = isLinearWorkflow && !isLastItem;
-  const showFakeSubmit = isLinearWorkflow && isLastItem;
-  const showNextPageDropdown = !isLinearWorkflow && !showFakeSubmit;
+  const showMockSubmit = isLinearWorkflow && isLastItem;
+  const showNextPageDropdown = !isLinearWorkflow && !showMockSubmit;
   const selectableSteps = allSteps.filter(([otherStepKey]) => otherStepKey !== stepKey);
   
   function onChange(e) {
@@ -23,7 +23,7 @@ export default function NextStepControls({
     updateNextStepForStep(stepKey, next);
   }
 
-  if (showNextPageDropdown || showFakeSubmit) {
+  if (showNextPageDropdown || showMockSubmit) {
     return (
       <div className="next-controls vertical-layout">
         <NextStepArrow
@@ -54,8 +54,8 @@ export default function NextStepControls({
             })}
           </select>
         )}
-        {showFakeSubmit && (
-          <div className="fake-submit">Submit</div>
+        {showMockSubmit && (
+          <div className="mock-submit">Submit</div>
         )}
       </div>
     );

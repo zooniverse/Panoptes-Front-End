@@ -30,7 +30,6 @@ import SubjectSetsContainer from './pages/lab/subject-sets-container';
 import SubjectSetsList from './pages/lab/subject-sets';
 import TranslationsManager from './pages/lab/translations';
 import UnsubscribeFromEmails from './pages/unsubscribe';
-import HomePageRoot from './pages/home';
 import PrivacyPolicy from './pages/privacy-policy';
 import YouthPrivacyPolicy from './pages/youth-privacy-policy';
 import SecurityPolicy from './pages/security-policy';

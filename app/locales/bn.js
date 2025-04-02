@@ -237,24 +237,6 @@ export default {
       submit: 'সংগ্রহে যোগ করুন'
     }
   },
-  about: {
-    index: {
-      header: 'বিষয়ে',
-      title: 'বিষয়ে',
-      nav: {
-        about: 'বিষয়ে',
-        publications: 'প্রকাশনা',
-        ourTeam: 'আমাদের টীম',
-        acknowledgements: 'স্বীকৃতি',
-        contact: 'যোগাযোগ করুন',
-        faq: 'সাধারণভাবে জিজ্ঞাসিত প্রশ্ন',
-        resources: 'সম্পদ',
-        highlights: 'হাইলাইটস বুক',
-        mobileApp: 'মোবাইল এপ',
-        donate: 'অনুদান'
-      }
-    }
-  },
   userSettings: {
     account: {
       displayName: 'প্রদর্শিত নাম (প্রয়োজনীয়)',

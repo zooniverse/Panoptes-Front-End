@@ -13,6 +13,7 @@ MediaArea = require('../../../pages/lab/media-area/').default
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 getAllLinked = require('../../../lib/get-all-linked').default
+{ isThisProjectUsingFEMLab } = require('../../../pages/lab-fem/fem-lab-utilities')
 
 module.exports = createReactClass
   displayName: 'SurveyTaskEditor'
@@ -309,21 +310,43 @@ module.exports = createReactClass
           <label htmlFor="#{@props.taskPrefix}.thumbnails">
               <span className="form-label">Thumbnails</span>
           </label>
-          <p>
-            <small>
-              <strong>Default</strong> - will show thumbnails as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. Note that volunteer-selected filters change the number of choices shown.
-            </small>
-          </p>
-          <p>
-            <small>
-              <strong>Show Small</strong> - will always show thumbnails as small, regardless of the number of choices shown.
-            </small>
-          </p>
-          <p>
-            <small>
-              <strong>Hide All</strong> - will never show thumbnails.
-            </small>
-          </p>
+          {if (isThisProjectUsingFEMLab(@props.project, @props.location)) then (
+            <div>
+              <p>
+                <small>
+                  <strong>Default</strong> - will show thumbnails when choices are 30 or less, hide thumbnails when choices are greater than 30. Note that volunteer-selected filters change the number of choices shown.
+                </small>
+              </p>
+              <p>
+                <small>
+                  <strong>Show</strong> - will always show thumbnails.
+                </small>
+              </p>
+              <p>
+                <small>
+                  <strong>Hide</strong> - will never show thumbnails.
+                </small>
+              </p>
+            </div>
+          ) else (
+            <div>
+              <p>
+                <small>
+                  <strong>Default</strong> - will show thumbnails as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. Note that volunteer-selected filters change the number of choices shown.
+                </small>
+              </p>
+              <p>
+                <small>
+                  <strong>Show Small</strong> - will always show thumbnails as small, regardless of the number of choices shown.
+                </small>
+              </p>
+              <p>
+                <small>
+                  <strong>Hide All</strong> - will never show thumbnails.
+                </small>
+              </p>
+            </div>
+          )}
           <select
             name="#{@props.taskPrefix}.thumbnails"
             onChange={handleInputChange.bind @props.workflow}

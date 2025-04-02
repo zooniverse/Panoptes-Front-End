@@ -12,9 +12,10 @@ jobs:
     uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
     with:
       commit_id: ${{ github.sha }}
-      node_version: 'lts/iron'
+      node_version: '>=20.5 <=20.18'
       output: 'dist'
       script: 'build-production'
+
   deploy_staging:
     name: Deploy staging
     uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
@@ -22,5 +23,28 @@ jobs:
     with:
       source: 'dist'
       target: 'preview.zooniverse.org/panoptes-front-end/master'
+    secrets:
+      creds: ${{ secrets.AZURE_STATIC_SITES }}
+
+  get_pr_number:
+    name: Get PR number
+    runs-on: ubuntu-latest
+    needs: deploy_staging
+    outputs:
+      pr_number: ${{ steps.pr.outputs.pr_number }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Get Pull Request Number
+      id: pr
+      run: echo "pr_number=$(git log -1 --pretty=%B | grep -oP '(#\K\d+)' || echo "")" >> $GITHUB_OUTPUT
+
+  remove_branch_deploy:
+    name: Remove branch deploy
+    needs: [deploy_staging, get_pr_number]
+    uses: zooniverse/ci-cd/.github/workflows/delete_blobs.yaml@main
+    with:
+      target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ needs.get_pr_number.outputs.pr_number }}'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
