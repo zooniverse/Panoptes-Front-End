@@ -1,6 +1,6 @@
-import editIcon from './assets/edit-icon.svg'
+import optionsIcon from './assets/options-icon.svg'
 
-export default function EditIcon({
+export default function OptionsIcon({
   alt,
   className = '',
   width,
@@ -10,7 +10,7 @@ export default function EditIcon({
     <img
       alt={alt}
       className={`icon ${className}`}
-      src={editIcon}
+      src={optionsIcon}
       width={width}
       height={height}
     />

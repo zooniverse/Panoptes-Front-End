@@ -1,26 +1,24 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import DrawingTask from './types/DrawingTask.jsx';
-import QuestionTask from './types/QuestionTask.jsx';
-import TextTask from './types/TextTask.jsx';
-import UnknownTask from './types/UnknownTask.jsx';
-import DeleteIcon from '../../../../icons/DeleteIcon.jsx';
+import DrawingTask from './types/DrawingTask.jsx'
+import QuestionTask from './types/QuestionTask.jsx'
+import TextTask from './types/TextTask.jsx'
+import UnknownTask from './types/UnknownTask.jsx'
+import DeleteIcon from '../../../../icons/DeleteIcon.jsx'
 
 const taskTypes = {
   'drawing': DrawingTask,
   'multiple': QuestionTask,  // Shared with single answer question task
   'single': QuestionTask,
   'text': TextTask
-};
+}
 
 function EditTaskForm({  // It's not actually a form, but a fieldset that's part of a form.
   deleteTask,
   enforceLimitedBranchingRule,
-  isFirstTaskInStep = true,
   stepHasManyTasks,
   task,
   taskKey,
-  taskIndexInStep,
   updateTask
 }) {
   if (!task || !taskKey) return (
@@ -44,9 +42,9 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
         </button>
       </div>
     </fieldset>
-  );
+  )
 
-  const TaskForm = taskTypes[task.type] || UnknownTask;
+  const TaskForm = taskTypes[task.type] || UnknownTask
   
   return (
     <fieldset
@@ -57,7 +55,6 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
         ? <TaskForm
             deleteTask={deleteTask}
             enforceLimitedBranchingRule={enforceLimitedBranchingRule}
-            isFirstTaskInStep={isFirstTaskInStep}
             stepHasManyTasks={stepHasManyTasks}
             task={task}
             taskKey={taskKey}
@@ -66,7 +63,7 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
         : null
       }
     </fieldset>
-  );
+  )
 }
 
 EditTaskForm.propTypes = {
@@ -74,12 +71,10 @@ EditTaskForm.propTypes = {
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
   }),
-  isFirstTaskInStep: PropTypes.bool,
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
-  taskIndexInStep: PropTypes.number,
   updateTask: PropTypes.func
 }              
 
-export default EditTaskForm;
+export default EditTaskForm

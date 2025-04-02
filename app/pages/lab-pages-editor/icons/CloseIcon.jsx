@@ -1,5 +1,18 @@
-export default function CloseIcon({ alt }) {
+import closeIcon from './assets/close-icon.svg'
+
+export default function CloseIcon({
+  alt,
+  className = '',
+  width,
+  height,
+}) {
   return (
-    <span className="icon fa fa-close" aria-label={alt} role={!!alt ? 'img' : undefined} />
-  );
+    <img
+      alt={alt}
+      className={`icon ${className}`}
+      src={closeIcon}
+      width={width}
+      height={height}
+    />
+  )
 }

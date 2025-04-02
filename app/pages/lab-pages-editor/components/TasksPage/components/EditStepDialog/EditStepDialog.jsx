@@ -1,20 +1,16 @@
-import { forwardRef, useRef, useImperativeHandle } from 'react';
-import PropTypes from 'prop-types';
+import { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react'
+import PropTypes from 'prop-types'
 
-import EditTaskForm from './EditTaskForm.jsx';
-import CloseIcon from '../../../../icons/CloseIcon.jsx';
+import EditTaskForm from './EditTaskForm.jsx'
+import CloseIcon from '../../../../icons/CloseIcon.jsx'
+import OptionsIcon from '../../../../icons/OptionsIcon.jsx'
 
-const taskNames = {
-  'drawing': 'Drawing',
-  'multiple': 'Question',
-  'single': 'Question',
-  'text': 'Text',
-}
-
-const DEFAULT_HANDLER = () => {};
+const DEFAULT_HANDLER = () => {}
 
 function EditStepDialog({
   allTasks = {},
+  copyStep = DEFAULT_HANDLER,
+  deleteStep = DEFAULT_HANDLER,
   deleteTask,
   enforceLimitedBranchingRule,
   onClose = DEFAULT_HANDLER,
@@ -23,53 +19,83 @@ function EditStepDialog({
   stepIndex = -1,
   updateTask
 }, forwardedRef) {
-  const [ stepKey, stepBody ] = step;
-  const taskKeys = stepBody?.taskKeys || [];
-  const editStepDialog = useRef(null);
+  const [ stepKey, stepBody ] = step
+  const [ showOptions, setShowOptions] = useState(false)
+  const taskKeys = stepBody?.taskKeys || []
+  const editStepDialog = useRef(null)
 
   useImperativeHandle(forwardedRef, () => {
     return {
       closeDialog,
       openDialog
-    };
-  });
+    }
+  })
+
+  function onLoad () {
+    setShowOptions(false)
+  }
+  useEffect(onLoad, [stepIndex])
 
   // the dialog is opened via the parent TasksPage.
   function openDialog() {
-    editStepDialog.current?.showModal();
+    editStepDialog.current?.showModal()
   }
 
   function closeDialog() {
-    onClose();
-    editStepDialog.current?.close();
+    onClose()
+    editStepDialog.current?.close()
   }
 
-  function handleClickAddTaskButton() {
-    openNewTaskDialog(stepIndex);
+  function doAddTask() {
+    openNewTaskDialog(stepIndex)
   }
 
-  const firstTask = allTasks?.[taskKeys?.[0]]
-  const taskName = taskNames[firstTask?.type] || '???';
+  function doCopyStep() {
+    copyStep(stepIndex)
+  }
+
+  function doDeleteStep() {
+    deleteStep(stepIndex)
+  }
+
+  function toggleShowOptions () {
+    setShowOptions(!showOptions)
+  }
+
   const stepHasManyTasks = taskKeys?.length > 1
-  const title = stepHasManyTasks
-    ? 'Edit A Multi-Task Page'
-    : `Edit ${taskName} Task`;
 
   return (
     <dialog
-      aria-labelledby="dialog-title"
       className="edit-step"
       ref={editStepDialog}
       /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
     >
-      <div className="dialog-header flex-row">
-        <span className="step-key">{stepKey}</span>
-        <h4 id="dialog-title" className="flex-item">
-          {title}
-        </h4>
+      <div className="dialog-header">
+        <span className="step-label">Page {stepIndex + 1}</span>
+        <span className="spacer" />
+        <span className="edit-step-options">
+          <button
+            aria-label="Options"
+            onClick={toggleShowOptions}
+            type="button"
+          >
+            <OptionsIcon />
+          </button>
+          <ul className="edit-step-options-submenu" hidden={!showOptions}>
+            <li>
+              <button onClick={doDeleteStep} type="button">
+                Delete Page
+              </button>  
+            </li>
+            <li>
+              <button onClick={doCopyStep} type="button">
+                Duplicate Page
+              </button>  
+            </li>
+          </ul>
+        </span>
         <button
           aria-label="Close dialog"
-          className="plain"
           onClick={closeDialog}
           type="button"
         >
@@ -81,44 +107,62 @@ function EditStepDialog({
         onSubmit={onSubmit}
       >
         {taskKeys.map((taskKey, index) => {
-          const task = allTasks[taskKey];
+          const task = allTasks[taskKey]
           return (
             <EditTaskForm
               key={`editTaskForm-${taskKey}`}
               deleteTask={deleteTask}
               enforceLimitedBranchingRule={enforceLimitedBranchingRule}
-              isFirstTaskInStep={index === 0}
               stepHasManyTasks={stepHasManyTasks}
               task={task}
               taskKey={taskKey}
-              taskIndexInStep={index}
               updateTask={updateTask}
             />
-          );
+          )
         })}
       </form>
-      <div className="dialog-footer flex-row">
+      <div className="dialog-footer">
         <button
-          className="big flex-item"
-          onClick={handleClickAddTaskButton}
+          className="button add-task-button"
+          onClick={doAddTask}
           type="button"
         >
-          Add another Task to this Page
+          Add another task to this page
         </button>
         <button
-          className="big done"
+          className="button done-button"
           onClick={closeDialog}
           type="button"
         >
           Done
         </button>
       </div>
+      {/*
+      <div className="dialog-footer">
+        <button
+          className="button cancel-button"
+          onClick={doAddTask}
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          className="button apply-button"
+          onClick={closeDialog}
+          type="button"
+        >
+          Apply
+        </button>
+      </div>
+      */}
     </dialog>
-  );
+  )
 }
 
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
+  copyStep:PropTypes.func,
+  deleteStep: PropTypes.func,
   deleteTask: PropTypes.func,
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
@@ -127,11 +171,11 @@ EditStepDialog.propTypes = {
   step: PropTypes.object,
   stepIndex: PropTypes.number,
   updateTask: PropTypes.func
-};
-
-function onSubmit(e) {
-  e.preventDefault();
-  return false;
 }
 
-export default forwardRef(EditStepDialog);
+function onSubmit(e) {
+  e.preventDefault()
+  return false
+}
+
+export default forwardRef(EditStepDialog)

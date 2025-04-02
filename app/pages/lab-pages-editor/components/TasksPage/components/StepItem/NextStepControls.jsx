@@ -61,7 +61,7 @@ export default function NextStepControls({
     );
   } else {
     return (
-      <div className="task-inbetween">
+      <div className="decorated-prompt">
         <span className="decoration-line" />
         <NextStepIcon className="next-step-icon" />
         <span className="decoration-line" />

@@ -5,21 +5,7 @@ import DrawingToolIcon from '../../../../icons/DrawingToolIcon.jsx';
 import TaskIcon from '../../../../icons/TaskIcon.jsx';
 import BranchingNextControls from './BranchingNextControls.jsx';
 import { Markdown } from 'markdownz'
-
-const TaskTypes = {
-  'drawing': {
-    name: 'Drawing Task',
-  },
-  'multiple': {  // Multiple question
-    name: 'Question Task',
-  },
-  'single': {  // Single question
-    name: 'Question Task',
-  },
-  'text': {
-    name: 'Text Task',
-  }
-};
+import { TaskTypes } from '../../../../helpers/constants.js'
 
 const DEFAULT_HANDLER = () => {};
 
@@ -54,7 +40,7 @@ function TaskItem({
       <div className="task-general-details">
         <span className="task-icon">
           <TaskIcon
-            alt={TaskTypes[task.type].name || 'Unknown Task Type'}
+            alt={TaskTypes[task.type]?.name || 'Unknown Task Type'}
             type={task.type}
           />
         </span>
