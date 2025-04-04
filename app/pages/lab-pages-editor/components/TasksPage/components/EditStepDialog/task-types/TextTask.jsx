@@ -101,7 +101,7 @@ function TextTask({
             Text Modifiers
           </label>
         </div>
-        <div>
+        <div className="tags-array">
           {TEXT_TAGS.map(textTag => (
             <span
               className="task-field-checkbox-set"
