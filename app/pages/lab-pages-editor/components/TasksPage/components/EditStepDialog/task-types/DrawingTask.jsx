@@ -148,7 +148,7 @@ function DrawingTask({
     return false
   }
 
-  function editTool(e) {
+  function editTool(e, commit = true) {
     const index = e?.target?.dataset?.index
     const field = e?.target?.dataset?.field
     const value = e?.target?.value
@@ -175,7 +175,11 @@ function DrawingTask({
 
     const newTools = tools.with(index, tool)
     setTools(newTools)
-    update({ tools: newTools })
+    commit && update({ tools: newTools })
+  }
+
+  function editToolWithoutCommit(e) {
+    editTool(e, false)
   }
 
   function deleteTool(e) {
@@ -256,7 +260,8 @@ function DrawingTask({
                   <div>
                     <input
                       id={`task-${taskKey}-tool-${index}-label`}
-                      onChange={editTool}
+                      onBlur={editTool}
+                      onChange={editToolWithoutCommit}
                       type="text"
                       value={label}
                       data-index={index}
