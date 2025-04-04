@@ -57,7 +57,9 @@ function TextTask({
     if (textTags.includes(textTag)) {
       newTextTags = textTags.filter(t => t !== textTag)
     } else {
-      newTextTags = textTags.slice().push(textTag).sort()
+      newTextTags = textTags.slice()
+      newTextTags.push(textTag)
+      newTextTags.sort()
     }
     setTextTags(newTextTags)
     update({ textTags: newTextTags })
