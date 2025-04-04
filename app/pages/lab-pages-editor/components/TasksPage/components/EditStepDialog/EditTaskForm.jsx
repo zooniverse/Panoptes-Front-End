@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 
-import DrawingTask from './types/DrawingTask.jsx'
-import QuestionTask from './types/QuestionTask.jsx'
-import TextTask from './types/TextTask.jsx'
-import UnknownTask from './types/UnknownTask.jsx'
+import DrawingTask from './task-types/DrawingTask.jsx'
+import QuestionTask from './task-types/QuestionTask.jsx'
+import TextTask from './task-types/TextTask.jsx'
+import UnknownTask from './task-types/UnknownTask.jsx'
+
 import DeleteIcon from '../../../../icons/DeleteIcon.jsx'
 
 const taskTypes = {
