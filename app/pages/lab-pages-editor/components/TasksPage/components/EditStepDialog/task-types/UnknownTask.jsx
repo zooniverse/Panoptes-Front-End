@@ -1,37 +1,33 @@
-import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
+import TaskHeader from '../components/TaskHeader.jsx'
+import TaskInstructionField from '../components/TaskInstructionField.jsx'
 
-const DEFAULT_HANDLER = () => {};
+const DEFAULT_HANDLER = () => {}
 
 export default function UnknownTask({
   deleteTask = DEFAULT_HANDLER,
   task,
   taskKey
 }) {
-  function doDelete() {
-    deleteTask(taskKey);
-  }
+  const title = 'Unknown Task'
 
   return (
-    <div className="unknown-task">
-      <div className="task-field">
-        <span className="big">
-          Unknown Task
-        </span>
-        <div className="flex-row">
-          <span className="task-key">{taskKey}</span>
-          <span className="flex-item">
-            Unknown task type: {task?.type}
-          </span>
-          <button
-            aria-label={`Delete Task ${taskKey}`}
-            className="big"
-            onClick={doDelete}
-            type="button"
-          >
-            <DeleteIcon />
-          </button>
-        </div>
-      </div>
+    <div className="text-task">
+      <TaskHeader
+        task={task}
+        taskKey={taskKey}
+        title={title}
+      >
+        <p>We're sorry, but the task type "{task?.type}" isn't recognised by the editor. Please contact the Zooniverse team to see if they can help figure out what's wrong.</p>
+      </TaskHeader>
+
+      <TaskInstructionField
+        deleteTask={deleteTask}
+        setValue={DEFAULT_HANDLER}
+        showDeleteButton={true}
+        taskKey={taskKey}
+        update={DEFAULT_HANDLER}
+        value={`ERROR: unknown task type "${task?.type}"`}
+      />
     </div>
-  );
+  )
 }
