@@ -642,13 +642,15 @@ $fontWeightBoldPlus = 700
             > *
               align-self: start
           
-          .task-field-checkbox-set 
+          .task-field-checkbox-set
+            align-items: center
             color: #5C5C5C
+            display: flex
             font-size: 12px
             font-style: normal
             font-weight: 400
             line-height: normal
-            gap: 10px
+            gap: 5px
 
             > *
               vertical-align: middle
@@ -731,14 +733,21 @@ $fontWeightBoldPlus = 700
               margin: $sizeSM 0
               padding: 0
           
+          .text-task
+            .tags-array
+              display: flex
+              flex-wrap: wrap
+              gap: 10px
+
+              .task-field-checkbox-set
+                font-size: 16px
+                min-width: 20em
+          
           .drawing-task
             ul
               list-style: none
               margin: 0
               padding: 0
-            
-            li
-              // TODO
           
           .task-tool
             border-radius: 4px
