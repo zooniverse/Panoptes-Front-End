@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
@@ -98,9 +98,20 @@ function DrawingTask({
   const [ prevMarks, setPrevMarks ] = useState(!!task?.enableHidePrevMarks)
   const title = 'Drawing Task'
 
-  // Update is usually called manually onBlur, after user input is complete.
+  // update() gets the latest Task data and prepares for all the changes to be
+  // committed. There are two ways the latest Task data is update()-ed:
+  // 1. for data fields with onBlur (e.g. "Instructions" text input), we can
+  //    pull the values from the React state. (i.e. the useState() value)
+  // 2. for everything else (e.g. "is Required" checkbox), the
+  //    optionalStateOverrides must be set for that data field 
+  //    (e.g. optionalStateOverrides = { required: true })
+  // This is because React state changes only really register _before_ onBlur,
+  // but _after_ onChange.
+  // Not to be confused with updateTask(), which actually performs the commit,
+  // and which update() calls.
   function update(optionalStateOverrides) {
-    const _tools = optionalStateOverrides?.tools || tools
+    console.log('+++ Update! nyoop nyoop')
+    const _tools = optionalStateOverrides?.tools ?? tools
     // const nonEmptyTools = _tools.filter(({ label }) => label.trim().length > 0)
 
     const newTask = {
@@ -110,9 +121,15 @@ function DrawingTask({
       help,
       instruction,
       required: false,  // On PFE/FEM Lab, this can't be changed.
-      enableHidePrevMarks: prevMarks
+      enableHidePrevMarks: optionalStateOverrides?.prevMarks ?? prevMarks
     }
     updateTask(taskKey, newTask)
+  }
+
+  function togglePrevMarks(e) {
+    const val = !!e?.currentTarget?.checked
+    setPrevMarks(val)
+    update({ prevMarks: val })
   }
 
   function addTool(e) {
@@ -126,6 +143,7 @@ function DrawingTask({
       type: 'point'
     }]
     setTools(newTools)
+    update({ tools: newTools })
 
     e.preventDefault()
     return false
@@ -156,7 +174,9 @@ function DrawingTask({
         break
     }
 
-    setTools(tools.with(index, tool))
+    const newTools = tools.with(index, tool)
+    setTools(newTools)
+    update({ tools: newTools })
   }
 
   function deleteTool(e) {
@@ -166,7 +186,7 @@ function DrawingTask({
     const newTools = tools.slice()  // Copy tools.
     newTools.splice(index, 1)
     setTools(newTools)
-    update({ tools: newTools })  // Use optional state override, since setTools() won't reflect new values in this step of the lifecycle.
+    update({ tools: newTools })
     
     e.preventDefault()
     return false
@@ -180,7 +200,7 @@ function DrawingTask({
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  useEffect(update, [tools, prevMarks])
+  // useEffect(update, [tools, prevMarks])
 
   // TODO: DEBOUNCE FOR tools UPDATE, since typing into the Tool Name/Label causes way too many updates!
 
@@ -214,7 +234,7 @@ function DrawingTask({
               id={`task-${taskKey}-prevMarks`}
               type="checkbox"
               checked={prevMarks}
-              onChange={(e) => { setPrevMarks(!!e?.target?.checked) }}
+              onChange={togglePrevMarks}
             />
             <label htmlFor={`task-${taskKey}-prevMarks`}>
               Allow hiding of marks
