@@ -6,6 +6,7 @@ import TaskInstructionField from '../components/TaskInstructionField.jsx'
 import TaskHelpField from '../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {}
+const TEXT_TAGS = ['deletion', 'insertion', 'unclear']
 
 function TextTask({
   deleteTask = DEFAULT_HANDLER,
@@ -17,6 +18,7 @@ function TextTask({
   const [ help, setHelp ] = useState(task?.help || '')
   const [ instruction, setInstruction ] = useState(task?.instruction || '')
   const [ required, setRequired ] = useState(!!task?.required)
+  const [ textTags, setTextTags ] = useState(Array.isArray(task?.text_tags) ? task.text_tags : [])
   const title = 'Text Task'
 
   // update() gets the latest Task data and prepares for all the changes to be
@@ -35,7 +37,8 @@ function TextTask({
       ...task,
       help,
       instruction,
-      required: optionalStateOverrides?.required ?? required
+      required: optionalStateOverrides?.required ?? required,
+      text_tags: optionalStateOverrides?.textTags ?? textTags
     }
     updateTask(taskKey, newTask)
   }
@@ -44,6 +47,20 @@ function TextTask({
     const val = !!e?.currentTarget?.checked
     setRequired(val)
     update({ required: val })
+  }
+
+  function toggleTextTag(e) {
+    const textTag = e?.currentTarget?.dataset?.texttag
+    if (!textTag) return
+
+    let newTextTags = []
+    if (textTags.includes(textTag)) {
+      newTextTags = textTags.filter(t => t !== textTag)
+    } else {
+      newTextTags = textTags.slice().push(textTag).sort()
+    }
+    setTextTags(newTextTags)
+    update({ textTags: newTextTags })
   }
 
   return (
@@ -77,6 +94,36 @@ function TextTask({
           </label>
         </span>
       </TaskInstructionField>
+
+      <div className="task-field">
+        <div className="task-field-subheader">
+          <label className="small-label">
+            Text Modifiers
+          </label>
+        </div>
+        <div>
+          {TEXT_TAGS.map(textTag => (
+            <span
+              className="task-field-checkbox-set"
+              key={`task-${taskKey}-textTag-${textTag}`}
+            >
+              <input
+                checked={textTags.includes(textTag)}
+                data-texttag={textTag}
+                id={`task-${taskKey}-textTag-${textTag}`}
+                onChange={toggleTextTag}
+                type="checkbox"
+              />
+              <label
+                htmlFor={`task-${taskKey}-textTag-${textTag}`}
+                style={{ textTransform: 'capitalize' }}
+              >
+                {textTag}
+              </label>
+            </span>
+          ))}
+        </div>
+      </div>
 
       <TaskHelpField
         help={help}
