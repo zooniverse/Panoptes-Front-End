@@ -9,6 +9,20 @@ export default function UnknownTask({
   taskKey
 }) {
   const title = 'Unknown Task'
+  let shortError = 'ERROR'
+  let longError = 'ERROR'
+
+  // Alright, what went wrong?
+  if (!taskKey) {
+    shortError = `ERROR: somehow, this task doesn't have a corresponding key.`
+    longError = `ERROR: somehow, this task doesn't have a corresponding key. This isn't a user error - something must have gone very, very wrong in the code.`
+  } else if (!task) {
+    shortError = `ERROR: the task ${taskKey} doesn't seem to exist in the Workflow.`
+    longError = `ERROR: the task ${taskKey} doesn't seem to exist in the Workflow. This could happen if a Workflow resource was manually edited (e.g. via CLI), such that workflow.steps[X] contains task Y, but workflow.tasks doesn't have the corresponding task Y.`
+  } else {
+    shortError = `ERROR: the task type "${task?.type}" might not be supported.`
+    longError = `ERROR: the task type "${task?.type}" might not be supported. This new editor doesn't work with all previously supported Task types, particularly experimental one-off Tasks. Alternatively, if the Workflow resource was manually edited (e.g. via CLI), the type might have been misspelled.`
+  }
 
   return (
     <div className="text-task">
@@ -17,16 +31,15 @@ export default function UnknownTask({
         taskKey={taskKey}
         title={title}
       >
-        <p>We're sorry, but the task type "{task?.type}" isn't recognised by the editor. Please contact the Zooniverse team to see if they can help figure out what's wrong.</p>
+        <p>{longError}</p>
+        <p>Please contact the Zooniverse team to see if they can help fix the issue.</p>
       </TaskHeader>
 
       <TaskInstructionField
         deleteTask={deleteTask}
-        setValue={DEFAULT_HANDLER}
         showDeleteButton={true}
         taskKey={taskKey}
-        update={DEFAULT_HANDLER}
-        value={`ERROR: unknown task type "${task?.type}"`}
+        value={shortError}
       />
     </div>
   )

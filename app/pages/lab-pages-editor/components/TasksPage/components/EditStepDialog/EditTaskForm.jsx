@@ -5,8 +5,6 @@ import QuestionTask from './task-types/QuestionTask.jsx'
 import TextTask from './task-types/TextTask.jsx'
 import UnknownTask from './task-types/UnknownTask.jsx'
 
-import DeleteIcon from '../../../../icons/DeleteIcon.jsx'
-
 const taskTypes = {
   'drawing': DrawingTask,
   'multiple': QuestionTask,  // Shared with single answer question task
@@ -22,30 +20,7 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
   taskKey,
   updateTask
 }) {
-  if (!task || !taskKey) return (
-    <fieldset
-      className="edit-task-form"
-    >
-      <div className="flex-row">
-        <span className="task-key">{taskKey || '???'}</span>
-        <p className="flex-item">
-          ERROR: could not render Task
-          {!task && ' (it doesn\'t exist in workflow.tasks)'}
-          {task?.type && ` of type: ${task.type}`}
-        </p>
-        <button
-          aria-label={`Delete Task ${taskKey || '???'}`}
-          className="big"
-          onClick={() => { deleteTask(taskKey) }}
-          type="button"
-        >
-          <DeleteIcon />
-        </button>
-      </div>
-    </fieldset>
-  )
-
-  const TaskForm = taskTypes[task.type] || UnknownTask
+  const TaskForm = taskTypes[task?.type] || UnknownTask
   
   return (
     <fieldset
