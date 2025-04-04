@@ -25,20 +25,42 @@ function QuestionTask({
   const [ isMultiple, setIsMultiple ] = useState(task?.type === 'multiple')
   const title = 'Question Task'
 
-  // Update is usually called manually onBlur, after user input is complete.
+  // update() gets the latest Task data and prepares for all the changes to be
+  // committed. There are two ways the latest Task data is update()-ed:
+  // 1. for data fields with onBlur (e.g. "Instructions" text input), we can
+  //    pull the values from the React state. (i.e. the useState() value)
+  // 2. for everything else (e.g. "is Required" checkbox), the
+  //    optionalStateOverrides must be set for that data field 
+  //    (e.g. optionalStateOverrides = { required: true })
+  // This is because React state changes only really register _before_ onBlur,
+  // but _after_ onChange.
+  // Not to be confused with updateTask(), which actually performs the commit,
+  // and which update() calls.
   function update(optionalStateOverrides) {
     const _answers = optionalStateOverrides?.answers || answers
     const nonEmptyAnswers = _answers.filter(({ label }) => label.trim().length > 0)
 
     const newTask = {
       ...task,
-      type: (!isMultiple) ? 'single' : 'multiple',
+      type: (optionalStateOverrides?.isMultiple ?? isMultiple) ? 'multiple' : 'single',
       answers: nonEmptyAnswers,
       help,
       question,
-      required
+      required: optionalStateOverrides?.required ?? required
     }
     updateTask(taskKey, newTask)
+  }
+
+  function toggleRequired(e) {
+    const val = !!e?.currentTarget?.checked
+    setRequired(val)
+    update({ required: val })
+  }
+
+  function toggleIsMultiple(e) {
+    const val = !!e?.currentTarget?.checked
+    setIsMultiple(val)
+    update({ isMultiple: val })
   }
 
   function addAnswer(e) {
@@ -72,11 +94,6 @@ function QuestionTask({
     return false
   }
 
-  // For inputs that don't have onBlur, update triggers automagically.
-  // (You can't call update() in the onChange() right after setStateValue().)
-  // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  useEffect(update, [required, isMultiple])
-
   return (
     <div className="question-task task">
       <TaskHeader
@@ -109,9 +126,7 @@ function QuestionTask({
               id={`task-${taskKey}-required`}
               type="checkbox"
               checked={required}
-              onChange={(e) => {
-                setRequired(!!e?.target?.checked)
-              }}
+              onChange={toggleRequired}
             />
             <label htmlFor={`task-${taskKey}-required`}>
               Required
@@ -123,9 +138,7 @@ function QuestionTask({
               type="checkbox"
               checked={isMultiple}
               disabled={enforceLimitedBranchingRule?.stepHasBranch && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
-              onChange={(e) => {
-                setIsMultiple(!!e?.target?.checked)
-              }}
+              onChange={toggleIsMultiple}
             />
             <label htmlFor={`task-${taskKey}-multiple`}>
               Allow multiple
