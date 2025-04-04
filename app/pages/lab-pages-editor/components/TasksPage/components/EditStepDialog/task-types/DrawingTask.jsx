@@ -110,7 +110,6 @@ function DrawingTask({
   // Not to be confused with updateTask(), which actually performs the commit,
   // and which update() calls.
   function update(optionalStateOverrides) {
-    console.log('+++ Update! nyoop nyoop')
     const _tools = optionalStateOverrides?.tools ?? tools
     // const nonEmptyTools = _tools.filter(({ label }) => label.trim().length > 0)
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
