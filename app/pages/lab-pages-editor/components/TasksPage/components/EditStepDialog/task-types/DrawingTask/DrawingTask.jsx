@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import AddItemIcon from '../../../../../icons/AddItemIcon.jsx'
-import DrawingToolIcon from '../../../../../icons/DrawingToolIcon.jsx'
-import DeleteIcon from '../../../../../icons/DeleteIcon.jsx'
+import AddItemIcon from '../../../../../../icons/AddItemIcon.jsx'
+import DrawingToolIcon from '../../../../../../icons/DrawingToolIcon.jsx'
+import DeleteIcon from '../../../../../../icons/DeleteIcon.jsx'
 
-import TaskHeader from '../components/TaskHeader.jsx'
-import TaskInstructionField from '../components/TaskInstructionField.jsx'
-import TaskHelpField from '../components/TaskHelpField.jsx'
+import TaskHeader from '../../components/TaskHeader.jsx'
+import TaskInstructionField from '../../components/TaskInstructionField.jsx'
+import TaskHelpField from '../../components/TaskHelpField.jsx'
 
 const DEFAULT_HANDLER = () => {}
 

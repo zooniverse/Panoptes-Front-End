@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import DrawingTask from './task-types/DrawingTask.jsx'
+import DrawingTask from './task-types/DrawingTask/index.jsx'
 import QuestionTask from './task-types/QuestionTask.jsx'
 import TextTask from './task-types/TextTask.jsx'
 import UnknownTask from './task-types/UnknownTask.jsx'
