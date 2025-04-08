@@ -100,7 +100,8 @@ export const SLUGS = [
   'rowan-aspire/the-wild-southwest',
   'sharkspy/shark-spy',
   'jordan-pierce/click-a-coral',
-  'sandiegozooglobal/wildwatch-burrowing-owl'
+  'sandiegozooglobal/wildwatch-burrowing-owl',
+  'mschwamb/planet-hunters-ngts'
 ];
 
 export function usesMonorepo(slug) {
