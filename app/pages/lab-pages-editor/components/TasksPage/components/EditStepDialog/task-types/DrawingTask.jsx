@@ -327,8 +327,10 @@ function DrawingTask({
                   <input
                     id={`task-${taskKey}-tool-${index}-min`}
                     inputMode="numeric"
+                    max={max || undefined}
                     min="0"
-                    onChange={editTool}
+                    onBlur={editTool}
+                    onChange={editToolWithoutCommit}
                     placeholder="0"
                     type="number"
                     value={(min !== undefined) ? min : ''}
@@ -342,7 +344,8 @@ function DrawingTask({
                     id={`task-${taskKey}-tool-${index}-max`}
                     inputMode="numeric"
                     min={min || 0}
-                    onChange={editTool}
+                    onBlur={editTool}
+                    onChange={editToolWithoutCommit}
                     placeholder="∞"
                     type="number"
                     value={(max !== undefined) ? max : ''}
