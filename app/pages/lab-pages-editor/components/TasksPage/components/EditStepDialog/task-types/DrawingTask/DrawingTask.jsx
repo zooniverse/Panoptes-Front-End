@@ -200,13 +200,6 @@ function DrawingTask({
     setShowHelpField(!showHelpField)
   }
 
-  // For inputs that don't have onBlur, update triggers automagically.
-  // (You can't call update() in the onChange() right after setStateValue().)
-  // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
-  // useEffect(update, [tools, prevMarks])
-
-  // TODO: DEBOUNCE FOR tools UPDATE, since typing into the Tool Name/Label causes way too many updates!
-
   return (
     <div className="drawing-task">
       <TaskHeader
