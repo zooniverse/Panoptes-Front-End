@@ -87,10 +87,17 @@ export function TalkLink({ disabled, onClick, projectSlug, subjectId, theme, tra
     );
   }
 
+  function onRightClick(e) {
+    setTimeout(() => {
+      onClick(e);
+    }, 100);
+  }
+
   return (
     <ThemeProvider theme={{ mode: theme }}>
       <StyledTalkLink
         onClick={onClick}
+        onContextMenu={onRightClick}
         to={`/projects/${projectSlug}/talk/subjects/${subjectId}`}
       >
         <Translate content={translateContent} />
