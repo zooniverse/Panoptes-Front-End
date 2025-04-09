@@ -90,7 +90,7 @@ export function TalkLink({ disabled, onClick, projectSlug, subjectId, theme, tra
   function onRightClick(e) {
     setTimeout(() => {
       onClick(e);
-    }, 100);
+    }, 1500);
   }
 
   return (
