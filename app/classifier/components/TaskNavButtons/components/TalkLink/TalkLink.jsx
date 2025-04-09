@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
-import { darken, lighten } from 'polished';
+import { darken } from 'polished';
 import Translate from 'react-translate-component';
-import { pxToRem, zooTheme } from '../../../../../theme';
+import { zooTheme } from '../../../../../theme';
 
 // These hasn't been moved into the zoo theme because the button might go away
 const TALK_LINK_BLUE = '#43bbfd';
