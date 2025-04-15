@@ -31,6 +31,7 @@ function TaskHeader({
         <button
           className="info-button"
           onClick={toggleShowInfoPanel}
+          type="button"
         >
           See more {showInfoPanel? <CollapseIcon /> : <ExpandIcon />}
         </button>
