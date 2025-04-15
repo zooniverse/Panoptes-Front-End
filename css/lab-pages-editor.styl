@@ -568,6 +568,17 @@ $fontWeightBoldPlus = 700
               button
                 width: 100%
                 height: auto
+                padding: 5px 10px
+                border-radius: 4px
+
+                &:hover
+                &:focus
+                  background: $lightYellow
+                  color: $yellow
+                
+                &:active
+                  background: $yellow
+                  color: $orange
       
         fieldset.edit-task-form
           // Yup, the form is actually a fieldset, so maybe strip out the default values
