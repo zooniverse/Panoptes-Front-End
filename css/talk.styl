@@ -115,6 +115,9 @@
 
   .polaroid-image
     max-width: 640px
+  
+  .polaroid-image.volumetric
+    max-width: 974px
 
   .talk-list-content
     display: flex
@@ -403,6 +406,19 @@
     .talk-discussion-preview-author
       font-size: 0.7em
       margin-top: 0.3em
+    
+  .subject-preview-volumetric
+    .planes-container
+        display: none
+      .volume-container
+        border-radius: 0
+        height: inherit
+        min-width: inherit
+        overflow: hidden
+        padding: 0 !important
+
+        .volume-controls
+          display: none
 
   .talk-discussion
     .talk-comment-box
