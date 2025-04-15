@@ -76,6 +76,7 @@ $fontWeightBoldPlus = 700
     flex: 0 0 auto
     width: $fontSizeM
     height: $fontSizeM
+    cursor: pointer
   
   textarea
     border: 1.5px solid $grey1
@@ -156,8 +157,8 @@ $fontWeightBoldPlus = 700
       color: $white
   
   .step-label
-    border-radius: 8px 0px 16px 0px;
-    background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow;
+    border-radius: 8px 0px 16px 0px
+    background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow
     color: $black
     font-size: 10px
     font-weight: 500
@@ -397,7 +398,8 @@ $fontWeightBoldPlus = 700
       p
         color: $grey1
     
-    .task-inbetween
+    // An accented button, e.g. "Add a Choice", decorated with yellow lines to the left & right
+    .decorated-prompt
       display: flex
       align-items: center
 
@@ -410,31 +412,33 @@ $fontWeightBoldPlus = 700
         color: $orange
         margin: 0 10px
 
-    .add-task-button
-      align-items: center
-      background: none
-      border: none
-      color: $orange
-      display: flex
-      font-size: 18px
-      margin: 0 auto
-      padding: 10px
-      text-transform: uppercase
+      button
+        align-items: center
+        background: none
+        border: none
+        color: $orange
+        display: flex
+        font-size: 18px
+        margin: 0 auto
+        padding: 10px
+        text-transform: uppercase
 
-      &:hover
-        color: $yellow
-        text-shadow: $yellow 1px 0 10px
-      
-      &:active
-        color: $darkOrange
-      
-      .icon
-        margin-left: 10px
+        &:hover
+          color: $yellow
+          text-shadow: $yellow 1px 0 10px
+        
+        &:active
+          color: $darkOrange
+        
+        .icon
+          margin-left: 10px
 
+    // Dialog for adding new tasks, and editing pages.
     dialog
-      border: 1px solid $grey1
-      border-radius: $sizeS
-      box-shadow: 1px 1px 6px 0px $shadowColour
+      border: none
+      border-radius: 8px
+      background: $white
+      box-shadow: 1px 1px 6px 0px rgba(0, 0, 0, 0.50)
       padding: 0
       width: 800px
       max-width: 90vw
@@ -442,30 +446,71 @@ $fontWeightBoldPlus = 700
       &::backdrop
         background: $backdropColour
       
-      button.big
-        border: 3px solid $grey1
-        font-size: $fontSizeM
-        padding: $sizeS $sizeM
-        box-shadow: none
-        text-transform: uppercase
-
-        &.done
-          border: 3px solid $teal
-          min-width: 33%
-          padding: $sizeS $sizeXL
-        
-        &[disabled]
-          color: $grey1
-      
       .dialog-header
-        background: $teal
-        color: $white
-        padding: $sizeXS $sizeM
-        text-transform: uppercase
+        flex-row()
 
         button
-          color: $white
+          display: flex
+          align-items: center
+          justify-content: center
+          padding: 0
+          width: 40px
+          height: 40px
+          background: none
+          border: none
+
+          .icon
+            display: block
       
+      .dialog-body
+        // null
+
+      .dialog-footer
+        display: flex
+        flex-direction: row
+        gap: 10px
+        padding: 10px 20px 30px 20px
+
+        button
+          flex: 1 1 50%
+          color: $black
+          background: $white
+          border: 0.5px solid $grey1
+          font-size: 16px
+          font-weight: 400
+          padding: 10px 20px
+          text-transform: uppercase
+
+          &:hover
+          &.button:hover
+            color: $yellow
+            border: 0.5px solid $yellow
+
+          &:active
+          &.button:active
+            color: $orange
+            background: linear-gradient(180deg, #F6D885 0%, #F0B200 100%)
+          
+          &.add-task-button
+            color: $grey3
+            text-transform: none
+
+          &.done-button
+            font-weight: 600
+
+            &:hover
+              background: linear-gradient(180deg, #FFF 0%, #F6D885 100%), #F6D885
+
+          &.apply-button
+            font-weight: 600
+            background: linear-gradient(180deg, #F0B200 0%, #D47811 100%), #D47811
+
+            &:hover
+              background: $lightYellow
+
+      // Dialog type: Add New Task
+      // -----------------------------------------------------------------------
+
       &.new-task
         .dialog-body
           padding: $sizeS $sizeL
@@ -486,17 +531,58 @@ $fontWeightBoldPlus = 700
 
             .fa
               font-size: $fontSizeXL
-        
-      &.edit-step
-        background: $white
       
-        .dialog-body
-          max-height: 70vh
-          overflow: auto
+      // Dialog type: Edit Step
+      // -----------------------------------------------------------------------
+
+      &.edit-step
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white
+        
+        .dialog-header
+          .step-label
+            align-self: flex-start
+            border-top-left-radius: 0px  // Make flush to container
+          
+          .edit-step-options
+            // Layout: anchor for popup
+            position: relative
+
+            .edit-step-options-submenu
+              // Layout: popup
+              position: absolute
+              top: 40px
+              right: 0
+              // Presentation
+              border-radius: 8px
+              background: $white
+              box-shadow: 1px 1px 6px 0px rgba(0, 0, 0, 0.50)
+              list-style: none
+              margin: 0
+              padding: 5px 10px
+              width: 140px
+      
+              li
+                padding: 0
+                margin: 0
+
+              button
+                width: 100%
+                height: auto
+                padding: 5px 10px
+                border-radius: 4px
+
+                &:hover
+                &:focus
+                  background: $lightYellow
+                  color: $yellow
+                
+                &:active
+                  background: $yellow
+                  color: $orange
       
         fieldset.edit-task-form
           // Yup, the form is actually a fieldset, so maybe strip out the default values
-          padding: $sizeM $sizeL
+          padding: 20px
           margin: 0
           border-bottom: none
           border-left: none
@@ -505,43 +591,135 @@ $fontWeightBoldPlus = 700
 
           &:first-child
             border-top: none
+
+          // Common Elements for Tasks
+          // -------------------------------------------------------------------
           
           legend
             display: none  // TODO: reconsider design
+          
+          h5  // Task title, e.g. "Question Task"
+            color: #404040
+            leading-trim: both
+            text-edge: cap
+            font-family: Karla
+            font-size: 18px
+            font-style: normal
+            font-weight: 500
+            line-height: normal
+            letter-spacing: 0.9px
+            text-transform: uppercase
 
-          .input-row
-            margin-bottom: $sizeSM
+          .task-header  // General details the Task, specifying the Task ID, Task Type, etc
+            flex-row()
+            margin-bottom: 20px
+
+          .info-button
+            background: transparent
+            border: none
+            color: #A6A7A9
+            font-size: 12px
+            font-style: normal
+            font-weight: 300
+            line-height: normal
           
-          label.big, span.big
-            display: block
-            font-weight: $fontWeightBold
-            font-size: $fontSizeL
-            text-transform: uppercase
+          .info-panel
+            color: $grey3
+            font-size: 16px
+            font-style: normal
+            font-weight: 400
+            line-height: normal
+            margin-bottom: 20px
+
+          .task-field  // Specific field for a Task, e.g. the question field, or choices field.
+            margin-bottom: 20px
           
-          label.medium
-            display: block
-            font-size: $fontSizeM
-            text-transform: uppercase
+          .task-field-subheader
+          .task-field-row
+            flex-row()
+            margin-bottom: 10px
+
+            > *
+              align-self: start
           
-          label.narrow, span.narrow
+          .task-field-checkbox-set 
+            color: #5C5C5C
+            font-size: 12px
+            font-style: normal
+            font-weight: 400
+            line-height: normal
+            gap: 10px
+
             > *
               vertical-align: middle
+          
+          label[for]
+            cursor: pointer
+          
+          .big-label  // Used to identify field task-fields, e.g. the label "Instructions" for the Instructions field
+            color: $nearBlack
+            font-size: 16px
+            font-style: normal
+            font-weight: 500
+            line-height: normal
+            letter-spacing: 0.8px
+            text-transform: uppercase
 
-          input[type=text]
-          input[type=checkbox]
-          textarea
-            box-shadow: 1px 1px 4px 0px #00000040 inset
+          .small-label  // Small labels, mostly used for the "Help" field.
+            color: $nearBlack
+            font-family: Karla
+            font-size: 12px
+            font-style: normal
+            font-weight: 400
+            line-height: normal
+            text-transform: uppercase
           
           input[type=text]
           textarea
-            background: $grey6
-            border-radius: $sizeXS
-            color: $black
-            padding: $sizeS $sizeM
+            border-radius: 4px
+            border: 0.5px solid $grey1
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.60) 100%), $white
+            box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25) inset
             width: 100%
+            color: $black
+            font-size: 16px
+            font-style: normal
+            font-weight: 400
+            line-height: normal
           
+          input[type=text]
+            height: 40px
+            padding: 9px 20px
+
           textarea
-            min-height: 8em
+            min-height: 3em
+            padding: 9px 10px
+
+          input[type=checkbox]
+            border-radius: 2px
+            border: 2px solid $grey1
+            background: $white
+
+            &:checked
+              accent-color: $yellow
+              border: 2px solid $white
+              color: $white
+              box-shadow: 0 0 4px 0 $yellow
+          
+          .delete-button
+            background: $white
+            border: 0.5px solid $grey1
+            border-radius: 4px
+            box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+            display: block
+            flex: 0 0 auto
+            width: 40px
+            height: 40px
+            padding: 0
+            margin: 0
+          
+          // Specific Tasks
+          // -------------------------------------------------------------------
           
           .question-task
             ul
@@ -560,60 +738,80 @@ $fontWeightBoldPlus = 700
               padding: 0
             
             li
-              background: $grey6
-              border: 1px solid $darkGreen
-              border-radius: $sizeXS
-              margin: $sizeSM 0
-              padding: $sizeM
+              // TODO
+          
+          .task-tool
+            border-radius: 4px
+            border-top: 3px solid $grey1
+            background: linear-gradient(0deg, rgba(166, 167, 169, 0.05) 0%, rgba(255, 255, 255, 0.05) 2.42%, rgba(255, 255, 255, 0.05) 98.03%, rgba(166, 167, 169, 0.05) 100%), #FFF
+            box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+            padding: 10px 20px 20px 20px
+
+            label
+              display: block
+              color: $grey3
+              font-size: 12px
+              font-style: normal
+              font-weight: 500
+              line-height: normal
+              margin-bottom: 5px
+            
+            select, input
+              flex: 1 1 auto
+              width: 100%
+              color: $black
+              font-size: 16px
+              font-style: normal
+              font-weight: 400
+              line-height: normal
+
+              &[data-field=subtask]  // TEMP / TEST
+                color: $grey3
+                background: $grey6
+            
+            .preview-box
+              border: 1px solid $black
+              flex: 0 0 auto
+              height: 20px
+              width: 20px
 
             .grid
               display: grid
-              gap: $sizeM
-              grid-template-columns: auto auto 16.5% 16.5%
-              grid-template-rows: auto auto
-              margin-top: $sizeM
+              gap: 10px
+              grid-template-columns: auto auto 18% 18%
+              grid-template-rows: auto auto auto
 
             .grid-item
-              label
-                display: block
-              
-              select, input
-                width: 100%
-              
-              .with-preview
-                .preview-box
-                  border: 1px solid $black
-                  flex: 0 0 auto
-                  height: $sizeL
-                  width: $sizeL
+              div
+                flex-row()
 
-                select, input
-                  flex: 1 1 auto
-                  width: auto
+            .grid-item-0
+              grid-column: 1 / span 4
+              grid-row: 1
 
             .grid-item-1
               grid-column: 1
-              grid-row: 1
+              grid-row: 2
             
             .grid-item-2
               grid-column: 2
-              grid-row: 1
+              grid-row: 2
             
             .grid-item-3
               grid-column: 3
-              grid-row: 1
+              grid-row: 2
             
             .grid-item-4
               grid-column: 4
-              grid-row: 1
+              grid-row: 2
             
             .grid-item-5
+              grid-column: 2
+              grid-row: 3
+            
+            .grid-item-6
               grid-column: 3 / span 2
-              grid-row: 2
-        
-      .dialog-footer
-        padding: $sizeXS $sizeL $sizeL $sizeL
-        margin-bottom: $sizeS
+              grid-row: 3
 
     section
       h3
@@ -630,11 +828,12 @@ $fontWeightBoldPlus = 700
 
     .step-item
       .step-body
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), $white
         border: 0.5px solid $grey1
         border-radius: 8px
-        box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
         overflow: visible  // Required for StepItem's experimentalRestyleContainer(), which makes the "next step" arrows for branching tasks appear "outside" the step container.
+        padding-bottom: 20px
 
         &:active
         &:has(.control-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
@@ -675,7 +874,7 @@ $fontWeightBoldPlus = 700
           background: $greenBright
           padding: $sizeL $sizeS
       
-      .task-inbetween
+      .decorated-prompt
         margin-top: 10px
 
     .tasks-list
@@ -727,7 +926,7 @@ $fontWeightBoldPlus = 700
       select
         // Note: <select> style goes out the window on Safari
         background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), $lightYellow
-        border-radius: 32px;
+        border-radius: 32px
         border: none
         color: $black
         font-size: 14px
@@ -769,7 +968,6 @@ $fontWeightBoldPlus = 700
       align-items: center
   
   .task-key
-  .step-key
     background: $nearBlack
     border-radius: 1em
     color: $white
