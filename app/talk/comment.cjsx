@@ -212,7 +212,7 @@ module.exports = createReactClass
             <p className="talk-comment-date">{timestamp(@props.data.created_at)}</p>
 
             {if @shouldShowFocus()
-              <div className="polaroid-image">
+              <div className="polaroid-image #{if @props.subject?.metadata['metadata:volumetric'] then 'volumetric' else ''}">
                 {@commentSubjectTitle(@props.data, @props.subject)}
                 <SubjectViewer
                   subject={@props.subject}

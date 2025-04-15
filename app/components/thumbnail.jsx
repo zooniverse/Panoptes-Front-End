@@ -74,6 +74,19 @@ export default class Thumbnail extends React.Component {
       );
     }
 
+    if (this.props.type === 'volumetric' && this.props.format === 'json') {
+      const fakeSubject = {
+        locations: [{ 'application/json': this.props.src }],
+        metadata: {}
+      };
+      
+      return (
+        <div style={style} className='subject-preview-volumetric'>
+          <FileViewer type='volumetric' format='json' src={this.props.src} subject={fakeSubject} />
+        </div>
+      );
+    }
+
     return (
       <div style={style}>
         <img alt="" {...this.props} src={src} {...dimensions} onError={this.handleError} />

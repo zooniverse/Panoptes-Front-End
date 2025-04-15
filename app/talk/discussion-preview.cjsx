@@ -41,11 +41,14 @@ module.exports = createReactClass
 
         {if @props.subject?
           subject = getSubjectLocation(@props.subject)
+          isVolumetric = @props.subject?.metadata['metadata:volumetric']
+          subjectType = if isVolumetric then 'volumetric' else subject.type
+
           <div className="subject-preview">
             <Link to={@discussionLink()}>
               <Thumbnail
                 src={subject.src}
-                type={subject.type}
+                type={subjectType}
                 format={subject.format}
                 width={100}
                 height={150}
