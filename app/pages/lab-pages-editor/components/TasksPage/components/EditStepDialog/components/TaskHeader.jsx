@@ -33,7 +33,10 @@ function TaskHeader({
           onClick={toggleShowInfoPanel}
           type="button"
         >
-          See more {showInfoPanel? <CollapseIcon /> : <ExpandIcon />}
+          {showInfoPanel
+            ? <>See less <CollapseIcon /></>
+            : <>See more <ExpandIcon /></>
+          }
         </button>
       </div>
 
