@@ -32,6 +32,15 @@ module.exports = {
     path: path.join(__dirname, '/dist'),
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].js',
+    // Image assets will be placed in the '/lab' subpath.
+    // This is due to how the www.zooniverse.org domain maps PFE and FEM to
+    // different subpaths; the root '/' path isn't set to serve PFE code, let
+    // alone PFE-related image assets.
+    // See https://github.com/zooniverse/static/blob/632be4f/nginx-pfe-redirects.conf
+    // The /lab subfolder was chosen since bundled image assets are primarily
+    // used ONLY by the Pages Editor system.
+    // See https://github.com/zooniverse/Panoptes-Front-End/issues/7295
+    assetModuleFilename: 'lab/[hash][ext][query]',
   },
   plugins: [
     new webpack.ProvidePlugin({
