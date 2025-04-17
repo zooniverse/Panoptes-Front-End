@@ -111,7 +111,7 @@ class UserSettings extends Component {
           ))}
           </ul>
         </details>
-        <details>
+        <details style={{ background: '#c0c0c0' }}>
           <summary>Semi-recent classifications {this.state.classifications.length}</summary>
           <p>⚠️ WARNING: classifications are <b>not correctly sorted</b> by most recently created. Order of classifications is semi-random.</p>
           <p>⚠️ WARNING: filtering by Subject ID <b>may not work</b> and return no results, even if the classification actually exists.</p>
