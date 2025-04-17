@@ -112,7 +112,8 @@ class UserSettings extends Component {
           </ul>
         </details>
         <details>
-          <summary>Recent classifications {this.state.classifications.length}</summary>
+          <summary>Semi-recent classifications {this.state.classifications.length}</summary>
+          <p>⚠️ WARNING: classifications are <b>not correctly sorted</b> by most recently created. Order of classifications is semi-random.</p>
           <form onSubmit={this.updateSubjectID}>
             <label for="subjectId">Filter by subject ID: </label>
             <input id="subjectId" name="subjectID" type="text" defaultValue='' pattern='\d+' />

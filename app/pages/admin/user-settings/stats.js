@@ -84,7 +84,7 @@ export function getUserProjects(user, callback, _page = 1) {
 export function getUserClassifications(user, subject_id, _page = 1) {
   return user.get('classifications', {
     subject_id: subject_id ? subject_id : undefined,
-    sort: '-created_at',
+    // sort: '-created_at',  // WARNING: sorting doesn't work for Classifications
     page: _page
   })
 }
