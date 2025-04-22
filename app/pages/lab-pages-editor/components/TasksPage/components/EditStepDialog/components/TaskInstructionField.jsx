@@ -41,7 +41,7 @@ function TaskInstructionField ({
           type="text"
           value={value}
           onBlur={update}
-          onChange={(e) => { setValue(e?.target?.value) }}
+          onChange={(e) => { setValue(e?.currentTarget?.value) }}
         />
         {showDeleteButton && (
           <button

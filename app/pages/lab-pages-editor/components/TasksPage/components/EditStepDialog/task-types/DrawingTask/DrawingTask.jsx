@@ -74,9 +74,9 @@ function DrawingTask({
   }
 
   function editTool(e, commit = true) {
-    const index = e?.target?.dataset?.index
-    const field = e?.target?.dataset?.field
-    const value = e?.target?.value
+    const index = e?.currentTarget?.dataset?.index
+    const field = e?.currentTarget?.dataset?.field
+    const value = e?.currentTarget?.value
     if (index === undefined || index < 0 || index >= tools.length) return
 
     const tool = structuredClone(tools[index]) || {}  // Copy target tool.

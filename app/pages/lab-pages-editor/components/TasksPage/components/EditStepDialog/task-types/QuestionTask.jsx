@@ -72,11 +72,11 @@ function QuestionTask({
   }
 
   function editAnswer(e) {
-    const index = e?.target?.dataset?.index
+    const index = e?.currentTarget?.dataset?.index
     if (index === undefined || index < 0 || index >= answers.length) return
 
     const answer = answers[index]
-    const newLabel = e?.target?.value || ''
+    const newLabel = e?.currentTarget?.value || ''
 
     setAnswers(answers.with(index, { ...answer, label: newLabel }))
   }
