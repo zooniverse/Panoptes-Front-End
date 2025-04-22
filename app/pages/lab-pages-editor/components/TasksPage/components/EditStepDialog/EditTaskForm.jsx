@@ -27,17 +27,14 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
       className="edit-task-form"
     >
       <legend className="task-key">{taskKey}</legend>
-      {(TaskForm)
-        ? <TaskForm
-            deleteTask={deleteTask}
-            enforceLimitedBranchingRule={enforceLimitedBranchingRule}
-            stepHasManyTasks={stepHasManyTasks}
-            task={task}
-            taskKey={taskKey}
-            updateTask={updateTask}
-          />
-        : null
-      }
+      <TaskForm
+        deleteTask={deleteTask}
+        enforceLimitedBranchingRule={enforceLimitedBranchingRule}
+        stepHasManyTasks={stepHasManyTasks}
+        task={task}
+        taskKey={taskKey}
+        updateTask={updateTask}
+      />
     </fieldset>
   )
 }
