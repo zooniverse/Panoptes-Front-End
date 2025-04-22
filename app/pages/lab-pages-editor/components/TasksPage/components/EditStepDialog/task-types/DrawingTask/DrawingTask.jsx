@@ -159,7 +159,7 @@ function DrawingTask({
           </span>
         </div>
       
-        <ul>
+        <ul className="task-tools-list">
           {tools.map((tool, index) => (
             <DrawingTool
               key={`drawing-task-tool-${index}`}

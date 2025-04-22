@@ -1,5 +1,6 @@
 import DrawingToolIcon from '../../../../../../icons/DrawingToolIcon.jsx'
 import DeleteIcon from '../../../../../../icons/DeleteIcon.jsx'
+import SubTaskSubForm from './SubTaskSubForm.jsx'
 
 const TOOL_COLOR_OPTIONS = [
   // Here are the new FEM colours.
@@ -92,7 +93,7 @@ export default function DrawingTool({
 
   return (
     <li
-      className='task-tool'
+      className="task-tool"
       style={(color) ? { borderTopColor: color } : null}
     >
       <div className="grid">
@@ -227,6 +228,15 @@ export default function DrawingTool({
           </select>
         </div>
       </div>
+      {(details?.length > 0) && (
+        <ul className="subtasks-list">
+          {details.map(detail => (
+            <SubTaskSubForm
+              task={detail}
+            />
+          ))}
+        </ul>
+      )}
     </li>
   )
 }
