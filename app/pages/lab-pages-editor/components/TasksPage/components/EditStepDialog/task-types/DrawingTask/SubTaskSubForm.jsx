@@ -7,8 +7,8 @@ import UnknownTask from '../UnknownTask.jsx'
 const DEFAULT_HANDLER = () => {}
 
 const taskTypes = {
-  // 'multiple': QuestionTask,  // Shared with single answer question task
-  // 'single': QuestionTask,
+  'multiple': QuestionTask,  // Shared with single answer question task
+  'single': QuestionTask,
   'text': TextTask
 }
 

@@ -12,6 +12,7 @@ const DEFAULT_HANDLER = () => {}
 
 function QuestionTask({
   deleteTask = DEFAULT_HANDLER,
+  isSubTask = false,
   enforceLimitedBranchingRule,
   stepHasManyTasks = false,
   task,
@@ -96,20 +97,23 @@ function QuestionTask({
 
   return (
     <div className="question-task task">
-      <TaskHeader
-        task={task}
-        taskKey={taskKey}
-        title={title}
-      >
-        <p>
-          Single choice (default):<br/>
-          The volunteer reads a question and selects one response from a list of choices. Cannot be combined with other tasks on a page.
-        </p>
-        <p>To allow volunteers to select multiple responses, check the ‘Allow multiple’ option in the task editor. When selected, the question task can be combined with other tasks on a page. </p>
-      </TaskHeader>
+      {(!isSubTask) && (
+        <TaskHeader
+          task={task}
+          taskKey={taskKey}
+          title={title}
+        >
+          <p>
+            Single choice (default):<br/>
+            The volunteer reads a question and selects one response from a list of choices. Cannot be combined with other tasks on a page.
+          </p>
+          <p>To allow volunteers to select multiple responses, check the ‘Allow multiple’ option in the task editor. When selected, the question task can be combined with other tasks on a page. </p>
+        </TaskHeader>
+      )}
 
       <TaskInstructionField
         deleteTask={deleteTask}
+        isSubTask={isSubTask}
         setValue={setQuestion}
         showDeleteButton={stepHasManyTasks}
         taskKey={taskKey}
@@ -186,18 +190,21 @@ function QuestionTask({
         </ul>
       </div>
 
-      <TaskHelpField
-        help={help}
-        setHelp={setHelp}
-        taskKey={taskKey}
-        update={update}
-      />
+      {(!isSubTask) && (
+        <TaskHelpField
+          help={help}
+          setHelp={setHelp}
+          taskKey={taskKey}
+          update={update}
+        />
+      )}
     </div>
   )
 }
 
 QuestionTask.propTypes = {
   deleteTask: PropTypes.func,
+  isSubTask: PropTypes.bool,
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
   }),
