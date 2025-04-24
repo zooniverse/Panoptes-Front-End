@@ -1,3 +1,4 @@
+import createTask from '../../../../../../helpers/createTask.js'
 import DrawingToolIcon from '../../../../../../icons/DrawingToolIcon.jsx'
 import DeleteIcon from '../../../../../../icons/DeleteIcon.jsx'
 import SubTaskSubForm from './SubTaskSubForm.jsx'
@@ -115,16 +116,17 @@ export default function DrawingTool({
     return false
   }
 
-  function deleteSubTask(subTaskIndex = '') {
-    const _subTaskIndex = parseInt(subTaskIndex)
-    if (!Number.isInteger(_subTaskIndex)
-      || _subTaskIndex < 0
-      || _subTaskIndex >= details?.length
-      || !Array.isArray(details)
-    ) return
+  function addSubTask(e) {
+    const subTaskType = e?.currentTarget.value
+    const newSubTask = createTask(subTaskType)
+    if (!newSubTask) return  // Throw error, perhaps?
 
-    const newDetails = details.toSpliced(_subTaskIndex, 1)  // Copy then delete Subtask at index
+    const newDetails = structuredClone(details) || []
+    newDetails.push(newSubTask)
     editTool(index, 'details', newDetails)
+
+    e.preventDefault()
+    return false
   }
 
   function updateSubTask(subTaskIndex = '', subTask) {
@@ -136,6 +138,18 @@ export default function DrawingTool({
     ) return
 
     const newDetails = details.with(_subTaskIndex, subTask)   
+    editTool(index, 'details', newDetails)
+  }
+
+  function deleteSubTask(subTaskIndex = '') {
+    const _subTaskIndex = parseInt(subTaskIndex)
+    if (!Number.isInteger(_subTaskIndex)
+      || _subTaskIndex < 0
+      || _subTaskIndex >= details?.length
+      || !Array.isArray(details)
+    ) return
+
+    const newDetails = details.toSpliced(_subTaskIndex, 1)  // Copy then delete Subtask at index
     editTool(index, 'details', newDetails)
   }
 
@@ -264,7 +278,7 @@ export default function DrawingTool({
           <label htmlFor={`task-${taskKey}-tool-${index}-subtask`}>Sub-task</label>
           <select
             id={`task-${taskKey}-tool-${index}-subtask`}
-            onChange={DEFAULT_HANDLER}
+            onChange={addSubTask}
             value={''}
             data-index={index}
             data-field="subtask"
