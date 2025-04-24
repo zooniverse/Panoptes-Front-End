@@ -12,6 +12,7 @@ const DEFAULT_HANDLER = () => {}
 function TaskInstructionField ({
   children,  // Children will appear next to the "Instructions" label. Used normally to add the "required" checkbox.
   deleteTask = DEFAULT_HANDLER,
+  isSubTask = false,
   setValue = DEFAULT_HANDLER,
   showDeleteButton = false,
   taskKey = '',
@@ -43,7 +44,7 @@ function TaskInstructionField ({
           onBlur={update}
           onChange={(e) => { setValue(e?.currentTarget?.value) }}
         />
-        {showDeleteButton && (
+        {(showDeleteButton || isSubTask) && (
           <button
             aria-label={`Delete Task ${taskKey}`}
             className="delete-button"
@@ -60,6 +61,7 @@ function TaskInstructionField ({
 
 TaskInstructionField.propTypes = {
   deleteTask: PropTypes.func,
+  isSubTask: PropTypes.bool,
   setValue: PropTypes.func,
   showDeleteTaskButton: PropTypes.bool,
   update: PropTypes.func,

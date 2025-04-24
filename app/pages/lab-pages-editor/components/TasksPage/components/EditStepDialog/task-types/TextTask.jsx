@@ -10,6 +10,7 @@ const TEXT_TAGS = ['deletion', 'insertion', 'unclear']
 
 function TextTask({
   deleteTask = DEFAULT_HANDLER,
+  isSubTask = false,
   stepHasManyTasks = false,
   task,
   taskKey,
@@ -67,16 +68,19 @@ function TextTask({
 
   return (
     <div className="text-task">
-      <TaskHeader
-        task={task}
-        taskKey={taskKey}
-        title={title}
-      >
-        <p>The volunteer types into a free-text entry field. Can be combined with other tasks on a page.</p>
-      </TaskHeader>
+      {!isSubTask && (
+        <TaskHeader
+          task={task}
+          taskKey={taskKey}
+          title={title}
+        >
+          <p>The volunteer types into a free-text entry field. Can be combined with other tasks on a page.</p>
+        </TaskHeader>
+      )}
 
       <TaskInstructionField
         deleteTask={deleteTask}
+        isSubTask={isSubTask}
         setValue={setInstruction}
         showDeleteButton={stepHasManyTasks}
         taskKey={taskKey}
@@ -127,18 +131,21 @@ function TextTask({
         </div>
       </div>
 
-      <TaskHelpField
-        help={help}
-        setHelp={setHelp}
-        taskKey={taskKey}
-        update={update}
-      />
+      {!isSubTask && (
+        <TaskHelpField
+          help={help}
+          setHelp={setHelp}
+          taskKey={taskKey}
+          update={update}
+        />
+      )}
     </div>
   )
 }
 
 TextTask.propTypes = {
   deleteTask: PropTypes.func,
+  isSubTask: PropTypes.bool,
   stepHasManyTasks: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,

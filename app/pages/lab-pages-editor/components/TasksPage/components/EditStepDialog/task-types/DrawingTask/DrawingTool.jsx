@@ -230,8 +230,9 @@ export default function DrawingTool({
       </div>
       {(details?.length > 0) && (
         <ul className="subtasks-list">
-          {details.map(detail => (
+          {details.map((detail, index) => (
             <SubTaskSubForm
+              key={`subtask-${index}`}
               task={detail}
             />
           ))}

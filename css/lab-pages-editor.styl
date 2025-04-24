@@ -751,6 +751,11 @@ $fontWeightBoldPlus = 700
 
               li:not(:last-child)  // Add margin to every list item except the last item
                 margin-bottom: 15px
+            
+            ul.subtasks-list
+              li.subtask
+                border-top: 0.5px solid $grey1
+                border: 1px solid green  // TMP
           
           .task-tool
             border-radius: 4px
@@ -759,28 +764,6 @@ $fontWeightBoldPlus = 700
             box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
             padding: 10px 20px 20px 20px
 
-            label
-              display: block
-              color: $grey3
-              font-size: 12px
-              font-style: normal
-              font-weight: 500
-              line-height: normal
-              margin-bottom: 5px
-            
-            select, input
-              flex: 1 1 auto
-              width: 100%
-              color: $black
-              font-size: 16px
-              font-style: normal
-              font-weight: 400
-              line-height: normal
-
-              &[data-field=subtask]  // TEMP / TEST
-                color: $grey3
-                background: $grey6
-            
             .preview-box
               border: 1px solid $black
               flex: 0 0 auto
@@ -792,6 +775,28 @@ $fontWeightBoldPlus = 700
               gap: 10px
               grid-template-columns: auto auto 18% 18%
               grid-template-rows: auto auto auto
+
+              label
+                display: block
+                color: $grey3
+                font-size: 12px
+                font-style: normal
+                font-weight: 500
+                line-height: normal
+                margin-bottom: 5px
+              
+              select, input
+                flex: 1 1 auto
+                width: 100%
+                color: $black
+                font-size: 16px
+                font-style: normal
+                font-weight: 400
+                line-height: normal
+
+                &[data-field=subtask]  // TEMP / TEST
+                  color: $grey3
+                  background: $grey6
 
             .grid-item
               div
