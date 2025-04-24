@@ -1,10 +1,13 @@
+import PropTypes from 'prop-types'
+
 import TaskHeader from '../components/TaskHeader.jsx'
 import TaskInstructionField from '../components/TaskInstructionField.jsx'
 
 const DEFAULT_HANDLER = () => {}
 
-export default function UnknownTask({
+function UnknownTask({
   deleteTask = DEFAULT_HANDLER,
+  isSubTask = false,
   task,
   taskKey
 }) {
@@ -26,14 +29,16 @@ export default function UnknownTask({
 
   return (
     <div className="text-task">
-      <TaskHeader
-        task={task}
-        taskKey={taskKey}
-        title={title}
-      >
-        <p>{longError}</p>
-        <p>Please contact the Zooniverse team to see if they can help fix the issue.</p>
-      </TaskHeader>
+      {(!isSubTask) && (
+        <TaskHeader
+          task={task}
+          taskKey={taskKey}
+          title={title}
+        >
+          <p>{longError}</p>
+          <p>Please contact the Zooniverse team to see if they can help fix the issue.</p>
+        </TaskHeader>
+      )}
 
       <TaskInstructionField
         deleteTask={deleteTask}
@@ -44,3 +49,12 @@ export default function UnknownTask({
     </div>
   )
 }
+
+UnknownTask.propTypes = {
+  deleteTask: PropTypes.func,
+  isSubTask: PropTypes.bool,
+  task: PropTypes.object,
+  taskKey: PropTypes.string,
+}
+
+export default UnknownTask

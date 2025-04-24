@@ -68,7 +68,7 @@ function TextTask({
 
   return (
     <div className="text-task">
-      {!isSubTask && (
+      {(!isSubTask) && (
         <TaskHeader
           task={task}
           taskKey={taskKey}
@@ -131,7 +131,7 @@ function TextTask({
         </div>
       </div>
 
-      {!isSubTask && (
+      {(!isSubTask) && (
         <TaskHelpField
           help={help}
           setHelp={setHelp}
