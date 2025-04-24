@@ -115,12 +115,28 @@ export default function DrawingTool({
     return false
   }
 
-  function deleteSubTask(a, b ,c) {
-    console.log('+++ deleteSubTask', a, b , c)
+  function deleteSubTask(subTaskIndex = '') {
+    const _subTaskIndex = parseInt(subTaskIndex)
+    if (!Number.isInteger(_subTaskIndex)
+      || _subTaskIndex < 0
+      || _subTaskIndex >= details?.length
+      || !Array.isArray(details)
+    ) return
+
+    const newDetails = details.toSpliced(_subTaskIndex, 1)  // Copy then delete Subtask at index
+    editTool(index, 'details', newDetails)
   }
 
-  function updateSubTask(a, b, c) {
-    console.log('+++ updateSubTask', a, b , c)
+  function updateSubTask(subTaskIndex = '', subTask) {
+    const _subTaskIndex = parseInt(subTaskIndex)
+    if (!Number.isInteger(_subTaskIndex)
+      || _subTaskIndex < 0
+      || _subTaskIndex >= details?.length
+      || !Array.isArray(details)
+    ) return
+
+    const newDetails = details.with(_subTaskIndex, subTask)   
+    editTool(index, 'details', newDetails)
   }
 
   return (

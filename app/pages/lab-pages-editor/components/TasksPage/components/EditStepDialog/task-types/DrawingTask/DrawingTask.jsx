@@ -86,6 +86,10 @@ function DrawingTask({
         tool[field] = value || ''
         break
       
+      case 'details':
+        tool[field] = value || []
+        break
+      
       case 'min':
       case 'max':
         tool[field] = parseInt(value) || undefined
@@ -94,6 +98,8 @@ function DrawingTask({
         }
         break
     }
+
+    console.log('+++ editTool', index, tool)
 
     const newTools = tools.with(index, tool)
     setTools(newTools)
