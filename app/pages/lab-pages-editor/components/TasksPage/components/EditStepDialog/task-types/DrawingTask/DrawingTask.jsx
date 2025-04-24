@@ -73,10 +73,7 @@ function DrawingTask({
     return false
   }
 
-  function editTool(e, commit = true) {
-    const index = e?.currentTarget?.dataset?.index
-    const field = e?.currentTarget?.dataset?.field
-    const value = e?.currentTarget?.value
+  function editTool(index, field, value, commit = true) {
     if (index === undefined || index < 0 || index >= tools.length) return
 
     const tool = structuredClone(tools[index]) || {}  // Copy target tool.
@@ -103,17 +100,13 @@ function DrawingTask({
     commit && update({ tools: newTools })
   }
 
-  function deleteTool(e) {
-    const index = e?.currentTarget?.dataset?.index
+  function deleteTool(index) {
     if (index === undefined || index < 0 || index >= tools.length) return
 
     const newTools = tools.slice()  // Copy tools.
     newTools.splice(index, 1)
     setTools(newTools)
     update({ tools: newTools })
-    
-    e.preventDefault()
-    return false
   }
 
   const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)

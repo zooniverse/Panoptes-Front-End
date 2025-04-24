@@ -87,8 +87,40 @@ export default function DrawingTool({
 
   const { color, details, label, max, min, size, type } = tool
 
-  function editToolWithoutCommit(e) {
-    editTool(e, false)
+  function _editTool(e) {
+    const index = e?.currentTarget?.dataset?.index
+    const field = e?.currentTarget?.dataset?.field
+    const value = e?.currentTarget?.value
+    editTool(index, field, value)
+
+    e.preventDefault()
+    return false
+  }
+
+  function _editToolWithoutCommit(e) {
+    const index = e?.currentTarget?.dataset?.index
+    const field = e?.currentTarget?.dataset?.field
+    const value = e?.currentTarget?.value
+    editTool(index, field, value, false)
+
+    e.preventDefault()
+    return false
+  }
+
+  function _deleteTool(e) {
+    const index = e?.currentTarget?.dataset?.index
+    deleteTool(index)
+
+    e.preventDefault()
+    return false
+  }
+
+  function deleteSubTask(a, b ,c) {
+    console.log('+++ deleteSubTask', a, b , c)
+  }
+
+  function updateSubTask(a, b, c) {
+    console.log('+++ updateSubTask', a, b , c)
   }
 
   return (
@@ -104,8 +136,8 @@ export default function DrawingTool({
           <div>
             <input
               id={`task-${taskKey}-tool-${index}-label`}
-              onBlur={editTool}
-              onChange={editToolWithoutCommit}
+              onBlur={_editTool}
+              onChange={_editToolWithoutCommit}
               type="text"
               value={label}
               data-index={index}
@@ -113,7 +145,7 @@ export default function DrawingTool({
             />
             <button
               aria-label={`Delete tool ${index}`}
-              onClick={deleteTool}
+              onClick={_deleteTool}
               className="delete-button"
               data-index={index}
               type="button"
@@ -128,7 +160,7 @@ export default function DrawingTool({
             <DrawingToolIcon type={type} />
             <select
               id={`task-${taskKey}-tool-${index}-type`}
-              onChange={editTool}
+              onChange={_editTool}
               value={type}
               data-index={index}
               data-field="type"
@@ -147,7 +179,7 @@ export default function DrawingTool({
             <div className="preview-box" style={{ background: color }}>&nbsp;</div>
             <select
               id={`task-${taskKey}-tool-${index}-color`}
-              onChange={editTool}
+              onChange={_editTool}
               value={color?.toLowerCase()}
               data-index={index}
               data-field="color"
@@ -173,8 +205,8 @@ export default function DrawingTool({
             inputMode="numeric"
             max={max || undefined}
             min="0"
-            onBlur={editTool}
-            onChange={editToolWithoutCommit}
+            onBlur={_editTool}
+            onChange={_editToolWithoutCommit}
             placeholder="0"
             type="number"
             value={(min !== undefined) ? min : ''}
@@ -188,8 +220,8 @@ export default function DrawingTool({
             id={`task-${taskKey}-tool-${index}-max`}
             inputMode="numeric"
             min={min || 0}
-            onBlur={editTool}
-            onChange={editToolWithoutCommit}
+            onBlur={_editTool}
+            onChange={_editToolWithoutCommit}
             placeholder="∞"
             type="number"
             value={(max !== undefined) ? max : ''}
@@ -202,7 +234,7 @@ export default function DrawingTool({
             <label htmlFor={`task-${taskKey}-tool-${index}-size`}>Size</label>
             <select
               id={`task-${taskKey}-tool-${index}-size`}
-              onChange={editTool}
+              onChange={_editTool}
               value={size || 'large'}
               data-index={index}
               data-field="size"
@@ -233,7 +265,10 @@ export default function DrawingTool({
           {details.map((detail, index) => (
             <SubTaskSubForm
               key={`subtask-${index}`}
+              deleteTask={deleteSubTask}
+              subTaskIndex={`${index}`}
               task={detail}
+              updateTask={updateSubTask}
             />
           ))}
         </ul>

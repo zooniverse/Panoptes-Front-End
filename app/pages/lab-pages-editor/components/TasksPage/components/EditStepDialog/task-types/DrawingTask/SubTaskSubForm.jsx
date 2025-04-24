@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import QuestionTask from '../QuestionTask.jsx'
 import TextTask from '../TextTask.jsx'
 import UnknownTask from '../UnknownTask.jsx'
@@ -10,12 +12,13 @@ const taskTypes = {
   'text': TextTask
 }
 
-function SubTaskSubForm({ task }) {
+function SubTaskSubForm({
+  deleteTask = DEFAULT_HANDLER,
+  subTaskIndex,
+  task,
+  updateTask = DEFAULT_HANDLER,
+}) {
   const TaskForm = taskTypes[task?.type] || UnknownTask
-
-  const deleteTask = DEFAULT_HANDLER
-  const taskKey = ''
-  const updateTask = DEFAULT_HANDLER
 
   return (
     <li className="subtask">
@@ -24,11 +27,18 @@ function SubTaskSubForm({ task }) {
         isSubTask={true}
         stepHasManyTasks={false}
         task={task}
-        taskKey={taskKey}
+        taskKey={subTaskIndex}
         updateTask={updateTask}
       />
     </li>
   )
+}
+
+SubTaskSubForm.propTypes = {
+  deleteTask: PropTypes.func,
+  subTaskIndex: PropTypes.string,
+  task: PropTypes.object,
+  updateTask: PropTypes.func
 }
 
 export default SubTaskSubForm
