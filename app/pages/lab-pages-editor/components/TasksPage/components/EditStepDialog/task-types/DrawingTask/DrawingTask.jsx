@@ -99,8 +99,6 @@ function DrawingTask({
         break
     }
 
-    console.log('+++ editTool', index, tool)
-
     const newTools = tools.with(index, tool)
     setTools(newTools)
     commit && update({ tools: newTools })

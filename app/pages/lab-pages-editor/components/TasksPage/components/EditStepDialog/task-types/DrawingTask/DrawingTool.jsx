@@ -278,15 +278,25 @@ export default function DrawingTool({
       </div>
       {(details?.length > 0) && (
         <ul className="subtasks-list">
-          {details.map((detail, index) => (
-            <SubTaskSubForm
-              key={`subtask-${index}`}
-              deleteTask={deleteSubTask}
-              subTaskIndex={`${index}`}
-              task={detail}
-              updateTask={updateSubTask}
-            />
-          ))}
+          {details.map((detail, index) => {
+            // We need a unique React key, but drawingTask.tools[x].details[y]
+            // doesn't have a unique identifier! There's no corresponding task
+            // key, and generating temporary IDs would require scrubbing before
+            // sending the deets to Panoptes.
+            // The following is a compromise that keeps re-rendering the
+            // subtask, but keeps the keys unique enough
+            const inefficientReactKey = `subtask-${index}-${detail?.type}-${detail?.instruction || detail?.question}`
+
+            return (
+              <SubTaskSubForm
+                key={inefficientReactKey}
+                deleteTask={deleteSubTask}
+                subTaskIndex={`${index}`}
+                task={detail}
+                updateTask={updateSubTask}
+              />
+            )
+          })}
         </ul>
       )}
     </li>
