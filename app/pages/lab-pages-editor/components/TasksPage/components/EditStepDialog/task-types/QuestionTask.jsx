@@ -114,6 +114,7 @@ function QuestionTask({
       <TaskInstructionField
         deleteTask={deleteTask}
         isSubTask={isSubTask}
+        label={isSubTask ? 'Question Sub-Task Instructions' : null}
         setValue={setQuestion}
         showDeleteButton={stepHasManyTasks}
         taskKey={taskKey}

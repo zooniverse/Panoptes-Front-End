@@ -81,6 +81,7 @@ function TextTask({
       <TaskInstructionField
         deleteTask={deleteTask}
         isSubTask={isSubTask}
+        label={isSubTask ? 'Text Sub-Task Instructions' : null}
         setValue={setInstruction}
         showDeleteButton={stepHasManyTasks}
         taskKey={taskKey}

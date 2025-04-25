@@ -13,6 +13,7 @@ function TaskInstructionField ({
   children,  // Children will appear next to the "Instructions" label. Used normally to add the "required" checkbox.
   deleteTask = DEFAULT_HANDLER,
   isSubTask = false,
+  label = 'Instructions',
   setValue = DEFAULT_HANDLER,
   showDeleteButton = false,
   taskKey = '',
@@ -31,7 +32,7 @@ function TaskInstructionField ({
           className="big-label"
           htmlFor={`task-${taskKey}-instruction`}
         >
-          Instructions
+          {label}
         </label>
         {children}
       </div>
@@ -62,6 +63,7 @@ function TaskInstructionField ({
 TaskInstructionField.propTypes = {
   deleteTask: PropTypes.func,
   isSubTask: PropTypes.bool,
+  label: PropTypes.string,
   setValue: PropTypes.func,
   showDeleteTaskButton: PropTypes.bool,
   update: PropTypes.func,
