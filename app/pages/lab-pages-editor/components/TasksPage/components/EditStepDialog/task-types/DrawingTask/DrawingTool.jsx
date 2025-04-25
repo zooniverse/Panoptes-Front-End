@@ -286,7 +286,7 @@ export default function DrawingTool({
             <option value="">Add a sub-task +</option>
             <option value="single">Question sub-task</option>
             <option value="text">Text sub-task</option>
-            <option value="dropdown">Dropdown sub-task</option>
+            {/*<option value="dropdown">Dropdown sub-task</option>*/}
           </select>
         </div>
       </div>
