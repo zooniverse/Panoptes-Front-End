@@ -755,7 +755,8 @@ $fontWeightBoldPlus = 700
             ul.subtasks-list
               li.subtask
                 border-top: 0.5px solid $grey1
-                border: 1px solid green  // TMP
+                margin: 15px -20px 0 -20px  // use negative margins to make top-border flush with edges of parent .task-tool container
+                padding: 20px 20px 0 20px  // positive padding compensates for negative margins
 
                 .big-label
                   color: $grey3
