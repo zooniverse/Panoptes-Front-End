@@ -376,8 +376,8 @@ class OrganizationPage extends React.Component {
               />
             </div>
 
-            <div className="organization-details__container">
-              {organization.urls && organization.urls.length && (
+            {organization.urls && organization.urls.length > 0 && (
+              <div className="organization-details__container">
                 <ExternalLinksBlockContainer
                   header={(
                     <Translate
@@ -393,8 +393,8 @@ class OrganizationPage extends React.Component {
                   className="organization-details__link"
                   socialLabel={true}
                 />
-              )}
-            </div>
+              </div>
+            )}
 
             <div className="organization-details__container">
               <div className="organization-details__content">
