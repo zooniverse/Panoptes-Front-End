@@ -48,7 +48,7 @@ function TaskHelpField ({
         hidden={!showHelpField}
         value={help}
         onBlur={update}
-        onChange={(e) => { setHelp(e?.target?.value) }}
+        onChange={(e) => { setHelp(e?.currentTarget?.value) }}
       />
     </div>
   )

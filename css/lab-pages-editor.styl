@@ -642,13 +642,15 @@ $fontWeightBoldPlus = 700
             > *
               align-self: start
           
-          .task-field-checkbox-set 
+          .task-field-checkbox-set
+            align-items: center
             color: #5C5C5C
+            display: flex
             font-size: 12px
             font-style: normal
             font-weight: 400
             line-height: normal
-            gap: 10px
+            gap: 5px
 
             > *
               vertical-align: middle
@@ -731,14 +733,34 @@ $fontWeightBoldPlus = 700
               margin: $sizeSM 0
               padding: 0
           
+          .text-task
+            .tags-array
+              display: flex
+              flex-wrap: wrap
+              gap: 10px
+
+              .task-field-checkbox-set
+                font-size: 16px
+                min-width: 120px
+          
           .drawing-task
             ul
               list-style: none
               margin: 0
               padding: 0
+
+              li:not(:last-child)  // Add margin to every list item except the last item
+                margin-bottom: 15px
             
-            li
-              // TODO
+            ul.subtasks-list
+              li.subtask
+                border-top: 0.5px solid $grey1
+                margin: 15px -20px 0 -20px  // use negative margins to make top-border flush with edges of parent .task-tool container
+                padding: 20px 20px 0 20px  // positive padding compensates for negative margins
+
+                .big-label
+                  color: $grey3
+                  text-transform: none
           
           .task-tool
             border-radius: 4px
@@ -747,28 +769,6 @@ $fontWeightBoldPlus = 700
             box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
             padding: 10px 20px 20px 20px
 
-            label
-              display: block
-              color: $grey3
-              font-size: 12px
-              font-style: normal
-              font-weight: 500
-              line-height: normal
-              margin-bottom: 5px
-            
-            select, input
-              flex: 1 1 auto
-              width: 100%
-              color: $black
-              font-size: 16px
-              font-style: normal
-              font-weight: 400
-              line-height: normal
-
-              &[data-field=subtask]  // TEMP / TEST
-                color: $grey3
-                background: $grey6
-            
             .preview-box
               border: 1px solid $black
               flex: 0 0 auto
@@ -780,6 +780,24 @@ $fontWeightBoldPlus = 700
               gap: 10px
               grid-template-columns: auto auto 18% 18%
               grid-template-rows: auto auto auto
+
+              label
+                display: block
+                color: $grey3
+                font-size: 12px
+                font-style: normal
+                font-weight: 500
+                line-height: normal
+                margin-bottom: 5px
+              
+              select, input
+                flex: 1 1 auto
+                width: 100%
+                color: $black
+                font-size: 16px
+                font-style: normal
+                font-weight: 400
+                line-height: normal
 
             .grid-item
               div

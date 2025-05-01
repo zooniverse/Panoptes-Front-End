@@ -25,12 +25,12 @@ export default function WorkflowSettingsPage() {
   }
 
   function doUpdate(e) {
-    const key = e?.target?.name;
-    let value = e?.target?.value || '';
-    const { updaterule } = e?.target?.dataset || {};
+    const key = e?.currentTarget?.name;
+    let value = e?.currentTarget?.value || '';
+    const { updaterule } = e?.currentTarget?.dataset || {};
     if (!key) return;
 
-    if (updaterule === 'checkbox') value = !!e?.target?.checked;
+    if (updaterule === 'checkbox') value = !!e?.currentTarget?.checked;
     if (updaterule === 'convert_to_number') value = parseInt(value);
     if (updaterule === 'undefined_if_empty') value = value || undefined;
 

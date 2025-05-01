@@ -21,9 +21,9 @@ function TaskHeader({
     <>
       <div className="task-header">
         <TaskIcon
-          alt={TaskTypes[task.type]?.name || 'Unknown Task Type'}
+          alt={TaskTypes[task?.type]?.name || 'Unknown Task Type'}
           size='large'
-          type={task.type}
+          type={task?.type}
         />
         <h5>{title}</h5>
         <span className="task-key">{taskKey}</span>
