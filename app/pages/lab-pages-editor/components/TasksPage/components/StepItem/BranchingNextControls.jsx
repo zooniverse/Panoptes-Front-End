@@ -16,8 +16,8 @@ export default function BranchingNextControls({
   const selectableSteps = allSteps.filter(([otherStepKey]) => otherStepKey !== stepKey);
 
   function onChange(e) {
-    const next = e.target?.value;
-    const index = e?.target?.dataset.index;
+    const next = e?.currentTarget?.value;
+    const index = e?.currentTarget?.dataset.index;
     updateNextStepForTaskAnswer(taskKey, index, next);
   }
 
