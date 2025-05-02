@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 're
 import PropTypes from 'prop-types'
 
 import EditTaskForm from './EditTaskForm.jsx'
+import checkIsFixedStep from '../../../../helpers/checkIsFixedStep.js'
 import CloseIcon from '../../../../icons/CloseIcon.jsx'
 import OptionsIcon from '../../../../icons/OptionsIcon.jsx'
 
@@ -62,8 +63,10 @@ function EditStepDialog({
     setShowOptions(!showOptions)
   }
 
+  const tasksInStep = taskKeys.map(taskKey => allTasks[taskKey] )
+  const isFixedStep = checkIsFixedStep(tasksInStep)
   const stepHasManyTasks = taskKeys?.length > 1
-  const showDeleteButtonOnEachTask = stepHasManyTasks
+  const showDeleteButtonOnEachTask = stepHasManyTasks && !isFixedStep
 
   return (
     <dialog
@@ -107,7 +110,7 @@ function EditStepDialog({
         className="dialog-body"
         onSubmit={onSubmit}
       >
-        {taskKeys.map((taskKey, index) => {
+        {taskKeys.map(taskKey => {
           const task = allTasks[taskKey]
           return (
             <EditTaskForm
