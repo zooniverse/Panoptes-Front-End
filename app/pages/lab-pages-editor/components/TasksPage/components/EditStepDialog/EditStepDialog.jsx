@@ -63,6 +63,7 @@ function EditStepDialog({
   }
 
   const stepHasManyTasks = taskKeys?.length > 1
+  const showDeleteButtonOnEachTask = stepHasManyTasks
 
   return (
     <dialog
@@ -113,7 +114,7 @@ function EditStepDialog({
               key={`editTaskForm-${taskKey}`}
               deleteTask={deleteTask}
               enforceLimitedBranchingRule={enforceLimitedBranchingRule}
-              stepHasManyTasks={stepHasManyTasks}
+              showDeleteButton={showDeleteButtonOnEachTask}
               task={task}
               taskKey={taskKey}
               updateTask={updateTask}
