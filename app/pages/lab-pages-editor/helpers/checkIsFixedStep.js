@@ -13,8 +13,5 @@ this is the "Transcription Task", which actually a Step/Page that contains
 
 export default function checkIsFixedStep(tasksInStep) {
   if (!Array.isArray(tasksInStep)) return false
-
-  console.log('+++ ', tasksInStep)
-
   return tasksInStep.some(task => task.type === 'transcription')
 }

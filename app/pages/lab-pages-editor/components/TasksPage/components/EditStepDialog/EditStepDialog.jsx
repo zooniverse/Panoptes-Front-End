@@ -126,13 +126,15 @@ function EditStepDialog({
         })}
       </form>
       <div className="dialog-footer">
-        <button
-          className="button add-task-button"
-          onClick={doAddTask}
-          type="button"
-        >
-          Add another task to this page
-        </button>
+        {(!isFixedStep) && ( 
+          <button
+            className="button add-task-button"
+            onClick={doAddTask}
+            type="button"
+          >
+            Add another task to this page
+          </button>
+        )}
         <button
           className="button done-button"
           onClick={closeDialog}
