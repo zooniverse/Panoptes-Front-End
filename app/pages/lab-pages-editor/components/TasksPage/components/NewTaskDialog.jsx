@@ -116,6 +116,18 @@ function NewTaskDialog({
             <TaskIcon type='drawing' />
             <span>Drawing</span>
           </button>
+          {(stepIndex === -1) && (
+            <button
+              aria-label="Add new Transcription Task (Fixed Page)"
+              className="new-task-button"
+              data-tasktype="transcription"
+              onClick={handleClickAddTask}
+              type="button"
+            >
+              <TaskIcon type='transcription' />
+              <span>Transcription</span>
+            </button>
+          )}
         </div>
       </form>
     </dialog>
