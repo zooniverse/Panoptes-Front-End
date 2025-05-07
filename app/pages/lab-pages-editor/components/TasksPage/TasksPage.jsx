@@ -152,7 +152,7 @@ export default function TasksPage() {
 
     // Commit changes
     await update({ tasks, steps })
-    return (stepIndex < 0) ? steps.length - 1 : stepIndex
+    return steps.length - 1
   }
 
   /*
