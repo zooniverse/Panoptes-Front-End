@@ -1,7 +1,7 @@
 // Generate a cache of all the colors used during render
 // This improves draw performance by avoiding re-calculating the same color every render
 
-import { Color } from 'three'
+import { Color } from './Three.min.js'
 
 const ColorHues = [
   205, 90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120

@@ -15,7 +15,7 @@ import {
   Vector2,
   Vector3,
   WebGLRenderer
-} from 'three'
+} from './../helpers/Three.min.js'
 import { object } from 'prop-types'
 import { OrbitControls } from './../helpers/OrbitControls.js'
 import { pointColor } from './../helpers/pointColor.js'
