@@ -34,10 +34,10 @@ const StyledSlider = styled.div`
 
   input[type="range"] {
     ${props =>
-      props.theme.dark
-        ? css`background: ${COLORS.white};`
-        : css`background: ${COLORS.black};`
-    }
+    props.theme.dark
+      ? css`background: ${COLORS.white};`
+      : css`background: ${COLORS.black};`
+  }
     -webkit-appearance: none;
     border-radius: 5px;
     height: 4px;
@@ -53,34 +53,43 @@ const StyledSlider = styled.div`
   }
   
   .plane-slider-forward {
-    ${props =>
-      props.theme.dark
-        ? css`color: ${COLORS.white};`
-        : css`color: ${COLORS.black};`
+    /* Force reset of button styles */
+    all: unset !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+
+    /* Fixed dimensions */
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    margin-bottom: 10px !important;
+
+    /* Default state */
+    background: transparent !important;
+    ${props => props.theme.dark
+      ? css`stroke: ${COLORS.white} !important;`
+      : css`stroke: ${COLORS.black} !important;`
     }
 
-    border-radius: 20px;
-    cursor: pointer;
-    height: 20px;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 20px;
-    
+    /* SVG sizing */
+    svg {
+      width: 20px !important;
+      height: 20px !important;
+    }
+
+    /* Hover state */
+    &:hover {
+      background: ${COLORS.hover} !important;
+      stroke: ${COLORS.white} !important;
+    }
+
+    /* Active state */
     &:active {
-      background-color: ${COLORS.active};
-      color: ${COLORS.white};
-    }
-  }
-
-  @media (hover: hover) {
-    .plane-slider-forward:hover {
-      background-color: ${COLORS.hover};
-      stroke: ${COLORS.white};
-    }
-
-    .plane-slider-forward:active {
-      background-color: ${COLORS.active};
-      stroke: ${COLORS.white};
+      background: ${COLORS.active} !important;
+      stroke: ${COLORS.white} !important;
     }
   }
 `
@@ -88,7 +97,7 @@ const StyledSlider = styled.div`
 export const Slider = ({ dimension, viewer }) => {
   const currentFrame = viewer.base - 1 - viewer.getPlaneFrameIndex({ dimension });
 
-  function inChange (e) {
+  function inChange(e) {
     const nextFrame = viewer.base - 1 - +e.target.value;
     viewer.setPlaneFrameActive({ dimension, frame: nextFrame })
   }
@@ -105,7 +114,21 @@ export const Slider = ({ dimension, viewer }) => {
       <button
         className='plane-slider-forward no-select'
         onClick={advanceFrame}
-      >Forward Ten</button>
+        aria-label="Forward Ten"
+      >
+        <svg
+          aria-label="ForwardTen"
+          viewBox="0 0 24 24"
+          fill="none"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path
+            d="M20.889 7.556C19.33 4.267 15.93 2 12 2 6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10m0-8v4h-4m-9 8V9l-2 .533M17 12c0-2-1-3.5-2.5-3.5S12 10 12 12s1 3.5 2.5 3.5S17 14 17 12zm-2.5-3.5C16.925 8.5 17 11 17 12s0 3.5-2.5 3.5S12 13 12 12s.059-3.5 2.5-3.5z"
+          />
+        </svg>
+      </button>
       <input
         aria-label={`Plane ${dimension} Slider`}
         max={viewer.base - 1}

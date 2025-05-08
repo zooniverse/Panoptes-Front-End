@@ -76,22 +76,21 @@ const StyledBox = styled.div`
     }
 
     .plane-title-dimension {
+      color: ${BACKGROUND_COLOR} !important;
       text-align: center;
       text-transform: uppercase;
       width: ${SLIDER_WIDTH}px;
     }
 
     .plane-title-frame {
+      color: ${BACKGROUND_COLOR} !important;
+      text-align: left !important;
       flex: 1;
       font-size: 16px !important;
       line-height: 18.7px;
     }
 
     .plane-title-label {
-      ${props => props.theme.dark
-        ? css`color: #E2E5E9;`
-        : css`color: ##5C5C5C;`
-      }
       font-size: 12px;
       line-height: 12px;
     }
@@ -238,7 +237,33 @@ export const Plane = ({
             {expanded ? 'Collapse' : 'Expand'}
           </div>
           <div className='plane-title-toggle'>
-            {expanded ? <div>UP</div> : <div>DOWN</div>}
+            {expanded ? (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="18 15 12 9 6 15" />
+              </svg>
+            ) : (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            )}
           </div>
         </div>
       </button>
