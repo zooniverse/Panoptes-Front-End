@@ -64,7 +64,7 @@ export const SLUGS = [
   'hjsmith/the-material-culture-of-wills-england-1540-1790',
   'effeli/node-code-breakers-looking-for-patterns-in-lymph-nodes',
   'md68135/notes-from-nature-ranges-mammal-traits-from-western-north-america',
-  'cmcbrain/axonal-pathfinders',
+  'cmcbrain/mind-mapper',
   'met-rhonda/irish-weather-rescue',
   'pmason/woodpecker-cavity-cam-learning',
   'tkillestein/kilonova-seekers',
@@ -102,8 +102,7 @@ export const SLUGS = [
   'jordan-pierce/click-a-coral',
   'sandiegozooglobal/wildwatch-burrowing-owl',
   'mschwamb/planet-hunters-ngts',
-  'orionnau/active-asteroids',
-  'cmcbrain/mind-mapper'
+  'orionnau/active-asteroids'
 ];
 
 export function usesMonorepo(slug) {
