@@ -102,7 +102,8 @@ export const SLUGS = [
   'jordan-pierce/click-a-coral',
   'sandiegozooglobal/wildwatch-burrowing-owl',
   'mschwamb/planet-hunters-ngts',
-  'orionnau/active-asteroids'
+  'orionnau/active-asteroids',
+  'cmcbrain/mind-mapper'
 ];
 
 export function usesMonorepo(slug) {
