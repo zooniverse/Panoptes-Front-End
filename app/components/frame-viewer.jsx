@@ -46,6 +46,7 @@ export default class FrameViewer extends React.Component {
     let type;
     let format;
     let src;
+
     if (this.props.isAudioPlusImage) {
       const subjectLocations = getSubjectLocations(this.props.subject);
       type = Object.keys(subjectLocations);
@@ -58,6 +59,10 @@ export default class FrameViewer extends React.Component {
     } else {
       ({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame));
     }
+    if (this.props.isVolumetric) {
+      type = 'volumetric';
+    }
+
     const zoomEnabled = (
       this.props.workflow &&
       this.props.workflow.configuration.pan_and_zoom &&
@@ -152,6 +157,7 @@ FrameViewer.propTypes = {
   groupSubjectId: PropTypes.string,
   groupSubjectLink: PropTypes.string,
   isGroupSubject: PropTypes.bool,
+  isVolumetric: PropTypes.bool,
   modification: PropTypes.object,
   onChange: PropTypes.func,
   onLoad: PropTypes.func,
@@ -173,6 +179,7 @@ FrameViewer.defaultProps = {
   groupSubjectId: undefined,
   groupSubjectLink: undefined,  // If a Subject is a "Subject Group", each frame can link to its constituent Subject's Talk page.
   isGroupSubject: false,  // A "Subject Group" is a type of Subject that's composed of many (single image) Subjects
+  isVolumetric: false, // volumetric projects need to use the imported viewer
   onChange: () => {},
   preferences: { },
   subject: {
