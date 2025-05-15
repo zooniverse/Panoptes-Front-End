@@ -130,7 +130,7 @@ export const routes = (
     {/* Part of Rubin 2025 project. See /app/rubin-2025 */}
     <Route path="rubin" component={RubinPage}>
       <IndexRoute component={require('./rubin-2025/register-form')} />
-      <Route path="sign-in" component={require('./rubin-2025/sign-in-form')} />
+      <Route path="sign-in" component={require('./rubin-2025/sign-in-form.jsx')} />
       <Route path="register" component={require('./rubin-2025/register-form')} />
     </Route>
 
