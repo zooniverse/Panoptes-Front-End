@@ -1,3 +1,11 @@
+/*
+Basic Sign-In Form
+Renders a form that allows users to provide their sign-in details and attempt
+to sign in.
+
+Converted from CoffeeScript on 15 May 2025. There's room for improvement.
+ */
+
 import counterpart from 'counterpart';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -20,6 +28,11 @@ counterpart.registerTranslations('en', {
 
 module.exports = createReactClass({
   displayName: 'SignInForm',
+  propTypes: {
+    onFailure: PropTypes.func,
+    onSuccess: PropTypes.func,
+    user: PropTypes.object
+  },
   contextTypes: {
     geordi: PropTypes.object
   },
@@ -52,7 +65,9 @@ module.exports = createReactClass({
     }}>
         {this.props.user != null ? <div className="form-help">
             Signed in as {this.props.user.login}{' '}
-            <button type="button" className="minor-button" onClick={this.handleSignOut}>Sign out</button>
+            <button type="button" className="minor-button" onClick={this.handleSignOut}>
+              <Translate content="signInForm.signOut" />
+            </button>
           </div> : this.state.error != null ? <div className="form-help error">
             {this.state.error.message.match(/invalid(.+)password/i) ? <Translate content="signInForm.incorrectDetails" /> : <span>{this.state.error.toString()}</span>}{' '}
 
