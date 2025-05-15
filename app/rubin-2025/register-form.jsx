@@ -1,8 +1,6 @@
 import counterpart from 'counterpart';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass  from 'create-react-class';
-import PromiseToSetState  from '../lib/promise-to-set-state';
 import auth from 'panoptes-client/lib/auth';
 import Translate from 'react-translate-component';
 import LoadingIndicator from '../components/loading-indicator';
@@ -45,16 +43,11 @@ counterpart.registerTranslations('en', {
   }
 });
 
-module.exports = createReactClass({
-  displayName: 'RegisterForm',
-  mixins: [PromiseToSetState],
-  getDefaultProps: function() {
-    return {
-      project: {}
-    };
-  },
-  getInitialState: function() {
-    return {
+class RegisterForm extends React.Component {
+  constructor (props) {
+    super(props);
+    // TODO: handle mixin
+    this.state = {
       badNameChars: null,
       nameConflict: null,
       passwordTooShort: null,
@@ -62,137 +55,163 @@ module.exports = createReactClass({
       emailConflict: null,
       agreedToPrivacyPolicy: null,
       error: null,
-      underAge: false
+      underAge: false,
+
+      // part of mixins from promiseToSetState
+      pending: {},
+      rejected: {}
     };
-  },
-  propTypes: {
-    onFailure: PropTypes.func,
-    onSubmit: PropTypes.func,
-    onSuccess: PropTypes.func,
-    user: PropTypes.object
-  },
-  contextTypes: {
-    geordi: PropTypes.object
-  },
-  render: function() {
-    var badNameChars, emailConflict, nameConflict, passwordTooShort, passwordsDontMatch, privacyPolicyLink;
-    ({badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = this.state);
-    return <form method="POST" onSubmit={this.handleSubmit}>
-      <label className="form-separator">
-        <input type="checkbox" ref="underAge" checked={this.state.underAge} disabled={this.props.user != null} onChange={this.updateAge} />
-        <Translate component="span" content="registerForm.underAge" />
-      </label>
+    
+    this.updateAge = this.updateAge.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.checkForNameConflict = this.checkForNameConflict.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.checkForEmailConflict = this.checkForEmailConflict.bind(this);
+    this.handlePrivacyPolicyChange = this.handlePrivacyPolicyChange.bind(this);
+    this.isFormValid = this.isFormValid.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
+    
+    this.debouncedCheckForNameConflict = null;
+    this.debouncedCheckForEmailConflict = null;
 
-      <label>
-        <span className="columns-container inline spread">
-          <Translate content="registerForm.userName" />
-          {(badNameChars != null ? badNameChars.length : void 0) > 0 ? <Translate className="form-help error" content="registerForm.badChars" /> : "nameConflict" in this.state.pending ? <LoadingIndicator /> : nameConflict != null ? nameConflict ? <span className="form-help error">
-                <Translate content="registerForm.nameConflict" />{' '}
-                <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
-                  <Translate content="registerForm.forgotPassword" />
-                </a>
-              </span> : <span className="form-help success">
-                <Translate content="registerForm.looksGood" />
-              </span> : void 0}
-          <Translate className="form-help info right-align" content="registerForm.required" />
-        </span>
-        <input type="text" ref="name" className="standard-input full" disabled={this.props.user != null} autoFocus onChange={this.handleNameChange} maxLength="255" />
-        <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
-        {this.state.underAge ? <Translate component="span" className="form-help info" content="registerForm.notRealName" /> : void 0}
-      </label>
+    // part of mixins from promiseToSetState
+    this._promiseStateKeys = {}
+  }
 
-      <br />
+  render () {
+    const {
+      badNameChars,
+      nameConflict,
+      passwordTooShort,
+      passwordsDontMatch,
+      emailConflict
+    } = this.state;
 
-      <label>
-        <span className="columns-container inline spread">
-          <Translate content="registerForm.password" />
-          {passwordTooShort ? <Translate className="form-help error" content="registerForm.passwordTooShort" /> : void 0}
-          <Translate className="form-help info right-align" content="registerForm.required" />
-        </span>
-        <input type="password" ref="password" className="standard-input full" disabled={this.props.user != null} onChange={this.handlePasswordChange} />
-      </label>
+    const privacyPolicyLink = (
+      <a target="_blank" href={`${window.location.origin}/privacy`}>
+        <Translate content="registerForm.privacyPolicy" />
+      </a>
+    );
+    
+    return (
+      <form method="POST" onSubmit={this.handleSubmit}>
+        <label className="form-separator">
+          <input type="checkbox" ref="underAge" checked={this.state.underAge} disabled={this.props.user != null} onChange={this.updateAge} />
+          <Translate component="span" content="registerForm.underAge" />
+        </label>
 
-      <br />
+        <label>
+          <span className="columns-container inline spread">
+            <Translate content="registerForm.userName" />
+            {(badNameChars != null ? badNameChars.length : void 0) > 0 ? <Translate className="form-help error" content="registerForm.badChars" /> : "nameConflict" in this.state.pending ? <LoadingIndicator /> : nameConflict != null ? nameConflict ? <span className="form-help error">
+                  <Translate content="registerForm.nameConflict" />{' '}
+                  <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
+                    <Translate content="registerForm.forgotPassword" />
+                  </a>
+                </span> : <span className="form-help success">
+                  <Translate content="registerForm.looksGood" />
+                </span> : void 0}
+            <Translate className="form-help info right-align" content="registerForm.required" />
+          </span>
+          <input type="text" ref="name" className="standard-input full" disabled={this.props.user != null} autoFocus onChange={this.handleNameChange} maxLength="255" />
+          <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
+          {this.state.underAge ? <Translate component="span" className="form-help info" content="registerForm.notRealName" /> : void 0}
+        </label>
 
-      <label>
-        <span className="columns-container inline spread">
-          <Translate content="registerForm.confirmPassword" /><br />
-          {passwordsDontMatch != null ? passwordsDontMatch ? <Translate className="form-help error" content="registerForm.passwordsDontMatch" /> : !passwordTooShort ? <Translate className="form-help success" content="registerForm.looksGood" /> : void 0 : void 0}
-          <Translate className="form-help info right-align" content="registerForm.required" />
-        </span>
-        <input type="password" ref="confirmedPassword" className="standard-input full" disabled={this.state.props != null} onChange={this.handlePasswordChange} />
-      </label>
+        <br />
 
-      <br />
+        <label>
+          <span className="columns-container inline spread">
+            <Translate content="registerForm.password" />
+            {passwordTooShort ? <Translate className="form-help error" content="registerForm.passwordTooShort" /> : void 0}
+            <Translate className="form-help info right-align" content="registerForm.required" />
+          </span>
+          <input type="password" ref="password" className="standard-input full" disabled={this.props.user != null} onChange={this.handlePasswordChange} />
+        </label>
 
-      <label>
-        <span className="columns-container inline spread">
-          {this.state.underAge ? <Translate content="registerForm.guardianEmail" /> : <Translate content="registerForm.email" />}
-          {'emailConflict' in this.state.pending ? <LoadingIndicator /> : emailConflict != null ? emailConflict ? <span className="form-help error">
-                <Translate content="registerForm.emailConflict" />{' '}
-                <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
-                  <Translate content="registerForm.forgotPassword" />
-                </a>
-              </span> : <Translate className="form-help success" content="registerForm.looksGood" /> : <Translate className="form-help info right-align" content="registerForm.required" />}
-        </span>
-        <input type="text" ref="email" className="standard-input full" disabled={this.state.props != null} onChange={this.handleEmailChange} />
-      </label>
+        <br />
 
-      <br />
+        <label>
+          <span className="columns-container inline spread">
+            <Translate content="registerForm.confirmPassword" /><br />
+            {passwordsDontMatch != null ? passwordsDontMatch ? <Translate className="form-help error" content="registerForm.passwordsDontMatch" /> : !passwordTooShort ? <Translate className="form-help success" content="registerForm.looksGood" /> : void 0 : void 0}
+            <Translate className="form-help info right-align" content="registerForm.required" />
+          </span>
+          <input type="password" ref="confirmedPassword" className="standard-input full" disabled={this.state.props != null} onChange={this.handlePasswordChange} />
+        </label>
 
-      <label>
-        <span className="columns-container inline spread">
-          <Translate content="registerForm.realName" />
-          <Translate className="form-help info right-align" content="registerForm.optional" />
-        </span>
-        <input type="text" pattern='[^@]+' ref="realName" className="standard-input full" disabled={this.props.user != null} title={counterpart('registerForm.realNamePatternHelp')} />
-        <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
-      </label>
+        <br />
 
-      <br />
-      <br />
+        <label>
+          <span className="columns-container inline spread">
+            {this.state.underAge ? <Translate content="registerForm.guardianEmail" /> : <Translate content="registerForm.email" />}
+            {'emailConflict' in this.state.pending ? <LoadingIndicator /> : emailConflict != null ? emailConflict ? <span className="form-help error">
+                  <Translate content="registerForm.emailConflict" />{' '}
+                  <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
+                    <Translate content="registerForm.forgotPassword" />
+                  </a>
+                </span> : <Translate className="form-help success" content="registerForm.looksGood" /> : <Translate className="form-help info right-align" content="registerForm.required" />}
+          </span>
+          <input type="text" ref="email" className="standard-input full" disabled={this.state.props != null} onChange={this.handleEmailChange} />
+        </label>
 
-      <label>
-        <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={this.props.user != null} onChange={this.handlePrivacyPolicyChange} />
-        {privacyPolicyLink = <a target="_blank" href={`${window.location.origin}/privacy`}><Translate content="registerForm.privacyPolicy" /></a>}
-        {this.state.underAge ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} /> : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />}
-      </label>
+        <br />
 
-      <br />
-      <br />
+        <label>
+          <span className="columns-container inline spread">
+            <Translate content="registerForm.realName" />
+            <Translate className="form-help info right-align" content="registerForm.optional" />
+          </span>
+          <input type="text" pattern='[^@]+' ref="realName" className="standard-input full" disabled={this.props.user != null} title={counterpart('registerForm.realNamePatternHelp')} />
+          <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
+        </label>
 
-      <label>
-        <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
-        {this.state.underAge ? <Translate component="span" content="registerForm.underAgeEmail" /> : <Translate component="span" content="registerForm.okayToEmail" />}
-      </label><br />
+        <br />
+        <br />
 
-      <label>
-        <input type="checkbox" ref="betaTester" disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
-        <Translate component="span" content="registerForm.betaTester" />
-      </label><br />
+        <label>
+          <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={this.props.user != null} onChange={this.handlePrivacyPolicyChange} />
+          {this.state.underAge ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} /> : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />}
+        </label>
 
-      <p style={{
-      textAlign: 'center'
-    }}>
-        {'user' in this.state.pending ? <LoadingIndicator /> : this.props.user != null ? <span className="form-help warning">
-            <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
-            <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
-          </span> : this.state.error != null ? <span className="form-help error">{this.state.error.toString()}</span> : <span>&nbsp;</span>}
-      </p>
+        <br />
+        <br />
 
-      <div>
-        <button type="submit" className="standard-button full" disabled={!this.isFormValid() || Object.keys(this.state.pending).length !== 0 || (this.props.user != null)}>
-          <Translate content="registerForm.register" />
-        </button>
-      </div>
-    </form>;
-  },
-  updateAge: function() {
+        <label>
+          <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
+          {this.state.underAge ? <Translate component="span" content="registerForm.underAgeEmail" /> : <Translate component="span" content="registerForm.okayToEmail" />}
+        </label><br />
+
+        <label>
+          <input type="checkbox" ref="betaTester" disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
+          <Translate component="span" content="registerForm.betaTester" />
+        </label><br />
+
+        <p style={{ textAlign: 'center' }}>
+          {'user' in this.state.pending ? <LoadingIndicator /> : this.props.user != null ? <span className="form-help warning">
+              <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
+              <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
+            </span> : this.state.error != null ? <span className="form-help error">{this.state.error.toString()}</span> : <span>&nbsp;</span>}
+        </p>
+
+        <div>
+          <button type="submit" className="standard-button full" disabled={!this.isFormValid() || Object.keys(this.state.pending).length !== 0 || (this.props.user != null)}>
+            <Translate content="registerForm.register" />
+          </button>
+        </div>
+      </form>
+    );
+  }
+
+  updateAge () {
     return this.setState({
       underAge: !this.state.underAge
     });
-  },
-  handleNameChange: function() {
+  }
+
+  handleNameChange () {
     var badChars, char, exists, name;
     name = this.refs.name.value;
     exists = name.length !== 0;
@@ -219,9 +238,9 @@ module.exports = createReactClass({
       }
       return this.debouncedCheckForNameConflict(name);
     }
-  },
-  debouncedCheckForNameConflict: null,
-  checkForNameConflict: function(username) {
+  }
+
+  checkForNameConflict (username) {
     return this.promiseToSetState({
       nameConflict: auth.register({
         login: username
@@ -230,8 +249,9 @@ module.exports = createReactClass({
         return (ref = error.message.match(/login(.+)taken/mi)) != null ? ref : false;
       })
     });
-  },
-  handlePasswordChange: function() {
+  }
+
+  handlePasswordChange () {
     var asLong, confirmedPassword, exists, longEnough, matches, password;
     password = this.refs.password.value;
     confirmedPassword = this.refs.confirmedPassword.value;
@@ -243,8 +263,9 @@ module.exports = createReactClass({
       passwordTooShort: exists ? !longEnough : void 0,
       passwordsDontMatch: exists && asLong ? !matches : void 0
     });
-  },
-  handleEmailChange: function() {
+  }
+
+  handleEmailChange () {
     var email;
     this.promiseToSetState({
       emailConflict: Promise.resolve(null) // Cancel any existing request.
@@ -256,27 +277,30 @@ module.exports = createReactClass({
       }
       return this.debouncedCheckForEmailConflict(email);
     }
-  },
-  debouncedCheckForEmailConflict: null,
-  checkForEmailConflict: function(email) {
+  }
+
+  checkForEmailConflict (email) {
     return this.promiseToSetState({
       emailConflict: auth.register({email}).catch(function(error) {
         var ref;
         return (ref = error.message.match(/email(.+)taken/mi)) != null ? ref : false;
       })
     });
-  },
-  handlePrivacyPolicyChange: function() {
+  }
+
+  handlePrivacyPolicyChange () {
     return this.setState({
       agreesToPrivacyPolicy: this.refs.agreesToPrivacyPolicy.checked
     });
-  },
-  isFormValid: function() {
+  }
+
+  isFormValid () {
     var agreesToPrivacyPolicy, badNameChars, emailConflict, nameConflict, nameExists, passwordsDontMatch;
     ({badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy, nameExists} = this.state);
     return (badNameChars != null ? badNameChars.length : void 0) === 0 && !nameConflict && !passwordsDontMatch && !emailConflict && nameExists && agreesToPrivacyPolicy;
-  },
-  handleSubmit: function(e) {
+  }
+
+  handleSubmit (e) {
     var base, beta_email_communication, credited_name, email, global_email_communication, login, password, project_email_communication, project_id, ref, ref1;
     if ((ref = this.context.geordi) != null) {
       ref.logEvent({
@@ -306,8 +330,58 @@ module.exports = createReactClass({
       this.setState({error});
       return typeof (base1 = this.props).onFailure === "function" ? base1.onFailure(...arguments) : void 0;
     });
-  },
-  handleSignOut: function() {
+  }
+
+  handleSignOut () {
     return auth.signOut();
   }
-});
+
+  // part of mixins from promiseToSetState
+  promiseToSetState (keysAndPromises, callback) {
+    var handledPromise, key, pending, promise, promiseHandler, rejected;
+    ({pending, rejected} = this.state);
+    for (key in keysAndPromises) {
+      promise = keysAndPromises[key];
+      this._promiseStateKeys[key] = promise;
+      promiseHandler = this._handlePromisedState.bind(this, key, promise);
+      handledPromise = promise.then(promiseHandler.bind(this, false)).catch(promiseHandler.bind(this, true));
+      pending[key] = handledPromise;
+      delete rejected[key];
+    }
+    return this.setState({pending, rejected}, callback);
+  }
+
+  // part of mixins from promiseToSetState
+  _handlePromisedState (key, promise, caught, value) {
+    var isLatestPromise, newState, pending, rejected;
+    // Only change the state if its current value is the same promise that's resolving.
+    isLatestPromise = promise === this._promiseStateKeys[key];
+    if (this.isMounted() && isLatestPromise) {
+      ({pending, rejected} = this.state);
+      newState = {pending, rejected};
+      delete pending[key];
+      if (caught) {
+        newState[key] = null;
+        rejected[key] = value;
+      } else {
+        newState[key] = value;
+        delete rejected[key];
+      }
+      this.setState(newState);
+      return null;
+    }
+  }
+}
+
+RegisterForm.contextTypes = {
+  geordi: PropTypes.object
+};
+
+RegisterForm.propTypes = {
+  onFailure: PropTypes.func,
+  onSubmit: PropTypes.func,
+  onSuccess: PropTypes.func,
+  user: PropTypes.object
+};
+
+export { RegisterForm }
