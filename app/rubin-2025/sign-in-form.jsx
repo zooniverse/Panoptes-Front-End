@@ -142,6 +142,7 @@ SignInForm.contextTypes = {
 
 SignInForm.propTypes = {
   onFailure: PropTypes.func,
+  onSubmit: PropTypes.func,
   onSuccess: PropTypes.func,
   user: PropTypes.object
 };
