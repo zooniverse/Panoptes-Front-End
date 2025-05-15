@@ -21,7 +21,8 @@ counterpart.registerTranslations('en', {
     userName: 'User name or email address',
     password: 'Password',
     incorrectDetails: 'Username or password incorrect',
-    forgotPassword: 'Forgot my password'
+    forgotPassword: 'Forgot my password',
+    alreadySignedIn: 'Signed in as %(name)s'
   }
 });
 
@@ -60,7 +61,7 @@ class SignInForm extends React.Component {
         textAlign: 'center'
       }}>
           {this.props.user != null ? <div className="form-help">
-              Signed in as {this.props.user.login}{' '}
+              <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
               <button type="button" className="minor-button" onClick={this.handleSignOut}>
                 <Translate content="signInForm.signOut" />
               </button>
