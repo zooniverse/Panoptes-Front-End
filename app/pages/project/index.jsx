@@ -339,13 +339,12 @@ class ProjectPageController extends React.Component {
         {!!this.state.error &&
           ((this.state.error.message === 'NOT_FOUND') ?
             <div className="content-container">
-              <p>Project <code>{slug}</code> not found.</p>
+              <p>Project not found.</p>
               <p>If you are sure the URL is correct, you might not have permission to view this project.</p>
             </div> :
             <div className="content-container">
               <p>
-                There was an error retrieving project{' '}
-                <strong>{slug}</strong>.
+                There was an error retrieving the project.
               </p>
               <p>
                 <code>{this.state.error.message}</code>
