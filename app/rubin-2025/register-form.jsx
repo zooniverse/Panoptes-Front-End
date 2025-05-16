@@ -371,6 +371,9 @@ class RegisterForm extends React.Component {
       return null;
     }
   }
+
+  // part of mixins from promiseToSetState
+  isMounted () { return true }
 }
 
 RegisterForm.contextTypes = {
