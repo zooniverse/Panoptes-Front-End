@@ -1,8 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS205: Consider reworking code to avoid use of IIFEs
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import { captureException, withScope } from '@sentry/browser';
 import React from 'react';
 import PropTypes from 'prop-types';
