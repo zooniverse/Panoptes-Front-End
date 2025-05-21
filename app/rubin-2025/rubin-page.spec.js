@@ -16,8 +16,8 @@ describe('RubinPage', function () {
   });
 
   describe('heading', function () {
-    it('renders signIn.withZooniverse content', function () {
-      assert.equal(wrapper.find('Translate').first().prop('content'), 'signIn.withZooniverse');
+    it('renders signIn.signIn content', function () {
+      assert.equal(wrapper.find('Translate').first().prop('content'), 'signIn.signIn');
     });
   });
 
