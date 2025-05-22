@@ -2,11 +2,11 @@ export default {
   loading: '(Chargement)',
   aboutPages: {
     missingContent: {
-      education: 'Ce projet n\'a pas de ressources éducatives pour l\'instant.',
-      faq: 'Ce projet ne comporte pas de questions fréquentes pour l\'instant.',
-      research: 'Ce projet n\'a pas de description de recherche pour l\'instant.',
-      results: 'Ce projet n\'a pas de résultats à partager pour l\'instant.',
-      team: 'Ce projet n\'a pas d\'information sur l\'équipe pour l\'instant.',
+      education: "Ce projet n\'a pas de ressources éducatives pour l\'instant.",
+      faq: "Ce projet ne comporte pas de questions fréquentes pour l\'instant.",
+      research: "Ce projet n\'a pas de description de recherche pour l\'instant.",
+      results: "Ce projet n\'a pas de résultats à partager pour l\'instant.",
+      team: "Ce projet n\'a pas d'information sur l\'équipe pour l\'instant."
     }
   },
   projectRoles: {
@@ -18,7 +18,7 @@ export default {
     moderator: 'Modérateur/trice',
     tester: 'Testeur/e',
     expert: 'Expert/èrte',
-    museum: 'Musée',
+    museum: 'Musée'
   },
   classifier: {
     back: 'Retour',
@@ -29,38 +29,78 @@ export default {
     done: 'Valider',
     doneAndTalk: 'Valider & Discussion',
     dontShowMinicourse: 'Ne plus montrer le petit tutoriel dans le futur',
+    interventions: {
+      optOut: 'Ne plus me montrer de messages.',
+      studyInfo: 'Je ne souhaite pas recevoir ces messages.'
+    },
     letsGo: 'À vos marques, prêts, partez!',
+    miniCourseButton: 'Relancer le petit tutoriel du projet',
     next: 'Suivant',
     optOut: 'Annuler',
+    recents: 'Vos classifications récentes',
+    talk: 'Discussions',
+    taskHelpButton: "Avez-vous besoin d\'aide?",
     taskTabs: {
       taskTab: 'Tache',
       tutorialTab: 'Tutoriel'
     },
-    recents: 'Vos classifications récentes',
-    talk: 'Discussions',
-    taskHelpButton: 'Avez-vous besoin d\'aide?',
-    miniCourseButton: 'Relancer le petit tutoriel du projet',
     workflowAssignmentDialog: {
-      promotionMessage: "Bravo! Vous avez débloqué le prochain module. Si vous préférez rester dans ce module, vous pouvez choisir de rester.",
       acceptButton: 'Passer au prochain module!',
-      declineButton: 'Non, merci'
+      declineButton: 'Non, merci',
+      promotionMessage: 'Bravo! Vous avez débloqué le prochain module. Si vous préférez rester dans ce module, vous pouvez choisir de rester.'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'Exacts',
+      falsepos: 'Faux positifs',
+      incorrect: 'Inexacts'
     }
   },
   project: {
-    language: 'Langue',
-    loading: 'Chargement du projet',
-    disclaimer: 'Ce projet a été créé avec le Zooniverse Project Builder mais n\'est pas encore un projet officiel de Zooniverse. Les questions et problèmes à propos de ce projet adressés à l\'équipe de Zooniverse peut ne pas recevoir de réponse.',
-    fieldGuide: 'Guide Pratique',
     about: {
       header: 'À propos',
       nav: {
+        education: 'Éducation',
+        faq: 'FAQ',
         research: 'Recherche',
         results: 'Résultats',
-        faq: 'FAQ',
-        education: 'Éducation',
-        team: 'Équipe',
+        team: 'Équipe'
       }
     },
+    classifyPage: {
+      dark: 'foncé',
+      light: 'clair',
+      themeToggle: 'Passer au thème %(theme)s',
+      title: 'Classifier'
+    },
+    disclaimer: "Ce projet a été créé avec le Zooniverse Project Builder mais n\'est pas encore un projet officiel de Zooniverse. Les questions et problèmes à propos de ce projet adressés à l\'équipe de Zooniverse peut ne pas recevoir de réponse.",
+    fieldGuide: 'Guide Pratique',
+    home: {
+      about: 'À propos de %(title)s',
+      getStarted: 'À vos marques, prêts, partez!',
+      joinIn: 'Les rejoindre',
+      learnMore: 'En savoir plus',
+      links: 'Liens externes du projet',
+      metadata: {
+        classifications: 'Classifications',
+        completedSubjects: 'Sujets complétés',
+        statistics: 'Statistiques de %(title)s',
+        subjects: 'Sujets',
+        volunteers: 'Volontaires'
+      },
+      organization: 'Organisation',
+      researcher: "Quelques mots de l\'équipe de recherche",
+      talk: {
+        one: '1 personne parle de %(title)s en ce moment.',
+        other: '%(count)s personnes parlent de %(title)s en ce moment.',
+        zero: 'Personne ne parle de %(title)s en ce moment.'
+      },
+      visitLink: 'Visiter le project',
+      workflowAssignment: 'Vous avez débloquez le module %(workflowDisplayName)s'
+    },
+    language: 'Langue',
+    loading: 'Chargement du projet',
     nav: {
       about: 'À propos',
       adminPage: 'Page Administrateur',
@@ -72,35 +112,14 @@ export default {
       talk: 'Discussions',
       underReview: 'En cours de révision',
       zooniverseApproved: 'Approuvé par Zooniverse'
-    },
-    classifyPage: {
-      dark: 'foncé',
-      light: 'clair',
-      title: 'Classifier',
-      themeToggle: 'Passer au thème %(theme)s'
-    },
-    home: {
-      organization: 'Organisation',
-      researcher: 'Quelques mots de l\'équipe de recherche',
-      about: 'À propos de %(title)s',
-      metadata: {
-        statistics: 'Statistiques de %(title)s',
-        classifications: 'Classifications',
-        volunteers: 'Volontaires',
-        completedSubjects: 'Sujets complétés',
-        subjects: 'Sujets'
-      },
-      talk: {
-        zero: 'Personne ne parle de **%(title)s** en ce moment.',
-        one: '**1** personne parle de **%(title)s** en ce moment.',
-        other: '**%(count)s** personnes parlent de **%(title)s** en ce moment.'
-      },
-      joinIn: 'Les rejoindre',
-      learnMore: 'En savoir plus',
-      getStarted: 'À vos marques, prêts, partez!',
-      workflowAssignment: 'Vous avez débloquez le module %(workflowDisplayName)s',
-      visitLink: 'Visiter le project',
-      links: 'Liens externes du projet'
+    }
+  },
+  projects: {
+    welcome: {
+      heading: "Bienvenue! Nous sommes ravis de vous voir ici",
+      scrollDown: "Faire défiler vers le bas pour en découvrir davantage",
+      talk: "Pensez à consulter également Talk où vous pourrez discuter avec des bénévoles qui ont le même état d\'esprit.",
+      thanks: "Merci de votre intérêt pour participer à nos recherches. Nous avons rassemblé ici plusieurs projets pour lesquels nous avons besoin de votre aide. Parcourez davantage d\'options en faisant défiler la page vers le bas afin de découvrir tous nos projets actifs."
     }
   },
   organization: {
@@ -127,6 +146,7 @@ export default {
     pleaseWait: 'Merci d\'attendre...'
   },
   tasks: {
+    hidePreviousMarks: 'Masquer les marques précédentes %(count)s',
     less: 'Moins',
     more: 'Plus',
     shortcut: {
@@ -166,10 +186,7 @@ export default {
     withZooniverse: 'Se connecter avec votre compte Zooniverse',
     whyHaveAccount: 'Les volontaires connectés peuvent suivre leur travail et seront crédités dans toutes les publications.',
     signIn: 'Se connecter',
-    register: 'S\'inscrire',
-    orThirdParty: 'Ou se connecter avec un autre compte',
-    withFacebook: 'Se connecter avec Facebook',
-    withGoogle: 'Se connecter avec Google'
+    register: "S\'inscrire"
   },
   notFoundPage: {
     message: 'Pas trouvé'
@@ -228,7 +245,7 @@ export default {
     },
     project: {
       section: 'Préférence pour les e-mails du projet',
-      header: 'Projet',
+      header: 'Projet'
     }
   },
   userSettings: {
@@ -257,4 +274,4 @@ export default {
       clearHeader: 'Supprimer l\'image d\'en-tête'
     }
   }
-};
+}

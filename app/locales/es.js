@@ -1,5 +1,14 @@
 export default {
   loading: '(Cargando)',
+  aboutPages: {
+    missingContent: {
+      education: 'Este proyecto no tiene recursos educativos todavía.',
+      faq: 'Este proyecto no tiene preguntas frecuentes todavía.',
+      research: 'Este proyecto no tiene un caso científico todavía.',
+      results: 'Este proyecto no tiene resultados que notificar todavía.',
+      team: 'Este proyecto no tiene información del equipo.'
+    }
+  },
   classifier: {
     back: 'Atrás',
     backButtonWarning: 'Al regresar se borrará su trabajo para la tarea actual.',
@@ -9,77 +18,114 @@ export default {
     done: 'Listo',
     doneAndTalk: 'Listo & Hablemos',
     dontShowMinicourse: 'No mostrar mini-curso en el futuro',
+    interventions: {
+      optOut: 'No quiero recibir más mensajes.',
+      studyInfo: 'No quiero participar en este estudio.'
+    },
     letsGo: '¡Vamos!',
+    miniCourseButton: 'Reiniciar el mini-curso del proyecto',
     next: 'Siguiente',
     optOut: 'Opción de salida',
     recents: 'Tus clasificaciones recientes',
+    talk: 'Hablemos',
+    taskHelpButton: '¿Necesitas ayuda con esta tarea?',
     taskTabs: {
       taskTab: 'Tarea',
       tutorialTab: 'Tutorial'
     },
-    talk: 'Hablemos',
-    taskHelpButton: '¿Necesitas ayuda con esta tarea?',
-    miniCourseButton: 'Reiniciar el mini-curso del proyecto',
     workflowAssignmentDialog: {
-      promotionMessage: "¡Felicitaciones! Has desbloqueado la próxima secuencia de trabajo. Si prefieres seguir en la secuencia actual, puedes escoger permanecer.",
       acceptButton: '¡Ir al siguiente nivel!',
-      declineButton: 'No, gracias'
+      declineButton: 'No, gracias',
+      promotionMessage: '¡Felicitaciones! Has desbloqueado la próxima secuencia de trabajo. Si prefieres seguir en la secuencia actual, puedes escoger permanecer.'
+    }
+  },
+  collections: {
+    createForm: {
+      private: 'Privado',
+      submit: 'Añadir colección'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'Aciertos',
+      falsepos: 'Falsos positivos',
+      incorrect: 'Fallos'
     }
   },
   project: {
-    language: 'Idioma',
-    loading: 'Cargando el proyecto',
-    disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Las preguntas y asuntos relacionados con este proyecto dirigidos al equipo de Zooniverse podrían no recibir respuesta.',
-    fieldGuide: 'Guía Práctica',
     about: {
       header: 'Acerca de',
       nav: {
+        education: 'Educación',
+        faq: 'Preguntas Frecuentes',
         research: 'Investigación',
         results: 'Resultados',
-        faq: 'Preguntas Frecuentes',
-        education: 'Educación',
-        team: 'El Equipo',
+        team: 'El Equipo'
       }
-    },
-    nav: {
-      about: 'Acerca de',
-      classify: 'Clasificar',
-      talk: 'Hablemos',
-      collections: 'Colecciones',
-      exploreProject: 'Explorar el proyecto',
-      recents: 'Recientes',
-      lab: 'Laboratorio',
-      adminPage: 'Página del Administrador',
-      underReview: 'Bajo Revisión',
-      zooniverseApproved: 'Aprobado por Zooniverse'
     },
     classifyPage: {
       dark: 'oscuro',
       light: 'claro',
-      title: 'Clasificar',
-      themeToggle: 'Cambiar a diseño %(theme)s'
+      themeToggle: 'Cambiar a diseño %(theme)s',
+      title: 'Clasificar'
     },
+    disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Las preguntas y asuntos relacionados con este proyecto dirigidos al equipo de Zooniverse podrían no recibir respuesta.',
+    fieldGuide: 'Guía Práctica',
     home: {
-      researcher: 'Palabras del investigador',
       about: 'Acerca de %(title)s',
-      metadata: {
-        statistics: 'Estadística de %(title)s',
-        classifications: 'Clasificaciones',
-        volunteers: 'Voluntarios',
-        completedSubjects: 'Sujetos completados',
-        subjects: 'Sujetos'
-      },
-      talk: {
-        zero: 'Nadie está hablando de **%(title)s** ahora.',
-        one: '**1** persona está hablando de  **%(title)s** ahora.',
-        other: '**%(count)s** personas están hablando de **%(title)s** ahora.'
-      },
+      getStarted: 'Comenzar',
       joinIn: 'Unirse',
       learnMore: 'Aprende más',
-      getStarted: 'Comenzar',
-      workflowAssignment: 'Has desbloqueado %(workflowDisplayName)s',
+      links: 'Enlaces',
+      metadata: {
+        classifications: 'Clasificaciones',
+        completedSubjects: 'Sujetos completados',
+        statistics: 'Estadística de %(title)s',
+        subjects: 'Sujetos',
+        volunteers: 'Voluntarios'
+      },
+      organization: 'Organización',
+      researcher: 'Palabras del investigador',
+      talk: {
+        one: '1 persona está hablando de  %(title)s ahora.',
+        other: '%(count)s personas están hablando de %(title)s ahora.',
+        zero: 'Nadie está hablando de %(title)s ahora.'
+      },
       visitLink: 'Visita el proyecto',
-      links: 'Enlaces'
+      workflowAssignment: 'Has desbloqueado %(workflowDisplayName)s'
+    },
+    language: 'Idioma',
+    loading: 'Cargando el proyecto',
+    nav: {
+      about: 'Acerca de',
+      adminPage: 'Página del Administrador',
+      classify: 'Clasificar',
+      collections: 'Colecciones',
+      exploreProject: 'Explorar el proyecto',
+      lab: 'Laboratorio',
+      recents: 'Recientes',
+      talk: 'Hablemos',
+      underReview: 'Bajo Revisión',
+      zooniverseApproved: 'Aprobado por Zooniverse'
+    }
+  },
+  projectRoles: {
+    collaborator: 'Colaborador',
+    expert: 'Experto',
+    moderator: 'Moderador',
+    museum: 'Museo',
+    owner: 'Propietario',
+    scientist: 'Investigador',
+    tester: 'Evaluador',
+    title: 'El Equipo',
+    translator: 'Traductor'
+  },
+  projects: {
+    welcome: {
+      heading: '¡Te damos la bienvenida! Estamos muy contentos de que estés aquí',
+      scrollDown: 'Desplázate hacia abajo para ver aún más',
+      talk: 'Asegúrate también de visitar Talk, donde puedes chatear con otros voluntarios afines.',
+      thanks: 'Gracias por tu interés en ayudar a la investigación real. Aquí hemos reunido algunos proyectos en los que nos vendría muy bien tu ayuda en este momento. Para ver más opciones, solo tienes que desplazarte hacia abajo para ver todos nuestros proyectos activos.'
     }
   },
   organization: {
@@ -99,13 +145,14 @@ export default {
       readMore: 'Leer más',
       readLess: 'Leer menos',
       links: 'Enlaces'
-    },
+    }
   },
   tasks: {
+    hidePreviousMarks: 'Ocultar marcas anteriores %(count)s',
     less: 'Menos',
     more: 'Más',
     shortcut: {
-      noAnswer: "Sin respuesta"
+      noAnswer: 'Sin respuesta'
     },
     survey: {
       clear: 'Borrar',
@@ -146,10 +193,7 @@ export default {
     withZooniverse: 'Iniciar sesión con su cuenta de Zooniverse',
     whyHaveAccount: 'Los voluntarios con sesión iniciada pueden llevar un registro de su trabajo y recibirán crédito por cualquier publicación resultante.',
     signIn: 'Iniciar sesión',
-    register: 'Registrarse',
-    orThirdParty: 'O iniciar sesión con otro servicio',
-    withFacebook: 'Iniciar sesión con Facebook',
-    withGoogle: 'Iniciar sesión con Google'
+    register: 'Registrarse'
   },
   notFoundPage: {
     message: 'No encontrado'
@@ -167,5 +211,8 @@ export default {
     loggedInDialog: 'Usted tiene una sesión activa actualmente. Por favor salga de su sesión si quiere restablecer su contraseña.',
     missingEmailsSpamNote: 'Por favor, revise su carpeta de spam si no ha recibido el correo electrónico para restablecer la contraseña.',
     missingEmailsAlternateNote: 'Si aún no ha recibido el correo electrónico, por favor intente con alguna otra dirección que pudo haber usado para registrarse.'
+  },
+  workflowToggle: {
+    label: 'Activo'
   }
-};
+}
