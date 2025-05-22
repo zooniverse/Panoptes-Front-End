@@ -37,8 +37,9 @@ export default class SocialLinksEditor extends React.Component {
 
   handleNewLink(site, e) {
     let index = this.indexFinder(this.props.project.urls, site);
+    const siteSubpath = socialIcons[site]?.siteSubpath || '';
     if (index < 0) { index = this.props.project.urls.length; }
-    let url = `https://${site}${e.target.value}`;
+    let url = `https://${site}${siteSubpath}${e.target.value}`;
     if (socialIcons[site]?.pathBeforeSite) {
       url = `https://${e.target.value}.${site}`;
     }
