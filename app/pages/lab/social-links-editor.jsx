@@ -92,11 +92,17 @@ export default class SocialLinksEditor extends React.Component {
     const index = this.indexFinder(this.props.project.urls, site);
     const value = index >= 0 ? this.props.project.urls[index].path : '';
     const precedeSiteName = socialIcons[site]?.pathBeforeSite;
+    const siteSubpath = socialIcons[site]?.siteSubpath || '';
 
     return (
       <tr key={i}>
         {!precedeSiteName && (
-          <td><label for={`socialLink${i}`}>{site}</label></td>
+          <td>
+            <label for={`socialLink${i}`}>{site}</label>
+            {siteSubpath && (
+              <span style={{ color: '#c0c0c0' }}>{siteSubpath}</span>
+            )} 
+          </td>
         )}
         <AutoSave tag="td" resource={this.props.project}>
           <input
