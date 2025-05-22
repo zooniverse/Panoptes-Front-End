@@ -1,5 +1,14 @@
 export default {
   loading: '(Učitava se)',
+  aboutPages: {
+    missingContent: {
+      education: 'Ovaj projekt još nema edukativnih resursa.',
+      faq: 'Ovaj projekt još nema česta pitanja.',
+      research: 'Ovaj projekt još nema znanstveni predmet.',
+      results: 'Ovaj projekt još nema rezultata za prijavu.',
+      team: 'Ovaj projekt nema informacije o timu.'
+    }
+  },
   classifier: {
     back: 'Natrag',
     backButtonWarning: 'Vraćanje natrag će obrisati Vaš rad za trenutni zadatak',
@@ -26,7 +35,15 @@ export default {
       declineButton: 'Ne, hvala.'
     },
     interventions: {
-      optOut: 'Ne pokazuj mi ove poruke u budućnosti.'
+      optOut: 'Ne pokazuj mi ove poruke u budućnosti.',
+      studyInfo: 'Ne želim sudjelovati u ovoj razmjeni poruka studija.'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'Točno',
+      falsepos: 'Lažno pozitivno',
+      incorrect: 'Netočno'
     }
   },
   project: {
@@ -73,9 +90,9 @@ export default {
         subjects: 'Predmeta'
       },
       talk: {
-        zero: 'Nitko ne priča o **%(title)s** trenutno.',
-        one: '**1** osoba prilča o  **%(title)s** trenutno.',
-        other: '**%(count)s** ljudi pričaju o **%(title)s** trenutno'
+        one: '1 osoba prilča o  %(title)s trenutno.',
+        other: '%(count)s ljudi pričaju o %(title)s trenutno',
+        zero: 'Nitko ne priča o %(title)s trenutno.'
       },
       joinIn: 'Priduži se',
       learnMore: 'Saznaj više',
@@ -84,6 +101,25 @@ export default {
       visitLink: 'Pogledaj projekt',
       links: 'Poveznice vanjskih projekata'
     }
+  },
+  projects: {
+    welcome: {
+      heading: 'Dobro došli! Drago nam je što ste ovdje',
+      scrollDown: 'Pomaknite se prema dolje za dodatni sadržaj',
+      talk: 'Istražite i Talk gdje možete chatati s drugim volonterima sličnih interesa.',
+      thanks: 'Hvala vam na interesu za davanje doprinosa stvarnom istraživanju. Imamo nekoliko projekata za koje nam je vaša pomoć trenutno zaista potrebna. Za više opcija samo se pomaknite prema dolje kako biste pregledali sve naše aktivne projekte.'
+    }
+  },
+  projectRoles: {
+    collaborator: 'Suradnik',
+    expert: 'Stručnjak',
+    moderator: 'Moderator',
+    museum: 'Muzej',
+    owner: 'Vlasnik',
+    scientist: 'Istraživač',
+    tester: 'Tester',
+    title: 'Tim',
+    translator: 'Prevoditelj'
   },
   organization: {
     error: 'Došlo je do pogreške pri učitavanju organizacije',
@@ -109,6 +145,7 @@ export default {
     pleaseWait: 'Molimo čekajte'
   },
   tasks: {
+    hidePreviousMarks: 'Sakrij prethodne oznake %(count)s',
     less: 'Manje',
     more: 'Više',
     shortcut: {
@@ -137,10 +174,7 @@ export default {
     withZooniverse: 'Prijavite se sa svojim Zooniverse računom',
     whyHaveAccount: 'Prijavljeni volonteri mogu pratiti svoj rad te će im biti odato priznanje u budućim publikacijama.',
     signIn: 'Prijavite se',
-    register: 'Registrirajte se',
-    orThirdParty: 'Ili se prijavite s drugom uslugom',
-    withFacebook: 'Prijavite se putem Facebooka',
-    withGoogle: 'Prijavite se putem Googla'
+    register: 'Registrirajte se'
   },
   notFoundPage: {
     message: 'Nije pronađeno'

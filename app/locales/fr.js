@@ -6,7 +6,7 @@ export default {
       faq: "Ce projet ne comporte pas de questions fréquentes pour l\'instant.",
       research: "Ce projet n\'a pas de description de recherche pour l\'instant.",
       results: "Ce projet n\'a pas de résultats à partager pour l\'instant.",
-      team: "Ce projet n\'a pas d'information sur l\'équipe pour l\'instant."
+      team: "Ce projet n\'a pas d\'information sur l\'équipe pour l\'instant."
     }
   },
   projectRoles: {

@@ -1,23 +1,56 @@
 export default {
   loading: '(Caricamento in corso)',
+  aboutPages: {
+    missingContent: {
+      education: 'Questo progetto non ha ancora risorse formative.',
+      faq: 'Questo progetto non ha ancora domande frequenti.',
+      research: 'Questo progetto non ha ancora informazioni sulla ricerca.',
+      results: 'Questo progetto non ha ancora risultati da mostrare.',
+      team: 'Questo progetto non ha ancora informazioni del team.'
+    }
+  },
   classifier: {
     back: 'Indietro',
+    backButtonWarning:
+      "Tornando indietro cancellerai il tuo lavoro sull'attività attuale.",
     close: 'Chiudi',
     continue: 'Continua',
     detailsSubTaskFormSubmitButton: 'OK',
     done: 'Completato',
     doneAndTalk: 'Concludi e Commenta',
     dontShowMinicourse: 'Non mostrare più il mini corso',
+    interventions: {
+      optOut: 'Non mostrare più questi messaggi.',
+      studyInfo: 'Non desidero prendere parte a questo studio di messaggistica.'
+    },
     letsGo: 'Inizia!',
+    miniCourseButton: 'Riavvia il mini-corso del progetto',
     next: 'Avanti',
     optOut: 'Rinuncia',
+    recents: 'I tuoi contributi recenti',
     talk: 'Talk',
     taskHelpButton: 'Hai bisogno di aiuto?',
-    workflowAssignmentDialog: {
-      declineButton: 'No, grazie'
+    taskTabs: {
+      taskTab: 'Attività',
+      tutorialTab: 'Tutorial'
     },
-    interventions: {
-      optOut: "Non mostrare più questi messaggi."
+    workflowAssignmentDialog: {
+      acceptButton: 'Passa al prossimo livello!',
+      declineButton: 'No, grazie',
+      promotionMessage: 'Congratulazioni! Hai sbloccato il prossimo flusso di lavoro. Se preferisci restare in questo flusso di lavoro, puoi scegliere di farlo.'
+    }
+  },
+  collections: {
+    createForm: {
+      private: 'Privata',
+      submit: 'Aggiungi collezione'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'Esatti',
+      falsepos: 'Falsi positivi',
+      incorrect: 'Errati'
     }
   },
   project: {
@@ -32,7 +65,7 @@ export default {
         results: 'Risultati',
         faq: 'FAQ',
         education: 'Approfondimento',
-        team: 'Il Team',
+        team: 'Il Team'
       }
     },
     nav: {
@@ -43,7 +76,7 @@ export default {
       exploreProject: 'Esplora il progetto',
       lab: 'Lab',
       recents: 'Recenti',
-      talk: 'Forum',
+      talk: 'Forum'
     },
     classifyPage: {
       dark: 'scuro',
@@ -63,9 +96,9 @@ export default {
         subjects: 'Soggetti'
       },
       talk: {
-        zero: 'Nessuno sta parlando di **%(title)s** in questo momento.',
-        one: '**1** persona sta parlando di **%(title)s** in questo momento.',
-        other: '**%(count)s** persone stanno parlando di **%(title)s** in questo momento.'
+        zero: 'Nessuno sta parlando di %(title)s in questo momento.',
+        one: '1 persona sta parlando di %(title)s in questo momento.',
+        other: '%(count)s persone stanno parlando di %(title)s in questo momento.'
       },
       joinIn: 'Partecipa',
       learnMore: 'Per saperne di piu',
@@ -73,6 +106,25 @@ export default {
       workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
       visitLink: 'Visita il progetto',
       links: 'Link'
+    }
+  },
+  projectRoles: {
+    collaborator: 'Collaboratore',
+    expert: 'Esperto',
+    moderator: 'Moderatore',
+    museum: 'Museo',
+    owner: 'Titolare',
+    scientist: 'Ricercatore',
+    tester: 'Collaudatore',
+    title: 'Il team',
+    translator: 'Traduttore'
+  },
+  projects: {
+    welcome: {
+      heading: 'Ti diamo il benvenuto! Siamo felici che tu sia qui',
+      scrollDown: 'Scorri verso il basso per vedere altro',
+      talk: 'Ricorda di esplorare il Talk Forum, dove potrai conoscere altri volontari come te.',
+      thanks: 'Grazie per aver scelto di contribuire a vere ricerche. Qui abbiamo raccolto alcuni progetti che avrebbero davvero bisogno del tuo aiuto in questo momento. Per trovare altre opzioni, scorri verso il basso ed esplora tutti i progetti attivi.'
     }
   },
   organization: {
@@ -101,7 +153,7 @@ export default {
     less: 'Di meno',
     more: 'Di più',
     shortcut: {
-      noAnswer: "Nessuna risposta"
+      noAnswer: 'Nessuna risposta'
     }
   },
   userAdminPage: {
@@ -114,6 +166,19 @@ export default {
     },
     notAdminMessage: 'Non sei amministratore',
     notSignedInMessage: 'Non sei autenticato'
+  },
+  resetPassword: {
+    emailError: 'Errore durante la reimpostazione della password.',
+    emailSuccess: "Ti abbiamo inviato un'email con un link per reimpostare la password.",
+    enterEmailLabel: 'Inserisci il tuo indirizzo email per ricevere un link con cui reimpostare la password.',
+    heading: 'Reimposta la password',
+    loggedInDialog: "Hai eseguito l'accesso. Per reimpostare la password, esci dall'account.",
+    missingEmailsAlternateNote: "Se non hai ancora ricevuto un'email, prova con altri indirizzi email che potresti aver utilizzato per registrarti.",
+    missingEmailsSpamNote: "Se non hai ricevuto l'email per reimpostare la password, controlla nella cartella spam.",
+    newPasswordConfirmationLabel: 'Ripeti la password per confermarla:',
+    newPasswordFormDialog: 'Inserisci due volte la stessa password per tornare alle attività di ricerca. Le password devono contenere almeno 8 caratteri.',
+    newPasswordFormLabel: 'Nuova password:',
+    passwordsDoNotMatch: 'Le password non coincidono. Riprova.'
   },
   signIn: {
     title: 'Login/registrazione',
@@ -160,17 +225,10 @@ export default {
     },
     project: {
       section: 'Preferenze email progetto',
-      header: 'Progetto',
+      header: 'Progetto'
     }
   },
-  lab: {
-    help: {
-      howToBuildProject: {
-        title: '## Come realizzare un progetto utilizzando Project Builder'
-      }
-    }
-  },
- userSettings: {
+  userSettings: {
     account: {
       displayName: 'Nickname (obbligatorio)',
       displayNameHelp: 'Questo è il nome con cui apparirai agli altri utenti in Talk e nella tua pagina del profilo',
@@ -199,4 +257,4 @@ export default {
       clearHeader: 'Clear header'
     }
   }
-};
+}
