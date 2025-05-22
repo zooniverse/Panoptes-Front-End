@@ -2,8 +2,7 @@ export default {
   loading: '(Laddar)',
   aboutPages: {
     missingContent: {
-      education:
-        'Det finns inga utbildningsresurser för det här projektet ännu.',
+      education: 'Det finns inga utbildningsresurser för det här projektet ännu.',
       faq: 'Det finns inga vanliga frågor för det här projektet ännu.',
       research: 'Det här projektet har inget vetenskapligt fall ännu.',
       results: 'Det här projektet har inga resultat att rapportera ännu.',
