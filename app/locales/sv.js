@@ -1,5 +1,15 @@
 export default {
   loading: '(Laddar)',
+  aboutPages: {
+    missingContent: {
+      education:
+        'Det finns inga utbildningsresurser för det här projektet ännu.',
+      faq: 'Det finns inga vanliga frågor för det här projektet ännu.',
+      research: 'Det här projektet har inget vetenskapligt fall ännu.',
+      results: 'Det här projektet har inga resultat att rapportera ännu.',
+      team: 'Det här projektet har ingen information om teamet.'
+    }
+  },
   classifier: {
     back: 'Tillbaka',
     backButtonWarning: 'Om du går tillbaka sparas inte ditt arbete med den aktuella uppgiften.',
@@ -21,21 +31,21 @@ export default {
     taskHelpButton: 'Behöver du hjälp med den här uppgiften?',
     miniCourseButton: 'Starta om snabbkursen för projektet',
     workflowAssignmentDialog: {
-      promotionMessage: "Grattis! Du har låst upp nästa arbetsflöde. Om du hellre vill fortsätta med detta arbetsflöde kan du välja att stanna kvar.",
+      promotionMessage: 'Grattis! Du har låst upp nästa arbetsflöde. Om du hellre vill fortsätta med detta arbetsflöde kan du välja att stanna kvar.',
       acceptButton: 'Ta mig till nästa nivå!',
       declineButton: 'Nej tack'
     },
     interventions: {
       optOut: 'Visa inte fler meddelanden.',
-      studyInfo: 'Jag vill inte delta i [meddelandeundersökningen](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
+      studyInfo: 'Jag vill inte delta i meddelandeundersökningen.'
     }
   },
   projects: {
     welcome: {
-      heading: "Välkommen! Vi är så glada att du är här.",
-      thanks: "Tack för att du vill hjälpa till med riktig forskning. Här har vi samlat några project som verkligen skulle kunna få nytta av din hjälp just nu. För fler möjligheter, bläddra nedåt så ser du alla våra aktiva projekt.",
-      talk: "Se till att kolla in [Prata](/talk) där du kan chatta med andra likasinnade frivilliga.",
-      scrollDown: "Bläddra ner för ännu mer"
+      heading: 'Välkommen! Vi är så glada att du är här.',
+      thanks: 'Tack för att du vill hjälpa till med riktig forskning. Här har vi samlat några project som verkligen skulle kunna få nytta av din hjälp just nu. För fler möjligheter, bläddra nedåt så ser du alla våra aktiva projekt.',
+      talk: 'Se till att kolla in [Prata](/talk) där du kan chatta med andra likasinnade frivilliga.',
+      scrollDown: 'Bläddra ner för ännu mer'
     }
   },
   project: {
@@ -50,7 +60,7 @@ export default {
         results: 'Resultat',
         faq: 'Vanliga frågor',
         education: 'Bakgrund',
-        team: 'Teamet',
+        team: 'Teamet'
       }
     },
     nav: {
@@ -83,9 +93,9 @@ export default {
         subjects: 'Ämnen'
       },
       talk: {
-        zero: 'Ingen diskuterar **%(title)s** just nu.',
-        one: '**1** person diskuterar **%(title)s** just nu.',
-        other: '**%(count)s** personer diskuterar **%(title)s** just nu.'
+        zero: 'Ingen diskuterar %(title)s just nu.',
+        one: '1 person diskuterar %(title)s just nu.',
+        other: '%(count)s personer diskuterar %(title)s just nu.'
       },
       joinIn: 'Gå med',
       learnMore: 'Lär dig mer',
@@ -94,6 +104,17 @@ export default {
       visitLink: 'Besök projektet',
       links: 'Externa projektlänkar'
     }
+  },
+  projectRoles: {
+    collaborator: 'Samarbetspartner',
+    expert: 'Expert',
+    moderator: 'Moderator',
+    museum: 'Museum',
+    owner: 'Ägare',
+    scientist: 'Forskare',
+    tester: 'Testare',
+    title: 'Teamet',
+    translator: 'Översättare'
   },
   organization: {
     error: 'Ett fel uppstod när organisationen skulle hämtas',
@@ -108,7 +129,7 @@ export default {
         numbers: 'I siffror',
         projects: 'Projekt',
         subtitle: 'Håll koll på hur långt du och andra frivilliga har kommit med projektet.',
-        text: 'Varje klick räknas! Gå med i %(title)s\-communityt för att göra klart projektet och hjälpa forskarna att få fram viktiga resultat.'
+        text: 'Varje klick räknas! Gå med i %(title)s-communityt för att göra klart projektet och hjälpa forskarna att få fram viktiga resultat.'
       },
       projects: {
         active: 'Aktiva projekt',
@@ -197,10 +218,7 @@ export default {
     withZooniverse: 'Logga in med ditt Zooniverse-konto',
     whyHaveAccount: 'Inloggade frivilliga kan hålla koll på sitt arbete och erkännas i eventuella forskningsartiklar.',
     signIn: 'Logga in',
-    register: 'Registrera dig',
-    orThirdParty: 'Eller logga in med en annan tjänst',
-    withFacebook: 'Logga in med Facebook',
-    withGoogle: 'Logga in med Google'
+    register: 'Registrera dig'
   },
   notFoundPage: {
     message: 'Hittas inte'
@@ -259,7 +277,7 @@ export default {
     },
     project: {
       section: 'Epost-preferenser för projekt',
-      header: 'Projekt',
+      header: 'Projekt'
     }
   },
   userSettings: {
@@ -298,4 +316,4 @@ export default {
       falsepos: 'Falskt positiv'
     }
   }
-};
+}

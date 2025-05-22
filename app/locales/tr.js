@@ -45,7 +45,7 @@ export default {
     },
     interventions: {
       optOut: 'Bana daha fazla mesaj göstermeç',
-      studyInfo: 'Bu mesajlaşmada yer almak istemiyorum [study](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
+      studyInfo: 'Bu mesajlaşmada yer almak istemiyorum'
     }
   },
   projects: {
@@ -101,9 +101,9 @@ export default {
         subjects: 'Temalar'
       },
       talk: {
-        zero: 'Şu anda kimse **%(title)s** hakkında konuşmuyor.',
-        one: '**1** kişi şu anda **%(title)s** hakkında konuşuyor.',
-        other: '**%(count)s** kişi şu anda **%(title)s** hakkında konuşuyor.'
+        zero: 'Şu anda kimse %(title)s hakkında konuşmuyor.',
+        one: '1 kişi şu anda %(title)s hakkında konuşuyor.',
+        other: '%(count)s kişi şu anda %(title)s hakkında konuşuyor.'
       },
       joinIn: 'Katıl',
       learnMore: 'Daha fazla bilgi edin',
@@ -215,10 +215,7 @@ export default {
     withZooniverse: 'Zooniverse hesabınızla oturum açın',
     whyHaveAccount: 'Oturum açan gönüllüler kendi yaptıkları çalışmalarını takip edebilirler ve  bu çalışmaların katkıda bulunduğu yayınlarda kendilerine atıfta  bulunulacaktır',
     signIn: 'Giriş yap',
-    register: 'Kayıt ol',
-    orThirdParty: 'Veya başka bir sistem ile oturum açın',
-    withFacebook: 'Facebook ile giriş yap',
-    withGoogle: 'Google ile giriş yap'
+    register: 'Kayıt ol'
   },
   notFoundPage: {
     message: 'Bulunamadı'
