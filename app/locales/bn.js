@@ -1,10 +1,9 @@
-
 export default {
   loading: 'লোডিং',
   aboutPages: {
     missingContent: {
-      education: 'এই প্রকল্পের এখনও কোন শিক্ষাগত সম্পদ নেই.',
-      faq: 'এই প্রকল্পে এখনও কোন সাধারণভাবে জিজ্ঞাসিত প্রশ্ন নেই।',
+      education: 'এই প্রোজেক্টে এখনও কোন শিক্ষাগত সম্পদ নেই।',
+      faq: 'এই প্রোজেক্টে এখনও কোন সাধারণভাবে জিজ্ঞাসিত প্রশ্ন নেই।',
       research: 'এই প্রকল্পের এখনও কোন বৈজ্ঞানিক উদাহরণ নেই',
       results: 'এই প্রকল্পের এখনও রিপোর্ট করার জন্য কোন ফলাফল নেই',
       team: 'এই প্রকল্পের কোন টিমের তথ্য নেই'
@@ -30,25 +29,38 @@ export default {
     done: 'সম্পন্ন',
     doneAndTalk: 'সম্পন্ন এবং আলোচনা',
     dontShowMinicourse: 'ভবিষ্যতে মিনি-কোর্স দেখাবেন না',
+    interventions: {
+      optOut: 'আর বার্তা দেখাবেন না।',
+      studyInfo: 'আমি এই আলোচনায় ভাগ নিতে চাই না'
+    },
     letsGo: 'শুরু করুন',
+    miniCourseButton: 'প্রজেক্ট মিনি-কোর্স রিস্টার্ট করুন ',
     next: 'পরবর্তী',
     optOut: 'অপ্ট আউট (করতে চাই না)',
+    recents: 'আপনার সাম্প্রতিক শ্রেণীবিভাজন',
+    talk: 'আলোচনা',
+    taskHelpButton: 'আপনার কি এই কাজে সাহায্যের প্রয়োজন?',
     taskTabs: {
       taskTab: 'টাস্ক',
       tutorialTab: 'টিউটোরিয়াল'
     },
-    recents: 'আপনার সাম্প্রতিক শ্রেণীবিভাজন',
-    talk: 'আলোচনা',
-    taskHelpButton: 'আপনার কি এই কাজে সাহায্যের প্রয়োজন?',
-    miniCourseButton: 'প্রজেক্ট মিনি-কোর্স রিস্টার্ট করুন ',
     workflowAssignmentDialog: {
-      promotionMessage: 'অভিনন্দন! আপনি পরবর্তী ওয়ার্কফ্লো আনলক করেছেন। আপনি চাইলে এই ওয়ার্কফ্লোতে থাকতে পারেন।',
       acceptButton: 'পরবর্তী স্তরে যেতে চাই',
-      declineButton: 'না'
-    },
-    interventions: {
-      optOut: 'আর বার্তা দেখাবেন না।',
-      studyInfo: 'আমি এই আলোচনায় ভাগ নিতে চাই না [অধ্যয়ন](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
+      declineButton: 'না',
+      promotionMessage: 'অভিনন্দন! আপনি পরবর্তী ওয়ার্কফ্লো আনলক করেছেন। আপনি চাইলে এই ওয়ার্কফ্লোতে থাকতে পারেন।'
+    }
+  },
+  collections: {
+    createForm: {
+      private: 'ব্যক্তিগত',
+      submit: 'কালেকশনে যোগ করুন'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'সফল সনাক্তিকরণ',
+      falsepos: 'ভুল সনাক্তিকরণ',
+      incorrect: 'অসফল সনাক্তিকরণ'
     }
   },
   projects: {
@@ -62,7 +74,7 @@ export default {
   project: {
     language: 'ভাষা',
     loading: 'লোডিং প্রজেক্ট',
-    disclaimer: 'এই প্রকল্পটি Zooniverse প্রজেক্ট বিল্ডার ব্যবহার করে তৈরি করা হয়েছে কিন্তু এটি এখনও একটি অফিসিয়াল Zooniverse প্রকল্প নয়। এই প্রজেক্ট সম্পর্কিত প্রশ্ন বা সমস্যার উত্তর দিতে Zooniverse এর টীম বাধিত নয়',
+    disclaimer: 'এই প্রোজেক্টটি জুনিভার্স প্রজেক্ট বিল্ডার ব্যবহার করে তৈরি করা হয়েছে কিন্তু এটি এখনও একটি অফিসিয়াল জুনিভার্স প্রকল্প নয়। এই প্রোজেক্ট  সম্পর্কিত প্রশ্ন বা সমস্যার উত্তর দিতে জুনিভার্স এর টীম বাধিত নয়',
     fieldGuide: 'ফিল্ড গাইড',
     about: {
       header: 'প্রজেক্ট এর বিষয়ে',
@@ -89,24 +101,24 @@ export default {
     classifyPage: {
       dark: 'ডার্ক (অন্ধকার)',
       light: 'লাইট (উজ্জ্বল)',
-      title: 'শ্রেণীবিভাজন করুন',
-      themeToggle: '%(theme)s থিমে স্যুইচ করুন'
+      themeToggle: '%(theme)s থিমে স্যুইচ করুন',
+      title: 'শ্রেণীবিভাজন করুন'
     },
     home: {
       organization: 'সংগঠন',
       researcher: 'গবেষকদের বক্তব্য',
       about: '%(title)s এর বিষয়ে',
       metadata: {
-        statistics: '%(title)s এর পরিসংখ্যান',
         classifications: 'শ্রেণীবিভাগ',
-        volunteers: 'স্বেচ্ছাসেবক',
         completedSubjects: 'সমাপ্ত বিষয়',
-        subjects: 'বিষয়'
+        statistics: '%(title)s এর পরিসংখ্যান',
+        subjects: 'বিষয়',
+        volunteers: 'স্বেচ্ছাসেবক'
       },
       talk: {
-        zero: 'এই মুহূর্তে কেউ **%(title)s** নিয়ে কথা বলছে না।',
-        one: '**1** ব্যক্তি এই মুহূর্তে **%(title)s** নিয়ে কথা বলছে।',
-        other: '**%(count)s** লোকে এখন **%(title)s** সম্পর্কে কথা বলছে৷'
+        one: '1 জন ব্যক্তি এই মুহূর্তে %(title)s নিয়ে কথা বলছে।',
+        other: '%(count)sএই মুহূর্তে কেউ %(title)s নিয়ে কথা বলছে না।',
+        zero: 'এই মুহূর্তে কেউ %(title)s নিয়ে কথা বলছে না।'
       },
       joinIn: 'যোগদান করুন',
       learnMore: 'আরও জানুন',
@@ -207,13 +219,10 @@ export default {
     withZooniverse: 'আপনার Zooniverse অ্যাকাউন্ট দিয়ে সাইন ইন করুন',
     whyHaveAccount: 'সাইন-ইন করা স্বেচ্ছাসেবকরা তাদের কাজের ট্র্যাক রাখতে পারেন এবং এর দ্বারা স্বেচ্ছাসেবকদের তাদের অবদানের জন্য প্রকাশনায় সহজে ক্রেডিট দেয়া যাবে',
     signIn: 'সাইন ইন',
-    register: 'রেজিস্টার করুন',
-    orThirdParty: 'অথবা অন্য পরিষেবা দিয়ে সাইন ইন করুন',
-    withFacebook: 'ফেসবুক দিয়ে সাইন ইন করুন',
-    withGoogle: 'গুগল দিয়ে সাইন ইন করুন'
+    register: 'রেজিস্টার করুন'
   },
   notFoundPage: {
-    message: 'পাওয়া যায় নি'
+    message: 'পাওয়া যায়নি'
   },
   resetPassword: {
     heading: 'পাসওয়ার্ড রিসেট করুন',
@@ -240,11 +249,14 @@ export default {
   userSettings: {
     account: {
       displayName: 'প্রদর্শিত নাম (প্রয়োজনীয়)',
-      displayNameHelp: 'কিভাবে আপনার নাম টক এবং আপনার প্রোফাইল পৃষ্ঠায় অন্যান্য ব্যবহারকারীদের কাছে প্রদর্শিত হবে',
+      displayNameHelp:
+        'কিভাবে আপনার নাম টক এবং আপনার প্রোফাইল পৃষ্ঠায় অন্যান্য ব্যবহারকারীদের কাছে প্রদর্শিত হবে',
       realName: 'আসল নাম (ঐচ্ছিক)',
-      realNameHelp: 'পাবলিক; আমরা কাগজপত্রে, পোস্টারে, ইত্যাদিতে স্বীকৃতি দেওয়ার জন্য এটি ব্যবহার করব।',
+      realNameHelp:
+        'পাবলিক; আমরা কাগজপত্রে, পোস্টারে, ইত্যাদিতে স্বীকৃতি দেওয়ার জন্য এটি ব্যবহার করব।',
       interventions: 'প্রকল্প হস্তক্ষেপ বিজ্ঞপ্তি দেখান.',
-      interventionsHelp: 'শ্রেণীবদ্ধ করার সময় প্রকল্পগুলিকে বার্তা প্রদর্শনের অনুমতি দিন।',
+      interventionsHelp:
+        'শ্রেণীবদ্ধ করার সময় প্রকল্পগুলিকে বার্তা প্রদর্শনের অনুমতি দিন।',
       interventionsPreferences: 'বিজ্ঞপ্তি পছন্দসমূহ',
       changePassword: {
         heading: 'আপনার পাসওয়ার্ড পরিবর্তন করুন',
@@ -259,18 +271,13 @@ export default {
     profile: {
       dropImage: 'এখানে ছবি ড্রপ করুন (বা নির্বাচন করতে ক্লিক করুন)।',
       changeAvatar: 'অবতার পরিবর্তন করুন',
-      avatarImageHelp: 'এখানে ছবি ড্রপ করুন (স্কোয়ার আকৃতির, %(size)s KB-র চেয়ে ছোট)',
+      avatarImageHelp:
+        'এখানে ছবি ড্রপ করুন (স্কোয়ার আকৃতির, %(size)s KB-র চেয়ে ছোট)',
       clearAvatar: 'অবতার সরিয়ে দিন',
       changeProfileHeader: 'প্রোফাইল হেডার পরিবর্তন করুন',
-      profileHeaderImageHelp: 'এখানে ছবি ড্র্যাগ এবং ড্রপ করুন (যে কোনো আকৃতির, %(size)s KB-র চেয়ে ছোট)',
+      profileHeaderImageHelp:
+        'এখানে ছবি ড্র্যাগ এবং ড্রপ করুন (যে কোনো আকৃতির, %(size)s KB-র চেয়ে ছোট)',
       clearHeader: 'শিরোনাম পরিষ্কার করুন'
     }
-  },
-  feedback: {
-    categories: {
-      correct: 'সফল সনাক্তিকরণ',
-      incorrect: 'অসফল সনাক্তিকরণ',
-      falsepos: 'ভুল সনাক্তিকরণ'
-    }
   }
-};
+}

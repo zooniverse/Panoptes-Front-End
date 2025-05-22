@@ -47,7 +47,7 @@ export default {
     },
     interventions: {
       optOut: 'Մի՛ ցուցադրեք ինձ հետագա հաղորդագրությունները:',
-      studyInfo: 'Ես չեմ ուզում մասնակցել այս հաղորդագրության [ուսումնասիրությանը](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview):'
+      studyInfo: 'Ես չեմ ուզում մասնակցել այս հաղորդագրության'
     }
   },
   projects: {
@@ -103,9 +103,9 @@ export default {
         subjects: 'նյութ'
       },
       talk: {
-        zero: 'Ոչ ոք այս պահին չի խոսում **%(title)s**  մասին:',
-        one: '**1** անձ այս պահին խոսում է ** %(title)s** մասին:',
-        other: '**%(count)s** մարդ այս պահին խոսում է **%(title)s** մասին:'
+        zero: 'Ոչ ոք այս պահին չի խոսում %(title)s  մասին:',
+        one: '1 անձ այս պահին խոսում է %(title)s մասին:',
+        other: '%(count)s մարդ այս պահին խոսում է %(title)s մասին:'
       },
       joinIn: 'Միանալ',
       learnMore: 'Տեսնել ավելին',
@@ -269,36 +269,6 @@ export default {
     project: {
       section: 'Նախագծի էլ. փոստի նախընտրություններ',
       header: 'Նախագիծ'
-    }
-  },
-  about: {
-    index: {
-      header: 'Նախագծի մասին',
-      title: 'Նախագծի մասին',
-      nav: {
-        about: 'Նախագծի մասին',
-        publications: 'Հոդվածներ',
-        ourTeam: 'Մեր Թիմը',
-        acknowledgements: 'Երախտագիտություն ',
-        contact: 'Կապվեք մեզ հետ',
-        faq: 'Հաճախ տրվող հարցեր',
-        resources: 'Ռեսուրսներ/ Աղբյուրներ',
-        highlights: 'նախագծի կարևորագույն կետերը',
-        mobileApp: 'Բջջային հավելված',
-        donate: 'Նվիրաբերել'
-      }
-    },
-    publications: {
-      nav: {
-        showAll: 'Ցույց տալ բոլորը',
-        space: 'Տիեզերք',
-        physics: 'Ֆիզիկա',
-        climate: 'Կլիմա',
-        humanities: 'Հումանիտար գիտություններ',
-        nature: 'Բնություն',
-        medicine: 'Բժշկություն',
-        meta: 'Մետա'
-      }
     }
   },
   userSettings: {

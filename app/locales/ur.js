@@ -1,5 +1,14 @@
 export default {
   loading: 'لوڈنگ',
+  'aboutPages': {
+    'missingContent': {
+      'education': 'اس پروجیکٹ کے پاس ابھی تک کوئی تعلیمی ذرائع موجود نہیں۔',
+      'faq': 'اس پروجیکٹ میں ابھی تک اکثر پوچھے جانے والے سوالات موجود نہیں۔',
+      'research': 'اس پروجیکٹ کا ابھی تک کوئی سائنس کیس موجود نہیں۔',
+      'results': 'اس پروجیکٹ کی رپورٹ دینے کے لیے ابھی تک کوئی نتائج موجود نہیں۔',
+      'team': 'اس پروجیکٹ میں ٹیم کی کوئی معلومات موجود نہیں۔'
+    }
+  },
   classifier: {
     back: 'واپس',
     backButtonWarning: ' واپس جانے سے آپ کا موجودہ کام ختم ہو جائےگا۔',
@@ -69,7 +78,7 @@ export default {
       dark: 'گہرا ',
       light: 'ہلکا',
       title: 'درجہ بندی (کریں)',
-      themeToggle: 'موضوع تبدیل کریں'
+      themeToggle: '%(theme)sع تبدیل کریں',
     },
     home: {
       organization: 'تنظیم',
@@ -93,6 +102,25 @@ export default {
       workflowAssignment: 'آپ نے(ورک فلو ڈسپلے نیم) غیر مقفل کر لیاہے',
       visitLink: 'پروجیکٹ پر جائیں',
       links: 'دیگر پروجیکٹ کے لنک'
+    }
+  },
+  projectRoles: {
+    collaborator: 'تعاون کنندہ',
+    expert: 'ماہر',
+    moderator: 'ثالث',
+    museum: 'میوزیم',
+    owner: 'مالک',
+    scientist: 'محقق',
+    tester: 'ٹیسٹر',
+    title: 'ٹیم',
+    translator: 'ترجمان'
+  },
+  projects: {
+    welcome: {
+      heading: 'خوش آمدید ، ہمیں آپکے یہاں آنےپر خوشی ہوئی',
+      scrollDown: 'مزید معلومات کے لئے سکرول کریں',
+      talk: 'اپنے جیسے دوسرے رضاکاروں سے بات کریں Talk',
+      thanks: 'اصل تحقیق میں مدد کرنے میں آپ کی دلچسپی کا شکریہ۔  ہم نے یہاں کچھ پروجیکٹس اکٹھے کئے ہیں جنہیں ہم ابھی آپ کی مدد کےلئے استعمال کرسکتے ہیں۔ مزید اختیارات کے لئے ہمارے تمام فعال منصوبوں کو براؤز کرنے کے لئے نیچے سکرول کریں۔'
     }
   },
   organization: {
@@ -197,10 +225,7 @@ export default {
     withZooniverse: 'اپنے زونیورس اکاؤنٹ سے سائن ان کریں',
     whyHaveAccount: 'سائن ان رضاکار اپنے کام پر نظر رکھ سکتے ہیں اور کسی بھی نتیجہ خیز اشاعت کا سہرا ان کے سر باندھا جائے گا۔',
     signIn: 'سائن ان',
-    register: 'اندراج ',
-    orThirdParty: ' یا کسی اور خدمت کے لئے سائن ان کریں',
-    withFacebook: 'فیس بک کے ذریعہ سائن ان کریں',
-    withGoogle: 'گوگل کے ذریعہ سائن ان کریں'
+    register: 'اندراج '
   },
   notFoundPage: {
     message: 'نہیں ملا'
@@ -260,35 +285,6 @@ export default {
     project: {
       section: 'پروجیکٹ کی ای میل کی ترجیحات',
       header: 'پروجیکٹ'
-    }
-  },
-  about: {
-    index: {
-      header: 'کے متعلق',
-      title: 'کے متعلق',
-      nav: {
-        about: 'کے متعلق',
-        publications: 'اشاعات',
-        ourTeam: 'ہماری ٹیم',
-        acknowledgements: 'اعتراف',
-        contact: 'ہم سے رابطہ کریں',
-        faq: 'اکثر پوچھے جانے والے سوالات',
-        resources: 'وسائل',
-        highlights: 'نمایاں کتاب',
-        donate: 'ہدیہ دیں'
-      }
-    }
-  },
-  getInvolved: {
-    index: {
-      title: 'شامل ہوں',
-      nav: {
-        volunteering: 'رضاکارانہ مدد',
-        education: 'تعلیم',
-        callForProjects: 'پروجیکٹس کے لئے درخواست کریں',
-        collections: 'مجموعہ',
-        favorites: 'پسندیدہ'
-      }
     }
   },
   userSettings: {

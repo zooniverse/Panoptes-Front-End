@@ -46,7 +46,8 @@ export default {
       declineButton: 'Não, obrigado'
     },
     interventions: {
-      optOut: 'Não me mostre mais mensagens.'
+      optOut: 'Não me mostre mais mensagens.',
+      studyInfo: 'Não quero participar neste estudo de mensagens'
     }
   },
   project: {
@@ -94,9 +95,9 @@ export default {
         subjects: 'Itens'
       },
       talk: {
-        zero: 'Neste momento ninguém está a falar sobre o projecto **%(title)s**.',
-        one: 'Neste momento está **1**  pessoa a falar sobre o projecto **%(title)s**.',
-        other: 'Neste momento estão **%(count)s** pessoas a falar sobre o projecto **%(title)s**.'
+        zero: 'Neste momento ninguém está a falar sobre o projecto %(title)s.',
+        one: 'Neste momento está 1 pessoa a falar sobre o projecto %(title)s.',
+        other: 'Neste momento estão %(count)s pessoas a falar sobre o projecto %(title)s.'
       },
       joinIn: 'Aderir',
       learnMore: 'Saber mais',
@@ -104,6 +105,14 @@ export default {
       workflowAssignment: 'Desbloqueou %(workflowDisplayName)s',
       visitLink: 'Visitar o projecto',
       links: 'Ligações Externas para o Projecto'
+    }
+  },
+  projects: {
+    welcome: {
+      heading: "Bem-vindo(a)! Estamos muito felizes por estar aqui",
+      scrollDown: "Deslize para mais para ver ainda mais",
+      talk: "Certifique-se de ver também o Talk onde pode conversar com outros voluntários com os mesmos interesses.",
+      thanks: "Agradecemos o seu interesse em apoiar a verdadeira investigação. Aqui, reunimos alguns projetos que precisam mesmo da sua ajuda neste momento. Para mais opções, deslize para baixo para explorar todos os nossos projetos ativos."
     }
   },
   organization: {

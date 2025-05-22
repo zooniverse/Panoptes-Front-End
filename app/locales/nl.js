@@ -1,37 +1,14 @@
 export default {
-  counterpart: {
-    names: {
-      days: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
-      abbreviated_days: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
-      months: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
-      abbreviated_months: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sept', 'okt', 'nov', 'dec'],
-      am: 'a.m.',
-      pm: 'p.m.'
-    },
-    pluralize: require('pluralizers/en'),
-
-    formats: {
-      date: {
-        'default': '%a, %e %b %Y',
-        long: '%A, %B %o, %Y',
-        short: '%b %e'
-      },
-
-      time: {
-        'default': '%H:%M',
-        long: '%H:%M:%S %z',
-        short: '%H:%M'
-      },
-
-      datetime: {
-        'default': '%a, %e %b %Y %H:%M',
-        long: '%A, %B %o, %Y %H:%M:%S %z',
-        short: '%e %b %H:%M'
-      }
-    }
-
-  },
   loading: '(Laden)',
+  aboutPages: {
+    missingContent: {
+      education: 'Dit project heeft nog geen educatieve bronnen.',
+      faq: 'Dit project heeft nog geen veelgestelde vragen.',
+      research: 'Dit project heeft nog geen wetenschappelijke onderbouwing.',
+      results: 'Dit project heeft nog geen resultaten.',
+      team: 'Dit project heeft geen teaminfo.'
+    }
+  },
   classifier: {
     back: 'Terug',
     backButtonWarning: 'Let op! Niet opgeslagen gegevens gaan verloren.',
@@ -41,17 +18,39 @@ export default {
     done: 'Afronden',
     doneAndTalk: 'Afronden & Bespreken',
     dontShowMinicourse: 'Verberg de uitleg in het vervolg.',
+    interventions: {
+      optOut: 'Laat me geen berichten meer zien.',
+      studyInfo: 'Ik wil niet meedoen aan dit onderzoek.'
+    },
     letsGo: 'Laten we beginnen!',
+    miniCourseButton: 'Herhaal de uitleg',
     next: 'Volgende',
     optOut: 'Opt-out',
+    recents: 'Je recente waarnemingen',
+    talk: 'Overleg',
+    taskHelpButton: 'Hulp nodig met deze taak?',
     taskTabs: {
       taskTab: 'Taak',
       tutorialTab: 'Uitleg'
     },
-    recents: 'Je recente waarnemingen',
-    talk: 'Overleg',
-    taskHelpButton: 'Hulp nodig met deze taak?',
-    miniCourseButton: 'Herhaal de uitleg',
+    workflowAssignmentDialog: {
+      acceptButton: 'Breng me naar het volgende niveau!',
+      declineButton: 'Nee, bedankt',
+      promotionMessage: 'Gefeliciteerd! Je hebt de volgende workflow ontgrendeld. Als je deze workflow wilt blijven gebruiken, kun je ervoor kiezen om te blijven.'
+    }
+  },
+  collections: {
+    createForm: {
+      private: 'Privé',
+      submit: 'Maak verzameling'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'Juist',
+      falsepos: 'Foutieve positieven',
+      incorrect: 'Onjuiste'
+    }
   },
   project: {
     language: 'Taal',
@@ -65,7 +64,7 @@ export default {
         results: 'Resultaten',
         faq: 'Veelgestelde vragen',
         education: 'Onderwijs',
-        team: 'Het team',
+        team: 'Het team'
       }
     },
     nav: {
@@ -96,15 +95,34 @@ export default {
         subjects: 'Taken'
       },
       talk: {
-        zero: 'Niemand praat over **%(title)s** op dit moment.',
-        one: '**1** persoon praat over **%(title)s** op dit moment.',
-        other: '**%(count)s** mensen praten over **%(title)s** op dit moment.'
+        zero: 'Niemand praat over %(title)s op dit moment.',
+        one: '1 persoon praat over %(title)s op dit moment.',
+        other: '%(count)s mensen praten over %(title)s op dit moment.'
       },
       joinIn: 'Doe mee!',
       learnMore: 'Lees meer',
       getStarted: 'Beginnen',
       visitLink: 'Bezoek het project',
       links: 'Links'
+    }
+  },
+  projectRoles: {
+    collaborator: 'Medewerker',
+    expert: 'Expert',
+    moderator: 'Moderator',
+    museum: 'Museum',
+    owner: 'Eigenaar',
+    scientist: 'Onderzoeker',
+    tester: 'Tester',
+    title: 'Het team',
+    translator: 'Vertaler'
+  },
+  projects: {
+    welcome: {
+      heading: 'Welkom! We zijn blij dat je er bent',
+      scrollDown: 'Scroll naar beneden voor nog meer',
+      talk: 'Ga ook eens naar Talk waar je met andere vrijwilligers kunt kletsen.',
+      thanks: 'Bedankt dat je wilt helpen met echt onderzoek. We hebben hier een paar projecten verzameld waar we je hulp nu goed bij kunnen gebruiken. Scroll naar beneden voor meer opties en bekijk al onze actieve projecten.'
     }
   },
   organization: {
@@ -124,13 +142,14 @@ export default {
       readMore: 'Lees meer',
       readLess: 'Lees minder',
       links: 'Links'
-    },
+    }
   },
   tasks: {
+    hidePreviousMarks: 'Vorige punten verbergen %(count)s',
     less: 'Minder',
     more: 'Meer',
     shortcut: {
-      noAnswer: "Geen antwoord"
+      noAnswer: 'Geen antwoord'
     },
     survey: {
       clear: 'Wissen',
@@ -150,9 +169,6 @@ export default {
       }
     }
   },
-  security: {
-    title: 'Zooniverse Beveiligingsbeleid',
-  },
   userAdminPage: {
     header: 'Administratie',
     nav: {
@@ -169,10 +185,7 @@ export default {
     withZooniverse: 'Log in met je Zooniverse account',
     whyHaveAccount: 'Ingelogde vrijwilligers kunnen hun eigen waarnemingen bijhouden en worden vermeld in publicaties.',
     signIn: 'Inloggen',
-    register: 'Registreren',
-    orThirdParty: 'Of log in met een andere dienst',
-    withFacebook: 'Log in met Facebook',
-    withGoogle: 'Log in met Google'
+    register: 'Registreren'
   },
   notFoundPage: {
     message: 'Niet gevonden'
@@ -192,11 +205,5 @@ export default {
   },
   workflowToggle: {
     label: 'Actief'
-  },
-  collections: {
-    createForm: {
-      private: 'Privé',
-      submit: 'Maak verzameling'
-    }
   }
-};
+}

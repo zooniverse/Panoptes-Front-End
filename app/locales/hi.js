@@ -1,5 +1,14 @@
 export default {
   loading: 'लोडिंग / लोड हो रहा है',
+  aboutPages: {
+    missingContent: {
+      education: 'इस प्रोजेक्ट में अभी तक कोई शैक्षिक रिसोर्सेज़ नहीं हैं।',
+      faq: 'इस प्रोजेक्ट में अभी तक कोई अक्सर पूछे जाने वाले सवाल नहीं हैं।',
+      research: 'इस प्रोजेक्ट के लिए अभी तक कोई साइंस केस नहीं है।',
+      results: 'इस प्रोजेक्ट के अभी तक कोई परिणाम रिपोर्ट करने के लिए नहीं हैं।',
+      team: 'इस प्रोजेक्ट में कोई टीम जानकारी नहीं है।'
+    }
+  },
   classifier: {
     back: 'वापस जाएं',
     backButtonWarning: 'अगर आप वापस होंगे, तो आपके चल रहे कार्य की प्रगति समाप्त हो जाएगी',
@@ -28,6 +37,19 @@ export default {
     interventions: {
       optOut: 'मुझे आगे से संदेश ना दिखाएं',
       studyInfo: 'मैं इस मैसेजिंग का हिस्सा नहीं बनना चाहता / चाहती'
+    }
+  },
+  collections: {
+    createForm: {
+      private: 'निष्क्रिय',
+      submit: 'संग्रह में जोड़ें'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'हिट्स',
+      falsepos: 'फॉल्स पॉजिटिव्स',
+      incorrect: 'मिस'
     }
   },
   projects: {
@@ -83,9 +105,9 @@ export default {
         subjects: 'विषय'
       },
       talk: {
-        zero: '**%(title)s** के बारे में अभी कोई भी चर्चा नहीं कर रहा है ',
-        one: '**१** अभी **%(title)s** के बारे में चर्चा कर रहे हैं। ',
-        other: '**%(count)s** लोग अभी **%(title)s** के बारे में चर्चा कर रहे हैं। '
+        one: '१ अभी %(title)s के बारे में चर्चा कर रहे हैं।',
+        other: '%(count)s लोग अभी %(title)s के बारे में चर्चा कर रहे हैं।',
+        zero: '%(title)s के बारे में अभी कोई भी चर्चा नहीं कर रहा है'
       },
       joinIn: 'चर्चा में शामिल हों',
       learnMore: 'अधिक जानकारी ',
@@ -94,6 +116,17 @@ export default {
       visitLink: 'परियोजना का मुआयना करें / आइए',
       links: 'बाहरी परियोजनाओं के लिंक'
     }
+  },
+  projectRoles: {
+    collaborator: 'कोलैबोरेटर',
+    expert: 'एक्सपर्ट',
+    moderator: 'मॉडरेटर',
+    museum: 'म्यूजियम',
+    owner: 'मालिक',
+    scientist: 'रिसर्चर',
+    tester: 'टेस्टर',
+    title: 'टीम',
+    translator: 'अनुवादक'
   },
   organization: {
     error: 'इस संगठन को वापस ढूंढने में एक एरर हुई है ',

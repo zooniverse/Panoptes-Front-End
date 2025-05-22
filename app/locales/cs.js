@@ -1,5 +1,14 @@
 export default {
   loading: 'načítá se',
+  aboutPages: {
+    missingContent: {
+      education: 'Tento projekt zatím nemá žádné vzdělávací zdroje.',
+      faq: 'Tento projekt zatím nemá žádné často kladené otázky.',
+      research: 'Tento projekt zatím nemá žádný vědecký případ.',
+      results: 'Tento projekt zatím nemá žádné výsledky.',
+      team: 'Tento projekt nemá žádné informace o týmu.'
+    }
+  },
   classifier: {
     back: 'Zpět',
     backButtonWarning: 'Krokem zpět ztratíte započatou práci na tomto úkolu.',
@@ -11,7 +20,7 @@ export default {
     dontShowMinicourse: 'Mini-kurz již v budoucnu nezobrazovat',
     interventions: {
       optOut: 'Tyto zprávy již nezobrazovat.',
-      studyInfo: 'Nechci se účastnit této [studie](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
+      studyInfo: 'Nechci se účastnit této studie.'
     },
     letsGo: 'Pojďme na to!',
     miniCourseButton: 'Znovu spustit Mini-kurz',
@@ -30,12 +39,19 @@ export default {
       promotionMessage: 'Gratulujeme! Otevřela se ti další úroveň s úkoly. Pokud si přeješ zůstat v té současné, můžeš.'
     }
   },
+  feedback: {
+    categories: {
+      correct: 'Trefy',
+      falsepos: 'Falešně pozitivní výsledky',
+      incorrect: 'Chyby'
+    }
+  },
   project: {
     about: {
       header: 'O projektu',
       nav: {
         education: 'Výuka',
-        faq: 'FAQ - Často kladené dotazy',
+        faq: 'Často kladené dotazy',
         research: 'Výzkum',
         results: 'Výsledky',
         team: 'Tým'

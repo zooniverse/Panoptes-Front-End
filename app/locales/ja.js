@@ -45,6 +45,7 @@ export default {
     },
     interventions: {
       optOut: '今後メッセージを表示しない',
+      studyInfo: "このメッセージ調査 には参加したくありません。"
     }
   },
   projects: {
@@ -100,9 +101,9 @@ export default {
         subjects: '対象物数'
       },
       talk: {
-        zero: '**%(title)s**に関するトークには現在参加者はいません',
-        one: '**1**人が現在**%(title)s**に関するトークに参加しています',
-        other: '**%(count)s**人が現在**%(title)s**に関するトークに参加しています'
+        zero: '%(title)sに関するトークには現在参加者はいません',
+        one: '1人が現在%(title)sに関するトークに参加しています',
+        other: '%(count)s人が現在%(title)sに関するトークに参加しています'
       },
       joinIn: '参加する',
       learnMore: 'このプロジェクトについて',
@@ -181,16 +182,21 @@ export default {
       noAnswer: '回答なし'
     },
     survey: {
+      cancel: 'キャンセル',
       clear: '消去',
       clearFilters: 'フィルターを消去',
-      makeSelection: '選択する',
-      showing: '%(max)sのうち%(count)s件を表示',
-      cancel: 'キャンセル',
+      confused: '時々次と混同されます：',
+      dismiss: '無視',
       identifications: {
         zero: '未検証',
         one: '1件の検証',
         other: '%(count)s件の検証'
-      }
+      },
+      identify: '識別する',
+      itsThis: 'これだと思います',
+      makeSelection: '選択する',
+      showing: '%(max)sのうち%(count)s件を表示',
+      surveyOf: '%(count)s択のアンケート'
     }
   },
   signIn: {
@@ -198,10 +204,7 @@ export default {
     withZooniverse: 'Zooniverseアカウントにサインイン',
     whyHaveAccount: 'サインインしたボランティアは、自分の作業を追跡することができ、成果の出版物にクレジットされます。',
     signIn: 'サインイン',
-    register: '新規登録',
-    orThirdParty: 'または別のサービスを使用してサインイン',
-    withFacebook: 'Facebookを使用してサインイン',
-    withGoogle: 'Googleを使用してサインイン'
+    register: '新規登録'
   },
   notFoundPage: {
     message: '見つかりません'

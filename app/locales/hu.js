@@ -47,7 +47,7 @@ export default {
     },
     interventions: {
       optOut: 'Ne mutasson további üzeneteket.',
-      studyInfo: 'Nem szeretnék részt venni ebbben a [kutatásban](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
+      studyInfo: 'Nem szeretnék részt venni ebbben a kutatásban.'
     }
   },
   projects: {
@@ -103,9 +103,9 @@ export default {
         subjects: 'Alanyok'
       },
       talk: {
-        zero: 'Most éppen senki nem beszél a/az **%(title)s** projektről.',
-        one: 'Most éppen **1** ember beszél a/az **%(title)s** projektről.',
-        other: 'Most éppen **%(count)s** ember beszél a/az **%(title)s** projektről.'
+        zero: 'Most éppen senki nem beszél a/az %(title)s projektről.',
+        one: 'Most éppen 1 ember beszél a/az %(title)s projektről.',
+        other: 'Most éppen %(count)s ember beszél a/az %(title)s projektről.'
       },
       joinIn: 'Csatlakozz',
       learnMore: 'Tudj meg többet',
@@ -140,6 +140,9 @@ export default {
       }
     }
   },
+  notFoundPage: {
+    message: 'Nem található'
+  },
   workflowToggle: {
     label: 'Aktív'
   },
@@ -155,5 +158,25 @@ export default {
       incorrect: 'Tévesztések',
       falsepos: 'Hamis pozitívok'
     }
+  },
+  resetPassword: {
+    emailError: 'Hiba történt a jelszó visszaállításakor.',
+    emailSuccess: 'Elküldtünk Önnek egy hivatkozást e-mailben, amellyel visszaállíthatja a jelszavát.',
+    enterEmailLabel: 'Adja meg itt az e-mail-címét, mi pedig elküldünk egy hivatkozást, amellyel visszaállíthatja.',
+    heading: 'Jelszó visszaállítása',
+    loggedInDialog: 'Jelenleg be van jelentkezve. Ha szeretné módosítani a jelszavát, jelentkezzen ki.',
+    missingEmailsAlternateNote: 'Ha továbbra sem kapott e-mailt, próbálkozzon egy másik e-mail-címmel, amellyel esetleg regisztrálhatott.',
+    missingEmailsSpamNote: 'Ha nem kapta meg a visszaállításra szolgáló e-mailt, ellenőrizze a spam mappát.',
+    newPasswordConfirmationLabel: 'Ismételje meg a jelszavát a megerősítéshez:',
+    newPasswordFormDialog: 'Adja meg kétszer ugyanazt a jelszót, hogy visszatérhessen a kutatáshoz. A jelszónak legalább 8 karakterből kell állnia.',
+    newPasswordFormLabel: 'Új jelszó:',
+    passwordsDoNotMatch: 'A jelszavak nem egyeznek, próbálja újra.'
+  },
+  signIn: {
+    register: 'Regisztráció',
+    signIn: 'Bejelentkezés',
+    title: 'Bejelentkezés/regisztráció',
+    whyHaveAccount: 'A bejelentkezett önkéntesen nyomon követhetik a munkájukat, és az esetlegesen megjelenő publikációkban is elismerik a hozzájárulásukat.',
+    withZooniverse: 'Jelentkezzen be Zooniverse-fiókjával'
   }
 }
