@@ -15,6 +15,14 @@ function RubinPage ({
     setTab(e?.currentTarget?.dataset?.tab)
   }
 
+  function onSignInSuccess () {
+    alert('You have successfully signed in!')
+  }
+
+  function onRegisterSuccess () {
+    alert('You have successfully registered. Welcome to the Zooniverse!')
+  }
+
   return (
     <div className="sign-in-page content-container">
       <Helmet title={'RUBIN 2025'} />
@@ -29,8 +37,8 @@ function RubinPage ({
             <button type="button" onClick={onTabClick} data-tab="register" className="tabbed-content-tab"><Translate content="signIn.register" /></button>
           </nav>
           {(tab !== 'register')
-            ? <SignInForm user={user} />
-            : <RegisterForm user={user} />
+            ? <SignInForm user={user} onSuccess={onSignInSuccess} />
+            : <RegisterForm user={user} onSuccess={onRegisterSuccess} />
           }
         </div>
       </div>
