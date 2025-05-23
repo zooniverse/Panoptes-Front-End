@@ -1,13 +1,20 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import counterpart from 'counterpart';
+import React, { useState } from 'react';
+// import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router';
 import { SignInForm } from './sign-in-form.jsx';
 import { RegisterForm } from './register-form.jsx';
 
-const RubinPage = ({ user }) => {
+function RubinPage ({
+  user
+}) {
+  const [tab, setTab] = useState('sign-in')
+
+  function onTabClick (e) {
+    setTab(e?.currentTarget?.dataset?.tab)
+  }
+
   return (
     <div className="sign-in-page content-container">
       <Helmet title={'RUBIN 2025'} />
@@ -18,11 +25,13 @@ const RubinPage = ({ user }) => {
       <div className="columns-container">
         <div className="tabbed-content column" data-side="top">
           <nav className="tabbed-content-tabs">
-            <Link to="/rubin/sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></Link>
-            <Link to="/rubin/register" className="tabbed-content-tab"><Translate content="signIn.register" /></Link>
+            <button type="button" onClick={onTabClick} data-tab="sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></button>
+            <button type="button" onClick={onTabClick} data-tab="register" className="tabbed-content-tab"><Translate content="signIn.register" /></button>
           </nav>
-          <SignInForm user={user} />
-          <RegisterForm user={user} />
+          {(tab !== 'register')
+            ? <SignInForm user={user} />
+            : <RegisterForm user={user} />
+          }
         </div>
       </div>
     </div>
