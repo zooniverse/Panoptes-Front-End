@@ -1,5 +1,5 @@
 /*
-Language List: used for code-to-name lookup. Language codes are limited to 
+Language List: used for code-to-name lookup. Language codes are limited to
 two-character primary tags, except for Chinese (two separate region subtags),
 limited cases including script subtags, and US/GB region subtags for backward
 compatibility.
@@ -122,6 +122,7 @@ const languages = [
   { value: 'wen', label: 'Upper Sorbian' },
   { value: 'ur', label: 'Urdu' },
   { value: 'uz', label: 'Uzbek' },
+  { value: 've', label: 'Venda' },
   { value: 'vi', label: 'Vietlabelse' },
   { value: 'cy', label: 'Welsh' },
   { value: 'wo', label: 'Wolof' },
