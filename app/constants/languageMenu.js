@@ -26,7 +26,7 @@ export default {
   pl: 'Polski', // Polish
   pt: 'Português', // Portuguese
   ru: 'русский', // Russian
-  sw: 'Swahili', // Swahili
+  sw: 'Kiswahili', // Swahili
   sv: 'Svenska', // Swedish
   te: 'తెలుగు', // Telugu
   tn: 'Setswana', // Tswana (not in Lokalise)
