@@ -75,7 +75,8 @@
     "icon": "fa-external-link",
     "ariaLabel": "Link to BlueSky page",
     "label": "BlueSky",
-    "pathBeforeSite": false
+    "pathBeforeSite": false,
+    "siteSubpath": "profile/"
   },
   "mastodon.social/": {
     "icon": "fa-external-link",
