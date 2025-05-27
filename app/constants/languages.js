@@ -1,5 +1,5 @@
 /*
-Language List: used for code-to-name lookup. Language codes are limited to 
+Language List: used for code-to-name lookup. Language codes are limited to
 two-character primary tags, except for Chinese (two separate region subtags),
 limited cases including script subtags, and US/GB region subtags for backward
 compatibility.
@@ -65,7 +65,6 @@ const languages = [
   { value: 'km', label: 'Khmer' },
   { value: 'qut', label: 'K\'iche' },
   { value: 'rw', label: 'Kinyarwanda' },
-  { value: 'sw', label: 'Kiswahili' },
   { value: 'kok', label: 'Konkani' },
   { value: 'ko', label: 'Korean' },
   { value: 'ky', label: 'Kyrgyz' },
@@ -105,6 +104,7 @@ const languages = [
   { value: 'sk', label: 'Slovak' },
   { value: 'sl', label: 'Slovenian' },
   { value: 'es', label: 'Spanish' },
+  { value: 'sw', label: 'Swahili' },
   { value: 'sv', label: 'Swedish' },
   { value: 'syr', label: 'Syriac' },
   { value: 'tg-cyrl-tj', label: 'Tajik (Cyrillic, Tajikistan)' },
@@ -122,7 +122,8 @@ const languages = [
   { value: 'wen', label: 'Upper Sorbian' },
   { value: 'ur', label: 'Urdu' },
   { value: 'uz', label: 'Uzbek' },
-  { value: 'vi', label: 'Vietlabelse' },
+  { value: 've', label: 'Venda' },
+  { value: 'vi', label: 'Vietnamese' },
   { value: 'cy', label: 'Welsh' },
   { value: 'wo', label: 'Wolof' },
   { value: 'ts', label: 'Xitsonga'},
