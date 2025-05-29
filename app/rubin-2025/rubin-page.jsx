@@ -1,25 +1,36 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import Helmet from 'react-helmet';
 import { SignInForm } from './sign-in-form.jsx';
 import { RegisterForm } from './register-form.jsx';
 
+counterpart.registerTranslations('en', {
+  newAccountsPage: {
+    successfullySignedIn: `You've successfully signed in! You'll be redirected to the home page in a moment.`,
+    successfullyRegistered: `You've successfully registered! You'll be redirected to the home page in a moment.`,
+  }
+})
+
 function RubinPage ({
   user
 }) {
   const [tab, setTab] = useState('sign-in')
+  const [successMessage, setSuccessMessage] = useState('')
 
   function onTabClick (e) {
     setTab(e?.currentTarget?.dataset?.tab)
   }
 
   function onSignInSuccess () {
-    alert('You have successfully signed in!')
+    console.log('+++ onSignInSuccess')
+    setSuccessMessage('successfullySignedIn')
   }
 
   function onRegisterSuccess () {
-    alert('You have successfully registered. Welcome to the Zooniverse!')
+    console.log('+++ onRegisterSuccess')
+    setSuccessMessage('successfullyRegistered')
   }
 
   return (
@@ -31,7 +42,7 @@ function RubinPage ({
 
       {user ? (
         <div className="already-signed-in">
-          <Translate content="registerForm.alreadySignedIn" name={user?.login} />
+          <Translate content="signIn.alreadySignedIn" name={user?.login} />
         </div>
       ) : (
         <div className="columns-container">
@@ -45,6 +56,12 @@ function RubinPage ({
               : <RegisterForm user={user} onSuccess={onRegisterSuccess} />
             }
           </div>
+        </div>
+      )}
+
+      {successMessage && (
+        <div className="successMessage">
+          <Translate content={`newAccountsPage.${successMessage}`} />
         </div>
       )}
     </div>
