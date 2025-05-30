@@ -316,13 +316,11 @@ class RegisterForm extends React.Component {
     if (typeof (base = this.props).onSubmit === "function") {
       base.onSubmit();
     }
-    return auth.register({login, password, email, credited_name, project_email_communication, global_email_communication, project_id, beta_email_communication}).then(() => {
-      var base1;
-      return typeof (base1 = this.props).onSuccess === "function" ? base1.onSuccess(...arguments) : void 0;
+    return auth.register({login, password, email, credited_name, project_email_communication, global_email_communication, project_id, beta_email_communication}).then((user) => {
+      return this.props.onSuccess?.(user);
     }).catch((error) => {
-      var base1;
       this.setState({error});
-      return typeof (base1 = this.props).onFailure === "function" ? base1.onFailure(...arguments) : void 0;
+      return this.props.onFailure?.(error);
     });
   }
 
