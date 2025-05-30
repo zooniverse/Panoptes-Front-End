@@ -46,7 +46,6 @@ counterpart.registerTranslations('en', {
 class RegisterForm extends React.Component {
   constructor (props) {
     super(props);
-    // TODO: handle mixin
     this.state = {
       badNameChars: null,
       nameConflict: null,
@@ -302,11 +301,6 @@ class RegisterForm extends React.Component {
 
   handleSubmit (e) {
     var base, beta_email_communication, credited_name, email, global_email_communication, login, password, project_email_communication, project_id, ref, ref1;
-    if ((ref = this.context.geordi) != null) {
-      ref.logEvent({
-        type: 'register'
-      });
-    }
     e.preventDefault();
     login = this.refs.name.value;
     password = this.refs.password.value;
@@ -375,10 +369,6 @@ class RegisterForm extends React.Component {
   // part of mixins from promiseToSetState
   isMounted () { return true }
 }
-
-RegisterForm.contextTypes = {
-  geordi: PropTypes.object
-};
 
 RegisterForm.propTypes = {
   onFailure: PropTypes.func,
