@@ -76,9 +76,7 @@ class SignInForm extends React.Component {
             </a>}
         </div>
 
-        <button type="submit" className="standard-button full" disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0} onClick={(ref2 = this.context.geordi) != null ? ref2.logEvent({
-        type: 'login'
-      }) : void 0}>
+        <button type="submit" className="standard-button full" disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}>
           <Translate content="signInForm.signIn" />
         </button>
       </form>
@@ -137,10 +135,6 @@ class SignInForm extends React.Component {
     });
   }
 }
-
-SignInForm.contextTypes = {
-  geordi: PropTypes.object
-};
 
 SignInForm.propTypes = {
   onFailure: PropTypes.func,
