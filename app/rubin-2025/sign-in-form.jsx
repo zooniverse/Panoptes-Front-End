@@ -41,20 +41,35 @@ class SignInForm extends React.Component {
   }
 
   render () {
-    var disabled, ref, ref1, ref2;
-    disabled = (this.props.user != null) || this.state.busy;
+    const disabled = (this.props.user !== null) || this.state.busy;
     return (
       <form method="POST" onSubmit={this.handleSubmit}>
         <label>
           <Translate content="signInForm.userName" />
-          <input type="text" className="standard-input full" name="login" value={(ref = this.props.user) != null ? ref.login : void 0} disabled={disabled} autoFocus onChange={this.handleInputChange} maxLength="255" />
+          <input
+            type="text"
+            className="standard-input full"
+            name="login"
+            value={this.state.login}
+            disabled={disabled}
+            autoFocus
+            onChange={this.handleInputChange}
+            maxLength="255"
+          />
         </label>
 
         <br />
 
         <label>
           <Translate content="signInForm.password" /><br />
-          <input type="password" className="standard-input full" name="password" value={(ref1 = this.props.user) != null ? ref1.password : void 0} disabled={disabled} onChange={this.handleInputChange} />
+          <input
+            type="password"
+            className="standard-input full"
+            name="password"
+            value={this.state.password}
+            disabled={disabled}
+            onChange={this.handleInputChange}
+          />
         </label>
 
         <div style={{ textAlign: 'center', margin: '1em 0' }}>
@@ -87,7 +102,10 @@ class SignInForm extends React.Component {
           )}
         </div>
 
-        <button type="submit" className="standard-button full" disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}>
+        <button
+          type="submit"
+          className="standard-button full"
+          disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}>
           <Translate content="signInForm.signIn" />
         </button>
       </form>
