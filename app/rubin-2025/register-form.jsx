@@ -76,7 +76,7 @@ class RegisterForm extends React.Component {
     this.debouncedCheckForEmailConflict = null;
 
     // part of mixins from promiseToSetState
-    this._promiseStateKeys = {}
+    this._promiseStateKeys = {};
   }
 
   render () {
@@ -294,30 +294,55 @@ class RegisterForm extends React.Component {
   }
 
   isFormValid () {
-    var agreesToPrivacyPolicy, badNameChars, emailConflict, nameConflict, nameExists, passwordsDontMatch;
-    ({badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy, nameExists} = this.state);
-    return (badNameChars != null ? badNameChars.length : void 0) === 0 && !nameConflict && !passwordsDontMatch && !emailConflict && nameExists && agreesToPrivacyPolicy;
+    const {
+      badNameChars,
+      nameConflict,
+      passwordsDontMatch,
+      emailConflict,
+      agreesToPrivacyPolicy,
+      nameExists
+    } = this.state;
+    return (
+      !(badNameChars?.length > 0)
+      && !nameConflict
+      && !passwordsDontMatch
+      && !emailConflict
+      && nameExists
+      && agreesToPrivacyPolicy
+    );
   }
 
   handleSubmit (e) {
-    var base, beta_email_communication, credited_name, email, global_email_communication, login, password, project_email_communication, project_id, ref, ref1;
     e.preventDefault();
-    login = this.refs.name.value;
-    password = this.refs.password.value;
-    email = this.refs.email.value;
-    credited_name = this.refs.realName.value;
-    global_email_communication = this.refs.okayToEmail.checked;
-    project_email_communication = global_email_communication;
-    beta_email_communication = this.refs.betaTester.checked;
-    project_id = (ref1 = this.props.project) != null ? ref1.id : void 0;
+
+    const login = this.refs.name.value;
+    const password = this.refs.password.value;
+    const email = this.refs.email.value;
+    const credited_name = this.refs.realName.value;
+    const global_email_communication = this.refs.okayToEmail.checked;
+    const project_email_communication = global_email_communication;
+    const beta_email_communication = this.refs.betaTester.checked;
+    
+    const project_id = this.props.project?.id || undefined;
+
     this.setState({
       error: null
     });
-    if (typeof (base = this.props).onSubmit === "function") {
-      base.onSubmit();
-    }
-    return auth.register({login, password, email, credited_name, project_email_communication, global_email_communication, project_id, beta_email_communication}).then((user) => {
+
+    this.props.onSubmit?.();
+
+    return auth.register({
+      login,
+      password,
+      email,
+      credited_name,
+      project_email_communication,
+      global_email_communication,
+      project_id,
+      beta_email_communication
+    }).then((user) => {
       return this.props.onSuccess?.(user);
+
     }).catch((error) => {
       this.setState({error});
       return this.props.onFailure?.(error);
