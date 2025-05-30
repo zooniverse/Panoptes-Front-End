@@ -43,34 +43,43 @@ class SignInForm extends React.Component {
   render () {
     const disabled = (this.props.user !== null) || this.state.busy;
     return (
-      <form method="POST" onSubmit={this.handleSubmit}>
-        <label>
-          <Translate content="signInForm.userName" />
-          <input
-            type="text"
-            className="standard-input full"
-            name="login"
-            value={this.state.login}
-            disabled={disabled}
-            autoFocus
-            onChange={this.handleInputChange}
-            maxLength="255"
-          />
-        </label>
+      <form className="sign-in-form" method="POST" onSubmit={this.handleSubmit}>
 
-        <br />
+        <div style={{ margin: '1em 0' }}>
 
-        <label>
-          <Translate content="signInForm.password" /><br />
-          <input
-            type="password"
-            className="standard-input full"
-            name="password"
-            value={this.state.password}
-            disabled={disabled}
-            onChange={this.handleInputChange}
-          />
-        </label>
+          <div style={{ margin: '1em 0' }}>
+            <label style={{ display: 'block' }} htmlFor="sign-in-form-login">
+              <Translate content="signInForm.userName" />
+            </label>
+            <input
+              type="text"
+              className="standard-input full"
+              name="login"
+              id="sign-in-form-login"
+              value={this.state.login}
+              disabled={disabled}
+              autoFocus
+              onChange={this.handleInputChange}
+              maxLength="255"
+            />
+          </div>
+
+          <div style={{ margin: '1em 0' }}>
+            <label style={{ display: 'block' }} htmlFor="sign-in-form-password">
+              <Translate content="signInForm.password" />
+            </label>
+            <input
+              type="password"
+              className="standard-input full"
+              name="password"
+              id="sign-in-form-password"
+              value={this.state.password}
+              disabled={disabled}
+              onChange={this.handleInputChange}
+            />
+          </div>
+
+        </div>
 
         <div style={{ textAlign: 'center', margin: '1em 0' }}>
           
@@ -108,6 +117,7 @@ class SignInForm extends React.Component {
           disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}>
           <Translate content="signInForm.signIn" />
         </button>
+        
       </form>
     );
   }
