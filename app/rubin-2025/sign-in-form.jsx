@@ -57,23 +57,34 @@ class SignInForm extends React.Component {
           <input type="password" className="standard-input full" name="password" value={(ref1 = this.props.user) != null ? ref1.password : void 0} disabled={disabled} onChange={this.handleInputChange} />
         </label>
 
-        <div style={{
-          textAlign: 'center'
-        }}>
-          {this.props.user != null ? <div className="form-help">
+        <div style={{ textAlign: 'center', margin: '1em 0' }}>
+          
+          {this.props.user !== null && ( 
+            <div className="form-help">
               <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
               <button type="button" className="minor-button" onClick={this.handleSignOut}>
                 <Translate content="signInForm.signOut" />
               </button>
-            </div> : this.state.error != null ? <div className="form-help error">
-              {this.state.error.message.match(/invalid(.+)password/i) ? <Translate content="signInForm.incorrectDetails" /> : <span>{this.state.error.toString()}</span>}{' '}
+            </div>
+          )}
 
-              <a href={`${window.location.origin}/reset-password`}>
-                <Translate content="signInForm.forgotPassword" />
-              </a>
-            </div> : this.state.busy ? <LoadingIndicator /> : <a href={`${window.location.origin}/reset-password`}>
+          {this.state.error !== null && (
+            <div className="form-help error">
+              {this.state.error.message.match(/invalid(.+)password/i) ? (
+                <Translate content="signInForm.incorrectDetails" />
+              ) : (
+                <span>{this.state.error.toString()}</span>
+              )}{' '}
+            </div>
+          )}
+
+          {this.state.busy ? (
+            <LoadingIndicator />
+          ) : (
+            <a href={`${window.location.origin}/reset-password`}>
               <Translate content="signInForm.forgotPassword" />
-            </a>}
+            </a>
+          )}
         </div>
 
         <button type="submit" className="standard-button full" disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}>
