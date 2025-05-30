@@ -100,24 +100,24 @@ class SignInForm extends React.Component {
       working: true
     }, () => {
       const {login, password} = this.state;
-
       auth.signIn({login, password}).then((user) => {
-        return this.setState({
+        this.setState({
           working: false,
           error: null
-        }, () => {
-          onSuccess?.(user);
-        });
+        })
+
+        onSuccess?.(user);
+        // Historical note: onSuccess used to be in the callback for setState(), but for some reason, that callback doesn't trigger.
 
       }).catch((error) => {
-        return this.setState({
+        this.setState({
           working: false,
           error: error
-        }, () => {
-          const ref = ReactDOM.findDOMNode(this).querySelector('[name="login"]');
-          ref?.focus();
-          return onFailure?.(error);
-        });
+        })
+
+        const ref = ReactDOM.findDOMNode(this).querySelector('[name="login"]');
+        ref?.focus();
+        onFailure?.(error);
       });
 
       return onSubmit?.(e);
