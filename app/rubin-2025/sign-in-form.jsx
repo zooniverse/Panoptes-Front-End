@@ -93,33 +93,34 @@ class SignInForm extends React.Component {
   }
 
   handleSubmit (e) {
+    const { onSuccess, onSubmit, onFailure } = this.props;
+
     e.preventDefault();
     return this.setState({
       working: true
     }, () => {
-      var base, login, password;
-      ({login, password} = this.state);
+      const {login, password} = this.state;
+
       auth.signIn({login, password}).then((user) => {
         return this.setState({
           working: false,
           error: null
         }, () => {
-          var base;
-          return typeof (base = this.props).onSuccess === "function" ? base.onSuccess(user) : void 0;
+          onSuccess?.(user);
         });
+
       }).catch((error) => {
         return this.setState({
           working: false,
           error: error
         }, () => {
-          var base, ref;
-          if ((ref = ReactDOM.findDOMNode(this).querySelector('[name="login"]')) != null) {
-            ref.focus();
-          }
-          return typeof (base = this.props).onFailure === "function" ? base.onFailure(error) : void 0;
+          const ref = ReactDOM.findDOMNode(this).querySelector('[name="login"]');
+          ref?.focus();
+          return onFailure?.(error);
         });
       });
-      return typeof (base = this.props).onSubmit === "function" ? base.onSubmit(e) : void 0;
+
+      return onSubmit?.(e);
     });
   }
 
