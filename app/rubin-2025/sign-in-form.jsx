@@ -41,7 +41,7 @@ class SignInForm extends React.Component {
   }
 
   render () {
-    const disabled = (this.props.user !== null) || this.state.busy;
+    const disabled = !!this.props.user || this.state.busy;
     return (
       <form className="sign-in-form" method="POST" onSubmit={this.handleSubmit}>
 
@@ -83,7 +83,7 @@ class SignInForm extends React.Component {
 
         <div style={{ textAlign: 'center', margin: '1em 0' }}>
           
-          {this.props.user !== null && ( 
+          {this.props.user && ( 
             <div className="form-help">
               <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
               <button type="button" className="minor-button" onClick={this.handleSignOut}>
@@ -92,7 +92,7 @@ class SignInForm extends React.Component {
             </div>
           )}
 
-          {this.state.error !== null && (
+          {this.state.error && (
             <div className="form-help error">
               {this.state.error.message.match(/invalid(.+)password/i) ? (
                 <Translate content="signInForm.incorrectDetails" />
