@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { browserHistory } from 'react-router';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import Helmet from 'react-helmet';
 import { SignInForm } from './sign-in-form.jsx';
 import { RegisterForm } from './register-form.jsx';
+
+const DELAY_TO_REDIRECT = 3000;
 
 counterpart.registerTranslations('en', {
   newAccountsPage: {
@@ -24,13 +27,17 @@ function RubinPage ({
   }
 
   function onSignInSuccess () {
-    console.log('+++ onSignInSuccess')
     setSuccessMessage('successfullySignedIn')
+    setTimeout(redirect, DELAY_TO_REDIRECT, '/')
   }
 
   function onRegisterSuccess () {
-    console.log('+++ onRegisterSuccess')
     setSuccessMessage('successfullyRegistered')
+    setTimeout(redirect, DELAY_TO_REDIRECT, '/')
+  }
+
+  function redirect(path = '/') {
+    window.location.href = `${window.location.origin}${path}`
   }
 
   return (
