@@ -68,10 +68,10 @@ class SignInForm extends React.Component {
             </div> : this.state.error != null ? <div className="form-help error">
               {this.state.error.message.match(/invalid(.+)password/i) ? <Translate content="signInForm.incorrectDetails" /> : <span>{this.state.error.toString()}</span>}{' '}
 
-              <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
+              <a href={`${window.location.origin}/reset-password`}>
                 <Translate content="signInForm.forgotPassword" />
               </a>
-            </div> : this.state.busy ? <LoadingIndicator /> : <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
+            </div> : this.state.busy ? <LoadingIndicator /> : <a href={`${window.location.origin}/reset-password`}>
               <Translate content="signInForm.forgotPassword" />
             </a>}
         </p>
