@@ -57,9 +57,9 @@ class SignInForm extends React.Component {
           <input type="password" className="standard-input full" name="password" value={(ref1 = this.props.user) != null ? ref1.password : void 0} disabled={disabled} onChange={this.handleInputChange} />
         </label>
 
-        <p style={{
-        textAlign: 'center'
-      }}>
+        <div style={{
+          textAlign: 'center'
+        }}>
           {this.props.user != null ? <div className="form-help">
               <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
               <button type="button" className="minor-button" onClick={this.handleSignOut}>
@@ -74,7 +74,7 @@ class SignInForm extends React.Component {
             </div> : this.state.busy ? <LoadingIndicator /> : <a href={`${window.location.origin}/reset-password`}>
               <Translate content="signInForm.forgotPassword" />
             </a>}
-        </p>
+        </div>
 
         <button type="submit" className="standard-button full" disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0} onClick={(ref2 = this.context.geordi) != null ? ref2.logEvent({
         type: 'login'
