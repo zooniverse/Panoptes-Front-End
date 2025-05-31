@@ -58,9 +58,11 @@ class RegisterForm extends React.Component {
 
       input_login: '',
       input_password: '',
-      input_passwordConfirmation: '',
+      input_confirmedPassword: '',
       input_email: '',
-      input_realName: '',
+      input_creditedName: '',
+      input_okayToEmail: true,
+      input_betaTester: false,
 
       // part of mixins from promiseToSetState
       pending: {},
@@ -346,8 +348,8 @@ class RegisterForm extends React.Component {
 
   handlePasswordChange () {
     var asLong, confirmedPassword, exists, longEnough, matches, password;
-    password = this.refs.password.value;
-    confirmedPassword = this.refs.confirmedPassword.value;
+    password = this.state.input_password;
+    confirmedPassword = this.state.input_confirmedPassword;
     exists = password.length !== 0;
     longEnough = password.length >= MIN_PASSWORD_LENGTH;
     asLong = confirmedPassword.length >= password.length;
@@ -363,7 +365,7 @@ class RegisterForm extends React.Component {
     this.promiseToSetState({
       emailConflict: Promise.resolve(null) // Cancel any existing request.
     });
-    email = this.refs.email.value;
+    email = this.state.input_email;
     if (email.match(/.+@.+\..+/)) {
       if (this.debouncedCheckForEmailConflict == null) {
         this.debouncedCheckForEmailConflict = debounce(this.checkForEmailConflict, REMOTE_CHECK_DELAY);
@@ -409,13 +411,13 @@ class RegisterForm extends React.Component {
   handleSubmit (e) {
     e.preventDefault();
 
-    const login = this.refs.name.value;
-    const password = this.refs.password.value;
-    const email = this.refs.email.value;
-    const credited_name = this.refs.realName.value;
-    const global_email_communication = this.refs.okayToEmail.checked;
+    const login = this.state.input_login;
+    const password = this.state.input_password;
+    const email = this.state.input_email;
+    const credited_name = this.state.input_creditedName;
+    const global_email_communication = this.state.input_okayToEmail;
     const project_email_communication = global_email_communication;
-    const beta_email_communication = this.refs.betaTester.checked;
+    const beta_email_communication = this.state.input_betaTester;
     
     const project_id = this.props.project?.id || undefined;
 
