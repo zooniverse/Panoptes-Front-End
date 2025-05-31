@@ -136,7 +136,6 @@ class RegisterForm extends React.Component {
           </span>
           <input
             type="text"
-            ref="name"
             name="login"
             id="register-form-login"
             value={this.state.input_login}
@@ -164,10 +163,12 @@ class RegisterForm extends React.Component {
           </span>
           <input
             type="password"
-            ref="password"
+            name="password"
+            id="register-form-password"
+            value={this.state.input_password}
             className="standard-input full"
             disabled={inputDisabled}
-            onChange={this.handlePasswordChange}
+            onChange={this.handleUserInput}
           />
         </label>
 
@@ -181,10 +182,12 @@ class RegisterForm extends React.Component {
           </span>
           <input
             type="password"
-            ref="confirmedPassword"
+            name="confirmedPassword"
+            id="register-form-confirmedPassword"
+            value={this.state.input_confirmedPassword}
             className="standard-input full"
             disabled={inputDisabled}
-            onChange={this.handlePasswordChange}
+            onChange={this.handleUserInput}
           />
         </label>
 
@@ -202,10 +205,12 @@ class RegisterForm extends React.Component {
           </span>
           <input
             type="text"
-            ref="email"
+            name="email"
+            id="register-form-email"
+            value={this.state.input_email}
             className="standard-input full"
             disabled={inputDisabled}
-            onChange={this.handleEmailChange}
+            onChange={this.handleUserInput}
           />
         </label>
 
@@ -219,10 +224,13 @@ class RegisterForm extends React.Component {
           <input
             type="text"
             pattern='[^@]+'
-            ref="realName"
+            name="creditedName"
+            id="register-form-creditedName"
+            value={this.state.input_creditedName}
             className="standard-input full"
             disabled={inputDisabled}
             title={counterpart('registerForm.realNamePatternHelp')}
+            onChange={this.handleUserInput}
           />
           <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
         </label>
@@ -304,6 +312,15 @@ class RegisterForm extends React.Component {
       case "login":
         this.handleLoginChange(inputValue);
         break;
+      case "password":
+        this.handlePasswordChange(inputValue, this.state.input_confirmedPassword);
+        break;
+      case "confirmedPassword":
+        this.handlePasswordChange(this.state.input_password, inputValue);
+        break;
+      case "email":
+        this.handleEmailChange(inputValue);
+        break;
     }
 
   }
@@ -346,10 +363,8 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handlePasswordChange () {
-    var asLong, confirmedPassword, exists, longEnough, matches, password;
-    password = this.state.input_password;
-    confirmedPassword = this.state.input_confirmedPassword;
+  handlePasswordChange (password, confirmedPassword) {
+    var asLong, exists, longEnough, matches;
     exists = password.length !== 0;
     longEnough = password.length >= MIN_PASSWORD_LENGTH;
     asLong = confirmedPassword.length >= password.length;
@@ -360,12 +375,10 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleEmailChange () {
-    var email;
+  handleEmailChange (email) {
     this.promiseToSetState({
       emailConflict: Promise.resolve(null) // Cancel any existing request.
     });
-    email = this.state.input_email;
     if (email.match(/.+@.+\..+/)) {
       if (this.debouncedCheckForEmailConflict == null) {
         this.debouncedCheckForEmailConflict = debounce(this.checkForEmailConflict, REMOTE_CHECK_DELAY);
