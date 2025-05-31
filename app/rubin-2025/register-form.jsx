@@ -52,9 +52,15 @@ class RegisterForm extends React.Component {
       passwordTooShort: null,
       passwordsDontMatch: null,
       emailConflict: null,
-      agreedToPrivacyPolicy: null,
+      agreeToPrivacyPolicy: false,
       error: null,
       underAge: false,
+
+      input_login: '',
+      input_password: '',
+      input_passwordConfirmation: '',
+      input_email: '',
+      input_realName: '',
 
       // part of mixins from promiseToSetState
       pending: {},
@@ -62,8 +68,8 @@ class RegisterForm extends React.Component {
     };
     
     this.updateAge = this.updateAge.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.checkForNameConflict = this.checkForNameConflict.bind(this);
+    this.handleLoginChange = this.handleLoginChange.bind(this);
+    this.checkForLoginConflict = this.checkForLoginConflict.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.checkForEmailConflict = this.checkForEmailConflict.bind(this);
@@ -71,8 +77,9 @@ class RegisterForm extends React.Component {
     this.isFormValid = this.isFormValid.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleUserInput = this.handleUserInput.bind(this);
     
-    this.debouncedCheckForNameConflict = null;
+    this.debouncedCheckForLoginConflict = null;
     this.debouncedCheckForEmailConflict = null;
 
     // part of mixins from promiseToSetState
@@ -98,7 +105,8 @@ class RegisterForm extends React.Component {
     const submitDisabled = !this.isFormValid() || Object.keys(this.state.pending).length !== 0 || (this.props.user != null)
 
     return (
-      <form method="POST" onSubmit={this.handleSubmit}>
+      <form className="register-form" method="POST" onSubmit={this.handleSubmit}>
+        
         <label className="form-separator">
           <input
             type="checkbox"
@@ -127,9 +135,13 @@ class RegisterForm extends React.Component {
           <input
             type="text"
             ref="name"
+            name="login"
+            id="register-form-login"
+            value={this.state.input_login}
             className="standard-input full"
             disabled={inputDisabled}
-            autoFocus onChange={this.handleNameChange}
+            autoFocus
+            onChange={this.handleUserInput}
             maxLength="255"
           />
           <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
@@ -219,8 +231,9 @@ class RegisterForm extends React.Component {
         <label>
           <input
             type="checkbox"
-            ref="agreesToPrivacyPolicy"
+            ref="agreeToPrivacyPolicy"
             disabled={inputDisabled}
+            checked={!!this.state.agreeToPrivacyPolicy}
             onChange={this.handlePrivacyPolicyChange}
           />
           {this.state.underAge ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} /> : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />}
@@ -270,19 +283,35 @@ class RegisterForm extends React.Component {
     );
   }
 
-  updateAge () {
+  updateAge (e) {
     return this.setState({
-      underAge: !this.state.underAge
+      underAge: !!e.currentTarget?.checked
     });
   }
 
-  handleNameChange () {
-    var badChars, char, exists, name;
-    name = this.refs.name.value;
-    exists = name.length !== 0;
+  handleUserInput (e) {
+    const input = e?.currentTarget;
+    const inputName = input.name;
+    const inputValue = input.type === 'checkbox' ? !!input.checked : input.value;
+
+    this.setState({
+      [`input_${inputName}`]: inputValue
+    })
+
+    switch (inputName) {
+      case "login":
+        this.handleLoginChange(inputValue);
+        break;
+    }
+
+  }
+
+  handleLoginChange (login) {
+    var badChars, char, exists;
+    exists = login.length !== 0;
     badChars = (function() {
       var i, len, ref, results;
-      ref = name.split('');
+      ref = login.split('');
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         char = ref[i];
@@ -298,20 +327,19 @@ class RegisterForm extends React.Component {
       nameExists: exists
     });
     if (exists && badChars.length === 0) {
-      if (this.debouncedCheckForNameConflict == null) {
-        this.debouncedCheckForNameConflict = debounce(this.checkForNameConflict, REMOTE_CHECK_DELAY);
+      if (this.debouncedCheckForLoginConflict == null) {
+        this.debouncedCheckForLoginConflict = debounce(this.checkForLoginConflict, REMOTE_CHECK_DELAY);
       }
-      return this.debouncedCheckForNameConflict(name);
+      return this.debouncedCheckForLoginConflict(login);
     }
   }
 
-  checkForNameConflict (username) {
+  checkForLoginConflict (username) {
     return this.promiseToSetState({
       nameConflict: auth.register({
         login: username
       }).catch(function(error) {
-        var ref;
-        return (ref = error.message.match(/login(.+)taken/mi)) != null ? ref : false;
+        return error.message.match(/login(.+)taken/mi) || false;
       })
     });
   }
@@ -353,9 +381,9 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handlePrivacyPolicyChange () {
+  handlePrivacyPolicyChange (e) {
     return this.setState({
-      agreesToPrivacyPolicy: this.refs.agreesToPrivacyPolicy.checked
+      agreeToPrivacyPolicy: !!e.currentTarget?.checked
     });
   }
 
@@ -365,7 +393,7 @@ class RegisterForm extends React.Component {
       nameConflict,
       passwordsDontMatch,
       emailConflict,
-      agreesToPrivacyPolicy,
+      agreeToPrivacyPolicy,
       nameExists
     } = this.state;
     return (
@@ -374,7 +402,7 @@ class RegisterForm extends React.Component {
       && !passwordsDontMatch
       && !emailConflict
       && nameExists
-      && agreesToPrivacyPolicy
+      && agreeToPrivacyPolicy
     );
   }
 
