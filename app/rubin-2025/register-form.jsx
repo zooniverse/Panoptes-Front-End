@@ -112,7 +112,6 @@ class RegisterForm extends React.Component {
         <label className="form-separator">
           <input
             type="checkbox"
-            ref="underAge"
             checked={this.state.underAge}
             disabled={inputDisabled}
             onChange={this.updateAge}
@@ -241,7 +240,6 @@ class RegisterForm extends React.Component {
         <label>
           <input
             type="checkbox"
-            ref="agreeToPrivacyPolicy"
             disabled={inputDisabled}
             checked={!!this.state.agreeToPrivacyPolicy}
             onChange={this.handlePrivacyPolicyChange}
@@ -255,10 +253,11 @@ class RegisterForm extends React.Component {
         <label>
           <input
             type="checkbox"
-            ref="okayToEmail"
-            defaultChecked={true}
+            name="okayToEmail"
+            id="register-form-okayToEmail"
+            checked={this.state.input_okayToEmail}
             disabled={inputDisabled}
-            onChange={this.forceUpdate.bind(this, null)}
+            onChange={this.handleUserInput}
           />
           {this.state.underAge ? <Translate component="span" content="registerForm.underAgeEmail" /> : <Translate component="span" content="registerForm.okayToEmail" />}
         </label><br />
@@ -266,9 +265,11 @@ class RegisterForm extends React.Component {
         <label>
           <input
             type="checkbox"
-            ref="betaTester"
+            name="betaTester"
+            id="register-form-betaTester"
+            checked={this.state.input_betaTester}
             disabled={inputDisabled}
-            onChange={this.forceUpdate.bind(this, null)}
+            onChange={this.handleUserInput}
           />
           <Translate component="span" content="registerForm.betaTester" />
         </label><br />
