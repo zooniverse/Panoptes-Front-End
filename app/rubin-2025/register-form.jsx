@@ -94,10 +94,19 @@ class RegisterForm extends React.Component {
       </a>
     );
     
+    const inputDisabled = !!this.props.user;
+    const submitDisabled = !this.isFormValid() || Object.keys(this.state.pending).length !== 0 || (this.props.user != null)
+
     return (
       <form method="POST" onSubmit={this.handleSubmit}>
         <label className="form-separator">
-          <input type="checkbox" ref="underAge" checked={this.state.underAge} disabled={this.props.user != null} onChange={this.updateAge} />
+          <input
+            type="checkbox"
+            ref="underAge"
+            checked={this.state.underAge}
+            disabled={inputDisabled}
+            onChange={this.updateAge}
+          />
           <Translate component="span" content="registerForm.underAge" />
         </label>
 
@@ -111,12 +120,22 @@ class RegisterForm extends React.Component {
                   </a>
                 </span> : <span className="form-help success">
                   <Translate content="registerForm.looksGood" />
-                </span> : void 0}
+                </span> : void 0
+            }
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
-          <input type="text" ref="name" className="standard-input full" disabled={this.props.user != null} autoFocus onChange={this.handleNameChange} maxLength="255" />
+          <input
+            type="text"
+            ref="name"
+            className="standard-input full"
+            disabled={inputDisabled}
+            autoFocus onChange={this.handleNameChange}
+            maxLength="255"
+          />
           <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
-          {this.state.underAge ? <Translate component="span" className="form-help info" content="registerForm.notRealName" /> : void 0}
+          {this.state.underAge && (
+            <Translate component="span" className="form-help info" content="registerForm.notRealName" />
+          )}
         </label>
 
         <br />
@@ -124,10 +143,18 @@ class RegisterForm extends React.Component {
         <label>
           <span className="columns-container inline spread">
             <Translate content="registerForm.password" />
-            {passwordTooShort ? <Translate className="form-help error" content="registerForm.passwordTooShort" /> : void 0}
+            {passwordTooShort && (
+              <Translate className="form-help error" content="registerForm.passwordTooShort" />
+            )}
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
-          <input type="password" ref="password" className="standard-input full" disabled={this.props.user != null} onChange={this.handlePasswordChange} />
+          <input
+            type="password"
+            ref="password"
+            className="standard-input full"
+            disabled={inputDisabled}
+            onChange={this.handlePasswordChange}
+          />
         </label>
 
         <br />
@@ -138,7 +165,13 @@ class RegisterForm extends React.Component {
             {passwordsDontMatch != null ? passwordsDontMatch ? <Translate className="form-help error" content="registerForm.passwordsDontMatch" /> : !passwordTooShort ? <Translate className="form-help success" content="registerForm.looksGood" /> : void 0 : void 0}
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
-          <input type="password" ref="confirmedPassword" className="standard-input full" disabled={this.state.props != null} onChange={this.handlePasswordChange} />
+          <input
+            type="password"
+            ref="confirmedPassword"
+            className="standard-input full"
+            disabled={inputDisabled}
+            onChange={this.handlePasswordChange}
+          />
         </label>
 
         <br />
@@ -153,7 +186,13 @@ class RegisterForm extends React.Component {
                   </a>
                 </span> : <Translate className="form-help success" content="registerForm.looksGood" /> : <Translate className="form-help info right-align" content="registerForm.required" />}
           </span>
-          <input type="text" ref="email" className="standard-input full" disabled={this.state.props != null} onChange={this.handleEmailChange} />
+          <input
+            type="text"
+            ref="email"
+            className="standard-input full"
+            disabled={inputDisabled}
+            onChange={this.handleEmailChange}
+          />
         </label>
 
         <br />
@@ -163,7 +202,14 @@ class RegisterForm extends React.Component {
             <Translate content="registerForm.realName" />
             <Translate className="form-help info right-align" content="registerForm.optional" />
           </span>
-          <input type="text" pattern='[^@]+' ref="realName" className="standard-input full" disabled={this.props.user != null} title={counterpart('registerForm.realNamePatternHelp')} />
+          <input
+            type="text"
+            pattern='[^@]+'
+            ref="realName"
+            className="standard-input full"
+            disabled={inputDisabled}
+            title={counterpart('registerForm.realNamePatternHelp')}
+          />
           <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
         </label>
 
@@ -171,7 +217,12 @@ class RegisterForm extends React.Component {
         <br />
 
         <label>
-          <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={this.props.user != null} onChange={this.handlePrivacyPolicyChange} />
+          <input
+            type="checkbox"
+            ref="agreesToPrivacyPolicy"
+            disabled={inputDisabled}
+            onChange={this.handlePrivacyPolicyChange}
+          />
           {this.state.underAge ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} /> : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />}
         </label>
 
@@ -179,12 +230,23 @@ class RegisterForm extends React.Component {
         <br />
 
         <label>
-          <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
+          <input
+            type="checkbox"
+            ref="okayToEmail"
+            defaultChecked={true}
+            disabled={inputDisabled}
+            onChange={this.forceUpdate.bind(this, null)}
+          />
           {this.state.underAge ? <Translate component="span" content="registerForm.underAgeEmail" /> : <Translate component="span" content="registerForm.okayToEmail" />}
         </label><br />
 
         <label>
-          <input type="checkbox" ref="betaTester" disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
+          <input
+            type="checkbox"
+            ref="betaTester"
+            disabled={inputDisabled}
+            onChange={this.forceUpdate.bind(this, null)}
+          />
           <Translate component="span" content="registerForm.betaTester" />
         </label><br />
 
@@ -196,7 +258,11 @@ class RegisterForm extends React.Component {
         </p>
 
         <div>
-          <button type="submit" className="standard-button full" disabled={!this.isFormValid() || Object.keys(this.state.pending).length !== 0 || (this.props.user != null)}>
+          <button
+            type="submit"
+            className="standard-button full"
+            disabled={submitDisabled}
+          >
             <Translate content="registerForm.register" />
           </button>
         </div>
