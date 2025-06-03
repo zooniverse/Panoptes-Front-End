@@ -128,7 +128,10 @@ export const routes = (
     </Route>
 
     {/* Part of Rubin 2025 project. See /app/rubin-2025 */}
-    <Route path="rubin" component={RubinPage} />
+    <Route path="rubin" component={RubinPage}>
+      <Route path="sign-in" />
+      <Route path="register" />
+    </Route>
 
     <Route path="privacy" component={PrivacyPolicy} />
     <Route path="youth_privacy" component={YouthPrivacyPolicy} />
