@@ -18,7 +18,7 @@ counterpart.registerTranslations('en', {
 function RubinPage ({
   user
 }) {
-  const [tab, setTab] = useState('sign-in')
+  const [tab, setTab] = useState('register')
   const [successMessage, setSuccessMessage] = useState('')
 
   function onTabClick (e) {
