@@ -11,7 +11,7 @@ describe('RubinPage', function () {
   });
 
   it('renders without crashing', function () {
-    const RubinPageContainer = wrapper.find('div.sign-in-page');
+    const RubinPageContainer = wrapper.find('div.new-accounts-page');
     assert.equal(RubinPageContainer.length, 1);
   });
 
