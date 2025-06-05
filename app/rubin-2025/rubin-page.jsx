@@ -38,10 +38,9 @@ function RubinPage ({
 
   return (
     <div className="new-accounts-page content-container">
-      <Helmet title={'RUBIN 2025'} />
-      <h1>RUBIN 2025</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut dapibus augue. Aliquam varius, lorem id tempor lacinia, nibh mauris ultrices odio, id aliquam purus metus et eros. Maecenas in felis nulla. Quisque nec urna orci. Integer odio lectus, vehicula ac faucibus eget, blandit eget libero. Morbi sed nunc interdum, aliquam orci sed, euismod orci. Vivamus in porttitor nunc. Proin vestibulum tempor aliquam. Nullam leo risus, posuere et venenatis sit amet, tincidunt pharetra neque. Duis aliquam mauris vel posuere fermentum. In nec euismod velit. Phasellus rutrum nulla at lorem facilisis blandit. Vestibulum eget massa leo. Fusce lobortis tortor id consequat aliquam. In eget turpis dignissim, fringilla ligula sed, porta magna.</p>
-      <p>Quisque tempus, ante condimentum tempus auctor, massa erat convallis quam, sit amet bibendum dui quam id leo. Vivamus hendrerit nibh ipsum, ut dapibus ante dapibus ut. Sed non sapien sit amet sapien cursus varius. Vestibulum faucibus sed enim ac placerat. Ut nec ex ac tortor auctor lobortis. Etiam a pulvinar nisl, vel pharetra enim. Donec vitae neque in sapien faucibus porttitor. Aenean tincidunt tellus ut nisl tristique pulvinar. Suspendisse ultricies nisl a diam imperdiet, sit amet pellentesque purus imperdiet.</p>
+      <Helmet title={'Zooniverse & Rubin 2025'} />
+      <h1>Zooniverse &amp; Rubin 2025</h1>
+      <p>Welcome to the Zooniverse, the home of Vera C. Rubin Observatory citizen science. We'll be launching the first projects with Rubin data in the next few weeks, so to be among the first to see data and help our scientists then sign up below, and we'll be in touch. In the meantime, to learn more and to enjoy the first images released by the Observatory go to <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">Rubinobservatory.org.</a></p>
 
       {user && successMessage && (
         <div className="successMessage">
