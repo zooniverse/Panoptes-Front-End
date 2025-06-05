@@ -7,17 +7,6 @@ import { Link } from 'react-router';
 import { SignInForm } from './sign-in-form.jsx';
 import { RegisterForm } from './register-form.jsx';
 
-counterpart.registerTranslations('en', {
-  newAccountsPage: {
-    successfullySignedIn: `You've successfully signed in!`,
-    successfullyRegistered: `You've successfully registered!`,
-    alreadySignedInLinks: {
-      gotoHomepage: 'Go to the homepage',
-      gotoProjects: 'Find a new project to explore'
-    }
-  }
-});
-
 function RubinPage ({
   user
 }) {
@@ -50,7 +39,7 @@ function RubinPage ({
 
       {user ? (
         <div className="already-signed-in">
-          <Translate content="signIn.alreadySignedIn" name={user?.login} />
+          <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
           <ul>
             <li><Link to="/"><Translate content='newAccountsPage.alreadySignedInLinks.gotoHomepage' /></Link></li>
             <li><Link to="/projects"><Translate content='newAccountsPage.alreadySignedInLinks.gotoProjects' /></Link></li>
@@ -60,8 +49,8 @@ function RubinPage ({
         <div className="columns-container">
           <div className="tabbed-content column" data-side="top">
             <nav className="tabbed-content-tabs">
-              <button type="button" onClick={onTabClick} data-tab="sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></button>
-              <button type="button" onClick={onTabClick} data-tab="register" className="tabbed-content-tab"><Translate content="signIn.register" /></button>
+              <button type="button" onClick={onTabClick} data-tab="sign-in" className="tabbed-content-tab"><Translate content="newAccountsPage.signIn" /></button>
+              <button type="button" onClick={onTabClick} data-tab="register" className="tabbed-content-tab"><Translate content="newAccountsPage.register" /></button>
             </nav>
             {(tab !== 'register')
               ? <SignInForm user={user} onSuccess={onSignInSuccess} />
