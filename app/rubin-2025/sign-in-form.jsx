@@ -85,7 +85,7 @@ class SignInForm extends React.Component {
           
           {this.props.user && ( 
             <div className="form-help">
-              <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
+              <Translate content="signInForm.alreadySignedIn" name={this.props.user.login} />{' '}
               <button type="button" className="minor-button" onClick={this.handleSignOut}>
                 <Translate content="signInForm.signOut" />
               </button>
