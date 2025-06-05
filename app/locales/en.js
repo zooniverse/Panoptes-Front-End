@@ -263,6 +263,46 @@ export default {
       gotoProjects: 'Find a new project to explore'
     }
   },
+  signInForm: {
+    signIn: 'Sign in',
+    signOut: 'Sign out',
+    userName: 'User name or email address',
+    password: 'Password',
+    incorrectDetails: 'Username or password incorrect',
+    forgotPassword: 'Forgot my password',
+    alreadySignedIn: 'Signed in as %(name)s'
+  },
+  registerForm: {
+    required: 'Required',
+    optional: 'Optional',
+    looksGood: 'Looks good',
+    userName: 'User name',
+    whyUserName: 'You\'ll use this name to log in. It will be shown publicly. ',
+    badChars: "Only letters, numbers, '.', '_', and '-'.",
+    nameConflict: 'That username is taken',
+    forgotPassword: 'Forgot my password',
+    password: 'Password',
+    passwordTooShort: 'Must be at least 8 characters',
+    confirmPassword: 'Confirm password',
+    passwordsDontMatch: 'These don\'t match',
+    email: 'Email address',
+    emailConflict: 'An account with this address already exists',
+    realName: 'Real name',
+    realNamePatternHelp: "Enter a name, not an email address",
+    whyRealName: 'We\'ll use this to give you credit in scientific papers, posters, etc',
+    agreeToPrivacyPolicy: 'You agree to our %(link)s (required)',
+    privacyPolicy: 'privacy policy',
+    okayToEmail: 'It\'s okay to send me email every once in a while. (optional)',
+    betaTester: 'I\'d like to help test new projects, and be emailed when they\'re available. (optional)',
+    underAge: 'If you are under 16 years old, tick this box and complete the form with your parent/guardian.',
+    notRealName: 'Don\'t use your real name.',
+    guardianEmail: 'Parent/Guardian\'s email address',
+    underAgeConsent: 'I confirm I am the parent/guardian and give permission for my child to register by providing my email address as the main contact address. Both I and my child understand and agree to the %(link)s (required)',
+    underAgeEmail: 'If you agree, we will periodically send email promoting new research-related projects or other information relating to our research. We will not use your contact information for commercial purposes. (optional)',
+    register: 'Register',
+    alreadySignedIn: 'Signed in as %(name)s',
+    signOut: 'Sign out'
+  },
   notFoundPage: {
     message: 'Not found'
   },
