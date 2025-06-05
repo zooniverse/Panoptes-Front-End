@@ -11,7 +11,7 @@ describe('RubinPage', function () {
   });
 
   it('renders without crashing', function () {
-    const RubinPageContainer = wrapper.find('div.sign-in-page');
+    const RubinPageContainer = wrapper.find('div.new-accounts-page');
     assert.equal(RubinPageContainer.length, 1);
   });
 
@@ -22,9 +22,9 @@ describe('RubinPage', function () {
   });
 
   describe('tabbed content tabs', function () {
-    it('renders two links', function () {
-      const linkElements = wrapper.find('Link');
-      assert.equal(linkElements.length, 2);
+    it('renders two buttons', function () {
+      const tabElements = wrapper.find('button');
+      assert.equal(tabElements.length, 2);
     });
   });
 });

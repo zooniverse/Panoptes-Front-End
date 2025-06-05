@@ -248,6 +248,7 @@ export default {
     whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
     signIn: 'Sign in',
     register: 'Register',
+    alreadySignedIn: 'Signed in as %(name)s',
     orThirdParty: 'Or sign in with another service',
     withFacebook: 'Sign in with Facebook',
     withGoogle: 'Sign in with Google'
