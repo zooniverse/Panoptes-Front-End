@@ -92,14 +92,21 @@ class RegisterForm extends React.Component {
         <label>
           <span className="columns-container inline spread">
             <Translate content="registerForm.userName" />
-            {(badNameChars != null ? badNameChars.length : void 0) > 0 ? <Translate className="form-help error" content="registerForm.badChars" /> : "nameConflict" in this.state.pending ? <LoadingIndicator /> : nameConflict != null ? nameConflict ? <span className="form-help error">
+            {badNameChars?.length > 0
+              ? <Translate className="form-help error" content="registerForm.badChars" />
+              : "nameConflict" in this.state.pending
+              ? <LoadingIndicator />
+              : nameConflict != null
+              ? nameConflict
+              ? <span className="form-help error">
                   <Translate content="registerForm.nameConflict" />{' '}
                   <a href={`${window.location.origin}/reset-password`}>
                     <Translate content="registerForm.forgotPassword" />
                   </a>
                 </span> : <span className="form-help success">
                   <Translate content="registerForm.looksGood" />
-                </span> : void 0
+                </span>
+              : null
             }
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
@@ -169,10 +176,10 @@ class RegisterForm extends React.Component {
               : <Translate content="registerForm.email" />
             }
             {emailInvalidChars && (
-              <Translate content="registerForm.emailInvalidChars" />
+              <Translate className="form-help error" content="registerForm.emailInvalidChars" />
             )}
             {emailInvalidFormat && (
-              <Translate content="registerForm.emailInvalidFormat" />
+              <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
             )}
             {'emailConflict' in this.state.pending
               ? <LoadingIndicator />
@@ -302,11 +309,7 @@ class RegisterForm extends React.Component {
   handleUserInput (e) {
     const input = e?.currentTarget;
     const inputName = input.name;
-    const inputValue = input.type === 'checkbox' ? !!input.checked : input.value;
-
-    this.setState({
-      [`input_${inputName}`]: inputValue
-    })
+    let inputValue = input.type === 'checkbox' ? !!input.checked : input.value;
 
     switch (inputName) {
       case "login":
@@ -319,10 +322,14 @@ class RegisterForm extends React.Component {
         this.handlePasswordChange(this.state.input_password, inputValue);
         break;
       case "email":
+        inputValue = (inputValue || '').replaceAll(' ', '');  // Trim out empty spaces
         this.handleEmailChange(inputValue);
         break;
     }
 
+    this.setState({
+      [`input_${inputName}`]: inputValue
+    });
   }
 
   handleLoginChange (login) {
