@@ -90,7 +90,7 @@ class RegisterForm extends React.Component {
             <Translate content="registerForm.userName" />
             {(badNameChars != null ? badNameChars.length : void 0) > 0 ? <Translate className="form-help error" content="registerForm.badChars" /> : "nameConflict" in this.state.pending ? <LoadingIndicator /> : nameConflict != null ? nameConflict ? <span className="form-help error">
                   <Translate content="registerForm.nameConflict" />{' '}
-                  <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
+                  <a href={`${window.location.origin}/reset-password`}>
                     <Translate content="registerForm.forgotPassword" />
                   </a>
                 </span> : <span className="form-help success">
@@ -163,7 +163,7 @@ class RegisterForm extends React.Component {
             {this.state.underAge ? <Translate content="registerForm.guardianEmail" /> : <Translate content="registerForm.email" />}
             {'emailConflict' in this.state.pending ? <LoadingIndicator /> : emailConflict != null ? emailConflict ? <span className="form-help error">
                   <Translate content="registerForm.emailConflict" />{' '}
-                  <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
+                  <a href={`${window.location.origin}/reset-password`}>
                     <Translate content="registerForm.forgotPassword" />
                   </a>
                 </span> : <Translate className="form-help success" content="registerForm.looksGood" /> : <Translate className="form-help info right-align" content="registerForm.required" />}
