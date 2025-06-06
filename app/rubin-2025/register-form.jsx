@@ -15,8 +15,8 @@ class RegisterForm extends React.Component {
     this.state = {
       badNameChars: null,
       nameConflict: null,  // This is null when uninitialised, false if there's no name conflict, and an array if there's a conflict.
-      passwordTooShort: null,
-      passwordsDontMatch: null,
+      passwordTooShort: false,
+      passwordsDontMatch: false,
       emailConflict: null,
       emailInvalidChars: false,
       emailInvalidFormat: false,
@@ -156,7 +156,16 @@ class RegisterForm extends React.Component {
         <label>
           <span className="columns-container inline spread">
             <Translate content="registerForm.confirmPassword" /><br />
-            {passwordsDontMatch != null ? passwordsDontMatch ? <Translate className="form-help error" content="registerForm.passwordsDontMatch" /> : !passwordTooShort ? <Translate className="form-help success" content="registerForm.looksGood" /> : void 0 : void 0}
+            {passwordsDontMatch && (
+              <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
+            )}
+            {(this.state.input_password?.length > 0
+              && this.state.input_confirmedPassword?.length > 0
+              && !passwordsDontMatch
+              && !passwordTooShort
+            ) && (
+              <Translate className="form-help success" content="registerForm.looksGood" />
+            )}
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
           <input
@@ -374,14 +383,14 @@ class RegisterForm extends React.Component {
   }
 
   handlePasswordChange (password, confirmedPassword) {
-    var asLong, exists, longEnough, matches;
-    exists = password.length !== 0;
-    longEnough = password.length >= MIN_PASSWORD_LENGTH;
-    asLong = confirmedPassword.length >= password.length;
-    matches = password === confirmedPassword;
+    const passwordNotEmpty = password.length > 0;
+    const bothNotEmpty = password.length > 0 && confirmedPassword.length > 0;
+    const longEnough = password.length >= MIN_PASSWORD_LENGTH;
+    const matches = password === confirmedPassword;
+
     return this.setState({
-      passwordTooShort: exists ? !longEnough : void 0,
-      passwordsDontMatch: exists && asLong ? !matches : void 0
+      passwordTooShort: passwordNotEmpty && !longEnough,
+      passwordsDontMatch: bothNotEmpty && !matches
     });
   }
 
