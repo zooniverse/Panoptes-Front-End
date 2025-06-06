@@ -14,7 +14,7 @@ class RegisterForm extends React.Component {
     super(props);
     this.state = {
       badNameChars: null,
-      nameConflict: null,
+      nameConflict: null,  // This is null when uninitialised, false if there's no name conflict, and an array if there's a conflict.
       passwordTooShort: null,
       passwordsDontMatch: null,
       emailConflict: null,
@@ -92,22 +92,25 @@ class RegisterForm extends React.Component {
         <label>
           <span className="columns-container inline spread">
             <Translate content="registerForm.userName" />
-            {badNameChars?.length > 0
-              ? <Translate className="form-help error" content="registerForm.badChars" />
-              : "nameConflict" in this.state.pending
-              ? <LoadingIndicator />
-              : nameConflict != null
-              ? nameConflict
-              ? <span className="form-help error">
-                  <Translate content="registerForm.nameConflict" />{' '}
-                  <a href={`${window.location.origin}/reset-password`}>
-                    <Translate content="registerForm.forgotPassword" />
-                  </a>
-                </span> : <span className="form-help success">
-                  <Translate content="registerForm.looksGood" />
-                </span>
-              : null
-            }
+            {badNameChars?.length > 0 && (
+              <Translate className="form-help error" content="registerForm.badChars" />
+            )}
+            {"nameConflict" in this.state.pending && (
+              <LoadingIndicator />
+            )}
+            {nameConflict && (
+              <span className="form-help error">
+                <Translate content="registerForm.nameConflict" />{' '}
+                <a href={`${window.location.origin}/reset-password`}>
+                  <Translate content="registerForm.forgotPassword" />
+                </a>
+              </span>
+            )}
+            {(nameConflict === false) && (
+              <span className="form-help success">
+                <Translate content="registerForm.looksGood" />
+              </span>
+            )}
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
           <input
