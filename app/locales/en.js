@@ -287,6 +287,8 @@ export default {
     passwordsDontMatch: 'These don\'t match',
     email: 'Email address',
     emailConflict: 'An account with this address already exists',
+    emailInvalidChars: 'Email address contains invalid characters',
+    emailInvalidFormat: 'Email address doesn\'t look correct',
     realName: 'Real name',
     realNamePatternHelp: "Enter a name, not an email address",
     whyRealName: 'We\'ll use this to give you credit in scientific papers, posters, etc',

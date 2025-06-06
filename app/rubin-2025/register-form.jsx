@@ -18,6 +18,8 @@ class RegisterForm extends React.Component {
       passwordTooShort: null,
       passwordsDontMatch: null,
       emailConflict: null,
+      emailInvalidChars: false,
+      emailInvalidFormat: false,
       agreeToPrivacyPolicy: false,
       error: null,
       underAge: false,
@@ -60,7 +62,9 @@ class RegisterForm extends React.Component {
       nameConflict,
       passwordTooShort,
       passwordsDontMatch,
-      emailConflict
+      emailConflict,
+      emailInvalidChars,
+      emailInvalidFormat,
     } = this.state;
 
     const privacyPolicyLink = (
@@ -160,13 +164,29 @@ class RegisterForm extends React.Component {
 
         <label>
           <span className="columns-container inline spread">
-            {this.state.underAge ? <Translate content="registerForm.guardianEmail" /> : <Translate content="registerForm.email" />}
-            {'emailConflict' in this.state.pending ? <LoadingIndicator /> : emailConflict != null ? emailConflict ? <span className="form-help error">
+            {this.state.underAge
+              ? <Translate content="registerForm.guardianEmail" />
+              : <Translate content="registerForm.email" />
+            }
+            {emailInvalidChars && (
+              <Translate content="registerForm.emailInvalidChars" />
+            )}
+            {emailInvalidFormat && (
+              <Translate content="registerForm.emailInvalidFormat" />
+            )}
+            {'emailConflict' in this.state.pending
+              ? <LoadingIndicator />
+              : emailConflict != null
+              ? emailConflict
+              ? <span className="form-help error">
                   <Translate content="registerForm.emailConflict" />{' '}
                   <a href={`${window.location.origin}/reset-password`}>
                     <Translate content="registerForm.forgotPassword" />
                   </a>
-                </span> : <Translate className="form-help success" content="registerForm.looksGood" /> : <Translate className="form-help info right-align" content="registerForm.required" />}
+                </span>
+              : <Translate className="form-help success" content="registerForm.looksGood" />
+              : <Translate className="form-help info right-align" content="registerForm.required" />
+            }
           </span>
           <input
             type="text"
@@ -210,7 +230,10 @@ class RegisterForm extends React.Component {
             checked={!!this.state.agreeToPrivacyPolicy}
             onChange={this.handlePrivacyPolicyChange}
           />
-          {this.state.underAge ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} /> : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />}
+          {this.state.underAge
+            ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} />
+            : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
+          }
         </label>
 
         <br />
@@ -225,7 +248,10 @@ class RegisterForm extends React.Component {
             disabled={inputDisabled}
             onChange={this.handleUserInput}
           />
-          {this.state.underAge ? <Translate component="span" content="registerForm.underAgeEmail" /> : <Translate component="span" content="registerForm.okayToEmail" />}
+          {this.state.underAge
+            ? <Translate component="span" content="registerForm.underAgeEmail" />
+            : <Translate component="span" content="registerForm.okayToEmail" />
+          }
         </label><br />
 
         <label>
@@ -241,10 +267,17 @@ class RegisterForm extends React.Component {
         </label><br />
 
         <p style={{ textAlign: 'center' }}>
-          {'user' in this.state.pending ? <LoadingIndicator /> : this.props.user != null ? <span className="form-help warning">
-              <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
-              <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
-            </span> : this.state.error != null ? <span className="form-help error">{this.state.error.toString()}</span> : <span>&nbsp;</span>}
+          {'user' in this.state.pending
+            ? <LoadingIndicator />
+            : this.props.user != null
+            ? <span className="form-help warning">
+                <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
+                <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
+              </span>
+            : this.state.error != null
+            ? <span className="form-help error">{this.state.error.toString()}</span>
+            : <span>&nbsp;</span>
+          }
         </p>
 
         <div>
@@ -346,6 +379,16 @@ class RegisterForm extends React.Component {
     this.promiseToSetState({
       emailConflict: Promise.resolve(null) // Cancel any existing request.
     });
+
+    // Sanity check for emails
+    // We're VERY LOOSE with our checks here, as it's better to admit an invalid email than to block a valid email we didn't correctly anticipate.
+    const emailInvalidChars = /[,\\\/]+/g.test(email);  // Does the email contain invalid characters? Mostly, this catches the common "comma instead of period" error.
+    const emailInvalidFormat = email?.length > 0 && !(/.+@.+\..+/).test(email);  // Does the email at least look SORTA like a proper email address?
+    this.setState({
+      emailInvalidChars,
+      emailInvalidFormat
+    });
+
     if (email.match(/.+@.+\..+/)) {
       if (this.debouncedCheckForEmailConflict == null) {
         this.debouncedCheckForEmailConflict = debounce(this.checkForEmailConflict, REMOTE_CHECK_DELAY);
