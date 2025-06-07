@@ -2,9 +2,6 @@
   background: BACKGROUND_COLOR
   margin: 0
 
-  h1
-    text-align: center
-
   section
     background: #ffffff
     margin: 0 auto
@@ -15,6 +12,49 @@
     margin: 0 auto
     padding: 30px
     max-width: 720px
+
+  .info
+    h1
+      color: #404040
+      text-align: center
+      font-size: 32px
+      font-weight: 700
+      line-height: normal
+      letter-spacing: 1.6px
+    
+    p
+      color: #404040
+      text-align: justify
+      font-size: 16px
+      font-style: normal
+      font-weight: 500
+      line-height: normal
+  
+  .tabs
+    margin-top: 2em
+
+    nav
+      display: flex
+      flex-direction: row
+      margin-bottom: 2em
+    
+    button.tab
+      background: none
+      border: none
+      border-bottom: 4px solid transparent
+      cursor: pointer
+      flex: 1 1 auto
+      color: #5C5C5C;
+      font-size: 18px
+      font-weight: 400
+      line-height: normal
+      letter-spacing: 1.8px
+      padding: 0.5em
+
+      &.active
+        border-bottom: 4px solid #005D69
+        color: #000;
+        font-weight: 700
 
   .already-signed-in
     border: 1px solid TEAL_DARK
