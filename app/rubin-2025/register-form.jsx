@@ -13,11 +13,11 @@ class RegisterForm extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      badNameChars: null,
+      badNameChars: [],
       nameConflict: null,  // This is null when uninitialised, false if there's no name conflict, and an array if there's a conflict.
       passwordTooShort: false,
       passwordsDontMatch: false,
-      emailConflict: null,
+      emailConflict: null,  // This is null when uninitialised, false if there's no name conflict, and an array if there's a conflict.
       emailInvalidChars: false,
       emailInvalidFormat: false,
       agreeToPrivacyPolicy: false,
@@ -106,7 +106,9 @@ class RegisterForm extends React.Component {
                 </a>
               </span>
             )}
-            {(nameConflict === false) && (
+            {(this.state.input_login?.length > 0
+              && nameConflict === false
+            ) && (
               <span className="form-help success">
                 <Translate content="registerForm.looksGood" />
               </span>
@@ -190,22 +192,28 @@ class RegisterForm extends React.Component {
             {emailInvalidChars && (
               <Translate className="form-help error" content="registerForm.emailInvalidChars" />
             )}
-            {emailInvalidFormat && (
+            {(!emailInvalidChars && emailInvalidFormat) && (
               <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
             )}
-            {'emailConflict' in this.state.pending
-              ? <LoadingIndicator />
-              : emailConflict != null
-              ? emailConflict
-              ? <span className="form-help error">
-                  <Translate content="registerForm.emailConflict" />{' '}
-                  <a href={`${window.location.origin}/reset-password`}>
-                    <Translate content="registerForm.forgotPassword" />
-                  </a>
-                </span>
-              : <Translate className="form-help success" content="registerForm.looksGood" />
-              : <Translate className="form-help info right-align" content="registerForm.required" />
-            }
+            {'emailConflict' in this.state.pending && (
+              <LoadingIndicator />
+            )}
+            {emailConflict && (
+              <span className="form-help error">
+                <Translate content="registerForm.emailConflict" />{' '}
+                <a href={`${window.location.origin}/reset-password`}>
+                  <Translate content="registerForm.forgotPassword" />
+                </a>
+              </span>
+            )}
+            {(this.state.input_email?.length > 0
+              && !emailConflict
+              && !emailInvalidChars
+              && !emailInvalidFormat
+            ) && (
+              <Translate className="form-help success" content="registerForm.looksGood" />
+            )}
+            <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
           <input
             type="text"
@@ -437,6 +445,8 @@ class RegisterForm extends React.Component {
       nameConflict,
       passwordsDontMatch,
       emailConflict,
+      emailInvalidChars,
+      emailInvalidFormat,
       agreeToPrivacyPolicy,
       nameExists
     } = this.state;
@@ -445,6 +455,8 @@ class RegisterForm extends React.Component {
       && !nameConflict
       && !passwordsDontMatch
       && !emailConflict
+      && !emailInvalidChars
+      && !emailInvalidFormat
       && nameExists
       && agreeToPrivacyPolicy
     );
