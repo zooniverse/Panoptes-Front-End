@@ -47,9 +47,27 @@ function RubinPage ({
       ) : (
         <div className="columns-container">
           <div className="tabbed-content column" data-side="top">
-            <nav className="tabbed-content-tabs">
-              <button type="button" onClick={onTabClick} data-tab="sign-in" className="tabbed-content-tab"><Translate content="newAccountsPage.signIn" /></button>
-              <button type="button" onClick={onTabClick} data-tab="register" className="tabbed-content-tab"><Translate content="newAccountsPage.register" /></button>
+            <nav
+              className="tabbed-content-tabs"
+              role="tablist"
+            >
+              <button
+                role="tab"
+                type="button"
+                onClick={onTabClick}
+                data-tab="sign-in"
+                className={`tabbed-content-tab ${tab !== 'register' ? 'active' : ''}`}
+              >
+                <Translate content="newAccountsPage.signIn" />
+              </button>
+              <button
+                role="tab"
+                type="button" onClick={onTabClick}
+                data-tab="register"
+                className={`tabbed-content-tab ${tab === 'register' ? 'active' : ''}`}
+              >
+                <Translate content="newAccountsPage.register" />
+              </button>
             </nav>
             {(tab !== 'register')
               ? <SignInForm user={user} onSuccess={onSignInSuccess} />
