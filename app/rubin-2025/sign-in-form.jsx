@@ -169,4 +169,4 @@ SignInForm.propTypes = {
   user: PropTypes.object
 };
 
-export { SignInForm }
+export { SignInForm };

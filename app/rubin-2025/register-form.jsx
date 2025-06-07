@@ -550,4 +550,4 @@ RegisterForm.propTypes = {
   user: PropTypes.object
 };
 
-export { RegisterForm }
+export { RegisterForm };
