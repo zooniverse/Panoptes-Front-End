@@ -49,74 +49,78 @@ function RubinPage ({
 
   return (
     <div className="new-accounts-page content-container">
-      <Helmet title={'Zooniverse & Rubin 2025'} />
-      <h1>Zooniverse &amp; Rubin 2025</h1>
-      <p>Welcome to the Zooniverse, the home of Vera C. Rubin Observatory citizen science. We'll be launching the first projects with Rubin data in the next few weeks, so to be among the first to see data and help our scientists then sign up below, and we'll be in touch. In the meantime, to learn more and to enjoy the first images released by the Observatory go to <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">Rubinobservatory.org.</a></p>
+      <section>
+        <div className="inner">
+          <Helmet title={'Zooniverse & Rubin 2025'} />
+          <h1>Zooniverse &amp; Rubin 2025</h1>
+          <p>Welcome to the Zooniverse, the home of Vera C. Rubin Observatory citizen science. We'll be launching the first projects with Rubin data in the next few weeks, so to be among the first to see data and help our scientists then sign up below, and we'll be in touch. In the meantime, to learn more and to enjoy the first images released by the Observatory go to <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">Rubinobservatory.org.</a></p>
 
-      {user && successMessage && (
-        <div className="successMessage">
-          <Translate content={`newAccountsPage.${successMessage}`} />
-        </div>
-      )}
+          {user && successMessage && (
+            <div className="successMessage">
+              <Translate content={`newAccountsPage.${successMessage}`} />
+            </div>
+          )}
 
-      {user ? (
-        <div className="already-signed-in">
-          <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
-          <ul>
-            <li><Link to="/"><Translate content='newAccountsPage.alreadySignedInLinks.gotoHomepage' /></Link></li>
-            <li><Link to="/projects"><Translate content='newAccountsPage.alreadySignedInLinks.gotoProjects' /></Link></li>
-          </ul>
-        </div>
-      ) : (
-        <div className="columns-container">
-          <div className="tabbed-content column" data-side="top">
-            <nav
-              className="tabbed-content-tabs"
-              role="tablist"
-            >
-              <button
-                role="tab"
-                id="new-accounts-page-tab-sign-in"
-                type="button"
-                onClick={onTabClick}
-                onKeyDown={onTabKeyPress}
-                data-tab="sign-in"
-                className={`tabbed-content-tab ${tab !== 'register' ? 'active' : ''}`}
-              >
-                <Translate content="newAccountsPage.signIn" />
-              </button>
-              <button
-                role="tab"
-                id="new-accounts-page-tab-register"
-                type="button"
-                onClick={onTabClick}
-                onKeyDown={onTabKeyPress}
-                data-tab="register"
-                className={`tabbed-content-tab ${tab === 'register' ? 'active' : ''}`}
-              >
-                <Translate content="newAccountsPage.register" />
-              </button>
-            </nav>
-            {(tab !== 'register')
-              ? (
-                <div
-                  role="tabpanel"
-                  aria-labelledby="new-accounts-page-tab-sign-in"
+          {user ? (
+            <div className="already-signed-in">
+              <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
+              <ul>
+                <li><Link to="/"><Translate content='newAccountsPage.alreadySignedInLinks.gotoHomepage' /></Link></li>
+                <li><Link to="/projects"><Translate content='newAccountsPage.alreadySignedInLinks.gotoProjects' /></Link></li>
+              </ul>
+            </div>
+          ) : (
+            <div className="columns-container">
+              <div className="tabbed-content column" data-side="top">
+                <nav
+                  className="tabbed-content-tabs"
+                  role="tablist"
                 >
-                  <SignInForm user={user} onSuccess={onSignInSuccess} />
-                </div>
-              ) : (
-                <div
-                  role="tabpanel"
-                  aria-labelledby="new-accounts-page-tab-register"
-                >
-                  <RegisterForm user={user} onSuccess={onRegisterSuccess} />
-                </div>
-              )
-            }
-          </div>
+                  <button
+                    role="tab"
+                    id="new-accounts-page-tab-sign-in"
+                    type="button"
+                    onClick={onTabClick}
+                    onKeyDown={onTabKeyPress}
+                    data-tab="sign-in"
+                    className={`tabbed-content-tab ${tab !== 'register' ? 'active' : ''}`}
+                  >
+                    <Translate content="newAccountsPage.signIn" />
+                  </button>
+                  <button
+                    role="tab"
+                    id="new-accounts-page-tab-register"
+                    type="button"
+                    onClick={onTabClick}
+                    onKeyDown={onTabKeyPress}
+                    data-tab="register"
+                    className={`tabbed-content-tab ${tab === 'register' ? 'active' : ''}`}
+                  >
+                    <Translate content="newAccountsPage.register" />
+                  </button>
+                </nav>
+                {(tab !== 'register')
+                  ? (
+                    <div
+                      role="tabpanel"
+                      aria-labelledby="new-accounts-page-tab-sign-in"
+                    >
+                      <SignInForm user={user} onSuccess={onSignInSuccess} />
+                    </div>
+                  ) : (
+                    <div
+                      role="tabpanel"
+                      aria-labelledby="new-accounts-page-tab-register"
+                    >
+                      <RegisterForm user={user} onSuccess={onRegisterSuccess} />
+                    </div>
+                  )
+                }
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </section>
     </div>
   )
 };
