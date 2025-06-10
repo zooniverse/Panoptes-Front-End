@@ -326,8 +326,7 @@ class ProjectPageController extends React.Component {
         {!!this.state.loading &&
           <div className="content-container">
             <p>
-              Loading{' '}
-              <strong>{slug}</strong>...
+              Loading...
             </p>
           </div>
         }
