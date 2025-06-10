@@ -1,10 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 import { SignInForm } from './sign-in-form.jsx';
 import { RegisterForm } from './register-form.jsx';
+
+counterpart.registerTranslations('en', {
+  rubinPage: {
+    callToAction: {
+      toZooniverseProjects: 'Check out existing Zooniverse space projects',
+      toRubinAbout: 'Read more about Rubin'
+    }
+  }
+});
 
 function RubinPage ({
   user
@@ -71,8 +81,16 @@ function RubinPage ({
                 <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
               </p>
               <ul className="call-to-action">
-                <li><Link to="/"><Translate content='newAccountsPage.alreadySignedInLinks.gotoHomepage' /></Link></li>
-                <li><Link to="/projects"><Translate content='newAccountsPage.alreadySignedInLinks.gotoProjects' /></Link></li>
+                <li>
+                  <Link to="/projects?discipline=astronomy&page=1&status=live">
+                    <Translate content='rubinPage.callToAction.toZooniverseProjects' />
+                  </Link>
+                </li>
+                <li>
+                  <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">
+                    <Translate content='rubinPage.callToAction.toRubinAbout' />
+                  </a>
+                </li>
               </ul>
             </div>
           ) : (
