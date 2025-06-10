@@ -98,12 +98,15 @@ class SignInForm extends React.Component {
           )}
         </div>
 
-        <button
-          type="submit"
-          className="standard-button full"
-          disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}>
-          <Translate content="signInForm.signIn" />
-        </button>
+        <div className="form-row submit-row">
+          <button
+            type="submit"
+            className="standard-button"
+            disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}
+          >
+            <Translate content="signInForm.signIn" />
+          </button>
+        </div>
         
       </form>
     );

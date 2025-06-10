@@ -307,10 +307,10 @@ class RegisterForm extends React.Component {
           }
         </p>
 
-        <div>
+        <div className="form-row submit-row">
           <button
             type="submit"
-            className="standard-button full"
+            className="standard-button"
             disabled={submitDisabled}
           >
             <Translate content="registerForm.register" />
