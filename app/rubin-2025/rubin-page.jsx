@@ -10,7 +10,7 @@ function RubinPage ({
   user
 }) {
   const [tab, setTab] = useState('register')
-  const [successMessage, setSuccessMessage] = useState('successfullyRegistered')
+  const [successMessage, setSuccessMessage] = useState('')
 
   function onTabClick (e) {
     setTab(e?.currentTarget?.dataset?.tab)
@@ -70,7 +70,7 @@ function RubinPage ({
                 <span className="fa fa-check-circle-o" />
                 <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
               </p>
-              <ul>
+              <ul className="call-to-action">
                 <li><Link to="/"><Translate content='newAccountsPage.alreadySignedInLinks.gotoHomepage' /></Link></li>
                 <li><Link to="/projects"><Translate content='newAccountsPage.alreadySignedInLinks.gotoProjects' /></Link></li>
               </ul>
