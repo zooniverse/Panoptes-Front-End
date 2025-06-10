@@ -5,6 +5,7 @@
   flex: 1 1 auto
   flex-direction: column
   align-items: center
+  overflow: hidden
 
   *
     box-sizing: border-box
@@ -26,19 +27,45 @@
 
     .zooniverse-logo
       max-width: 160px
-
-  section
-    flex: 1 1 auto
-    background: #ffffff
-    margin: 0 auto
-    padding: 1.5em 0 3em 0
-    width: 100%
-    max-width: 1440px
   
   a
     color: #005D69
   
-  .inner
+  section
+    flex: 1 1 auto
+    display: flex
+    background: #ffffff
+    margin: 0 auto
+    padding: 1.5em 0 3em 0
+    width: 1440px
+    max-width: 100%
+
+    // The following shadows, clip-path, position, ::before, and ::after are used to create a "page shadow".
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px
+    clip-path: inset(0px -30px)
+    position: relative
+
+    &::before
+      content: ""
+      position: absolute
+      top: 0px
+      left: -30px
+      width: 30px
+      height: 300px
+      clip-path: polygon(100% 0px, 0px 0px, 100% 100%)
+      background: linear-gradient(to left bottom, rgba(92, 92, 92, 0.3) 0%, rgba(92, 92, 92, 0) 60%)
+    
+    &::after
+      content: ""
+      position: absolute
+      top: 0px
+      right: -30px
+      width: 30px
+      height: 300px
+      clip-path: polygon(100% 0px, 0px 0px, 0px 100%)
+      background: linear-gradient(to right bottom, rgba(92, 92, 92, 0.3) 0%, rgba(92, 92, 92, 0) 60%)
+
+  .content-inner
     margin: 0 auto
     padding: 30px
     max-width: 720px

@@ -67,7 +67,7 @@ function RubinPage ({
         <img className="zooniverse-logo" src={zooniverseLogo} />
       </div>
       <section>
-        <div className="inner">
+        <div className="content-inner">
           <div className="page-info">
             <Helmet title={'Zooniverse & Rubin 2025'} />
             <h1>Zooniverse &amp; Rubin 2025</h1>
