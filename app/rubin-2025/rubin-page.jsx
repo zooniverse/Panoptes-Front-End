@@ -68,7 +68,7 @@ function RubinPage ({
       </div>
       <section>
         <div className="inner">
-          <div className="info">
+          <div className="page-info">
             <Helmet title={'Zooniverse & Rubin 2025'} />
             <h1>Zooniverse &amp; Rubin 2025</h1>
             <p>Welcome to the Zooniverse, the home of Vera C. Rubin Observatory citizen science. We'll be launching the first projects with Rubin data in the next few weeks, so to be among the first to see data and help our scientists then sign up below, and we'll be in touch. In the meantime, to learn more and to enjoy the first images released by the Observatory go to <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">Rubinobservatory.org.</a></p>
