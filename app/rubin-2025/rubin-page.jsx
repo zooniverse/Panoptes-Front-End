@@ -10,7 +10,7 @@ function RubinPage ({
   user
 }) {
   const [tab, setTab] = useState('register')
-  const [successMessage, setSuccessMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState('successfullyRegistered')
 
   function onTabClick (e) {
     setTab(e?.currentTarget?.dataset?.tab)
@@ -58,14 +58,18 @@ function RubinPage ({
           </div>
 
           {user && successMessage && (
-            <div className="successMessage">
+            <div className="success-message">
+              <span className="fa fa-check-circle-o" />
               <Translate content={`newAccountsPage.${successMessage}`} />
             </div>
           )}
 
           {user ? (
             <div className="already-signed-in">
-              <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
+              <p>
+                <span className="fa fa-check-circle-o" />
+                <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
+              </p>
               <ul>
                 <li><Link to="/"><Translate content='newAccountsPage.alreadySignedInLinks.gotoHomepage' /></Link></li>
                 <li><Link to="/projects"><Translate content='newAccountsPage.alreadySignedInLinks.gotoProjects' /></Link></li>
