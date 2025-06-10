@@ -7,6 +7,9 @@ import { Link } from 'react-router';
 import { SignInForm } from './sign-in-form.jsx';
 import { RegisterForm } from './register-form.jsx';
 
+// TODO: find a more centralised place to put this
+import zooniverseLogo from '../pages/lab-pages-editor/assets/zooniverse-word-white.png'
+
 counterpart.registerTranslations('en', {
   rubinPage: {
     callToAction: {
@@ -59,6 +62,10 @@ function RubinPage ({
 
   return (
     <div className="new-accounts-page content-container">
+      <div className="fem-subheader">
+        <span className="filler" />
+        <img className="zooniverse-logo" src={zooniverseLogo} />
+      </div>
       <section>
         <div className="inner">
           <div className="info">
