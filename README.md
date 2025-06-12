@@ -24,7 +24,7 @@ change dependencies in `package.json`.
 
 ### With Node.js
 
-Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage your Node installations with **nvm**.
+Make sure you have Node 20.5 to 20.18 and `npm` 10 or greater. It's recommended you manage your Node installations with **nvm**.
 
 - `npm ci` installs dependencies.
 
