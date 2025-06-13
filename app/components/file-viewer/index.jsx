@@ -6,6 +6,7 @@ import AudioPlayer from './audio-player';
 import TextViewer from './text-viewer';
 import ImageViewer from './image-viewer';
 import CanvasViewer from './canvas-viewer';
+import VolumetricViewer from './volumetric-viewer';
 
 function DefaultViewer(props) {
   return (
@@ -24,7 +25,8 @@ const VIEWERS = {
   text: TextViewer,
   video: VideoPlayer,
   audio: AudioPlayer,
-  application: CanvasViewer
+  application: CanvasViewer,
+  volumetric: VolumetricViewer
 };
 
 function subjectViewerSelector(props) {
