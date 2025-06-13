@@ -266,7 +266,7 @@ export default {
   signInForm: {
     signIn: 'Sign in',
     signOut: 'Sign out',
-    userName: 'User name or email address',
+    userName: 'Username or email address',
     password: 'Password',
     incorrectDetails: 'Username or password incorrect',
     forgotPassword: 'Forgot my password',
