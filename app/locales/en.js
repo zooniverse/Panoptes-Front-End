@@ -276,7 +276,7 @@ export default {
     required: 'Required',
     optional: 'Optional',
     looksGood: 'Looks good',
-    userName: 'User name',
+    userName: 'Username',
     whyUserName: 'You\'ll use this name to log in. It will be shown publicly. ',
     badChars: "Only letters, numbers, '.', '_', and '-'.",
     nameConflict: 'That username is taken',
