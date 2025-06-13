@@ -60,6 +60,12 @@ function RubinPage ({
     siblings?.[nextIndex].focus();
   }
 
+  if (user === undefined) {
+    // If the user is undefined, we are still waiting for the user to be loaded.
+    // This is a common pattern in the app, so we return null here.
+    return null;
+  }
+
   return (
     <div className="new-accounts-page content-container">
       <div className="fem-subheader">
