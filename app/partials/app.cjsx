@@ -39,7 +39,7 @@ PanoptesApp = createReactClass
 
   getInitialState: ->
     initialLoadComplete: false
-    user: null
+    user: undefined
 
   getDefaultProps: ->
     notificationsCounter: new NotificationsCounter()
