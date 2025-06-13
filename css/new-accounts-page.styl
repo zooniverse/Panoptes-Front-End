@@ -1,11 +1,165 @@
 .new-accounts-page
+  background: BACKGROUND_COLOR
+  margin: 0
+  display: flex
+  flex: 1 1 auto
+  flex-direction: column
+  align-items: center
+  overflow: hidden
 
-  .already-signed-in
-    border: 1px solid TEAL_DARK
-    margin-top: 8px
-    padding: 12px
+  *
+    box-sizing: border-box
+
+  .fem-subheader
+    align-items: center
+    display: flex
+    flex: 0 0 auto
+    flex-direction: row
+    gap: 1em
+    background: #005D69
+    color: #ffffff
+    min-height: 60px
+    padding: 15px 30px
+    width: 100%
+
+    .filler
+      flex: 1 1 auto
+
+    .zooniverse-logo
+      max-width: 160px
   
-  .successMessage
-    border: 1px solid BURNT_ORANGE
-    margin-top: 8px
-    padding: 12px
+  a
+    color: #005D69
+  
+  section
+    flex: 1 1 auto
+    display: flex
+    background: #ffffff
+    margin: 0 auto
+    padding: 1.5em 0 3em 0
+    width: 1440px
+    max-width: 100%
+
+    // The following shadows, clip-path, position, ::before, and ::after are used to create a "page shadow".
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px
+    clip-path: inset(0px -30px)
+    position: relative
+
+    &::before
+      content: ""
+      position: absolute
+      top: 0px
+      left: -30px
+      width: 30px
+      height: 300px
+      clip-path: polygon(100% 0px, 0px 0px, 100% 100%)
+      background: linear-gradient(to left bottom, rgba(92, 92, 92, 0.3) 0%, rgba(92, 92, 92, 0) 60%)
+    
+    &::after
+      content: ""
+      position: absolute
+      top: 0px
+      right: -30px
+      width: 30px
+      height: 300px
+      clip-path: polygon(100% 0px, 0px 0px, 0px 100%)
+      background: linear-gradient(to right bottom, rgba(92, 92, 92, 0.3) 0%, rgba(92, 92, 92, 0) 60%)
+
+  .content-inner
+    margin: 0 auto
+    padding: 30px
+    max-width: 720px
+
+  .page-info
+    margin-bottom: 40px
+
+    h1
+      color: #404040
+      text-align: center
+      font-size: 32px
+      font-weight: 700
+      line-height: normal
+      letter-spacing: 1.6px
+    
+    p
+      color: #404040
+      text-align: justify
+      font-size: 16px
+      font-style: normal
+      font-weight: 500
+      line-height: normal
+  
+  .tabs
+    nav
+      display: flex
+      flex-direction: row
+      margin-bottom: 2em
+    
+    button.tab
+      background: none
+      border: none
+      border-bottom: 4px solid transparent
+      cursor: pointer
+      flex: 1 1 auto
+      color: #5C5C5C;
+      font-size: 18px
+      font-weight: 400
+      line-height: normal
+      letter-spacing: 1.8px
+      padding: 0.5em
+
+      &.active
+        border-bottom: 4px solid #005D69
+        color: #000;
+        font-weight: 700
+
+  .already-signed-in, .success-message
+    margin-bottom: 8px
+    font-size: 16px
+
+    .fa
+      color: #52DB72
+      font-size: 1.2em
+      margin-right: 0.5em 
+      vertical-align: middle
+
+  ul.call-to-action
+    border-radius: 16px
+    border-left: 16px solid #005D69
+    background: rgba(239, 242, 245, 0.50)
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25)
+    list-style: none
+    padding: 1em
+    text-align: center
+
+    li
+      margin: 16px
+      font-size: 20px
+    
+  form
+    accent-color: #005D69
+    
+    input[type=text], input[type=password]
+      border-radius: 4px
+      border: 0.5px solid #A6A7A9
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.60) 100%), #FFF
+      box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25) inset
+    
+    input[type=checkbox]
+      cursor: pointer
+    
+    button[type=submit]
+      border-radius: 4px
+      background: #005D69
+      color: #ffffff
+      width: 300px
+      max-width: 100%
+    
+    .form-row
+      margin: 1em
+
+      &.submit-row
+        display: flex
+        flex-direction: row
+        justify-content: center
+
