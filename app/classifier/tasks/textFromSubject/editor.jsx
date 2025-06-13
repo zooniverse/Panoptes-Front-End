@@ -11,6 +11,7 @@ export default function TextFromSubjectEditor({
   taskPrefix,
   workflow
 }) {
+  const [root, taskKey] = taskPrefix.split('.');
   const handleChange = handleInputChange.bind(workflow);
 
   return (
@@ -64,7 +65,7 @@ export default function TextFromSubjectEditor({
         </span>
         <br />
         <NextTaskSelector
-          task={task}
+          taskKey={taskKey}
           workflow={workflow}
           name={`${taskPrefix}.next`}
           value={task.next}
