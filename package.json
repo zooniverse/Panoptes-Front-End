@@ -1,5 +1,6 @@
 {
   "name": "panoptes-front-end",
+  "type": "commonjs",
   "dependencies": {
     "@babel/runtime": "~7.26.0",
     "@sentry/browser": "~7.120.0",
