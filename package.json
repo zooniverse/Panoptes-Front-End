@@ -1,5 +1,6 @@
 {
   "name": "panoptes-front-end",
+  "type": "commonjs",
   "dependencies": {
     "@babel/runtime": "~7.26.0",
     "@sentry/browser": "~7.120.0",
@@ -102,7 +103,7 @@
     "whatwg-url": "~14.0.0"
   },
   "engines": {
-    "node": ">=20.5 <=20.18",
+    "node": ">=20",
     "npm": ">=10"
   },
   "license": "Apache-2.0",
