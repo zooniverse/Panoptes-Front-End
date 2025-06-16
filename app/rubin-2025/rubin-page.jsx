@@ -20,14 +20,14 @@ counterpart.registerTranslations('en', {
 });
 
 function RubinPage ({
+  initialLoadComplete = false,
   location,
   user
 }) {
+  console.log('+++ initialLoadComplete', initialLoadComplete)
   const startingTab = /\/sign\-in$/g.test(location?.pathname) ? 'sign-in' : 'register';
   const [tab, setTab] = useState(startingTab);
   const [successMessage, setSuccessMessage] = useState('');
-
-  console.log('+++ location', location?.pathname)
 
   function onTabClick (e) {
     setTab(e?.currentTarget?.dataset?.tab);
@@ -63,6 +63,8 @@ function RubinPage ({
     // Focus on the next tab.
     siblings?.[nextIndex].focus();
   }
+
+  if (!initialLoadComplete) { return null; }
 
   return (
     <div className="new-accounts-page content-container">
@@ -156,6 +158,7 @@ function RubinPage ({
 };
 
 RubinPage.propTypes = {
+  initialLoadComplete: PropTypes.bool,  // .initialLoadComplete is provided by app.cjsx via React.cloneElement
   location: PropTypes.shape({  // .location is provided by react-router's Router in main.cjsx
     pathname: PropTypes.string
   }),

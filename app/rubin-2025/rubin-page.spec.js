@@ -9,7 +9,7 @@ describe('RubinPage', function () {
   let wrapper;
 
   before(function () {
-    wrapper = shallow(<RubinPage />);
+    wrapper = shallow(<RubinPage initialLoadComplete={true} />);
   });
 
   it('renders without crashing', function () {
