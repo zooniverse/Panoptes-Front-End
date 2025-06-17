@@ -101,22 +101,26 @@ class RegisterForm extends React.Component {
               <Translate content="registerForm.userName" />
             </label>
 
-            {badNameChars?.length > 0 && (
-              <Translate className="form-help error" content="registerForm.badChars" />
-            )}
+            <div aria-live="polite" id="register-form-login-help-message-1">
+              {badNameChars?.length > 0 && (
+                <Translate className="form-help error" content="registerForm.badChars" />
+              )}
+            </div>
 
             {"nameConflict" in this.state.pending && (
               <LoadingIndicator />
             )}
 
-            {nameConflict && (
-              <span className="form-help error">
-                <Translate content="registerForm.nameConflict" />{' '}
-                <a href={`${window.location.origin}/reset-password`}>
-                  <Translate content="registerForm.forgotPassword" />
-                </a>
-              </span>
-            )}
+            <div aria-live="polite" id="register-form-login-help-message-2">
+              {nameConflict && (
+                <span className="form-help error">
+                  <Translate content="registerForm.nameConflict" />{' '}
+                  <a href={`${window.location.origin}/reset-password`}>
+                    <Translate content="registerForm.forgotPassword" />
+                  </a>
+                </span>
+              )}
+            </div>
 
             {(this.state.input_login?.length > 0
               && nameConflict === false
@@ -130,7 +134,7 @@ class RegisterForm extends React.Component {
           </div>
 
           <input
-            aria-describedby="register-form-error-message"
+            aria-describedby="register-form-error-message register-form-login-help-message-1 register-form-login-help-message-2"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-login"
@@ -154,13 +158,17 @@ class RegisterForm extends React.Component {
             <label htmlFor="register-form-password">
               <Translate content="registerForm.password" />
             </label>
-            {passwordTooShort && (
-              <Translate className="form-help error" content="registerForm.passwordTooShort" />
-            )}
+            
+            <div aria-live="polite" id="register-form-password-help-message">
+              {passwordTooShort && (
+                <Translate className="form-help error" content="registerForm.passwordTooShort" />
+              )}
+            </div>
+
             <Translate className="form-help info right-align" content="registerForm.required" />
           </div>
           <input
-            aria-describedby="register-form-error-message"
+            aria-describedby="register-form-error-message register-form-password-help-message"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-password"
@@ -176,9 +184,13 @@ class RegisterForm extends React.Component {
             <label htmlFor="register-form-confirmedPassword">
               <Translate content="registerForm.confirmPassword" />
             </label>
-            {passwordsDontMatch && (
-              <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
-            )}
+            
+            <div aria-live="polite" id="register-form-confirmedPassword-help-message">
+              {passwordsDontMatch && (
+                <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
+              )}
+            </div>
+
             {(this.state.input_password?.length > 0
               && this.state.input_confirmedPassword?.length > 0
               && !passwordsDontMatch
@@ -186,9 +198,11 @@ class RegisterForm extends React.Component {
             ) && (
               <Translate className="form-help success" content="registerForm.looksGood" />
             )}
+
             <Translate className="form-help info right-align" content="registerForm.required" />
           </div>
           <input
+            aria-describedby="register-form-confirmedPassword-help-message"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-confirmedPassword"
@@ -208,26 +222,32 @@ class RegisterForm extends React.Component {
               }
             </label>
 
-            {emailInvalidChars && (
-              <Translate className="form-help error" content="registerForm.emailInvalidChars" />
-            )}
+            <div aria-live="polite" id="register-form-email-help-message-1">
+              {emailInvalidChars && (
+                <Translate className="form-help error" content="registerForm.emailInvalidChars" />
+              )}
+            </div>
 
-            {(!emailInvalidChars && emailInvalidFormat) && (
-              <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
-            )}
+            <div aria-live="polite" id="register-form-email-help-message-2">
+              {(!emailInvalidChars && emailInvalidFormat) && (
+                <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
+              )}
+            </div>
 
             {'emailConflict' in this.state.pending && (
               <LoadingIndicator />
             )}
 
-            {emailConflict && (
-              <span className="form-help error">
-                <Translate content="registerForm.emailConflict" />{' '}
-                <a href={`${window.location.origin}/reset-password`}>
-                  <Translate content="registerForm.forgotPassword" />
-                </a>
-              </span>
-            )}
+            <div aria-live="polite" id="register-form-email-help-message-3">
+              {emailConflict && (
+                <span className="form-help error">
+                  <Translate content="registerForm.emailConflict" />{' '}
+                  <a href={`${window.location.origin}/reset-password`}>
+                    <Translate content="registerForm.forgotPassword" />
+                  </a>
+                </span>
+              )}
+            </div>
 
             {(this.state.input_email?.length > 0
               && !emailConflict
@@ -241,7 +261,7 @@ class RegisterForm extends React.Component {
           </div>
 
           <input
-            aria-describedby="register-form-error-message"
+            aria-describedby="register-form-error-message register-form-email-help-message-1 register-form-email-help-message-2 register-form-email-help-message-3"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-email"
