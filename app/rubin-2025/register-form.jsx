@@ -350,7 +350,7 @@ class RegisterForm extends React.Component {
           <button
             type="submit"
             className="standard-button"
-            disabled={false && submitDisabled}
+            disabled={submitDisabled}
           >
             <Translate content="registerForm.register" />
           </button>
