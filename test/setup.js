@@ -18,9 +18,6 @@ function copyProps(src, target) {
 
 global.window = window;
 global.document = window.document;
-global.navigator = {
-  userAgent: 'node.js'
-};
 global.screen = window.screen;
 global.pageXOffset = window.pageXOffset;
 global.pageYOffset = window.pageYOffset;
