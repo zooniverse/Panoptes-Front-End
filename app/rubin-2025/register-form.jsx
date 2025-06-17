@@ -79,25 +79,36 @@ class RegisterForm extends React.Component {
     return (
       <form className="register-form" method="POST" onSubmit={this.handleSubmit}>
         
-        <label className="form-separator">
-          <input
-            type="checkbox"
-            checked={this.state.underAge}
-            disabled={inputDisabled}
-            onChange={this.updateAge}
-          />
-          <Translate component="span" content="registerForm.underAge" />
-        </label>
+        <div className="form-row">
+          <span className="checkbox-pair">
+            <input
+              checked={this.state.underAge}
+              disabled={inputDisabled}
+              id="register-form-underAge"
+              name="underAge"
+              onChange={this.updateAge}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-underAge">
+              <Translate component="span" content="registerForm.underAge" />
+            </label>
+          </span>
+        </div>
 
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.userName" />
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-login">
+              <Translate content="registerForm.userName" />
+            </label>
+
             {badNameChars?.length > 0 && (
               <Translate className="form-help error" content="registerForm.badChars" />
             )}
+
             {"nameConflict" in this.state.pending && (
               <LoadingIndicator />
             )}
+
             {nameConflict && (
               <span className="form-help error">
                 <Translate content="registerForm.nameConflict" />{' '}
@@ -106,6 +117,7 @@ class RegisterForm extends React.Component {
                 </a>
               </span>
             )}
+
             {(this.state.input_login?.length > 0
               && nameConflict === false
             ) && (
@@ -113,8 +125,10 @@ class RegisterForm extends React.Component {
                 <Translate content="registerForm.looksGood" />
               </span>
             )}
+
             <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
+          </div>
+
           <input
             type="text"
             name="login"
@@ -125,11 +139,14 @@ class RegisterForm extends React.Component {
             onChange={this.handleUserInput}
             maxLength="255"
           />
-          <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
-          {this.state.underAge && (
-            <Translate component="span" className="form-help info" content="registerForm.notRealName" />
-          )}
-        </label>
+
+          <div>
+            <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
+            {this.state.underAge && (
+              <Translate component="span" className="form-help info" content="registerForm.notRealName" />
+            )}
+          </div>
+        </div>
 
         <br />
 
