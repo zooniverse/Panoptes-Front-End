@@ -130,14 +130,15 @@ class RegisterForm extends React.Component {
           </div>
 
           <input
-            type="text"
-            name="login"
-            id="register-form-login"
-            value={this.state.input_login}
+            aria-describedby="register-form-error-message"
             className="standard-input full"
             disabled={inputDisabled}
-            onChange={this.handleUserInput}
+            id="register-form-login"
             maxLength="255"
+            name="login"
+            onChange={this.handleUserInput}
+            type="text"
+            value={this.state.input_login}
           />
 
           <div>
@@ -159,6 +160,7 @@ class RegisterForm extends React.Component {
             <Translate className="form-help info right-align" content="registerForm.required" />
           </div>
           <input
+            aria-describedby="register-form-error-message"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-password"
@@ -239,13 +241,14 @@ class RegisterForm extends React.Component {
           </div>
 
           <input
-            type="text"
-            name="email"
-            id="register-form-email"
-            value={this.state.input_email}
+            aria-describedby="register-form-error-message"
             className="standard-input full"
             disabled={inputDisabled}
+            id="register-form-email"
+            name="email"
             onChange={this.handleUserInput}
+            type="text"
+            value={this.state.input_email}
           />
         </div>
 
@@ -257,15 +260,15 @@ class RegisterForm extends React.Component {
             <Translate className="form-help info right-align" content="registerForm.optional" />
           </div>
           <input
-            type="text"
-            pattern='[^@]+'
-            name="creditedName"
-            id="register-form-creditedName"
-            value={this.state.input_creditedName}
             className="standard-input full"
             disabled={inputDisabled}
-            title={counterpart('registerForm.realNamePatternHelp')}
+            id="register-form-creditedName"
+            name="creditedName"
             onChange={this.handleUserInput}
+            pattern='[^@]+'
+            title={counterpart('registerForm.realNamePatternHelp')}
+            type="text"
+            value={this.state.input_creditedName}
           />
           <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
         </div>
@@ -323,24 +326,31 @@ class RegisterForm extends React.Component {
         </div>
 
         <div className="center-align">
-          {'user' in this.state.pending
-            ? <LoadingIndicator />
-            : this.props.user != null
-            ? <span className="form-help warning">
-                <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
-                <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
-              </span>
-            : this.state.error != null
-            ? <span className="form-help error">{this.state.error.toString()}</span>
-            : <span>&nbsp;</span>
-          }
+          {'user' in this.state.pending && (
+            <LoadingIndicator />
+          )}
+
+          {this.props.user && (
+            <span className="form-help warning">
+              <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
+              <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
+            </span>
+          )}
+
+          <div aria-live="polite">
+            {this.state.error && (
+              <div id="register-form-error-message" className="form-help error">
+                <span>{this.state.error.toString()}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="form-row submit-row">
           <button
             type="submit"
             className="standard-button"
-            disabled={submitDisabled}
+            disabled={false && submitDisabled}
           >
             <Translate content="registerForm.register" />
           </button>
