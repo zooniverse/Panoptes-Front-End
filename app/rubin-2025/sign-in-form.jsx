@@ -42,15 +42,16 @@ class SignInForm extends React.Component {
               <Translate content="signInForm.userName" />
             </label>
             <input
-              type="text"
-              className="standard-input full"
-              name="login"
-              id="sign-in-form-login"
-              value={this.state.login}
-              disabled={disabled}
+              aria-describedby="sign-in-form-error-message"
               autoFocus
-              onChange={this.handleInputChange}
+              className="standard-input full"
+              disabled={disabled}
+              id="sign-in-form-login"
               maxLength="255"
+              name="login"
+              onChange={this.handleInputChange}
+              type="text"
+              value={this.state.login}
             />
           </div>
 
@@ -62,13 +63,14 @@ class SignInForm extends React.Component {
               <Translate content="signInForm.password" />
             </label>
             <input
-              type="password"
+              aria-describedby="sign-in-form-error-message"
               className="standard-input full"
-              name="password"
-              id="sign-in-form-password"
-              value={this.state.password}
               disabled={disabled}
+              id="sign-in-form-password"
+              name="password"
               onChange={this.handleInputChange}
+              type="password"
+              value={this.state.password}
             />
           </div>
 
@@ -85,15 +87,17 @@ class SignInForm extends React.Component {
             </div>
           )}
 
-          {this.state.error && (
-            <div className="form-help error">
-              {this.state.error.message.match(/invalid(.+)password/i) ? (
-                <Translate content="signInForm.incorrectDetails" />
-              ) : (
-                <span>{this.state.error.toString()}</span>
-              )}{' '}
-            </div>
-          )}
+          <div aria-live="polite">
+            {this.state.error && (
+              <div id="sign-in-form-error-message" className="form-help error">
+                {this.state.error.message.match(/invalid(.+)password/i) ? (
+                  <Translate content="signInForm.incorrectDetails" />
+                ) : (
+                  <span>{this.state.error.toString()}</span>
+                )}{' '}
+              </div>
+            )}
+          </div>
 
           {this.state.busy ? (
             <LoadingIndicator />
