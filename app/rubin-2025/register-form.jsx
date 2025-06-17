@@ -80,7 +80,7 @@ class RegisterForm extends React.Component {
       <form className="register-form" method="POST" onSubmit={this.handleSubmit}>
         
         <div className="form-row">
-          <span className="checkbox-pair">
+          <span className="checkbox-block">
             <input
               checked={this.state.underAge}
               disabled={inputDisabled}
@@ -148,32 +148,32 @@ class RegisterForm extends React.Component {
           </div>
         </div>
 
-        <br />
-
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.password" />
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-password">
+              <Translate content="registerForm.password" />
+            </label>
             {passwordTooShort && (
               <Translate className="form-help error" content="registerForm.passwordTooShort" />
             )}
             <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
+          </div>
           <input
-            type="password"
-            name="password"
-            id="register-form-password"
-            value={this.state.input_password}
             className="standard-input full"
             disabled={inputDisabled}
+            id="register-form-password"
+            name="password"
             onChange={this.handleUserInput}
+            type="password"
+            value={this.state.input_password}
           />
-        </label>
+        </div>
 
-        <br />
-
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.confirmPassword" /><br />
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-confirmedPassword">
+              <Translate content="registerForm.confirmPassword" />
+            </label>
             {passwordsDontMatch && (
               <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
             )}
@@ -185,35 +185,39 @@ class RegisterForm extends React.Component {
               <Translate className="form-help success" content="registerForm.looksGood" />
             )}
             <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
+          </div>
           <input
-            type="password"
-            name="confirmedPassword"
-            id="register-form-confirmedPassword"
-            value={this.state.input_confirmedPassword}
             className="standard-input full"
             disabled={inputDisabled}
+            id="register-form-confirmedPassword"
+            name="confirmedPassword"
             onChange={this.handleUserInput}
+            type="password"
+            value={this.state.input_confirmedPassword}
           />
-        </label>
+        </div>
 
-        <br />
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-email">
+              {this.state.underAge
+                ? <Translate content="registerForm.guardianEmail" />
+                : <Translate content="registerForm.email" />
+              }
+            </label>
 
-        <label>
-          <span className="columns-container inline spread">
-            {this.state.underAge
-              ? <Translate content="registerForm.guardianEmail" />
-              : <Translate content="registerForm.email" />
-            }
             {emailInvalidChars && (
               <Translate className="form-help error" content="registerForm.emailInvalidChars" />
             )}
+
             {(!emailInvalidChars && emailInvalidFormat) && (
               <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
             )}
+
             {'emailConflict' in this.state.pending && (
               <LoadingIndicator />
             )}
+
             {emailConflict && (
               <span className="form-help error">
                 <Translate content="registerForm.emailConflict" />{' '}
@@ -222,6 +226,7 @@ class RegisterForm extends React.Component {
                 </a>
               </span>
             )}
+
             {(this.state.input_email?.length > 0
               && !emailConflict
               && !emailInvalidChars
@@ -229,8 +234,10 @@ class RegisterForm extends React.Component {
             ) && (
               <Translate className="form-help success" content="registerForm.looksGood" />
             )}
+
             <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
+          </div>
+
           <input
             type="text"
             name="email"
@@ -240,15 +247,15 @@ class RegisterForm extends React.Component {
             disabled={inputDisabled}
             onChange={this.handleUserInput}
           />
-        </label>
+        </div>
 
-        <br />
-
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.realName" />
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-creditedName">
+              <Translate content="registerForm.realName" />
+            </label>
             <Translate className="form-help info right-align" content="registerForm.optional" />
-          </span>
+          </div>
           <input
             type="text"
             pattern='[^@]+'
@@ -261,55 +268,61 @@ class RegisterForm extends React.Component {
             onChange={this.handleUserInput}
           />
           <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
-        </label>
+        </div>
 
-        <br />
-        <br />
+        <div className="form-row">
+          <div className="checkbox-block">
+            <input
+              checked={!!this.state.agreeToPrivacyPolicy}
+              disabled={inputDisabled}
+              name="agreeToPrivacyPolicy"
+              id="register-form-agreeToPrivacyPolicy"
+              onChange={this.handlePrivacyPolicyChange}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-agreeToPrivacyPolicy">
+              {this.state.underAge
+                ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} />
+                : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
+              }
+            </label>
+          </div>
+        </div>
 
-        <label>
-          <input
-            type="checkbox"
-            disabled={inputDisabled}
-            checked={!!this.state.agreeToPrivacyPolicy}
-            onChange={this.handlePrivacyPolicyChange}
-          />
-          {this.state.underAge
-            ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} />
-            : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
-          }
-        </label>
+        <div className="form-row">
+          <div className="checkbox-block">
+            <input
+              checked={this.state.input_okayToEmail}
+              disabled={inputDisabled}
+              name="okayToEmail"
+              id="register-form-okayToEmail"
+              onChange={this.handleUserInput}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-okayToEmail">
+              {this.state.underAge
+                ? <Translate component="span" content="registerForm.underAgeEmail" />
+                : <Translate component="span" content="registerForm.okayToEmail" />
+              }
+            </label>
+          </div>
 
-        <br />
-        <br />
+          <div className="checkbox-block">
+            <input
+              checked={this.state.input_betaTester}
+              disabled={inputDisabled}
+              name="betaTester"
+              id="register-form-betaTester"
+              onChange={this.handleUserInput}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-betaTester">
+              <Translate component="span" content="registerForm.betaTester" />
+            </label>
+          </div>
+        </div>
 
-        <label>
-          <input
-            type="checkbox"
-            name="okayToEmail"
-            id="register-form-okayToEmail"
-            checked={this.state.input_okayToEmail}
-            disabled={inputDisabled}
-            onChange={this.handleUserInput}
-          />
-          {this.state.underAge
-            ? <Translate component="span" content="registerForm.underAgeEmail" />
-            : <Translate component="span" content="registerForm.okayToEmail" />
-          }
-        </label><br />
-
-        <label>
-          <input
-            type="checkbox"
-            name="betaTester"
-            id="register-form-betaTester"
-            checked={this.state.input_betaTester}
-            disabled={inputDisabled}
-            onChange={this.handleUserInput}
-          />
-          <Translate component="span" content="registerForm.betaTester" />
-        </label><br />
-
-        <p style={{ textAlign: 'center' }}>
+        <div className="center-align">
           {'user' in this.state.pending
             ? <LoadingIndicator />
             : this.props.user != null
@@ -321,7 +334,7 @@ class RegisterForm extends React.Component {
             ? <span className="form-help error">{this.state.error.toString()}</span>
             : <span>&nbsp;</span>
           }
-        </p>
+        </div>
 
         <div className="form-row submit-row">
           <button
