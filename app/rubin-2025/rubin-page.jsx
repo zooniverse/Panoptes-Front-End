@@ -24,7 +24,6 @@ function RubinPage ({
   location,
   user
 }) {
-  console.log('+++ initialLoadComplete', initialLoadComplete)
   const startingTab = /\/sign\-in$/g.test(location?.pathname) ? 'sign-in' : 'register';
   const [tab, setTab] = useState(startingTab);
   const [successMessage, setSuccessMessage] = useState('');
