@@ -124,6 +124,7 @@ class RegisterForm extends React.Component {
 
             {(this.state.input_login?.length > 0
               && nameConflict === false
+              && !("nameConflict" in this.state.pending)
             ) && (
               <span className="form-help success">
                 <Translate content="registerForm.looksGood" />
@@ -253,6 +254,7 @@ class RegisterForm extends React.Component {
               && !emailConflict
               && !emailInvalidChars
               && !emailInvalidFormat
+              && !('emailConflict' in this.state.pending)
             ) && (
               <Translate className="form-help success" content="registerForm.looksGood" />
             )}
