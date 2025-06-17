@@ -43,7 +43,6 @@ class SignInForm extends React.Component {
             </label>
             <input
               aria-describedby="sign-in-form-error-message"
-              autoFocus
               className="standard-input full"
               disabled={disabled}
               id="sign-in-form-login"
@@ -152,8 +151,6 @@ class SignInForm extends React.Component {
           error: error
         })
 
-        const ref = ReactDOM.findDOMNode(this).querySelector('[name="login"]');
-        ref?.focus();
         onFailure?.(error);
       });
 
