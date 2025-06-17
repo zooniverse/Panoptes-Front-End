@@ -12,7 +12,7 @@ jobs:
     uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
     with:
       commit_id: ${{ github.sha }}
-      node_version: 'lts/iron'
+      node_version: 'lts/jod'
       output: 'dist'
       script: 'build-production'
 
