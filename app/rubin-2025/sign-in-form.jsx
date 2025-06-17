@@ -32,10 +32,13 @@ class SignInForm extends React.Component {
     return (
       <form className="sign-in-form" method="POST" onSubmit={this.handleSubmit}>
 
-        <div style={{ margin: '1em 0' }}>
+        <div className="form-row">
 
-          <div style={{ margin: '1em 0' }}>
-            <label style={{ display: 'block' }} htmlFor="sign-in-form-login">
+          <div className="form-row">
+            <label
+              className="label-block"
+              htmlFor="sign-in-form-login"
+            >
               <Translate content="signInForm.userName" />
             </label>
             <input
@@ -51,8 +54,11 @@ class SignInForm extends React.Component {
             />
           </div>
 
-          <div style={{ margin: '1em 0' }}>
-            <label style={{ display: 'block' }} htmlFor="sign-in-form-password">
+          <div className="form-row">
+            <label
+              className="label-block"
+              htmlFor="sign-in-form-password"
+            >
               <Translate content="signInForm.password" />
             </label>
             <input
@@ -68,7 +74,7 @@ class SignInForm extends React.Component {
 
         </div>
 
-        <div style={{ textAlign: 'center', margin: '1em 0' }}>
+        <div className="form-row center-align">
           
           {this.props.user && ( 
             <div className="form-help">
