@@ -122,7 +122,6 @@ class RegisterForm extends React.Component {
             value={this.state.input_login}
             className="standard-input full"
             disabled={inputDisabled}
-            autoFocus
             onChange={this.handleUserInput}
             maxLength="255"
           />
