@@ -109,24 +109,26 @@ function RubinPage ({
             <div className="tabs">
               <nav role="tablist">
                 <button
-                  role="tab"
+                  aria-selected={tab !== 'register'}
+                  className={`tab ${tab !== 'register' ? 'active' : ''}`}
+                  data-tab="sign-in"
                   id="new-accounts-page-tab-sign-in"
-                  type="button"
                   onClick={onTabClick}
                   onKeyDown={onTabKeyPress}
-                  data-tab="sign-in"
-                  className={`tab ${tab !== 'register' ? 'active' : ''}`}
+                  role="tab"
+                  type="button"
                 >
                   <Translate content="newAccountsPage.signIn" />
                 </button>
                 <button
-                  role="tab"
+                  aria-selected={tab === 'register'}
+                  className={`tab ${tab === 'register' ? 'active' : ''}`}
+                  data-tab="register"
                   id="new-accounts-page-tab-register"
-                  type="button"
                   onClick={onTabClick}
                   onKeyDown={onTabKeyPress}
-                  data-tab="register"
-                  className={`tab ${tab === 'register' ? 'active' : ''}`}
+                  role="tab"
+                  type="button"
                 >
                   <Translate content="newAccountsPage.register" />
                 </button>
