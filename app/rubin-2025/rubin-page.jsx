@@ -1,34 +1,160 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
+import { SignInForm } from './sign-in-form.jsx';
+import { RegisterForm } from './register-form.jsx';
 
-const RubinPage = ({ children }) =>
-  (<div className="sign-in-page content-container">
-    <Helmet title={'RUBIN 2025'} />
-    <h1>RUBIN 2025</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut dapibus augue. Aliquam varius, lorem id tempor lacinia, nibh mauris ultrices odio, id aliquam purus metus et eros. Maecenas in felis nulla. Quisque nec urna orci. Integer odio lectus, vehicula ac faucibus eget, blandit eget libero. Morbi sed nunc interdum, aliquam orci sed, euismod orci. Vivamus in porttitor nunc. Proin vestibulum tempor aliquam. Nullam leo risus, posuere et venenatis sit amet, tincidunt pharetra neque. Duis aliquam mauris vel posuere fermentum. In nec euismod velit. Phasellus rutrum nulla at lorem facilisis blandit. Vestibulum eget massa leo. Fusce lobortis tortor id consequat aliquam. In eget turpis dignissim, fringilla ligula sed, porta magna.</p>
-    <p>Quisque tempus, ante condimentum tempus auctor, massa erat convallis quam, sit amet bibendum dui quam id leo. Vivamus hendrerit nibh ipsum, ut dapibus ante dapibus ut. Sed non sapien sit amet sapien cursus varius. Vestibulum faucibus sed enim ac placerat. Ut nec ex ac tortor auctor lobortis. Etiam a pulvinar nisl, vel pharetra enim. Donec vitae neque in sapien faucibus porttitor. Aenean tincidunt tellus ut nisl tristique pulvinar. Suspendisse ultricies nisl a diam imperdiet, sit amet pellentesque purus imperdiet.</p>
+// TODO: find a more centralised place to put this
+import zooniverseLogo from '../pages/lab-pages-editor/assets/zooniverse-word-white.png'
 
-    <div className="columns-container">
-      <div className="tabbed-content column" data-side="top">
-        <nav className="tabbed-content-tabs">
-          <Link to="/rubin/sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></Link>
-          <Link to="/rubin/register" className="tabbed-content-tab"><Translate content="signIn.register" /></Link>
-        </nav>
-        {children}
+counterpart.registerTranslations('en', {
+  rubinPage: {
+    callToAction: {
+      toZooniverseProjects: 'Check out existing Zooniverse space projects',
+      toRubinAbout: 'Read more about Rubin'
+    }
+  }
+});
+
+function RubinPage ({
+  user
+}) {
+  const [tab, setTab] = useState('register')
+  const [successMessage, setSuccessMessage] = useState('')
+
+  function onTabClick (e) {
+    setTab(e?.currentTarget?.dataset?.tab)
+  }
+
+  function onSignInSuccess () {
+    setSuccessMessage('successfullySignedIn')
+  }
+
+  function onRegisterSuccess () {
+    setSuccessMessage('successfullyRegistered')
+  }
+
+  /*
+  When a Tab has focus, and user presses left/right keys, switch which tab has focus.
+  This code is probably a bit more complicated than it needs to be.
+   */
+  function onTabKeyPress (keyboardEvent) {
+    const currentNode = keyboardEvent?.currentTarget;
+    const siblings = currentNode?.parentNode?.childNodes;
+
+    // Find what/where's the current tab, in relation to its siblings.
+    let currentIndex = -1;
+    siblings.forEach((node, index) => { if (node === currentNode) { currentIndex = index } });
+    if (currentIndex < 0) return;  // Error!
+
+    // Choose the next tab we're going to focus on.
+    let nextIndex = currentIndex;
+    if (keyboardEvent.key === 'ArrowLeft') { nextIndex -= 1 }
+    if (keyboardEvent.key === 'ArrowRight') { nextIndex += 1 }
+    nextIndex = Math.min(Math.max(0, nextIndex), siblings?.length - 1);
+
+    // Focus on the next tab.
+    siblings?.[nextIndex].focus();
+  }
+
+  return (
+    <div className="new-accounts-page content-container">
+      <div className="fem-subheader">
+        <span className="filler" />
+        <img className="zooniverse-logo" src={zooniverseLogo} />
       </div>
-    </div>
-  </div>);
+      <section>
+        <div className="content-inner">
+          <div className="page-info">
+            <Helmet title={'Zooniverse & Rubin 2025'} />
+            <h1>Zooniverse &amp; Rubin 2025</h1>
+            <p>Welcome to the Zooniverse, the home of Vera C. Rubin Observatory citizen science. We'll be launching the first projects with Rubin data in the next few weeks, so to be among the first to see data and help our scientists then sign up below, and we'll be in touch. In the meantime, to learn more and to enjoy the first images released by the Observatory go to <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">Rubinobservatory.org.</a></p>
+          </div>
 
-RubinPage.defaultProps = {
-  children: null
+          {user && successMessage && (
+            <div className="success-message">
+              <span className="fa fa-check-circle-o" />
+              <Translate content={`newAccountsPage.${successMessage}`} />
+            </div>
+          )}
+
+          {user ? (
+            <div className="already-signed-in">
+              <p>
+                <span className="fa fa-check-circle-o" />
+                <Translate content="newAccountsPage.alreadySignedIn" name={user?.login} />
+              </p>
+              <ul className="call-to-action">
+                <li>
+                  <Link to="/projects?discipline=astronomy&page=1&status=live">
+                    <Translate content='rubinPage.callToAction.toZooniverseProjects' />
+                  </Link>
+                </li>
+                <li>
+                  <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">
+                    <Translate content='rubinPage.callToAction.toRubinAbout' />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <div className="tabs">
+              <nav role="tablist">
+                <button
+                  role="tab"
+                  id="new-accounts-page-tab-sign-in"
+                  type="button"
+                  onClick={onTabClick}
+                  onKeyDown={onTabKeyPress}
+                  data-tab="sign-in"
+                  className={`tab ${tab !== 'register' ? 'active' : ''}`}
+                >
+                  <Translate content="newAccountsPage.signIn" />
+                </button>
+                <button
+                  role="tab"
+                  id="new-accounts-page-tab-register"
+                  type="button"
+                  onClick={onTabClick}
+                  onKeyDown={onTabKeyPress}
+                  data-tab="register"
+                  className={`tab ${tab === 'register' ? 'active' : ''}`}
+                >
+                  <Translate content="newAccountsPage.register" />
+                </button>
+              </nav>
+              {(tab !== 'register')
+                ? (
+                  <div
+                    role="tabpanel"
+                    aria-labelledby="new-accounts-page-tab-sign-in"
+                  >
+                    <SignInForm user={user} onSuccess={onSignInSuccess} />
+                  </div>
+                ) : (
+                  <div
+                    role="tabpanel"
+                    aria-labelledby="new-accounts-page-tab-register"
+                  >
+                    <RegisterForm user={user} onSuccess={onRegisterSuccess} />
+                  </div>
+                )
+              }
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  )
 };
 
 RubinPage.propTypes = {
-  children: PropTypes.node
+  user: PropTypes.shape({  // .user is provided by app.cjsx via React.cloneElement
+    id: PropTypes.string
+  })
 };
 
 export default RubinPage;

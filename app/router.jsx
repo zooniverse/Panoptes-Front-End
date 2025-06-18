@@ -36,8 +36,6 @@ import SecurityPolicy from './pages/security-policy';
 import AdminPage from './pages/admin';
 import SignInPage from './pages/sign-in';
 import RubinPage from './rubin-2025/rubin-page.jsx';  // Part of Rubin 2025 project. See /app/rubin-2025 
-import { SignInForm as RubinSignInForm } from './rubin-2025/sign-in-form.jsx'
-import { RegisterForm as RubinRegisterForm } from './rubin-2025/register-form.jsx'
 import NotFoundPage from './pages/not-found';
 import ResetPasswordPage from './pages/reset-password/reset-password';
 import Recents from './pages/profile/recents';
@@ -131,9 +129,8 @@ export const routes = (
 
     {/* Part of Rubin 2025 project. See /app/rubin-2025 */}
     <Route path="rubin" component={RubinPage}>
-      <IndexRoute component={RubinRegisterForm} />
-      <Route path="sign-in" component={RubinSignInForm} />
-      <Route path="register" component={RubinRegisterForm} />
+      <Route path="sign-in" />
+      <Route path="register" />
     </Route>
 
     <Route path="privacy" component={PrivacyPolicy} />

@@ -9,53 +9,28 @@ import debounce from 'debounce';
 const REMOTE_CHECK_DELAY = 1000;
 const MIN_PASSWORD_LENGTH = 8;
 
-counterpart.registerTranslations('en', {
-  registerForm: {
-    required: 'Required',
-    optional: 'Optional',
-    looksGood: 'Looks good',
-    userName: 'User name',
-    whyUserName: 'You’ll use this name to log in. It will be shown publicly. ',
-    badChars: "Only letters, numbers, '.', '_', and '-'.",
-    nameConflict: 'That username is taken',
-    forgotPassword: 'Forgot my password',
-    password: 'Password',
-    passwordTooShort: 'Must be at least 8 characters',
-    confirmPassword: 'Confirm password',
-    passwordsDontMatch: 'These don’t match',
-    email: 'Email address',
-    emailConflict: 'An account with this address already exists',
-    realName: 'Real name',
-    realNamePatternHelp: "Enter a name, not an email address",
-    whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc',
-    agreeToPrivacyPolicy: 'You agree to our %(link)s (required)',
-    privacyPolicy: 'privacy policy',
-    okayToEmail: 'It’s okay to send me email every once in a while. (optional)',
-    betaTester: 'I’d like to help test new projects, and be emailed when they’re available. (optional)',
-    underAge: 'If you are under 16 years old, tick this box and complete the form with your parent/guardian.',
-    notRealName: 'Don’t use your real name.',
-    guardianEmail: 'Parent/Guardian’s email address',
-    underAgeConsent: 'I confirm I am the parent/guardian and give permission for my child to register by providing my email address as the main contact address. Both I and my child understand and agree to the %(link)s (required)',
-    underAgeEmail: 'If you agree, we will periodically send email promoting new research-related projects or other information relating to our research. We will not use your contact information for commercial purposes. (optional)',
-    register: 'Register',
-    alreadySignedIn: 'Signed in as %(name)s',
-    signOut: 'Sign out'
-  }
-});
-
 class RegisterForm extends React.Component {
   constructor (props) {
     super(props);
-    // TODO: handle mixin
     this.state = {
-      badNameChars: null,
-      nameConflict: null,
-      passwordTooShort: null,
-      passwordsDontMatch: null,
-      emailConflict: null,
-      agreedToPrivacyPolicy: null,
+      badNameChars: [],
+      nameConflict: null,  // This is null when uninitialised, false if there's no name conflict, and an array if there's a conflict.
+      passwordTooShort: false,
+      passwordsDontMatch: false,
+      emailConflict: null,  // This is null when uninitialised, false if there's no name conflict, and an array if there's a conflict.
+      emailInvalidChars: false,
+      emailInvalidFormat: false,
+      agreeToPrivacyPolicy: false,
       error: null,
       underAge: false,
+
+      input_login: '',
+      input_password: '',
+      input_confirmedPassword: '',
+      input_email: '',
+      input_creditedName: '',
+      input_okayToEmail: true,
+      input_betaTester: false,
 
       // part of mixins from promiseToSetState
       pending: {},
@@ -63,8 +38,8 @@ class RegisterForm extends React.Component {
     };
     
     this.updateAge = this.updateAge.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.checkForNameConflict = this.checkForNameConflict.bind(this);
+    this.handleLoginChange = this.handleLoginChange.bind(this);
+    this.checkForLoginConflict = this.checkForLoginConflict.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.checkForEmailConflict = this.checkForEmailConflict.bind(this);
@@ -72,12 +47,13 @@ class RegisterForm extends React.Component {
     this.isFormValid = this.isFormValid.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleUserInput = this.handleUserInput.bind(this);
     
-    this.debouncedCheckForNameConflict = null;
+    this.debouncedCheckForLoginConflict = null;
     this.debouncedCheckForEmailConflict = null;
 
     // part of mixins from promiseToSetState
-    this._promiseStateKeys = {}
+    this._promiseStateKeys = {};
   }
 
   render () {
@@ -86,7 +62,9 @@ class RegisterForm extends React.Component {
       nameConflict,
       passwordTooShort,
       passwordsDontMatch,
-      emailConflict
+      emailConflict,
+      emailInvalidChars,
+      emailInvalidFormat,
     } = this.state;
 
     const privacyPolicyLink = (
@@ -95,29 +73,63 @@ class RegisterForm extends React.Component {
       </a>
     );
     
+    const inputDisabled = !!this.props.user;
+    const submitDisabled = !this.isFormValid() || Object.keys(this.state.pending).length !== 0 || (this.props.user != null)
+
     return (
-      <form method="POST" onSubmit={this.handleSubmit}>
+      <form className="register-form" method="POST" onSubmit={this.handleSubmit}>
+        
         <label className="form-separator">
-          <input type="checkbox" ref="underAge" checked={this.state.underAge} disabled={this.props.user != null} onChange={this.updateAge} />
+          <input
+            type="checkbox"
+            checked={this.state.underAge}
+            disabled={inputDisabled}
+            onChange={this.updateAge}
+          />
           <Translate component="span" content="registerForm.underAge" />
         </label>
 
         <label>
           <span className="columns-container inline spread">
             <Translate content="registerForm.userName" />
-            {(badNameChars != null ? badNameChars.length : void 0) > 0 ? <Translate className="form-help error" content="registerForm.badChars" /> : "nameConflict" in this.state.pending ? <LoadingIndicator /> : nameConflict != null ? nameConflict ? <span className="form-help error">
-                  <Translate content="registerForm.nameConflict" />{' '}
-                  <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
-                    <Translate content="registerForm.forgotPassword" />
-                  </a>
-                </span> : <span className="form-help success">
-                  <Translate content="registerForm.looksGood" />
-                </span> : void 0}
+            {badNameChars?.length > 0 && (
+              <Translate className="form-help error" content="registerForm.badChars" />
+            )}
+            {"nameConflict" in this.state.pending && (
+              <LoadingIndicator />
+            )}
+            {nameConflict && (
+              <span className="form-help error">
+                <Translate content="registerForm.nameConflict" />{' '}
+                <a href={`${window.location.origin}/reset-password`}>
+                  <Translate content="registerForm.forgotPassword" />
+                </a>
+              </span>
+            )}
+            {(this.state.input_login?.length > 0
+              && nameConflict === false
+            ) && (
+              <span className="form-help success">
+                <Translate content="registerForm.looksGood" />
+              </span>
+            )}
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
-          <input type="text" ref="name" className="standard-input full" disabled={this.props.user != null} autoFocus onChange={this.handleNameChange} maxLength="255" />
+          <input
+            type="text"
+            name="login"
+            id="register-form-login"
+            value={this.state.input_login}
+            className="standard-input full"
+            disabled={inputDisabled}
+            autoFocus
+            onChange={this.handleUserInput}
+            maxLength="255"
+          />
           <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
-          {this.state.underAge ? <Translate component="span" className="form-help info" content="registerForm.notRealName" /> : void 0}
+          {this.state.underAge && (
+            <Translate component="span" className="form-help info" content="registerForm.notRealName" />
+          )}
         </label>
 
         <br />
@@ -125,10 +137,20 @@ class RegisterForm extends React.Component {
         <label>
           <span className="columns-container inline spread">
             <Translate content="registerForm.password" />
-            {passwordTooShort ? <Translate className="form-help error" content="registerForm.passwordTooShort" /> : void 0}
+            {passwordTooShort && (
+              <Translate className="form-help error" content="registerForm.passwordTooShort" />
+            )}
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
-          <input type="password" ref="password" className="standard-input full" disabled={this.props.user != null} onChange={this.handlePasswordChange} />
+          <input
+            type="password"
+            name="password"
+            id="register-form-password"
+            value={this.state.input_password}
+            className="standard-input full"
+            disabled={inputDisabled}
+            onChange={this.handleUserInput}
+          />
         </label>
 
         <br />
@@ -136,25 +158,72 @@ class RegisterForm extends React.Component {
         <label>
           <span className="columns-container inline spread">
             <Translate content="registerForm.confirmPassword" /><br />
-            {passwordsDontMatch != null ? passwordsDontMatch ? <Translate className="form-help error" content="registerForm.passwordsDontMatch" /> : !passwordTooShort ? <Translate className="form-help success" content="registerForm.looksGood" /> : void 0 : void 0}
+            {passwordsDontMatch && (
+              <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
+            )}
+            {(this.state.input_password?.length > 0
+              && this.state.input_confirmedPassword?.length > 0
+              && !passwordsDontMatch
+              && !passwordTooShort
+            ) && (
+              <Translate className="form-help success" content="registerForm.looksGood" />
+            )}
             <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
-          <input type="password" ref="confirmedPassword" className="standard-input full" disabled={this.state.props != null} onChange={this.handlePasswordChange} />
+          <input
+            type="password"
+            name="confirmedPassword"
+            id="register-form-confirmedPassword"
+            value={this.state.input_confirmedPassword}
+            className="standard-input full"
+            disabled={inputDisabled}
+            onChange={this.handleUserInput}
+          />
         </label>
 
         <br />
 
         <label>
           <span className="columns-container inline spread">
-            {this.state.underAge ? <Translate content="registerForm.guardianEmail" /> : <Translate content="registerForm.email" />}
-            {'emailConflict' in this.state.pending ? <LoadingIndicator /> : emailConflict != null ? emailConflict ? <span className="form-help error">
-                  <Translate content="registerForm.emailConflict" />{' '}
-                  <a href={`${window.location.origin}/reset-password`} onClick={this.props.onSuccess}>
-                    <Translate content="registerForm.forgotPassword" />
-                  </a>
-                </span> : <Translate className="form-help success" content="registerForm.looksGood" /> : <Translate className="form-help info right-align" content="registerForm.required" />}
+            {this.state.underAge
+              ? <Translate content="registerForm.guardianEmail" />
+              : <Translate content="registerForm.email" />
+            }
+            {emailInvalidChars && (
+              <Translate className="form-help error" content="registerForm.emailInvalidChars" />
+            )}
+            {(!emailInvalidChars && emailInvalidFormat) && (
+              <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
+            )}
+            {'emailConflict' in this.state.pending && (
+              <LoadingIndicator />
+            )}
+            {emailConflict && (
+              <span className="form-help error">
+                <Translate content="registerForm.emailConflict" />{' '}
+                <a href={`${window.location.origin}/reset-password`}>
+                  <Translate content="registerForm.forgotPassword" />
+                </a>
+              </span>
+            )}
+            {(this.state.input_email?.length > 0
+              && !emailConflict
+              && !emailInvalidChars
+              && !emailInvalidFormat
+            ) && (
+              <Translate className="form-help success" content="registerForm.looksGood" />
+            )}
+            <Translate className="form-help info right-align" content="registerForm.required" />
           </span>
-          <input type="text" ref="email" className="standard-input full" disabled={this.state.props != null} onChange={this.handleEmailChange} />
+          <input
+            type="text"
+            name="email"
+            id="register-form-email"
+            value={this.state.input_email}
+            className="standard-input full"
+            disabled={inputDisabled}
+            onChange={this.handleUserInput}
+          />
         </label>
 
         <br />
@@ -164,7 +233,17 @@ class RegisterForm extends React.Component {
             <Translate content="registerForm.realName" />
             <Translate className="form-help info right-align" content="registerForm.optional" />
           </span>
-          <input type="text" pattern='[^@]+' ref="realName" className="standard-input full" disabled={this.props.user != null} title={counterpart('registerForm.realNamePatternHelp')} />
+          <input
+            type="text"
+            pattern='[^@]+'
+            name="creditedName"
+            id="register-form-creditedName"
+            value={this.state.input_creditedName}
+            className="standard-input full"
+            disabled={inputDisabled}
+            title={counterpart('registerForm.realNamePatternHelp')}
+            onChange={this.handleUserInput}
+          />
           <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
         </label>
 
@@ -172,32 +251,68 @@ class RegisterForm extends React.Component {
         <br />
 
         <label>
-          <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={this.props.user != null} onChange={this.handlePrivacyPolicyChange} />
-          {this.state.underAge ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} /> : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />}
+          <input
+            type="checkbox"
+            disabled={inputDisabled}
+            checked={!!this.state.agreeToPrivacyPolicy}
+            onChange={this.handlePrivacyPolicyChange}
+          />
+          {this.state.underAge
+            ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} />
+            : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
+          }
         </label>
 
         <br />
         <br />
 
         <label>
-          <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
-          {this.state.underAge ? <Translate component="span" content="registerForm.underAgeEmail" /> : <Translate component="span" content="registerForm.okayToEmail" />}
+          <input
+            type="checkbox"
+            name="okayToEmail"
+            id="register-form-okayToEmail"
+            checked={this.state.input_okayToEmail}
+            disabled={inputDisabled}
+            onChange={this.handleUserInput}
+          />
+          {this.state.underAge
+            ? <Translate component="span" content="registerForm.underAgeEmail" />
+            : <Translate component="span" content="registerForm.okayToEmail" />
+          }
         </label><br />
 
         <label>
-          <input type="checkbox" ref="betaTester" disabled={this.props.user != null} onChange={this.forceUpdate.bind(this, null)} />
+          <input
+            type="checkbox"
+            name="betaTester"
+            id="register-form-betaTester"
+            checked={this.state.input_betaTester}
+            disabled={inputDisabled}
+            onChange={this.handleUserInput}
+          />
           <Translate component="span" content="registerForm.betaTester" />
         </label><br />
 
         <p style={{ textAlign: 'center' }}>
-          {'user' in this.state.pending ? <LoadingIndicator /> : this.props.user != null ? <span className="form-help warning">
-              <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
-              <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
-            </span> : this.state.error != null ? <span className="form-help error">{this.state.error.toString()}</span> : <span>&nbsp;</span>}
+          {'user' in this.state.pending
+            ? <LoadingIndicator />
+            : this.props.user != null
+            ? <span className="form-help warning">
+                <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
+                <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
+              </span>
+            : this.state.error != null
+            ? <span className="form-help error">{this.state.error.toString()}</span>
+            : <span>&nbsp;</span>
+          }
         </p>
 
-        <div>
-          <button type="submit" className="standard-button full" disabled={!this.isFormValid() || Object.keys(this.state.pending).length !== 0 || (this.props.user != null)}>
+        <div className="form-row submit-row">
+          <button
+            type="submit"
+            className="standard-button"
+            disabled={submitDisabled}
+          >
             <Translate content="registerForm.register" />
           </button>
         </div>
@@ -205,19 +320,44 @@ class RegisterForm extends React.Component {
     );
   }
 
-  updateAge () {
+  updateAge (e) {
     return this.setState({
-      underAge: !this.state.underAge
+      underAge: !!e.currentTarget?.checked
     });
   }
 
-  handleNameChange () {
-    var badChars, char, exists, name;
-    name = this.refs.name.value;
-    exists = name.length !== 0;
+  handleUserInput (e) {
+    const input = e?.currentTarget;
+    const inputName = input.name;
+    let inputValue = input.type === 'checkbox' ? !!input.checked : input.value;
+
+    switch (inputName) {
+      case "login":
+        this.handleLoginChange(inputValue);
+        break;
+      case "password":
+        this.handlePasswordChange(inputValue, this.state.input_confirmedPassword);
+        break;
+      case "confirmedPassword":
+        this.handlePasswordChange(this.state.input_password, inputValue);
+        break;
+      case "email":
+        inputValue = (inputValue || '').replaceAll(' ', '');  // Trim out empty spaces
+        this.handleEmailChange(inputValue);
+        break;
+    }
+
+    this.setState({
+      [`input_${inputName}`]: inputValue
+    });
+  }
+
+  handleLoginChange (login) {
+    var badChars, char, exists;
+    exists = login.length !== 0;
     badChars = (function() {
       var i, len, ref, results;
-      ref = name.split('');
+      ref = login.split('');
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         char = ref[i];
@@ -233,44 +373,49 @@ class RegisterForm extends React.Component {
       nameExists: exists
     });
     if (exists && badChars.length === 0) {
-      if (this.debouncedCheckForNameConflict == null) {
-        this.debouncedCheckForNameConflict = debounce(this.checkForNameConflict, REMOTE_CHECK_DELAY);
+      if (this.debouncedCheckForLoginConflict == null) {
+        this.debouncedCheckForLoginConflict = debounce(this.checkForLoginConflict, REMOTE_CHECK_DELAY);
       }
-      return this.debouncedCheckForNameConflict(name);
+      return this.debouncedCheckForLoginConflict(login);
     }
   }
 
-  checkForNameConflict (username) {
+  checkForLoginConflict (username) {
     return this.promiseToSetState({
       nameConflict: auth.register({
         login: username
       }).catch(function(error) {
-        var ref;
-        return (ref = error.message.match(/login(.+)taken/mi)) != null ? ref : false;
+        return error.message.match(/login(.+)taken/mi) || false;
       })
     });
   }
 
-  handlePasswordChange () {
-    var asLong, confirmedPassword, exists, longEnough, matches, password;
-    password = this.refs.password.value;
-    confirmedPassword = this.refs.confirmedPassword.value;
-    exists = password.length !== 0;
-    longEnough = password.length >= MIN_PASSWORD_LENGTH;
-    asLong = confirmedPassword.length >= password.length;
-    matches = password === confirmedPassword;
+  handlePasswordChange (password, confirmedPassword) {
+    const passwordNotEmpty = password.length > 0;
+    const bothNotEmpty = password.length > 0 && confirmedPassword.length > 0;
+    const longEnough = password.length >= MIN_PASSWORD_LENGTH;
+    const matches = password === confirmedPassword;
+
     return this.setState({
-      passwordTooShort: exists ? !longEnough : void 0,
-      passwordsDontMatch: exists && asLong ? !matches : void 0
+      passwordTooShort: passwordNotEmpty && !longEnough,
+      passwordsDontMatch: bothNotEmpty && !matches
     });
   }
 
-  handleEmailChange () {
-    var email;
+  handleEmailChange (email) {
     this.promiseToSetState({
       emailConflict: Promise.resolve(null) // Cancel any existing request.
     });
-    email = this.refs.email.value;
+
+    // Sanity check for emails
+    // We're VERY LOOSE with our checks here, as it's better to admit an invalid email than to block a valid email we didn't correctly anticipate.
+    const emailInvalidChars = /[,\\\/]+/g.test(email);  // Does the email contain invalid characters? Mostly, this catches the common "comma instead of period" error.
+    const emailInvalidFormat = email?.length > 0 && !(/.+@.+\..+/).test(email);  // Does the email at least look SORTA like a proper email address?
+    this.setState({
+      emailInvalidChars,
+      emailInvalidFormat
+    });
+
     if (email.match(/.+@.+\..+/)) {
       if (this.debouncedCheckForEmailConflict == null) {
         this.debouncedCheckForEmailConflict = debounce(this.checkForEmailConflict, REMOTE_CHECK_DELAY);
@@ -288,47 +433,69 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handlePrivacyPolicyChange () {
+  handlePrivacyPolicyChange (e) {
     return this.setState({
-      agreesToPrivacyPolicy: this.refs.agreesToPrivacyPolicy.checked
+      agreeToPrivacyPolicy: !!e.currentTarget?.checked
     });
   }
 
   isFormValid () {
-    var agreesToPrivacyPolicy, badNameChars, emailConflict, nameConflict, nameExists, passwordsDontMatch;
-    ({badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy, nameExists} = this.state);
-    return (badNameChars != null ? badNameChars.length : void 0) === 0 && !nameConflict && !passwordsDontMatch && !emailConflict && nameExists && agreesToPrivacyPolicy;
+    const {
+      badNameChars,
+      nameConflict,
+      passwordsDontMatch,
+      emailConflict,
+      emailInvalidChars,
+      emailInvalidFormat,
+      agreeToPrivacyPolicy,
+      nameExists
+    } = this.state;
+    return (
+      !(badNameChars?.length > 0)
+      && !nameConflict
+      && !passwordsDontMatch
+      && !emailConflict
+      && !emailInvalidChars
+      && !emailInvalidFormat
+      && nameExists
+      && agreeToPrivacyPolicy
+    );
   }
 
   handleSubmit (e) {
-    var base, beta_email_communication, credited_name, email, global_email_communication, login, password, project_email_communication, project_id, ref, ref1;
-    if ((ref = this.context.geordi) != null) {
-      ref.logEvent({
-        type: 'register'
-      });
-    }
     e.preventDefault();
-    login = this.refs.name.value;
-    password = this.refs.password.value;
-    email = this.refs.email.value;
-    credited_name = this.refs.realName.value;
-    global_email_communication = this.refs.okayToEmail.checked;
-    project_email_communication = global_email_communication;
-    beta_email_communication = this.refs.betaTester.checked;
-    project_id = (ref1 = this.props.project) != null ? ref1.id : void 0;
+
+    const login = this.state.input_login;
+    const password = this.state.input_password;
+    const email = this.state.input_email;
+    const credited_name = this.state.input_creditedName;
+    const global_email_communication = this.state.input_okayToEmail;
+    const project_email_communication = global_email_communication;
+    const beta_email_communication = this.state.input_betaTester;
+    
+    const project_id = this.props.project?.id || undefined;
+
     this.setState({
       error: null
     });
-    if (typeof (base = this.props).onSubmit === "function") {
-      base.onSubmit();
-    }
-    return auth.register({login, password, email, credited_name, project_email_communication, global_email_communication, project_id, beta_email_communication}).then(() => {
-      var base1;
-      return typeof (base1 = this.props).onSuccess === "function" ? base1.onSuccess(...arguments) : void 0;
+
+    this.props.onSubmit?.();
+
+    return auth.register({
+      login,
+      password,
+      email,
+      credited_name,
+      project_email_communication,
+      global_email_communication,
+      project_id,
+      beta_email_communication
+    }).then((user) => {
+      return this.props.onSuccess?.(user);
+
     }).catch((error) => {
-      var base1;
       this.setState({error});
-      return typeof (base1 = this.props).onFailure === "function" ? base1.onFailure(...arguments) : void 0;
+      return this.props.onFailure?.(error);
     });
   }
 
@@ -376,10 +543,6 @@ class RegisterForm extends React.Component {
   isMounted () { return true }
 }
 
-RegisterForm.contextTypes = {
-  geordi: PropTypes.object
-};
-
 RegisterForm.propTypes = {
   onFailure: PropTypes.func,
   onSubmit: PropTypes.func,
@@ -387,4 +550,4 @@ RegisterForm.propTypes = {
   user: PropTypes.object
 };
 
-export { RegisterForm }
+export { RegisterForm };
