@@ -42,6 +42,7 @@ class SignInForm extends React.Component {
               <Translate content="signInForm.userName" />
             </label>
             <input
+              autoComplete="username email"
               aria-describedby="sign-in-form-error-message"
               className="standard-input full"
               disabled={disabled}
@@ -62,6 +63,7 @@ class SignInForm extends React.Component {
               <Translate content="signInForm.password" />
             </label>
             <input
+              autoComplete="current-password"
               aria-describedby="sign-in-form-error-message"
               className="standard-input full"
               disabled={disabled}
