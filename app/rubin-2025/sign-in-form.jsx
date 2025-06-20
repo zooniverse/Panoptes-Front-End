@@ -32,43 +32,52 @@ class SignInForm extends React.Component {
     return (
       <form className="sign-in-form" method="POST" onSubmit={this.handleSubmit}>
 
-        <div style={{ margin: '1em 0' }}>
+        <div className="form-row">
 
-          <div style={{ margin: '1em 0' }}>
-            <label style={{ display: 'block' }} htmlFor="sign-in-form-login">
+          <div className="form-row">
+            <label
+              className="label-block"
+              htmlFor="sign-in-form-login"
+            >
               <Translate content="signInForm.userName" />
             </label>
             <input
-              type="text"
+              autoComplete="username email"
+              aria-describedby="sign-in-form-error-message"
               className="standard-input full"
-              name="login"
-              id="sign-in-form-login"
-              value={this.state.login}
               disabled={disabled}
-              autoFocus
-              onChange={this.handleInputChange}
+              id="sign-in-form-login"
               maxLength="255"
+              name="login"
+              onChange={this.handleInputChange}
+              type="text"
+              value={this.state.login}
             />
           </div>
 
-          <div style={{ margin: '1em 0' }}>
-            <label style={{ display: 'block' }} htmlFor="sign-in-form-password">
+          <div className="form-row">
+            <label
+              className="label-block"
+              htmlFor="sign-in-form-password"
+            >
               <Translate content="signInForm.password" />
             </label>
             <input
-              type="password"
+              autoComplete="current-password"
+              aria-describedby="sign-in-form-error-message"
               className="standard-input full"
-              name="password"
-              id="sign-in-form-password"
-              value={this.state.password}
               disabled={disabled}
+              id="sign-in-form-password"
+              name="password"
               onChange={this.handleInputChange}
+              type="password"
+              value={this.state.password}
             />
           </div>
 
         </div>
 
-        <div style={{ textAlign: 'center', margin: '1em 0' }}>
+        <div className="form-row center-align">
           
           {this.props.user && ( 
             <div className="form-help">
@@ -79,15 +88,17 @@ class SignInForm extends React.Component {
             </div>
           )}
 
-          {this.state.error && (
-            <div className="form-help error">
-              {this.state.error.message.match(/invalid(.+)password/i) ? (
-                <Translate content="signInForm.incorrectDetails" />
-              ) : (
-                <span>{this.state.error.toString()}</span>
-              )}{' '}
-            </div>
-          )}
+          <div id="sign-in-form-error-message" className="form-help error">
+            {this.state.error && (
+              <div>
+                {this.state.error.message.match(/invalid(.+)password/i) ? (
+                  <Translate content="signInForm.incorrectDetails" />
+                ) : (
+                  <span>{this.state.error.toString()}</span>
+                )}{' '}
+              </div>
+            )}
+          </div>
 
           {this.state.busy ? (
             <LoadingIndicator />
@@ -124,12 +135,13 @@ class SignInForm extends React.Component {
 
     e.preventDefault();
     return this.setState({
-      working: true
+      busy: true,
+      error: null
     }, () => {
       const {login, password} = this.state;
       auth.signIn({login, password}).then((user) => {
         this.setState({
-          working: false,
+          busy: false,
           error: null
         })
 
@@ -138,12 +150,10 @@ class SignInForm extends React.Component {
 
       }).catch((error) => {
         this.setState({
-          working: false,
+          busy: false,
           error: error
         })
 
-        const ref = ReactDOM.findDOMNode(this).querySelector('[name="login"]');
-        ref?.focus();
         onFailure?.(error);
       });
 
