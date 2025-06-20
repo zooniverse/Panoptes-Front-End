@@ -363,11 +363,9 @@ class RegisterForm extends React.Component {
             </span>
           )}
 
-          <div>
+          <div id="register-form-error-message" className="form-help error">
             {this.state.error && (
-              <div id="register-form-error-message" className="form-help error">
-                <span>{this.state.error.toString()}</span>
-              </div>
+              <span>{this.state.error.toString()}</span>
             )}
           </div>
         </div>
@@ -376,7 +374,7 @@ class RegisterForm extends React.Component {
           <button
             type="submit"
             className="standard-button"
-            disabled={submitDisabled}
+            disabled={false && submitDisabled}
           >
             <Translate content="registerForm.register" />
           </button>
