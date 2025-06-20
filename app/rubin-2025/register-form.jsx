@@ -135,6 +135,7 @@ class RegisterForm extends React.Component {
           </div>
 
           <input
+            autoComplete="username"
             aria-describedby="register-form-error-message register-form-login-help-message-1 register-form-login-help-message-2"
             className="standard-input full"
             disabled={inputDisabled}
@@ -169,6 +170,7 @@ class RegisterForm extends React.Component {
             <Translate className="form-help info right-align" content="registerForm.required" />
           </div>
           <input
+            autoComplete="new-password"
             aria-describedby="register-form-error-message register-form-password-help-message"
             className="standard-input full"
             disabled={inputDisabled}
@@ -263,6 +265,7 @@ class RegisterForm extends React.Component {
           </div>
 
           <input
+            autoComplete="email"
             aria-describedby="register-form-error-message register-form-email-help-message-1 register-form-email-help-message-2 register-form-email-help-message-3"
             className="standard-input full"
             disabled={inputDisabled}
@@ -282,6 +285,7 @@ class RegisterForm extends React.Component {
             <Translate className="form-help info right-align" content="registerForm.optional" />
           </div>
           <input
+            autoComplete="name"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-creditedName"
