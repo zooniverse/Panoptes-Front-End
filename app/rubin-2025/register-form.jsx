@@ -122,21 +122,29 @@ class RegisterForm extends React.Component {
               )}
             </div>
 
-            {(this.state.input_login?.length > 0
-              && nameConflict === false
-              && !("nameConflict" in this.state.pending)
-            ) && (
-              <span className="form-help success">
-                <Translate content="registerForm.looksGood" />
-              </span>
-            )}
+            <div id="register-form-login-help-message-looksGood">
+              {(this.state.input_login?.length > 0
+                && nameConflict === false
+                && !("nameConflict" in this.state.pending)
+              ) && (
+                <span className="form-help success">
+                  <Translate
+                    content="registerForm.looksGood"
+                  />
+                </span>
+              )}
+            </div>
 
-            <Translate className="form-help info right-align" content="registerForm.required" />
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-login-help-message-required"
+            />
           </div>
 
           <input
             autoComplete="username"
-            aria-describedby="register-form-error-message register-form-login-help-message-1 register-form-login-help-message-2"
+            aria-describedby="register-form-error-message register-form-login-help-message-1 register-form-login-help-message-2 register-form-login-help-message-looksGood register-form-login-help-message-required register-form-login-help-message-whyUserName"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-login"
@@ -147,7 +155,7 @@ class RegisterForm extends React.Component {
             value={this.state.input_login}
           />
 
-          <div>
+          <div id="register-form-login-help-message-whyUserName">
             <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
             {this.state.underAge && (
               <Translate component="span" className="form-help info" content="registerForm.notRealName" />
@@ -167,11 +175,15 @@ class RegisterForm extends React.Component {
               )}
             </div>
 
-            <Translate className="form-help info right-align" content="registerForm.required" />
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-password-help-required"
+            />
           </div>
           <input
             autoComplete="new-password"
-            aria-describedby="register-form-error-message register-form-password-help-message"
+            aria-describedby="register-form-error-message register-form-password-help-message register-form-password-help-required"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-password"
@@ -194,18 +206,24 @@ class RegisterForm extends React.Component {
               )}
             </div>
 
-            {(this.state.input_password?.length > 0
-              && this.state.input_confirmedPassword?.length > 0
-              && !passwordsDontMatch
-              && !passwordTooShort
-            ) && (
-              <Translate className="form-help success" content="registerForm.looksGood" />
-            )}
+            <div id="register-form-confirmedPassword-help-looksGood">
+              {(this.state.input_password?.length > 0
+                && this.state.input_confirmedPassword?.length > 0
+                && !passwordsDontMatch
+                && !passwordTooShort
+              ) && (
+                <Translate className="form-help success" content="registerForm.looksGood" />
+              )}
+            </div>
 
-            <Translate className="form-help info right-align" content="registerForm.required" />
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-confirmedPassword-help-required"
+            />
           </div>
           <input
-            aria-describedby="register-form-confirmedPassword-help-message"
+            aria-describedby="register-form-confirmedPassword-help-message register-form-confirmedPassword-help-looksGood register-form-confirmedPassword-help-required"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-confirmedPassword"
@@ -252,21 +270,27 @@ class RegisterForm extends React.Component {
               )}
             </div>
 
-            {(this.state.input_email?.length > 0
-              && !emailConflict
-              && !emailInvalidChars
-              && !emailInvalidFormat
-              && !('emailConflict' in this.state.pending)
-            ) && (
-              <Translate className="form-help success" content="registerForm.looksGood" />
-            )}
+            <div id="register-form-email-help-message-looksGood">
+              {(this.state.input_email?.length > 0
+                && !emailConflict
+                && !emailInvalidChars
+                && !emailInvalidFormat
+                && !('emailConflict' in this.state.pending)
+              ) && (
+                <Translate className="form-help success" content="registerForm.looksGood" />
+              )}
+            </div>
 
-            <Translate className="form-help info right-align" content="registerForm.required" />
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-email-help-message-required"
+            />
           </div>
 
           <input
             autoComplete="email"
-            aria-describedby="register-form-error-message register-form-email-help-message-1 register-form-email-help-message-2 register-form-email-help-message-3"
+            aria-describedby="register-form-error-message register-form-email-help-message-1 register-form-email-help-message-2 register-form-email-help-message-3 register-form-email-help-message-looksGood register-form-email-help-message-required"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-email"
@@ -282,10 +306,15 @@ class RegisterForm extends React.Component {
             <label htmlFor="register-form-creditedName">
               <Translate content="registerForm.realName" />
             </label>
-            <Translate className="form-help info right-align" content="registerForm.optional" />
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.optional"
+              id="register-form-creditedName-help-message-optional"
+            />
           </div>
           <input
             autoComplete="name"
+            aria-describedby="register-form-creditedName-help-message-optional register-form-creditedName-help-message-whyRealName"
             className="standard-input full"
             disabled={inputDisabled}
             id="register-form-creditedName"
@@ -296,7 +325,12 @@ class RegisterForm extends React.Component {
             type="text"
             value={this.state.input_creditedName}
           />
-          <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
+          <Translate
+            component="span"
+            className="form-help info"
+            content="registerForm.whyRealName"
+            id="register-form-creditedName-help-message-whyRealName"
+          />
         </div>
 
         <div className="form-row">
@@ -374,7 +408,7 @@ class RegisterForm extends React.Component {
           <button
             type="submit"
             className="standard-button"
-            disabled={false && submitDisabled}
+            disabled={submitDisabled}
           >
             <Translate content="registerForm.register" />
           </button>
