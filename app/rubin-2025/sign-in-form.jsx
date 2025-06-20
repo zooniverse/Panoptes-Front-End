@@ -88,9 +88,9 @@ class SignInForm extends React.Component {
             </div>
           )}
 
-          <div aria-live="polite">
+          <div id="sign-in-form-error-message" className="form-help error">
             {this.state.error && (
-              <div id="sign-in-form-error-message" className="form-help error">
+              <div>
                 {this.state.error.message.match(/invalid(.+)password/i) ? (
                   <Translate content="signInForm.incorrectDetails" />
                 ) : (
@@ -135,12 +135,13 @@ class SignInForm extends React.Component {
 
     e.preventDefault();
     return this.setState({
-      working: true
+      busy: true,
+      error: null
     }, () => {
       const {login, password} = this.state;
       auth.signIn({login, password}).then((user) => {
         this.setState({
-          working: false,
+          busy: false,
           error: null
         })
 
@@ -149,7 +150,7 @@ class SignInForm extends React.Component {
 
       }).catch((error) => {
         this.setState({
-          working: false,
+          busy: false,
           error: error
         })
 
