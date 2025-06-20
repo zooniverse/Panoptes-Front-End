@@ -101,7 +101,7 @@ class RegisterForm extends React.Component {
               <Translate content="registerForm.userName" />
             </label>
 
-            <div aria-live="polite" id="register-form-login-help-message-1">
+            <div id="register-form-login-help-message-1">
               {badNameChars?.length > 0 && (
                 <Translate className="form-help error" content="registerForm.badChars" />
               )}
@@ -111,7 +111,7 @@ class RegisterForm extends React.Component {
               <LoadingIndicator />
             )}
 
-            <div aria-live="polite" id="register-form-login-help-message-2">
+            <div id="register-form-login-help-message-2">
               {nameConflict && (
                 <span className="form-help error">
                   <Translate content="registerForm.nameConflict" />{' '}
@@ -160,7 +160,7 @@ class RegisterForm extends React.Component {
               <Translate content="registerForm.password" />
             </label>
             
-            <div aria-live="polite" id="register-form-password-help-message">
+            <div id="register-form-password-help-message">
               {passwordTooShort && (
                 <Translate className="form-help error" content="registerForm.passwordTooShort" />
               )}
@@ -186,7 +186,7 @@ class RegisterForm extends React.Component {
               <Translate content="registerForm.confirmPassword" />
             </label>
             
-            <div aria-live="polite" id="register-form-confirmedPassword-help-message">
+            <div id="register-form-confirmedPassword-help-message">
               {passwordsDontMatch && (
                 <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
               )}
@@ -223,13 +223,13 @@ class RegisterForm extends React.Component {
               }
             </label>
 
-            <div aria-live="polite" id="register-form-email-help-message-1">
+            <div id="register-form-email-help-message-1">
               {emailInvalidChars && (
                 <Translate className="form-help error" content="registerForm.emailInvalidChars" />
               )}
             </div>
 
-            <div aria-live="polite" id="register-form-email-help-message-2">
+            <div id="register-form-email-help-message-2">
               {(!emailInvalidChars && emailInvalidFormat) && (
                 <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
               )}
@@ -239,7 +239,7 @@ class RegisterForm extends React.Component {
               <LoadingIndicator />
             )}
 
-            <div aria-live="polite" id="register-form-email-help-message-3">
+            <div id="register-form-email-help-message-3">
               {emailConflict && (
                 <span className="form-help error">
                   <Translate content="registerForm.emailConflict" />{' '}
@@ -359,7 +359,7 @@ class RegisterForm extends React.Component {
             </span>
           )}
 
-          <div aria-live="polite">
+          <div>
             {this.state.error && (
               <div id="register-form-error-message" className="form-help error">
                 <span>{this.state.error.toString()}</span>
