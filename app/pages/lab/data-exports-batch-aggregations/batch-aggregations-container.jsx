@@ -20,12 +20,22 @@ function BatchAggregationsExport () {
     batchAggregationsDialog?.current?.close();
   }
 
+  // DEBUG: open modal for development's sake
+  setTimeout(openModal, 100)
+
   return (
     <div className="batch-aggregations-container">
       <button onClick={toggleDialog}>
         Batch Aggregations
       </button>
-      <dialog ref={batchAggregationsDialog}>
+      <dialog
+        ref={batchAggregationsDialog}
+        style={{
+          height: '90vh',
+          width: '90vw',
+          overflow: 'auto',
+        }}
+      >
         <BatchAggregations
           closeModal={closeModal}
         />
