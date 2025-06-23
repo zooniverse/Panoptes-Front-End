@@ -9,6 +9,7 @@ import DataExportButton from  '../../partials/data-export-button';
 import SubjectSetDataExportButton from '../../partials/subject-set-data-export-button';
 import TalkDataExportButton from  '../../talk/data-export-button';
 import DataExportDownloadLink from '../../partials/data-export-download-link';
+import BatchAggregations from './data-exports-batch-aggregations';
 
 counterpart.registerTranslations('en', {
   projectDetails: {
@@ -91,6 +92,11 @@ export default function DataExports (props) {
               </div>
             )
           }
+          <div className="row">
+            <BatchAggregations
+              project={props.project}
+            />
+          </div>
           <div className="row">
             <p>
               <strong>Workflow contents export: </strong>
