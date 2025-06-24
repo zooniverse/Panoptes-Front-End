@@ -54,7 +54,11 @@ export default function AggregationsChecker ({
 
   return (
     <div>
-      Do we have any existing aggregations? Status - {apiData.status}
+      Do we have any existing aggregations? &nbsp;
+      {apiData.status === 'ready' && (
+        <button onClick={fetchAggregations}>Refresh</button>
+      )}
+      {apiData.status !== 'ready' && apiData.status}
 
       <ul>
         {apiData.aggregations?.map(agg => {
@@ -63,11 +67,13 @@ export default function AggregationsChecker ({
           const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${selectedWorkflow.id}_reductions.csv`
           return (
             <li key={agg.id}>
-              Aggregation #{agg.id} - {agg.status} - {updatedTime.toUTCString()}
-              <br />
-              <a href={linkForZip}>[Download ZIP]</a>
-              <br/>
-              <a href={linkForCsv}>[Download CSV]</a>
+              Aggregation #{agg.id} - {agg.status} - {updatedTime.toUTCString()} <br/>
+              {agg.status === 'completed' && (
+                <span>
+                  <a href={linkForZip}>[Download ZIP]</a>
+                  <a href={linkForCsv}>[Download CSV]</a>
+                </span>
+              )}
             </li>
           )
         })}
