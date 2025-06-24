@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
+import AggregationsChecker from './components/aggregations-checker.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
@@ -24,6 +25,10 @@ function BatchAggregations ({
       <p>
         Currently chosen workflow: {selectedWorkflow ? `${selectedWorkflow.id} - ${selectedWorkflow.display_name}` : 'none'}
       </p>
+
+      <AggregationsChecker
+        selectedWorkflow={selectedWorkflow}
+      />
 
       <div>
         <button onClick={closeModal}>Close</button>
