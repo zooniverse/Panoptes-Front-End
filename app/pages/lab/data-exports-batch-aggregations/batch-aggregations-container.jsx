@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import BatchAggregations from './batch-aggregations.jsx';
 
-function BatchAggregationsExport () {
+function BatchAggregationsExport ({ project }) {
   const batchAggregationsDialog = useRef(null);
 
   function toggleDialog () {
@@ -38,6 +38,7 @@ function BatchAggregationsExport () {
       >
         <BatchAggregations
           closeModal={closeModal}
+          project={project}
         />
       </dialog>
     </div>
