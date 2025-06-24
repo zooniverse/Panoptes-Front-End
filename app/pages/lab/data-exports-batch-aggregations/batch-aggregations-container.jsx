@@ -21,7 +21,7 @@ function BatchAggregationsExport ({ project }) {
   }
 
   // DEBUG: open modal for development's sake
-  setTimeout(openModal, 100)
+  // setTimeout(openModal, 100)
 
   return (
     <div className="batch-aggregations-container">
