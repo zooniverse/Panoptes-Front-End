@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 const DEFAULT_HANDLER = () => {};
 
 export default function WorkflowsList ({
-  currentWorkflow,
   project,
-  setCurrentWorkflow = DEFAULT_HANDLER,
+  selectedWorkflow,
+  setSelectedWorkflow = DEFAULT_HANDLER,
 }) {
   const [apiData, setApiData] = useState({
     workflows: [],
@@ -49,11 +49,17 @@ export default function WorkflowsList ({
   }
 
   // Trigger fetchWorkflow every time project changes.
-  useEffect(fetchWorkflows, [project])
+  useEffect(fetchWorkflows, [project]);
+
+  // When a user clicks on the 
+  function workflowRadio_onChange (e) {
+    const selectedWorkflow = (e?.currentTarget?.checked)
+      ? apiData?.workflows?.find(wf => wf.id === e?.currentTarget?.value)
+      : null;
+    setSelectedWorkflow(selectedWorkflow);
+  }
   
   if (!project) return null;
-
-  console.log('+++ apiData.workflows ', apiData.workflows);
 
   return (
     <div>
@@ -61,7 +67,17 @@ export default function WorkflowsList ({
       <ul>
         {apiData.workflows?.map((workflow) => (
           <li key={workflow.id}>
-            {workflow.id} - {workflow.display_name}
+            <input
+              checked={selectedWorkflow?.id === workflow.id}
+              id={`workflows-list-${workflow.id}`}
+              name="available-workflows"
+              onChange={workflowRadio_onChange}
+              type="radio"
+              value={workflow?.id}
+            />
+            <label htmlFor={`workflows-list-${workflow.id}`}>
+              {workflow.id} - {workflow.display_name}
+            </label>
           </li>
         ))}
       </ul>
