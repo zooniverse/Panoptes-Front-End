@@ -7,7 +7,7 @@ function BatchAggregations ({
   closeModal = DEFAULT_HANDLER,  // This component is contained in a <dialog>, this function closes it.
   project,
 }) {
-  const [ currentWorkflow, setCurrentWorkflow ] = useState(undefined);
+  const [ selectedWorkflow, setSelectedWorkflow ] = useState(undefined);
 
   if (!project) return null;
 
@@ -16,10 +16,14 @@ function BatchAggregations ({
       <h4>Batch Aggregations</h4>
 
       <WorkflowsList
-        currentWorkflow={currentWorkflow}
         project={project}
-        setCurrentWorkflow={setCurrentWorkflow}
+        selectedWorkflow={selectedWorkflow}
+        setSelectedWorkflow={setSelectedWorkflow}
       />
+
+      <p>
+        Currently chosen workflow: {selectedWorkflow ? `${selectedWorkflow.id} - ${selectedWorkflow.display_name}` : 'none'}
+      </p>
 
       <div>
         <button onClick={closeModal}>Close</button>
