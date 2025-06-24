@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import apiClient from 'panoptes-client/lib/api-client';
 import getEnv from '../helpers/getEnv.js';
 
 export default function AggregationsChecker ({
@@ -13,7 +14,7 @@ export default function AggregationsChecker ({
     // Sanity check: if there's no workflow, reset everything and then do nothing.
     if (!selectedWorkflow) {
       setApiData({
-        xyz: null,
+        aggregations: [],
         status: 'ready'
       });
       return;
@@ -22,16 +23,16 @@ export default function AggregationsChecker ({
     try {
       // Initialise fetching state, then fetch.
       setApiData({
-        xyz: null,
+        aggregations: [],
         status: 'fetching'
       });
+      const aggregationsResourcesArray = await apiClient.type('aggregations').get({ workflow_id: selectedWorkflow.id  });
 
-      const res = await fetch(`https://panoptes-staging.zooniverse.org/api/aggregations?workflow_id=28510`);
-      // const workflowResourcesArray = await project.get('workflows', { page });
+      console.log('+++ aggregations: ', aggregationsResourcesArray);
       
       // On success, save the results.
       setApiData({
-        xyz: null,
+        aggregations: aggregationsResourcesArray,
         status: 'ready'
       });
     
@@ -39,7 +40,7 @@ export default function AggregationsChecker ({
       // On failure, set error state.
       console.error('AggregationsChecker: ', err);
       setApiData({
-        xyz: null,
+        aggregations: [],
         status: 'error'
       });
     }
@@ -49,10 +50,31 @@ export default function AggregationsChecker ({
 
   if (!selectedWorkflow) return null;
 
+  const env = getEnv();
+
   return (
     <div>
-      Do we have any existing aggregations? Status - {apiData.status} <br/>
-      env - {getEnv()}
+      Do we have any existing aggregations? Status - {apiData.status}
+
+      <ul>
+        {apiData.aggregations?.map(agg => {
+          const updatedTime = new Date(agg.updated_at);
+          const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${selectedWorkflow.id}_aggregation.zip`;
+          const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${selectedWorkflow.id}_reductions.csv`
+          return (
+            <li key={agg.id}>
+              Aggregation #{agg.id} - {agg.status} - {updatedTime.toUTCString()}
+              <br />
+              <a href={linkForZip}>[Download ZIP]</a>
+              <br/>
+              <a href={linkForCsv}>[Download CSV]</a>
+            </li>
+          )
+        })}
+        {apiData.status === 'ready' && !(apiData.aggregations?.length > 0) && (
+          <li>No aggregations found</li>
+        )}
+      </ul>
     </div>
   );
 }
