@@ -6,19 +6,20 @@ export default function AggregationsChecker ({
   selectedWorkflow = null
 }) {
   const [apiData, setApiData] = useState({
-    xyz: null,
+    aggregations: null,
     status: 'ready'
   });
 
+  function reset () {
+    setApiData({
+      aggregations: [],
+      status: 'ready'
+    });
+  }
+
   async function fetchAggregations () {
     // Sanity check: if there's no workflow, reset everything and then do nothing.
-    if (!selectedWorkflow) {
-      setApiData({
-        aggregations: [],
-        status: 'ready'
-      });
-      return;
-    }
+    if (!selectedWorkflow) return reset();
 
     try {
       // Initialise fetching state, then fetch.
@@ -33,7 +34,7 @@ export default function AggregationsChecker ({
       // On success, save the results.
       setApiData({
         aggregations: aggregationsResourcesArray,
-        status: 'ready'
+        status: 'success'
       });
     
     } catch (err) {
@@ -55,10 +56,10 @@ export default function AggregationsChecker ({
   return (
     <div>
       Do we have any existing aggregations? &nbsp;
-      {apiData.status === 'ready' && (
+      {['ready', 'success'].includes(apiData.status) && (
         <button onClick={fetchAggregations}>Refresh</button>
       )}
-      {apiData.status !== 'ready' && apiData.status}
+      {!['ready', 'success'].includes(apiData.status) && apiData.status}
 
       <ul>
         {apiData.aggregations?.map(agg => {
