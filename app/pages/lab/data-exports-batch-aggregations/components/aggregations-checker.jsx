@@ -3,7 +3,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import getEnv from '../helpers/getEnv.js';
 
 export default function AggregationsChecker ({
-  selectedWorkflow = null
+  workflow = null
 }) {
   const [apiData, setApiData] = useState({
     aggregations: null,
@@ -19,7 +19,7 @@ export default function AggregationsChecker ({
 
   async function fetchAggregations () {
     // Sanity check: if there's no workflow, reset everything and then do nothing.
-    if (!selectedWorkflow) return reset();
+    if (!workflow) return reset();
 
     try {
       // Initialise fetching state, then fetch.
@@ -27,7 +27,7 @@ export default function AggregationsChecker ({
         aggregations: [],
         status: 'fetching'
       });
-      const aggregationsResourcesArray = await apiClient.type('aggregations').get({ workflow_id: selectedWorkflow.id  });
+      const aggregationsResourcesArray = await apiClient.type('aggregations').get({ workflow_id: workflow.id  });
 
       console.log('+++ aggregations: ', aggregationsResourcesArray);
       
@@ -47,9 +47,9 @@ export default function AggregationsChecker ({
     }
   }
 
-  useEffect(fetchAggregations, [selectedWorkflow])
+  useEffect(fetchAggregations, [workflow])
 
-  if (!selectedWorkflow) return null;
+  if (!workflow) return null;
 
   const env = getEnv();
 
@@ -64,8 +64,8 @@ export default function AggregationsChecker ({
       <ul>
         {apiData.aggregations?.map(agg => {
           const updatedTime = new Date(agg.updated_at);
-          const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${selectedWorkflow.id}_aggregation.zip`;
-          const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${selectedWorkflow.id}_reductions.csv`
+          const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${workflow.id}_aggregation.zip`;
+          const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${workflow.id}_reductions.csv`
           return (
             <li key={agg.id}>
               Aggregation #{agg.id} - {agg.status} - {updatedTime.toUTCString()} <br/>
@@ -78,7 +78,7 @@ export default function AggregationsChecker ({
             </li>
           )
         })}
-        {apiData.status === 'ready' && !(apiData.aggregations?.length > 0) && (
+        {apiData.status === 'success' && !(apiData.aggregations?.length > 0) && (
           <li>No aggregations found</li>
         )}
       </ul>

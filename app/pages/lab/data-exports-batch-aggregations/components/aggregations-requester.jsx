@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
 export default function AggregationsRequester ({
-  selectedWorkflow,
-  user
+  user,
+  workflow
 }) {
   const [apiData, setApiData] = useState({
     status: 'ready'
@@ -17,7 +17,7 @@ export default function AggregationsRequester ({
 
   async function requestAggregations () {
     // Sanity check: if there's no workflow, reset everything and then do nothing.
-    if (!selectedWorkflow || !user) return reset();
+    if (!user || !workflow) return reset();
 
     try {
       // Initialise fetching state, then fetch.
@@ -29,7 +29,7 @@ export default function AggregationsRequester ({
         'aggregations': {
           'links': {
             'user': `${user.id}`,
-            'workflow': `${selectedWorkflow.id}`
+            'workflow': `${workflow.id}`
           }
         }
       };
@@ -51,9 +51,9 @@ export default function AggregationsRequester ({
     }
   }
 
-  useEffect(reset, [selectedWorkflow, user])
+  useEffect(reset, [user, workflow])
 
-  if (!selectedWorkflow || !user) return null;
+  if (!user || !workflow) return null;
 
   return (
     <div>

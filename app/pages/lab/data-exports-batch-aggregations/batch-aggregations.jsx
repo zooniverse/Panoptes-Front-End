@@ -10,7 +10,7 @@ function BatchAggregations ({
   project,
   user
 }) {
-  const [ selectedWorkflow, setSelectedWorkflow ] = useState(undefined);
+  const [ workflow, setWorkflow ] = useState(undefined);
 
   if (!project) return null;
 
@@ -20,21 +20,21 @@ function BatchAggregations ({
 
       <WorkflowsList
         project={project}
-        selectedWorkflow={selectedWorkflow}
-        setSelectedWorkflow={setSelectedWorkflow}
+        setWorkflow={setWorkflow}
+        workflow={workflow}
       />
 
       <p>
-        Currently chosen workflow: {selectedWorkflow ? `${selectedWorkflow.id} - ${selectedWorkflow.display_name}` : 'none'}
+        Currently chosen workflow: {workflow ? `${workflow.id} - ${workflow.display_name}` : 'none'}
       </p>
 
       <AggregationsChecker
-        selectedWorkflow={selectedWorkflow}
+        workflow={workflow}
       />
 
       <AggregationsRequester
-        selectedWorkflow={selectedWorkflow}
         user={user}
+        workflow={workflow}
       />
 
       <div>
