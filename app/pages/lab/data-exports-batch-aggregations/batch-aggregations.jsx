@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
 import AggregationsChecker from './components/aggregations-checker.jsx';
+import AggregationsRequester from './components/aggregations-requester.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
 function BatchAggregations ({
   closeModal = DEFAULT_HANDLER,  // This component is contained in a <dialog>, this function closes it.
   project,
+  user
 }) {
   const [ selectedWorkflow, setSelectedWorkflow ] = useState(undefined);
 
@@ -28,6 +30,11 @@ function BatchAggregations ({
 
       <AggregationsChecker
         selectedWorkflow={selectedWorkflow}
+      />
+
+      <AggregationsRequester
+        selectedWorkflow={selectedWorkflow}
+        user={user}
       />
 
       <div>

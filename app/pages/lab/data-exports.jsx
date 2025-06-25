@@ -95,6 +95,7 @@ export default function DataExports (props) {
           <div className="row">
             <BatchAggregations
               project={props.project}
+              user={props.user}
             />
           </div>
           <div className="row">
