@@ -33,9 +33,8 @@ export default function AggregationsRequester ({
           }
         }
       };
-      const test = await apiClient.post(url, payload);
-
-      console.log('+++ test: ', test);
+      const testResponse = await apiClient.post(url, payload);
+      console.log('+++ test: ', testResponse);
       
       setApiData({
         status: 'success'
@@ -45,7 +44,6 @@ export default function AggregationsRequester ({
       // On failure, set error state.
       console.error('AggregationsChecker: ', err);
       setApiData({
-        aggregations: [],
         status: 'error'
       });
     }
@@ -59,7 +57,7 @@ export default function AggregationsRequester ({
     <div>
       {['ready'].includes(apiData.status)
         ? <button onClick={requestAggregations}>Request new Batch Aggregations</button>
-        : apiClient.status
+        : apiData.status
       }
     </div>
   );
