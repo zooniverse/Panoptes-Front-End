@@ -4,8 +4,8 @@ const DEFAULT_HANDLER = () => {};
 
 export default function WorkflowsList ({
   project,
-  selectedWorkflow,
-  setSelectedWorkflow = DEFAULT_HANDLER,
+  setWorkflow = DEFAULT_HANDLER,
+  workflow,
 }) {
   const [apiData, setApiData] = useState({
     workflows: [],
@@ -53,10 +53,10 @@ export default function WorkflowsList ({
 
   // When a user clicks on the 
   function workflowRadio_onChange (e) {
-    const selectedWorkflow = (e?.currentTarget?.checked)
+    const workflow = (e?.currentTarget?.checked)
       ? apiData?.workflows?.find(wf => wf.id === e?.currentTarget?.value)
       : null;
-    setSelectedWorkflow(selectedWorkflow);
+    setWorkflow(workflow);
   }
   
   if (!project) return null;
@@ -65,18 +65,18 @@ export default function WorkflowsList ({
     <div>
       List of workflows - {apiData.status}
       <ul>
-        {apiData.workflows?.map((workflow) => (
-          <li key={workflow.id}>
+        {apiData.workflows?.map((wf) => (
+          <li key={wf.id}>
             <input
-              checked={selectedWorkflow?.id === workflow.id}
-              id={`workflows-list-${workflow.id}`}
+              checked={workflow?.id === wf.id}
+              id={`workflows-list-${wf.id}`}
               name="available-workflows"
               onChange={workflowRadio_onChange}
               type="radio"
-              value={workflow?.id}
+              value={wf.id}
             />
-            <label htmlFor={`workflows-list-${workflow.id}`}>
-              {workflow.id} - {workflow.display_name}
+            <label htmlFor={`workflows-list-${wf.id}`}>
+              {wf.id} - {wf.display_name}
             </label>
           </li>
         ))}
