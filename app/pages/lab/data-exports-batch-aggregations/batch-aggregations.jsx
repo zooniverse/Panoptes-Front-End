@@ -23,14 +23,20 @@ function BatchAggregations ({
         workflow={workflow}
       />
 
+      <hr/>
+
       <p>
         Currently chosen workflow: {workflow ? `${workflow.id} - ${workflow.display_name}` : 'none'}
       </p>
+
+      <hr/>
 
       <AggregationsChecker
         user={user}
         workflow={workflow}
       />
+
+      <hr/>
 
       <div>
         <button onClick={closeModal}>Close</button>
