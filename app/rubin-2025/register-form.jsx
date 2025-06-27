@@ -296,7 +296,7 @@ class RegisterForm extends React.Component {
             id="register-form-email"
             name="email"
             onChange={this.handleUserInput}
-            type="text"
+            type="email"
             value={this.state.input_email}
           />
         </div>
