@@ -16,13 +16,15 @@ export default function AggregationsChecker ({
 }) {
   const [apiData, setApiData] = useState({
     aggregations: null,  // Despite the plural, this is either null or a single object.
-    status: 'ready'
+    status: 'ready',
+    statusMessage: '',
   });
 
   function reset () {
     setApiData({
       aggregations: null,
-      status: 'ready'
+      status: 'ready',
+      statusMessage: ''
     });
   }
 
@@ -30,7 +32,8 @@ export default function AggregationsChecker ({
     console.error(err);
     setApiData({
       aggregations: null,
-      status: 'error'
+      status: 'error',
+      statusMessage: err
     });
   }
 
@@ -133,6 +136,10 @@ export default function AggregationsChecker ({
       )}
       {!['ready', 'success'].includes(apiData.status) && apiData.status}
 
+      {apiData.statusMessage && (
+        <span style={{ color: 'red' }}>&nbsp; {apiData.statusMessage?.toString()}</span>
+      )}
+
       <br/>
       <br/>
 
@@ -164,8 +171,6 @@ export default function AggregationsChecker ({
           <button onClick={requestNewAggregations}>➕ Request new Aggregations</button>
         </div>
       )}
-
-      <br/>
     </div>
   );
 }
