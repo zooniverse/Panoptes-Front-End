@@ -48,11 +48,11 @@ export default function AggregationsChecker ({
   }
 
   async function requestNewAggregations () {
-    // Sanity check: if there's no workflow, reset everything and then do nothing.
+    // Sanity check: if there's no workflow (or user), reset everything and then do nothing.
     if (!user || !workflow) return reset();
 
     try {
-      // Initialise fetching state, then fetch.
+      // Initialise requesting state, then post.
       setApiData({
         aggregations: null,
         status: 'requesting'
@@ -84,7 +84,37 @@ export default function AggregationsChecker ({
     }
   }
 
-  useEffect(fetchAggregations, [user, workflow])
+  async function deleteAggregations () {
+    // Sanity check: if there's no workflow or aggregation, reset everything and then do nothing.
+    if (!workflow || !apiData.aggregations) return reset();
+
+    try {
+      const aggregations = apiData.aggregations;
+
+      // Initialise deleting state, then delete.
+      setApiData({
+        aggregations: null,
+        status: 'deleting'
+      });
+      
+      await aggregations.delete();
+      
+      setApiData({
+        aggregations: null,
+        status: 'success'
+      });
+    
+    } catch (err) {
+      // On failure, set error state.
+      console.error('AggregationsChecker: ', err);
+      setApiData({
+        aggregations: null,
+        status: 'error'
+      });
+    }
+  }
+
+  useEffect(fetchAggregations, [user, workflow]);
 
   if (!user || !workflow) return null;
 
@@ -119,7 +149,7 @@ export default function AggregationsChecker ({
               <br/>
             </span>
           )}
-          <button>Delete existing aggregations</button> - you need to do this if you want to request a new one.
+          <button onClick={deleteAggregations}>Delete existing aggregations</button> - you need to do this if you want to request a new one.
         </div>
       )}
 
