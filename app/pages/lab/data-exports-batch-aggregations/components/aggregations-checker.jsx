@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import getEnv from '../helpers/getEnv.js';
 
+function getAggStatusSymbol (aggStatus) {
+  switch (aggStatus) {
+    case 'pending': return '🟡';
+    case 'completed': return '🟢';
+    default: return '⚪️';
+  }
+}
+
 export default function AggregationsChecker ({
   user = null,
   workflow = null
@@ -121,7 +129,7 @@ export default function AggregationsChecker ({
     <div>
       Do we have any existing aggregations? &nbsp;
       {['ready', 'success'].includes(apiData.status) && (
-        <button onClick={fetchAggregations}>Refresh</button>
+        <button onClick={fetchAggregations}>🔄 Refresh</button>
       )}
       {!['ready', 'success'].includes(apiData.status) && apiData.status}
 
@@ -130,7 +138,7 @@ export default function AggregationsChecker ({
 
       {apiData.status === 'success' && apiData.aggregations && (
         <div>
-          Aggregation #{apiData.aggregations.id} - {apiData.aggregations.status} - {updatedTime.toUTCString()}
+          Aggregation #{apiData.aggregations.id} - {getAggStatusSymbol(apiData.aggregations.status)} {apiData.aggregations.status} - {updatedTime.toUTCString()}
           <br/>
           {apiData.aggregations.status === 'completed' && (
             <span>
@@ -142,7 +150,7 @@ export default function AggregationsChecker ({
           )}
 
           <br/>
-          <button onClick={deleteAggregations}>Delete existing aggregations</button>
+          <button onClick={deleteAggregations}>❌ Delete existing aggregations</button>
           <br/>
           <i>you need to do this if you want to request a new one.</i>
         </div>
@@ -153,7 +161,7 @@ export default function AggregationsChecker ({
           No aggregations found.
           <br/>
           <br/>
-          <button onClick={requestNewAggregations}>Request new Aggregations</button>
+          <button onClick={requestNewAggregations}>➕ Request new Aggregations</button>
         </div>
       )}
 
