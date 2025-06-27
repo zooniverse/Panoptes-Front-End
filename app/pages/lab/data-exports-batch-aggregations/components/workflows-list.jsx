@@ -11,8 +11,10 @@ export default function WorkflowsList ({
     workflows: [],
     status: 'ready'
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
 
-  async function fetchWorkflows () {
+  async function fetchWorkflows (page = currentPage) {
     // Sanity check: if there's no project, reset everything and then do nothing.
     if (!project) {
       setApiData({
@@ -23,15 +25,21 @@ export default function WorkflowsList ({
     }
 
     try {
-      const page = 1;  // TODO: paging
-
       // Initialise fetching state, then fetch.
       setApiData({
         workflows: [],
         status: 'fetching'
       });
       const workflowResourcesArray = await project.get('workflows', { page });
-      
+
+      // How many pages of results do we have?
+      const resultsMeta = workflowResourcesArray?.[0].getMeta()
+      if (resultsMeta) {
+        setMaxPage(resultsMeta.page_count)
+      } else {
+        setMaxPage(1);
+      }
+
       // On success, save the results.
       setApiData({
         workflows: workflowResourcesArray,
@@ -51,12 +59,20 @@ export default function WorkflowsList ({
   // Trigger fetchWorkflow every time project changes.
   useEffect(fetchWorkflows, [project]);
 
-  // When a user clicks on the 
+  // When a user clicks on a workflow, select that workflow.
   function workflowRadio_onChange (e) {
     const workflow = (e?.currentTarget?.checked)
       ? apiData?.workflows?.find(wf => wf.id === e?.currentTarget?.value)
       : null;
     setWorkflow(workflow);
+  }
+
+  // When user changes the page number, fetch a new page of workflows
+  function pageInput_onChange (e) {
+    let newPage = parseInt(e?.currentTarget.value) || 1;
+    newPage = Math.max(Math.min(newPage, maxPage), 1);
+    setCurrentPage(newPage);
+    fetchWorkflows(newPage);
   }
   
   if (!project) return null;
@@ -64,6 +80,21 @@ export default function WorkflowsList ({
   return (
     <div>
       List of workflows - {apiData.status}
+
+      <div>
+        Page
+        &nbsp;
+        <input
+          max={maxPage}
+          min="1"
+          onChange={pageInput_onChange}
+          type="number"
+          value={currentPage}
+        />
+        &nbsp;
+        of {maxPage}
+      </div>
+
       <ul>
         {apiData.workflows?.map((wf) => (
           <li key={wf.id}>
@@ -81,6 +112,7 @@ export default function WorkflowsList ({
           </li>
         ))}
       </ul>
+
     </div>
   );
 }
