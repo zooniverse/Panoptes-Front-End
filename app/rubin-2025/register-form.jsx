@@ -320,8 +320,6 @@ class RegisterForm extends React.Component {
             id="register-form-creditedName"
             name="creditedName"
             onChange={this.handleUserInput}
-            pattern='[^@]+'
-            title={counterpart('registerForm.realNamePatternHelp')}
             type="text"
             value={this.state.input_creditedName}
           />
