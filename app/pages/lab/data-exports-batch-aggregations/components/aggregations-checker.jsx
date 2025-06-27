@@ -3,16 +3,17 @@ import apiClient from 'panoptes-client/lib/api-client';
 import getEnv from '../helpers/getEnv.js';
 
 export default function AggregationsChecker ({
+  user = null,
   workflow = null
 }) {
   const [apiData, setApiData] = useState({
-    aggregations: null,
+    aggregations: null,  // Despite the plural, this is either null or a single object.
     status: 'ready'
   });
 
   function reset () {
     setApiData({
-      aggregations: [],
+      aggregations: null,
       status: 'ready'
     });
   }
@@ -24,16 +25,15 @@ export default function AggregationsChecker ({
     try {
       // Initialise fetching state, then fetch.
       setApiData({
-        aggregations: [],
+        aggregations: null,
         status: 'fetching'
       });
       const aggregationsResourcesArray = await apiClient.type('aggregations').get({ workflow_id: workflow.id  });
-
-      console.log('+++ aggregations: ', aggregationsResourcesArray);
+      const aggregations = aggregationsResourcesArray?.[0];
       
       // On success, save the results.
       setApiData({
-        aggregations: aggregationsResourcesArray,
+        aggregations: aggregations,
         status: 'success'
       });
     
@@ -41,17 +41,59 @@ export default function AggregationsChecker ({
       // On failure, set error state.
       console.error('AggregationsChecker: ', err);
       setApiData({
-        aggregations: [],
+        aggregations: null,
         status: 'error'
       });
     }
   }
 
-  useEffect(fetchAggregations, [workflow])
+  async function requestNewAggregations () {
+    // Sanity check: if there's no workflow, reset everything and then do nothing.
+    if (!user || !workflow) return reset();
 
-  if (!workflow) return null;
+    try {
+      // Initialise fetching state, then fetch.
+      setApiData({
+        aggregations: null,
+        status: 'requesting'
+      });
+      const url = '/aggregations';
+      const payload = {
+        'aggregations': {
+          'links': {
+            'user': `${user.id}`,
+            'workflow': `${workflow.id}`
+          }
+        }
+      };
+      const testResponse = await apiClient.post(url, payload);
+      console.log('+++ test: ', testResponse);
+      
+      setApiData({
+        aggregations: null,
+        status: 'success'
+      });
+    
+    } catch (err) {
+      // On failure, set error state.
+      console.error('AggregationsChecker: ', err);
+      setApiData({
+        aggregations: null,
+        status: 'error'
+      });
+    }
+  }
+
+  useEffect(fetchAggregations, [user, workflow])
+
+  if (!user || !workflow) return null;
 
   const env = getEnv();
+
+  // Aggregations data, if any.
+  const updatedTime = new Date(apiData.aggregations?.updated_at);
+  const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${apiData.aggregations?.uuid}/${workflow.id}_aggregation.zip`;
+  const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${apiData.aggregations?.uuid}/${workflow.id}_reductions.csv`;
 
   return (
     <div>
@@ -61,27 +103,35 @@ export default function AggregationsChecker ({
       )}
       {!['ready', 'success'].includes(apiData.status) && apiData.status}
 
-      <ul>
-        {apiData.aggregations?.map(agg => {
-          const updatedTime = new Date(agg.updated_at);
-          const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${workflow.id}_aggregation.zip`;
-          const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${workflow.id}_reductions.csv`
-          return (
-            <li key={agg.id}>
-              Aggregation #{agg.id} - {agg.status} - {updatedTime.toUTCString()} <br/>
-              {agg.status === 'completed' && (
-                <span>
-                  <a href={linkForZip}>[Download ZIP]</a>
-                  <a href={linkForCsv}>[Download CSV]</a>
-                </span>
-              )}
-            </li>
-          )
-        })}
-        {apiData.status === 'success' && !(apiData.aggregations?.length > 0) && (
-          <li>No aggregations found</li>
-        )}
-      </ul>
+      <br/>
+      <br/>
+
+      {apiData.status === 'success' && apiData.aggregations && (
+        <div>
+          Aggregation #{apiData.aggregations.id} - {apiData.aggregations.status} - {updatedTime.toUTCString()}
+          <br/>
+          {apiData.aggregations.status === 'completed' && (
+            <span>
+              <a href={linkForZip}>[Download ZIP]</a>
+              &nbsp;
+              <a href={linkForCsv}>[Download CSV]</a>
+              <br/>
+              <br/>
+            </span>
+          )}
+          <button>Delete existing aggregations</button> - you need to do this if you want to request a new one.
+        </div>
+      )}
+
+      {apiData.status === 'success' && !apiData.aggregations && (
+        <div>
+          No aggregations found.
+          <br/>
+          <button onClick={requestNewAggregations}>Request new Aggregations</button>
+        </div>
+      )}
+
+      <br/>
     </div>
   );
 }

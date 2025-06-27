@@ -29,10 +29,6 @@ function BatchAggregations ({
       </p>
 
       <AggregationsChecker
-        workflow={workflow}
-      />
-
-      <AggregationsRequester
         user={user}
         workflow={workflow}
       />
