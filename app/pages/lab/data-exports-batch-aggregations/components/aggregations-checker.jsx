@@ -66,11 +66,11 @@ export default function AggregationsChecker ({
           }
         }
       };
-      const testResponse = await apiClient.post(url, payload);
-      console.log('+++ test: ', testResponse);
+      const aggregationsResourcesArray = await apiClient.post(url, payload);
+      const aggregations = aggregationsResourcesArray?.[0];
       
       setApiData({
-        aggregations: null,
+        aggregations: aggregations,
         status: 'success'
       });
     
