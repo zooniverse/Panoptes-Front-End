@@ -18,6 +18,14 @@ export default function AggregationsChecker ({
     });
   }
 
+  function onError (err) {
+    console.error(err);
+    setApiData({
+      aggregations: null,
+      status: 'error'
+    });
+  }
+
   async function fetchAggregations () {
     // Sanity check: if there's no workflow, reset everything and then do nothing.
     if (!workflow) return reset();
@@ -38,12 +46,7 @@ export default function AggregationsChecker ({
       });
     
     } catch (err) {
-      // On failure, set error state.
-      console.error('AggregationsChecker: ', err);
-      setApiData({
-        aggregations: null,
-        status: 'error'
-      });
+      onError(err);
     }
   }
 
@@ -75,12 +78,7 @@ export default function AggregationsChecker ({
       });
     
     } catch (err) {
-      // On failure, set error state.
-      console.error('AggregationsChecker: ', err);
-      setApiData({
-        aggregations: null,
-        status: 'error'
-      });
+      onError(err);
     }
   }
 
@@ -96,7 +94,6 @@ export default function AggregationsChecker ({
         aggregations: null,
         status: 'deleting'
       });
-      
       await aggregations.delete();
       
       setApiData({
@@ -105,12 +102,7 @@ export default function AggregationsChecker ({
       });
     
     } catch (err) {
-      // On failure, set error state.
-      console.error('AggregationsChecker: ', err);
-      setApiData({
-        aggregations: null,
-        status: 'error'
-      });
+      onError(err);
     }
   }
 
@@ -146,16 +138,20 @@ export default function AggregationsChecker ({
               &nbsp;
               <a href={linkForCsv}>[Download CSV]</a>
               <br/>
-              <br/>
             </span>
           )}
-          <button onClick={deleteAggregations}>Delete existing aggregations</button> - you need to do this if you want to request a new one.
+
+          <br/>
+          <button onClick={deleteAggregations}>Delete existing aggregations</button>
+          <br/>
+          <i>you need to do this if you want to request a new one.</i>
         </div>
       )}
 
       {apiData.status === 'success' && !apiData.aggregations && (
         <div>
           No aggregations found.
+          <br/>
           <br/>
           <button onClick={requestNewAggregations}>Request new Aggregations</button>
         </div>
