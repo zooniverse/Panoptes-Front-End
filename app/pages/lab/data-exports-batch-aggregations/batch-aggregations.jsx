@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
 import AggregationsChecker from './components/aggregations-checker.jsx';
-import AggregationsRequester from './components/aggregations-requester.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
