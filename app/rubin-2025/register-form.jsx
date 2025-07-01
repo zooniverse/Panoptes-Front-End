@@ -79,233 +79,328 @@ class RegisterForm extends React.Component {
     return (
       <form className="register-form" method="POST" onSubmit={this.handleSubmit}>
         
-        <label className="form-separator">
-          <input
-            type="checkbox"
-            checked={this.state.underAge}
-            disabled={inputDisabled}
-            onChange={this.updateAge}
-          />
-          <Translate component="span" content="registerForm.underAge" />
-        </label>
+        <div className="form-row">
+          <span className="checkbox-block">
+            <input
+              checked={this.state.underAge}
+              disabled={inputDisabled}
+              id="register-form-underAge"
+              name="underAge"
+              onChange={this.updateAge}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-underAge">
+              <Translate component="span" content="registerForm.underAge" />
+            </label>
+          </span>
+        </div>
 
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.userName" />
-            {badNameChars?.length > 0 && (
-              <Translate className="form-help error" content="registerForm.badChars" />
-            )}
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-login">
+              <Translate content="registerForm.userName" />
+            </label>
+
+            <div id="register-form-login-help-message-1">
+              {badNameChars?.length > 0 && (
+                <Translate className="form-help error" content="registerForm.badChars" />
+              )}
+            </div>
+
             {"nameConflict" in this.state.pending && (
               <LoadingIndicator />
             )}
-            {nameConflict && (
-              <span className="form-help error">
-                <Translate content="registerForm.nameConflict" />{' '}
-                <a href={`${window.location.origin}/reset-password`}>
-                  <Translate content="registerForm.forgotPassword" />
-                </a>
-              </span>
-            )}
-            {(this.state.input_login?.length > 0
-              && nameConflict === false
-            ) && (
-              <span className="form-help success">
-                <Translate content="registerForm.looksGood" />
-              </span>
-            )}
-            <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
+
+            <div id="register-form-login-help-message-2">
+              {nameConflict && (
+                <span className="form-help error">
+                  <Translate content="registerForm.nameConflict" />{' '}
+                  <a href={`${window.location.origin}/reset-password`}>
+                    <Translate content="registerForm.forgotPassword" />
+                  </a>
+                </span>
+              )}
+            </div>
+
+            <div id="register-form-login-help-message-looksGood">
+              {(this.state.input_login?.length > 0
+                && nameConflict === false
+                && !("nameConflict" in this.state.pending)
+              ) && (
+                <span className="form-help success">
+                  <Translate
+                    content="registerForm.looksGood"
+                  />
+                </span>
+              )}
+            </div>
+
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-login-help-message-required"
+            />
+          </div>
+
           <input
-            type="text"
-            name="login"
+            autoComplete="username"
+            aria-describedby="register-form-error-message register-form-login-help-message-1 register-form-login-help-message-2 register-form-login-help-message-looksGood register-form-login-help-message-required register-form-login-help-message-whyUserName"
+            className="standard-input full"
+            disabled={inputDisabled}
             id="register-form-login"
-            value={this.state.input_login}
-            className="standard-input full"
-            disabled={inputDisabled}
-            autoFocus
-            onChange={this.handleUserInput}
             maxLength="255"
+            name="login"
+            onChange={this.handleUserInput}
+            type="text"
+            value={this.state.input_login}
           />
-          <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
-          {this.state.underAge && (
-            <Translate component="span" className="form-help info" content="registerForm.notRealName" />
-          )}
-        </label>
 
-        <br />
-
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.password" />
-            {passwordTooShort && (
-              <Translate className="form-help error" content="registerForm.passwordTooShort" />
+          <div id="register-form-login-help-message-whyUserName">
+            <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
+            {this.state.underAge && (
+              <Translate component="span" className="form-help info" content="registerForm.notRealName" />
             )}
-            <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-password">
+              <Translate content="registerForm.password" />
+            </label>
+            
+            <div id="register-form-password-help-message">
+              {passwordTooShort && (
+                <Translate className="form-help error" content="registerForm.passwordTooShort" />
+              )}
+            </div>
+
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-password-help-required"
+            />
+          </div>
           <input
-            type="password"
-            name="password"
+            autoComplete="new-password"
+            aria-describedby="register-form-error-message register-form-password-help-message register-form-password-help-required"
+            className="standard-input full"
+            disabled={inputDisabled}
             id="register-form-password"
-            value={this.state.input_password}
-            className="standard-input full"
-            disabled={inputDisabled}
+            name="password"
             onChange={this.handleUserInput}
-          />
-        </label>
-
-        <br />
-
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.confirmPassword" /><br />
-            {passwordsDontMatch && (
-              <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
-            )}
-            {(this.state.input_password?.length > 0
-              && this.state.input_confirmedPassword?.length > 0
-              && !passwordsDontMatch
-              && !passwordTooShort
-            ) && (
-              <Translate className="form-help success" content="registerForm.looksGood" />
-            )}
-            <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
-          <input
             type="password"
-            name="confirmedPassword"
-            id="register-form-confirmedPassword"
-            value={this.state.input_confirmedPassword}
+            value={this.state.input_password}
+          />
+        </div>
+
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-confirmedPassword">
+              <Translate content="registerForm.confirmPassword" />
+            </label>
+            
+            <div id="register-form-confirmedPassword-help-message">
+              {passwordsDontMatch && (
+                <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
+              )}
+            </div>
+
+            <div id="register-form-confirmedPassword-help-looksGood">
+              {(this.state.input_password?.length > 0
+                && this.state.input_confirmedPassword?.length > 0
+                && !passwordsDontMatch
+                && !passwordTooShort
+              ) && (
+                <Translate className="form-help success" content="registerForm.looksGood" />
+              )}
+            </div>
+
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-confirmedPassword-help-required"
+            />
+          </div>
+          <input
+            aria-describedby="register-form-confirmedPassword-help-message register-form-confirmedPassword-help-looksGood register-form-confirmedPassword-help-required"
             className="standard-input full"
             disabled={inputDisabled}
+            id="register-form-confirmedPassword"
+            name="confirmedPassword"
             onChange={this.handleUserInput}
+            type="password"
+            value={this.state.input_confirmedPassword}
           />
-        </label>
+        </div>
 
-        <br />
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-email">
+              {this.state.underAge
+                ? <Translate content="registerForm.guardianEmail" />
+                : <Translate content="registerForm.email" />
+              }
+            </label>
 
-        <label>
-          <span className="columns-container inline spread">
-            {this.state.underAge
-              ? <Translate content="registerForm.guardianEmail" />
-              : <Translate content="registerForm.email" />
-            }
-            {emailInvalidChars && (
-              <Translate className="form-help error" content="registerForm.emailInvalidChars" />
-            )}
-            {(!emailInvalidChars && emailInvalidFormat) && (
-              <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
-            )}
+            <div id="register-form-email-help-message-1">
+              {emailInvalidChars && (
+                <Translate className="form-help error" content="registerForm.emailInvalidChars" />
+              )}
+            </div>
+
+            <div id="register-form-email-help-message-2">
+              {(!emailInvalidChars && emailInvalidFormat) && (
+                <Translate className="form-help info" content="registerForm.emailInvalidFormat" />
+              )}
+            </div>
+
             {'emailConflict' in this.state.pending && (
               <LoadingIndicator />
             )}
-            {emailConflict && (
-              <span className="form-help error">
-                <Translate content="registerForm.emailConflict" />{' '}
-                <a href={`${window.location.origin}/reset-password`}>
-                  <Translate content="registerForm.forgotPassword" />
-                </a>
-              </span>
-            )}
-            {(this.state.input_email?.length > 0
-              && !emailConflict
-              && !emailInvalidChars
-              && !emailInvalidFormat
-            ) && (
-              <Translate className="form-help success" content="registerForm.looksGood" />
-            )}
-            <Translate className="form-help info right-align" content="registerForm.required" />
-          </span>
+
+            <div id="register-form-email-help-message-3">
+              {emailConflict && (
+                <span className="form-help error">
+                  <Translate content="registerForm.emailConflict" />{' '}
+                  <a href={`${window.location.origin}/reset-password`}>
+                    <Translate content="registerForm.forgotPassword" />
+                  </a>
+                </span>
+              )}
+            </div>
+
+            <div id="register-form-email-help-message-looksGood">
+              {(this.state.input_email?.length > 0
+                && !emailConflict
+                && !emailInvalidChars
+                && !emailInvalidFormat
+                && !('emailConflict' in this.state.pending)
+              ) && (
+                <Translate className="form-help success" content="registerForm.looksGood" />
+              )}
+            </div>
+
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.required"
+              id="register-form-email-help-message-required"
+            />
+          </div>
+
           <input
-            type="text"
-            name="email"
+            autoComplete="email"
+            aria-describedby="register-form-error-message register-form-email-help-message-1 register-form-email-help-message-2 register-form-email-help-message-3 register-form-email-help-message-looksGood register-form-email-help-message-required"
+            className="standard-input full"
+            disabled={inputDisabled}
             id="register-form-email"
+            name="email"
+            onChange={this.handleUserInput}
+            type="email"
             value={this.state.input_email}
+          />
+        </div>
+
+        <div className="form-row">
+          <div className="label-block">
+            <label htmlFor="register-form-creditedName">
+              <Translate content="registerForm.realName" />
+            </label>
+            <Translate
+              className="form-help info right-align"
+              content="registerForm.optional"
+              id="register-form-creditedName-help-message-optional"
+            />
+          </div>
+          <input
+            autoComplete="name"
+            aria-describedby="register-form-creditedName-help-message-optional register-form-creditedName-help-message-whyRealName"
             className="standard-input full"
             disabled={inputDisabled}
-            onChange={this.handleUserInput}
-          />
-        </label>
-
-        <br />
-
-        <label>
-          <span className="columns-container inline spread">
-            <Translate content="registerForm.realName" />
-            <Translate className="form-help info right-align" content="registerForm.optional" />
-          </span>
-          <input
-            type="text"
-            pattern='[^@]+'
-            name="creditedName"
             id="register-form-creditedName"
+            name="creditedName"
+            onChange={this.handleUserInput}
+            type="text"
             value={this.state.input_creditedName}
-            className="standard-input full"
-            disabled={inputDisabled}
-            title={counterpart('registerForm.realNamePatternHelp')}
-            onChange={this.handleUserInput}
           />
-          <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
-        </label>
-
-        <br />
-        <br />
-
-        <label>
-          <input
-            type="checkbox"
-            disabled={inputDisabled}
-            checked={!!this.state.agreeToPrivacyPolicy}
-            onChange={this.handlePrivacyPolicyChange}
+          <Translate
+            component="span"
+            className="form-help info"
+            content="registerForm.whyRealName"
+            id="register-form-creditedName-help-message-whyRealName"
           />
-          {this.state.underAge
-            ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} />
-            : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
-          }
-        </label>
+        </div>
 
-        <br />
-        <br />
+        <div className="form-row">
+          <div className="checkbox-block">
+            <input
+              checked={!!this.state.agreeToPrivacyPolicy}
+              disabled={inputDisabled}
+              name="agreeToPrivacyPolicy"
+              id="register-form-agreeToPrivacyPolicy"
+              onChange={this.handlePrivacyPolicyChange}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-agreeToPrivacyPolicy">
+              {this.state.underAge
+                ? <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} />
+                : <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
+              }
+            </label>
+          </div>
+        </div>
 
-        <label>
-          <input
-            type="checkbox"
-            name="okayToEmail"
-            id="register-form-okayToEmail"
-            checked={this.state.input_okayToEmail}
-            disabled={inputDisabled}
-            onChange={this.handleUserInput}
-          />
-          {this.state.underAge
-            ? <Translate component="span" content="registerForm.underAgeEmail" />
-            : <Translate component="span" content="registerForm.okayToEmail" />
-          }
-        </label><br />
+        <div className="form-row">
+          <div className="checkbox-block">
+            <input
+              checked={this.state.input_okayToEmail}
+              disabled={inputDisabled}
+              name="okayToEmail"
+              id="register-form-okayToEmail"
+              onChange={this.handleUserInput}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-okayToEmail">
+              {this.state.underAge
+                ? <Translate component="span" content="registerForm.underAgeEmail" />
+                : <Translate component="span" content="registerForm.okayToEmail" />
+              }
+            </label>
+          </div>
 
-        <label>
-          <input
-            type="checkbox"
-            name="betaTester"
-            id="register-form-betaTester"
-            checked={this.state.input_betaTester}
-            disabled={inputDisabled}
-            onChange={this.handleUserInput}
-          />
-          <Translate component="span" content="registerForm.betaTester" />
-        </label><br />
+          <div className="checkbox-block">
+            <input
+              checked={this.state.input_betaTester}
+              disabled={inputDisabled}
+              name="betaTester"
+              id="register-form-betaTester"
+              onChange={this.handleUserInput}
+              type="checkbox"
+            />
+            <label htmlFor="register-form-betaTester">
+              <Translate component="span" content="registerForm.betaTester" />
+            </label>
+          </div>
+        </div>
 
-        <p style={{ textAlign: 'center' }}>
-          {'user' in this.state.pending
-            ? <LoadingIndicator />
-            : this.props.user != null
-            ? <span className="form-help warning">
-                <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
-                <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
-              </span>
-            : this.state.error != null
-            ? <span className="form-help error">{this.state.error.toString()}</span>
-            : <span>&nbsp;</span>
-          }
-        </p>
+        <div className="center-align">
+          {'user' in this.state.pending && (
+            <LoadingIndicator />
+          )}
+
+          {this.props.user && (
+            <span className="form-help warning">
+              <Translate content="registerForm.alreadySignedIn" name={this.props.user.login} />{' '}
+              <button type="button" className="minor-button" onClick={this.handleSignOut}><Translate content="registerForm.signOut" /></button>
+            </span>
+          )}
+
+          <div id="register-form-error-message" className="form-help error">
+            {this.state.error && (
+              <span>{this.state.error.toString()}</span>
+            )}
+          </div>
+        </div>
 
         <div className="form-row submit-row">
           <button

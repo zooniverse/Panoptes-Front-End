@@ -139,7 +139,7 @@
   form
     accent-color: #005D69
     
-    input[type=text], input[type=password]
+    input[type=text], input[type=password], input[type=email]
       border-radius: 4px
       border: 0.5px solid #A6A7A9
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.60) 100%), #FFF
@@ -155,11 +155,24 @@
       width: 300px
       max-width: 100%
     
+    .label-block
+      align-items: baseline
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      justify-content: space-between
+      margin-bottom: 2px
+    
+    .checkbox-block
+      display: flex
+      gap: 0.1em
+
     .form-row
-      margin: 1em
+      margin: 1em 0
 
       &.submit-row
+      &.center-align
         display: flex
         flex-direction: row
         justify-content: center
-
+        gap: 1em

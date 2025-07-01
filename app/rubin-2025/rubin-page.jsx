@@ -20,21 +20,24 @@ counterpart.registerTranslations('en', {
 });
 
 function RubinPage ({
+  initialLoadComplete = false,
+  location,
   user
 }) {
-  const [tab, setTab] = useState('register')
-  const [successMessage, setSuccessMessage] = useState('')
+  const startingTab = /\/sign\-in$/g.test(location?.pathname) ? 'sign-in' : 'register';
+  const [tab, setTab] = useState(startingTab);
+  const [successMessage, setSuccessMessage] = useState('');
 
   function onTabClick (e) {
-    setTab(e?.currentTarget?.dataset?.tab)
+    setTab(e?.currentTarget?.dataset?.tab);
   }
 
   function onSignInSuccess () {
-    setSuccessMessage('successfullySignedIn')
+    setSuccessMessage('successfullySignedIn');
   }
 
   function onRegisterSuccess () {
-    setSuccessMessage('successfullyRegistered')
+    setSuccessMessage('successfullyRegistered');
   }
 
   /*
@@ -59,6 +62,8 @@ function RubinPage ({
     // Focus on the next tab.
     siblings?.[nextIndex].focus();
   }
+
+  if (!initialLoadComplete) { return null; }
 
   return (
     <div className="new-accounts-page content-container">
@@ -104,24 +109,26 @@ function RubinPage ({
             <div className="tabs">
               <nav role="tablist">
                 <button
-                  role="tab"
+                  aria-selected={tab !== 'register'}
+                  className={`tab ${tab !== 'register' ? 'active' : ''}`}
+                  data-tab="sign-in"
                   id="new-accounts-page-tab-sign-in"
-                  type="button"
                   onClick={onTabClick}
                   onKeyDown={onTabKeyPress}
-                  data-tab="sign-in"
-                  className={`tab ${tab !== 'register' ? 'active' : ''}`}
+                  role="tab"
+                  type="button"
                 >
                   <Translate content="newAccountsPage.signIn" />
                 </button>
                 <button
-                  role="tab"
+                  aria-selected={tab === 'register'}
+                  className={`tab ${tab === 'register' ? 'active' : ''}`}
+                  data-tab="register"
                   id="new-accounts-page-tab-register"
-                  type="button"
                   onClick={onTabClick}
                   onKeyDown={onTabKeyPress}
-                  data-tab="register"
-                  className={`tab ${tab === 'register' ? 'active' : ''}`}
+                  role="tab"
+                  type="button"
                 >
                   <Translate content="newAccountsPage.register" />
                 </button>
@@ -152,6 +159,10 @@ function RubinPage ({
 };
 
 RubinPage.propTypes = {
+  initialLoadComplete: PropTypes.bool,  // .initialLoadComplete is provided by app.cjsx via React.cloneElement
+  location: PropTypes.shape({  // .location is provided by react-router's Router in main.cjsx
+    pathname: PropTypes.string
+  }),
   user: PropTypes.shape({  // .user is provided by app.cjsx via React.cloneElement
     id: PropTypes.string
   })
