@@ -101,9 +101,10 @@ function SubjectNode({
   });
 
   const { src } = getSubjectLocation(subject);
+  const volumetricClass = subject?.metadata['metadata:volumetric'] ? 'volumetric' : ''
 
   return (
-    <div className="collection-subject-viewer">
+    <div className={`collection-subject-viewer ${volumetricClass}`}>
       <SubjectViewer
         defaultStyle={false}
         subject={subject}
