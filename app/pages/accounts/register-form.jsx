@@ -1,9 +1,8 @@
-import counterpart from 'counterpart';
 import React from 'react';
 import PropTypes from 'prop-types';
 import auth from 'panoptes-client/lib/auth';
 import Translate from 'react-translate-component';
-import LoadingIndicator from '../components/loading-indicator';
+import LoadingIndicator from '../../components/loading-indicator';
 import debounce from 'debounce';
 
 const REMOTE_CHECK_DELAY = 1000;
