@@ -19,7 +19,7 @@ counterpart.registerTranslations('en', {
   }
 });
 
-function RubinPage ({
+function AccountsPage ({
   initialLoadComplete = false,
   location,
   user
@@ -158,7 +158,7 @@ function RubinPage ({
   )
 };
 
-RubinPage.propTypes = {
+AccountsPage.propTypes = {
   initialLoadComplete: PropTypes.bool,  // .initialLoadComplete is provided by app.cjsx via React.cloneElement
   location: PropTypes.shape({  // .location is provided by react-router's Router in main.cjsx
     pathname: PropTypes.string
@@ -168,4 +168,4 @@ RubinPage.propTypes = {
   })
 };
 
-export default RubinPage;
+export default AccountsPage;
