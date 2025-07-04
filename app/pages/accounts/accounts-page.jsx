@@ -15,7 +15,7 @@ function AccountsPage ({
   location,
   user
 }) {
-  const startingTab = /\/sign\-in$/g.test(location?.pathname) ? 'sign-in' : 'register';
+  const startingTab = /\/register$/g.test(location?.pathname) ? 'register' : 'sign-in';
   const [tab, setTab] = useState(startingTab);
   const [successMessage, setSuccessMessage] = useState('');
 
