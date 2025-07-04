@@ -35,6 +35,7 @@ import YouthPrivacyPolicy from './pages/youth-privacy-policy';
 import SecurityPolicy from './pages/security-policy';
 import AdminPage from './pages/admin';
 import SignInPage from './pages/sign-in';
+import AccountsPage from './pages/accounts';
 import RubinPage from './rubin-2025/rubin-page.jsx';  // Part of Rubin 2025 project. See /app/rubin-2025 
 import NotFoundPage from './pages/not-found';
 import ResetPasswordPage from './pages/reset-password/reset-password';
@@ -121,10 +122,15 @@ export const routes = (
 
     <Route path="unsubscribe" component={UnsubscribeFromEmails} />
 
-    <Route path="accounts" component={SignInPage}>
+    <Route path="accounts-old" component={SignInPage}>
       <IndexRoute component={require('./partials/sign-in-form')} />
       <Route path="sign-in" component={require('./partials/sign-in-form')} />
       <Route path="register" component={require('./partials/register-form')} />
+    </Route>
+
+    <Route path="accounts" component={AccountsPage}>
+      <Route path="sign-in" />
+      <Route path="register" />
     </Route>
 
     {/* Part of Rubin 2025 project. See /app/rubin-2025 */}
