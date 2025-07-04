@@ -10,15 +10,6 @@ import { RegisterForm } from './register-form.jsx';
 // TODO: find a more centralised place to put this
 import zooniverseLogo from '../lab-pages-editor/assets/zooniverse-word-white.png'
 
-counterpart.registerTranslations('en', {
-  rubinPage: {
-    callToAction: {
-      toZooniverseProjects: 'Check out existing Zooniverse space projects',
-      toRubinAbout: 'Read more about Rubin'
-    }
-  }
-});
-
 function AccountsPage ({
   initialLoadComplete = false,
   location,
@@ -74,9 +65,9 @@ function AccountsPage ({
       <section>
         <div className="content-inner">
           <div className="page-info">
-            <Helmet title={'Zooniverse & Rubin 2025'} />
-            <h1>Zooniverse &amp; Rubin 2025</h1>
-            <p>Welcome to the Zooniverse, the home of Vera C. Rubin Observatory citizen science. We'll be launching the first projects with Rubin data in the next few weeks, so to be among the first to see data and help our scientists then sign up below, and we'll be in touch. In the meantime, to learn more and to enjoy the first images released by the Observatory go to <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">Rubinobservatory.org.</a></p>
+            <Helmet title={counterpart('signIn.register')} />
+            <Translate component="h1" content="signIn.withZooniverse" />
+            <Translate component="p" content="signIn.whyHaveAccount" />
           </div>
 
           {user && successMessage && (
@@ -94,14 +85,14 @@ function AccountsPage ({
               </p>
               <ul className="call-to-action">
                 <li>
-                  <Link to="/projects?discipline=astronomy&page=1&status=live">
-                    <Translate content='rubinPage.callToAction.toZooniverseProjects' />
+                  <Link to="/">
+                    <Translate content="newAccountsPage.alreadySignedInLinks.gotoHomepage" />
                   </Link>
                 </li>
                 <li>
-                  <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">
-                    <Translate content='rubinPage.callToAction.toRubinAbout' />
-                  </a>
+                  <Link to="/projects">
+                    <Translate content="newAccountsPage.alreadySignedInLinks.gotoProjects" />
+                  </Link>
                 </li>
               </ul>
             </div>
