@@ -92,12 +92,14 @@ export default function DataExports (props) {
               </div>
             )
           }
-          <div className="row">
-            <BatchAggregations
-              project={props.project}
-              user={props.user}
-            />
-          </div>
+          {props.project?.experimental_tools?.includes('batchAggregations') && (
+            <div className="row">
+              <BatchAggregations
+                project={props.project}
+                user={props.user}
+              />
+            </div>
+          )}
           <div className="row">
             <p>
               <strong>Workflow contents export: </strong>
