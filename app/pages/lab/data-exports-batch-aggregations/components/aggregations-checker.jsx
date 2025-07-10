@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import getEnv from '../helpers/getEnv.js';
+import getAPIEnv from '../helpers/getAPIEnv.js';
 
 function getAggStatusSymbol (aggStatus) {
   switch (aggStatus) {
@@ -121,7 +121,7 @@ export default function AggregationsChecker ({
 
   if (!user || !workflow) return null;
 
-  const env = getEnv();
+  const env = getAPIEnv();
 
   // Aggregations data, if any.
   const updatedTime = new Date(apiData.aggregations?.updated_at);

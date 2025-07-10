@@ -1,6 +1,6 @@
 const DEFAULT_ENV = 'development'
 
-export default function getEnv() {
+export default function getAPIEnv() {
   const params = new URLSearchParams(window?.location?.search);
   const envFromShell = process.env.NODE_ENV;
   const envFromBrowser = params.get('env');
