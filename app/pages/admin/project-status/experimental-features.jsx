@@ -5,6 +5,7 @@ import AutoSave from '../../../components/auto-save';
 const experimentalFeatures = [
   'allow workflow query',
   'anchoredEllipse',
+  'batchAggregations',  // Enables Data Export => Batch Aggregations UI. See /app/pages/lab/data-exports-batch-aggregations in this repo
   'caesarDataFetching',  // Indicates that the Project should pull data from Caesar
   'combo',
   'crop',
