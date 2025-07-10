@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { bool, shape, string } from 'prop-types';
 import React, { useState } from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -37,11 +37,10 @@ function AccountsPage ({
    */
   function onTabKeyPress (keyboardEvent) {
     const currentNode = keyboardEvent?.currentTarget;
-    const siblings = currentNode?.parentNode?.childNodes;
+    const siblings = Array.from(currentNode?.parentNode?.childNodes || []);
 
     // Find what/where's the current tab, in relation to its siblings.
-    let currentIndex = -1;
-    siblings.forEach((node, index) => { if (node === currentNode) { currentIndex = index } });
+    const currentIndex = siblings.indexOf(currentNode);
     if (currentIndex < 0) return;  // Error!
 
     // Choose the next tab we're going to focus on.
@@ -150,12 +149,12 @@ function AccountsPage ({
 };
 
 AccountsPage.propTypes = {
-  initialLoadComplete: PropTypes.bool,  // .initialLoadComplete is provided by app.cjsx via React.cloneElement
-  location: PropTypes.shape({  // .location is provided by react-router's Router in main.cjsx
-    pathname: PropTypes.string
+  initialLoadComplete: bool,  // .initialLoadComplete is provided by app.cjsx via React.cloneElement
+  location: shape({  // .location is provided by react-router's Router in main.cjsx
+    pathname: string
   }),
-  user: PropTypes.shape({  // .user is provided by app.cjsx via React.cloneElement
-    id: PropTypes.string
+  user: shape({  // .user is provided by app.cjsx via React.cloneElement
+    id: string
   })
 };
 

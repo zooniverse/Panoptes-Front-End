@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { func, object } from 'prop-types';
 import auth from 'panoptes-client/lib/auth';
 import Translate from 'react-translate-component';
 import LoadingIndicator from '../../components/loading-indicator';
@@ -638,10 +638,10 @@ class RegisterForm extends React.Component {
 }
 
 RegisterForm.propTypes = {
-  onFailure: PropTypes.func,
-  onSubmit: PropTypes.func,
-  onSuccess: PropTypes.func,
-  user: PropTypes.object
+  onFailure: func,
+  onSubmit: func,
+  onSuccess: func,
+  user: object
 };
 
 export { RegisterForm };

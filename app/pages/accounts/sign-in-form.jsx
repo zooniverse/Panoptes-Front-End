@@ -7,7 +7,7 @@ Converted from CoffeeScript on 15 May 2025. There's room for improvement.
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { func, object } from 'prop-types';
 import Translate from 'react-translate-component';
 import auth from 'panoptes-client/lib/auth';
 import LoadingIndicator from '../../components/loading-indicator';
@@ -175,10 +175,10 @@ class SignInForm extends React.Component {
 }
 
 SignInForm.propTypes = {
-  onFailure: PropTypes.func,
-  onSubmit: PropTypes.func,
-  onSuccess: PropTypes.func,
-  user: PropTypes.object
+  onFailure: func,
+  onSubmit: func,
+  onSuccess: func,
+  user: object
 };
 
 export { SignInForm };
