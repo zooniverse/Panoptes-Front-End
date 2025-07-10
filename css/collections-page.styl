@@ -192,6 +192,19 @@ $collection-viewer-button
             .button
               @extends $collection-viewer-button
 
+    .collection-subject-viewer.volumetric
+      .planes-container
+        display: none
+      .volume-container
+        border-radius: 0
+        height: inherit
+        min-width: inherit
+        overflow: hidden
+        padding: 0 !important
+
+        .volume-controls
+          display: none
+
     .collection-subject-viewer__default-label
       background: TEAL_MID
       border-radius: initial
