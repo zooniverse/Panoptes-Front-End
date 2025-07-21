@@ -145,7 +145,7 @@ export default function AggregationsChecker ({
 
       {apiData.status === 'success' && apiData.aggregations && (
         <div>
-          Aggregation #{apiData.aggregations.id} - {getAggStatusSymbol(apiData.aggregations.status)} {apiData.aggregations.status} - {updatedTime.toUTCString()}
+          Aggregation #{apiData.aggregations.id} - {getAggStatusSymbol(apiData.aggregations.status)} {apiData.aggregations.status} - {updatedTime.toLocaleTimeString()}
           <br/>
           {apiData.aggregations.status === 'completed' && (
             <span>
