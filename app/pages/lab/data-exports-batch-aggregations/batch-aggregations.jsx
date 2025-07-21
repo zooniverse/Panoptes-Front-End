@@ -1,56 +1,40 @@
-import React, { useState } from 'react';
-import WorkflowsList from './components/workflows-list.jsx';
-import AggregationsChecker from './components/aggregations-checker.jsx';
+import React, { useRef } from 'react';
+import BatchAggregationsDialog from './batch-aggregations-dialog.jsx';
 
-// TODO: find a better place to put shared items
-import CloseIcon from '../../lab-pages-editor/icons/CloseIcon.jsx';
+function BatchAggregations ({ project, user }) {
+  const batchAggregationsDialog = useRef(null);
 
-const DEFAULT_HANDLER = () => {};
+  function toggleDialog () {
+    if (batchAggregationsDialog?.current?.open) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  }
 
-function BatchAggregations ({
-  closeModal = DEFAULT_HANDLER,  // This component is contained in a <dialog>, this function closes it.
-  project,
-  user
-}) {
-  const [ workflow, setWorkflow ] = useState(undefined);
+  function openModal () {
+    batchAggregationsDialog?.current?.showModal();
+  }
 
-  if (!project) return null;
+  function closeModal () {
+    batchAggregationsDialog?.current?.close();
+  }
+
+  // DEBUG: open modal for development's sake
+  setTimeout(openModal, 100)
 
   return (
     <div className="batch-aggregations">
-      <div className="batch-aggregations-header">
-        <h2>Batch Aggregations</h2>
-        <button
-          aria-label="Close dialog"
-          className="button close-button"
-          onClick={closeModal}
-        >
-          <CloseIcon />
-        </button>
-      </div>
-
-      <div className="batch-aggregations-info">
-        <p>(TODO: info)</p>
-      </div>
-
-      <WorkflowsList
-        project={project}
-        setWorkflow={setWorkflow}
-        workflow={workflow}
-      />
-
-      <hr/>
-
-      <p>
-        Currently chosen workflow: {workflow ? `${workflow.id} - ${workflow.display_name}` : 'none'}
-      </p>
-
-      <hr/>
-
-      <AggregationsChecker
-        user={user}
-        workflow={workflow}
-      />
+      <button onClick={toggleDialog}>
+        Aggregate My Results
+      </button>
+      <dialog ref={batchAggregationsDialog}>
+        <BatchAggregationsDialog
+          closeModal={closeModal}
+          project={project}
+          user={user}
+        />
+      </dialog>
     </div>
   );
 }

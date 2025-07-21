@@ -1,3 +1,3 @@
-import BatchAggregations from './batch-aggregations-container.jsx';
+import BatchAggregations from './batch-aggregations.jsx';
 
 export default BatchAggregations;
