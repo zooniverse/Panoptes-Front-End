@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import WorkflowItem from './workflow-item.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
@@ -60,7 +61,7 @@ export default function WorkflowsList ({
   useEffect(fetchWorkflows, [project]);
 
   // When a user clicks on a workflow, select that workflow.
-  function workflowRadio_onChange (e) {
+  function workflowItem_onChange (e) {
     const workflow = (e?.currentTarget?.checked)
       ? apiData?.workflows?.find(wf => wf.id === e?.currentTarget?.value)
       : null;
@@ -97,19 +98,12 @@ export default function WorkflowsList ({
 
       <ul>
         {apiData.workflows?.map((wf) => (
-          <li key={wf.id}>
-            <input
-              checked={workflow?.id === wf.id}
-              id={`workflows-list-${wf.id}`}
-              name="available-workflows"
-              onChange={workflowRadio_onChange}
-              type="radio"
-              value={wf.id}
-            />
-            <label htmlFor={`workflows-list-${wf.id}`}>
-              {wf.id} - {wf.display_name}
-            </label>
-          </li>
+          <WorkflowItem
+            key={wf.id}
+            checked={wf.id === workflow?.id}
+            onChange={workflowItem_onChange}
+            workflow={wf}
+          />
         ))}
       </ul>
 
