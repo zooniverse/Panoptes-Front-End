@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
 import AggregationsChecker from './components/aggregations-checker.jsx';
+import ExpandableContainer from './components/expandable-container.jsx';
 
 // TODO: find a better place to put shared items
 import CloseIcon from '../../lab-pages-editor/icons/CloseIcon.jsx';
@@ -33,12 +34,18 @@ function BatchAggregationsDialog ({
         <p>Two exports are necessary to generate a batch aggregation.</p>
       </div>
 
-      <WorkflowsList
-        project={project}
-        setWorkflow={setWorkflow}
-        workflow={workflow}
-      />
+      <ExpandableContainer
+        header={<span><b>1</b> Classifications by Workflow</span>}
+      >
+        <p>Choose which workflow to include in the export here. Only workflows with Question tasks or Survey tasks are compatible with our batch aggregation export at this time.</p>
+        <WorkflowsList
+          project={project}
+          setWorkflow={setWorkflow}
+          workflow={workflow}
+        />
+      </ExpandableContainer>
 
+      {/*
       <hr/>
 
       <p>
@@ -46,11 +53,43 @@ function BatchAggregationsDialog ({
       </p>
 
       <hr/>
+      */}
 
-      <AggregationsChecker
-        user={user}
-        workflow={workflow}
-      />
+      <ExpandableContainer
+        header={<span><b>2</b> Workflow(s Export)</span>}
+      >
+        <div>
+          <i>PLACEHOLDER</i>
+          <p>✅ Workflow(s!) was last exported on <b>XYZ</b></p> 
+        </div>
+      </ExpandableContainer>
+
+      <ExpandableContainer
+        header={<span><b>3</b> Summary</span>}
+      >
+        <div>
+          <i>PLACEHOLDER</i>
+          {workflow ? (
+            <p>✅ Selected workflow is valid</p>
+          ) : (
+            <p>❌ No workflow selected, OR selected workflow is valid</p>
+          )}
+          <p>✅ Workflows export is valid </p>
+        </div>
+
+        <div>
+          <button disabled={!workflow}>Generate</button>
+        </div>
+      </ExpandableContainer>
+      
+      <ExpandableContainer
+        header={<i>DEBUG</i>}
+      >
+        <AggregationsChecker
+          user={user}
+          workflow={workflow}
+        />
+      </ExpandableContainer>
     </div>
   );
 }
