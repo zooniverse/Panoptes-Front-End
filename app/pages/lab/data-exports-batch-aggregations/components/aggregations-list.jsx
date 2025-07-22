@@ -53,6 +53,7 @@ function AggregationsList ({
       const aggregations = await apiClient.type('aggregations').get({
         project_id: project.id,
         sort: '-workflow_id',
+        page,
         page_size: 3  // TESTING ONLY
       });
 
@@ -123,23 +124,22 @@ function AggregationsList ({
             key={agg.id}
             className="aggregation-item"
           >
-            Workflow {agg.links?.workflow} - Aggregation #{agg.id}
-            <br/>
-            {getAggStatusSymbol(agg.status)} {agg.status} - {updatedTime.toLocaleTimeString()}
-            <br/>
+            <div>
+              Workflow {agg.links?.workflow} - Aggregation #{agg.id}
+            </div>
+            <div>
+              {getAggStatusSymbol(agg.status)} {agg.status} - {updatedTime.toLocaleTimeString()}
+            </div>
             {agg.status === 'completed' && (
-              <span>
+              <div>
                 <a href={linkForZip}>[Download ZIP]</a>
                 &nbsp;
                 <a href={linkForCsv}>[Download CSV]</a>
-                <br/>
-              </span>
+              </div>
             )}
-
-            <br/>
-            <button onClick={() => { alert('TODO') }}>❌ Delete existing aggregations</button>
-            <br/>
-            <i>you need to do this if you want to request a new one.</i>
+            <div>
+              <button onClick={() => { alert('TODO') }}>❌ Delete</button>
+            </div>
           </div>
         );
       })}
