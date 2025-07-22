@@ -18,6 +18,8 @@ function BatchAggregationsResults ({
     status: 'ready',
     statusMessage: '',
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
 
   function reset () {
     setApiData({
@@ -25,6 +27,8 @@ function BatchAggregationsResults ({
       status: 'ready',
       statusMessage: ''
     });
+    setCurrentPage(1);
+    setMaxPage(1);
   }
 
   function onError (err) {
@@ -36,7 +40,7 @@ function BatchAggregationsResults ({
     });
   }
 
-  async function fetchAggregations () {
+  async function fetchAggregations (page = currentPage) {
     // Sanity check: if there's no project, reset everything and then do nothing.
     if (!project) return reset();
 
@@ -51,7 +55,13 @@ function BatchAggregationsResults ({
         sort: '-workflow_id'
       });
 
-      console.log('+++ aggregations: ', aggregations);
+      // How many pages of results do we have?
+      const aggMeta = aggregations?.[0].getMeta()
+      if (aggMeta) {
+        setMaxPage(aggMeta.page_count)
+      } else {
+        setMaxPage(1);
+      }
       
       // On success, save the results.
       setApiData({
@@ -66,6 +76,14 @@ function BatchAggregationsResults ({
 
   useEffect(fetchAggregations, [project]);
 
+  // When user changes the page number, fetch a new page of workflows
+  function pageInput_onChange (e) {
+    let newPage = parseInt(e?.currentTarget.value) || 1;
+    newPage = Math.max(Math.min(newPage, maxPage), 1);
+    setCurrentPage(newPage);
+    fetchAggregations(newPage);
+  }
+
   if (!project) return null;
 
   const env = getAPIEnv();
@@ -73,6 +91,20 @@ function BatchAggregationsResults ({
   return (
     <div className="batch-aggregations-results">
       <span>Results: {apiData.status}</span>
+
+      <div>
+        Page
+        &nbsp;
+        <input
+          max={maxPage}
+          min="1"
+          onChange={pageInput_onChange}
+          type="number"
+          value={currentPage}
+        />
+        &nbsp;
+        of {maxPage}
+      </div>
 
       {apiData.status === 'success' && apiData.aggregations.length === 0 && (
         <div>
