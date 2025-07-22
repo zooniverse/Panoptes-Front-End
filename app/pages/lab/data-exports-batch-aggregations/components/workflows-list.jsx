@@ -105,16 +105,23 @@ export default function WorkflowsList ({
         </div>
       )}
 
-      <ul>
-        {apiData.workflows?.map((wf) => (
-          <WorkflowItem
-            key={wf.id}
-            checked={wf.id === workflow?.id}
-            onChange={workflowItem_onChange}
-            workflow={wf}
-          />
-        ))}
-      </ul>
+      <table>
+        <tbody>
+          <tr>
+            <td><b>Workflow</b></td>
+            <td><b>ID</b></td>
+            <td><b>Last Requested</b></td>
+          </tr>
+          {apiData.workflows?.map((wf) => (
+            <WorkflowItem
+              key={wf.id}
+              checked={wf.id === workflow?.id}
+              onChange={workflowItem_onChange}
+              workflow={wf}
+            />
+          ))}
+        </tbody>
+      </table>
 
     </div>
   );

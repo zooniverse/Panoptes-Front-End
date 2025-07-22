@@ -129,7 +129,7 @@ function AggregationsList ({
                 Workflow {agg.links?.workflow} - Aggregation #{agg.id}
               </div>
               <div>
-                {getAggStatusSymbol(agg.status)} {agg.status} - {updatedTime.toLocaleTimeString()}
+                {getAggStatusSymbol(agg.status)} {agg.status} - {updatedTime.toLocaleString()}
               </div>
               {agg.status === 'completed' && (
                 <div>
