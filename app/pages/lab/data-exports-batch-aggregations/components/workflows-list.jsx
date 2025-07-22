@@ -82,7 +82,7 @@ export default function WorkflowsList ({
   if (!project) return null;
 
   return (
-    <div>
+    <div className="workflows-list">
       List of workflows - {apiData.status}
 
       <div>
@@ -98,6 +98,12 @@ export default function WorkflowsList ({
         &nbsp;
         of {maxPage}
       </div>
+
+      {apiData.status === 'success' && apiData.workflows.length === 0 && (
+        <div className="message">
+          There are no workflows for this project.
+        </div>
+      )}
 
       <ul>
         {apiData.workflows?.map((wf) => (

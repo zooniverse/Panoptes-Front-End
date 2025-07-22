@@ -61,6 +61,7 @@ export default function WorkflowItem ({
 
   return (
     <li
+      className="workflow-item"
       style={{ color: (selectionDisabled) ? '#a0a0a0' : undefined }}
     >
       <input
