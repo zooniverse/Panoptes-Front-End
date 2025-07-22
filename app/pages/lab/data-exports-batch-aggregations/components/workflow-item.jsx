@@ -60,35 +60,41 @@ export default function WorkflowItem ({
   const selectionDisabled = (apiData.status !== 'success');
 
   return (
-    <li
+    <tr
       className="workflow-item"
       style={{ color: (selectionDisabled) ? '#a0a0a0' : undefined }}
     >
-      <input
-        checked={checked}
-        disabled={selectionDisabled}
-        id={`workflows-list-${workflow.id}`}
-        name="available-workflows"
-        onChange={onChange}
-        type="radio"
-        value={workflow.id}
-      />
-      <label htmlFor={`workflows-list-${workflow.id}`}>
-        {workflow.id} - {workflow.display_name}
-      </label>
+      <td>
+        <input
+          checked={checked}
+          disabled={selectionDisabled}
+          id={`workflows-list-${workflow.id}`}
+          name="available-workflows"
+          onChange={onChange}
+          type="radio"
+          value={workflow.id}
+        />
+        <label htmlFor={`workflows-list-${workflow.id}`}>
+          {workflow.display_name}
+        </label>
+      </td>
+      <td>
+        {workflow.id}
+      </td>
 
-      {(apiData.status === 'success') && (
-        <span>
-          &nbsp; ✔️ Exported {updatedTime.toLocaleTimeString()}
-        </span>
-      )}
+      <td>
+        {(apiData.status === 'success') && (
+          <span>
+            Exported {updatedTime.toLocaleString()}
+          </span>
+        )}
+        {(apiData.status === 'no-data') && (
+          <span>
+            Never
+          </span>
+        )}
+      </td>
 
-      {(apiData.status === 'no-data') && (
-        <span>
-          &nbsp; ❌ No data export
-        </span>
-      )}
-
-    </li>
+    </tr>
   );
 }
