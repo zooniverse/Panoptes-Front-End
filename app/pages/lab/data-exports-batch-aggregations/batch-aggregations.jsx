@@ -25,10 +25,14 @@ function BatchAggregations ({ project, user }) {
   // setTimeout(openModal, 100)
 
   return (
-    <div className="batch-aggregations">
-      <button onClick={toggleDialog}>
-        Aggregate My Results
-      </button>
+    <section className="batch-aggregations">
+      <div className="flex-row">
+        <h3>Aggregate My Results</h3>
+        <span className="spacer" />
+        <button onClick={toggleDialog}>
+          Configure
+        </button>
+      </div>
       <BatchAggregationsResults
         project={project}
       />
@@ -39,7 +43,7 @@ function BatchAggregations ({ project, user }) {
           user={user}
         />
       </dialog>
-    </div>
+    </section>
   );
 }
 
