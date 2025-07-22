@@ -33,7 +33,7 @@ export default function WorkflowsList ({
       });
       const workflowResourcesArray = await project.get('workflows', {
         page,
-        page_size: 3  // TESTING ONLY
+        // page_size: 3  // TESTING ONLY
       });
 
       // How many pages of results do we have?
