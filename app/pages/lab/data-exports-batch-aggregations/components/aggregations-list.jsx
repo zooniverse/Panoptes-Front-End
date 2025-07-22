@@ -114,35 +114,37 @@ function AggregationsList ({
         </div>
       )}
 
-      {apiData.aggregations.map(agg => {
-        const updatedTime = new Date(agg.updated_at);
-        const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${agg.links?.workflow}_aggregation.zip`;
-        const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${agg.links?.workflow}_reductions.csv`;
+      <ul>
+        {apiData.aggregations.map(agg => {
+          const updatedTime = new Date(agg.updated_at);
+          const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${agg.links?.workflow}_aggregation.zip`;
+          const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${agg.links?.workflow}_reductions.csv`;
 
-        return (
-          <div
-            key={agg.id}
-            className="aggregation-item"
-          >
-            <div>
-              Workflow {agg.links?.workflow} - Aggregation #{agg.id}
-            </div>
-            <div>
-              {getAggStatusSymbol(agg.status)} {agg.status} - {updatedTime.toLocaleTimeString()}
-            </div>
-            {agg.status === 'completed' && (
+          return (
+            <li
+              key={agg.id}
+              className="aggregation-item"
+            >
               <div>
-                <a href={linkForZip}>[Download ZIP]</a>
-                &nbsp;
-                <a href={linkForCsv}>[Download CSV]</a>
+                Workflow {agg.links?.workflow} - Aggregation #{agg.id}
               </div>
-            )}
-            <div>
-              <button onClick={() => { alert('TODO') }}>❌ Delete</button>
-            </div>
-          </div>
-        );
-      })}
+              <div>
+                {getAggStatusSymbol(agg.status)} {agg.status} - {updatedTime.toLocaleTimeString()}
+              </div>
+              {agg.status === 'completed' && (
+                <div>
+                  <a href={linkForZip}>[Download ZIP]</a>
+                  &nbsp;
+                  <a href={linkForCsv}>[Download CSV]</a>
+                </div>
+              )}
+              <div>
+                <button onClick={() => { alert('TODO') }}>❌ Delete</button>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

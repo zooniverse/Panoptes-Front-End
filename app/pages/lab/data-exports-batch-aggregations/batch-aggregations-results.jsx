@@ -8,7 +8,7 @@ function BatchAggregationsResults ({
   project
 }) {
   return (
-    <div className="batch-aggregations-result">
+    <div className="batch-aggregations-results">
       <AggregationsList
         project={project}
       />

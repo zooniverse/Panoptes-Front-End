@@ -8,20 +8,7 @@
 
 .batch-aggregations
   border: 1px solid LIGHT_GREY
-
-  > dialog
-    max-height: 90vh
-    max-width: 90vw
-    overflow: auto
-    padding: 5px 20px
-
-    border: none
-    border-radius: 8px
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #FFF
-    box-shadow: 1px 1px 12px 8px rgba(0, 0, 0, 0.25)
-
-.batch-aggregations-dialog
-  padding-bottom: 1em
+  padding: 10px
 
   flex-row()
     align-items: center
@@ -40,23 +27,51 @@
     border: none
     cursor: pointer
 
-  .batch-aggregations-header
-    flex-row()
+  > dialog
+    max-height: 90vh
+    max-width: 90vw
+    overflow: auto
+    padding: 5px 20px
 
-    h2
-      flex: 1 1 auto
-      color: #000
-      leading-trim: both
-      text-edge: cap
-      font-size: 18px
-      font-style: normal
-      font-weight: 600
-      line-height: normal
-      letter-spacing: 0.9px
+    border: none
+    border-radius: 8px
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #FFF
+    box-shadow: 1px 1px 12px 8px rgba(0, 0, 0, 0.25)
 
-    .close-button
-      color: #5C5C5C
-      padding: 0
-  
-  .batch-aggregations-info
+  .batch-aggregations-dialog
+    padding-bottom: 1em
+
+    .batch-aggregations-header
+      flex-row()
+
+      h2
+        flex: 1 1 auto
+        color: #000
+        leading-trim: both
+        text-edge: cap
+        font-size: 18px
+        font-style: normal
+        font-weight: 600
+        line-height: normal
+        letter-spacing: 0.9px
+
+      .close-button
+        color: #5C5C5C
+        padding: 0
+    
+    .batch-aggregations-info
+      // void
+
+  .batch-aggregations-results
     // void
+
+    .aggregations-list
+
+      ul
+        list-style: none
+        padding: 0
+      
+      li
+        border: 1px solid LIGHT_GREY
+        margin: 5px
+        padding: 5px
