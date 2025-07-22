@@ -52,7 +52,8 @@ function BatchAggregationsResults ({
       });
       const aggregations = await apiClient.type('aggregations').get({
         project_id: project.id,
-        sort: '-workflow_id'
+        sort: '-workflow_id',
+        page_size: 3  // TESTING ONLY
       });
 
       // How many pages of results do we have?
