@@ -20,7 +20,6 @@ export default function WorkflowItem ({
         status: 'fetching'
       });
       const wfcExportData = await workflow.get('classifications_export');
-      console.log('+++ wfcExportData', wfcExportData);
 
       // On success, save the results.
       setApiData({

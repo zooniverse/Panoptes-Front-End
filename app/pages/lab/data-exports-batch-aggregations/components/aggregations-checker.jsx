@@ -117,7 +117,7 @@ export default function AggregationsChecker ({
     }
   }
 
-  useEffect(fetchAggregations, [user, workflow]);
+  useEffect(fetchAggregations, [workflow]);
 
   if (!user || !workflow) return null;
 
