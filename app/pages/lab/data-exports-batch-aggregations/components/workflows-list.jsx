@@ -31,7 +31,10 @@ export default function WorkflowsList ({
         workflows: [],
         status: 'fetching'
       });
-      const workflowResourcesArray = await project.get('workflows', { page });
+      const workflowResourcesArray = await project.get('workflows', {
+        page,
+        page_size: 3  // TESTING ONLY
+      });
 
       // How many pages of results do we have?
       const resultsMeta = workflowResourcesArray?.[0].getMeta()
