@@ -30,7 +30,7 @@ function BatchAggregationsDialog ({
       </div>
 
       <div className="batch-aggregations-info">
-        <p>(TODO: info)</p>
+        <p>Two exports are necessary to generate a batch aggregation.</p>
       </div>
 
       <WorkflowsList
