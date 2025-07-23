@@ -1,3 +1,19 @@
+/*
+Workflow Item
+Displays a single item on the Workflows List. (See worklows-list.jsx)
+
+- Displays basic workflow details, and the workflow's most recent "workflow
+  classifications" export.
+- Contains a radio input that lets users select this workflow.
+- Radio input is DISABLED if workflow doesn't have a corresponding "workflow
+  classifications" export!
+
+Arguments:
+- checked: indicates if the radio input is checked.
+- onChange: callback function, for when the radio input is changed.
+- workflow: the workflow to display. (Panoptes Workflow Resource)
+*/
+
 import React, { useEffect, useState } from 'react';
 
 const DEFAULT_FUNCTION = () => {};
@@ -34,22 +50,6 @@ export default function WorkflowItem ({
         status: 'no-data'
       });
     }
-
-    /*
-    workflow.get('classifications_export')
-    .then((media) => {
-      const mediaState = this.state.media;
-      mediaState[workflow.id] = media[0];
-      this.setState({ media: mediaState });
-    })
-    .catch((error) => {
-      if (error.status !== 404) {
-        const workflowErrorState = this.state.workflowError;
-        workflowErrorState[workflow.id] = error[0];
-        this.setState({ workflowError: workflowErrorState });
-      }
-    });
-    */
   }
 
   useEffect(fetchWorkflowClassificationExportStatus, [workflow]);
