@@ -1,3 +1,23 @@
+/*
+Aggregations Checker
+Given a workflow, this component checks if that workflow has any aggregations
+from the Panoptes /aggregations endpoint.
+
+NOTE: a workflow can only have ONE aggregation associated with it, or none at
+all.
+
+- Displays information on any existing aggregation.
+- Allows a new aggregation to be requested, if the workflow doesn't have one 
+  (either pending, completed, or error-ed out).
+- Allows an existing aggregation to be deleted.
+
+Arguments:
+- user: currently logged-in user. (Panoptes User Resource)
+- workflow: currently selected workflow. (Panoptes Workflow Resource)
+
+Currently used as a debug tool.
+ */
+
 import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import getAPIEnv from '../helpers/getAPIEnv.js';

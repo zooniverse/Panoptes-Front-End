@@ -1,3 +1,15 @@
+/*
+Expandable Container
+A typical accordion design.
+
+Arguments:
+- children: content to be displayed when container is expanded.
+- header: content to be displayed in the container's header.
+- startExpanded: does the container start off expanded? (boolean)
+
+TODO: accessibility pass
+ */
+
 import React, { useState } from 'react';
 
 export default function ExpandableContainer ({

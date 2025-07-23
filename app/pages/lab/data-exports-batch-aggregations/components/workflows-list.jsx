@@ -1,3 +1,16 @@
+/*
+Workflows List
+Displays all workflows that belong to a project, and allows users to select
+which workflow they want to interact with.
+
+- Supports paging.
+
+Arguments:
+- project: the project whose workflows we want to list. (Panoptes Project Resource)
+- setWorkflow: sets currently selected workflow.
+- workflow: currently selected workflow. (Panoptes Workflow Resource)
+ */
+
 import React, { useEffect, useState } from 'react';
 import WorkflowItem from './workflow-item.jsx';
 
