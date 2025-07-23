@@ -12,7 +12,7 @@ Arguments:
 - checked: indicates if the radio input is checked.
 - onChange: callback function, for when the radio input is changed.
 - workflow: the workflow to display. (Panoptes Workflow Resource)
-*/
+ */
 
 import React, { useEffect, useState } from 'react';
 
