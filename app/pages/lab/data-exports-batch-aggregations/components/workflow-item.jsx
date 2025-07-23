@@ -16,11 +16,11 @@ Arguments:
 
 import React, { useEffect, useState } from 'react';
 
-const DEFAULT_FUNCTION = () => {};
+const DEFAULT_HANDLER = () => {};
 
 export default function WorkflowItem ({
   checked = false,
-  onChange = DEFAULT_FUNCTION,
+  onChange = DEFAULT_HANDLER,
   workflow
 }) {
   const [apiData, setApiData] = useState({
