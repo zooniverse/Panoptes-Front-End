@@ -103,7 +103,8 @@ export const SLUGS = [
   'sandiegozooglobal/wildwatch-burrowing-owl',
   'mschwamb/planet-hunters-ngts',
   'orionnau/active-asteroids',
-  'bg557/field-journal-fix-up'
+  'bg557/field-journal-fix-up',
+  'healion90/weather-archive-africa'
 ];
 
 export function usesMonorepo(slug) {
