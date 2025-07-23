@@ -13,6 +13,7 @@ Arguments:
 import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import getAPIEnv from '../helpers/getAPIEnv.js';
+import AggregationItem from './aggregation-item.jsx'
 
 function getAggStatusSymbol (aggStatus) {
   switch (aggStatus) {
@@ -127,35 +128,12 @@ function AggregationsList ({
       )}
 
       <ul>
-        {apiData.aggregations.map(agg => {
-          const updatedTime = new Date(agg.updated_at);
-          const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${agg.links?.workflow}_aggregation.zip`;
-          const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${agg.uuid}/${agg.links?.workflow}_reductions.csv`;
-
-          return (
-            <li
-              key={agg.id}
-              className="aggregation-item"
-            >
-              <div>
-                Workflow {agg.links?.workflow} - Aggregation #{agg.id}
-              </div>
-              <div>
-                {getAggStatusSymbol(agg.status)} {agg.status} - {updatedTime.toLocaleString()}
-              </div>
-              {agg.status === 'completed' && (
-                <div>
-                  <a href={linkForZip}>[Download ZIP]</a>
-                  &nbsp;
-                  <a href={linkForCsv}>[Download CSV]</a>
-                </div>
-              )}
-              <div>
-                <button onClick={() => { alert('TODO') }}>❌ Delete</button>
-              </div>
-            </li>
-          );
-        })}
+        {apiData.aggregations.map(agg => (
+          <AggregationItem
+            key={agg.id}
+            aggregation={agg}
+          />
+        ))}
       </ul>
     </div>
   );
