@@ -2,7 +2,7 @@
 Expandable Container
 A typical accordion design.
 
-Arguments:
+Component Props:
 - children: content to be displayed when container is expanded.
 - header: content to be displayed in the container's header.
 - startExpanded: does the container start off expanded? (boolean)

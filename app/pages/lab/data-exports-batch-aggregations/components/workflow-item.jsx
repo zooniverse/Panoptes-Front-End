@@ -8,7 +8,7 @@ Displays a single item on the Workflows List. (See worklows-list.jsx)
 - Radio input is DISABLED if workflow doesn't have a corresponding "workflow
   classifications" export!
 
-Arguments:
+Component Props:
 - checked: indicates if the radio input is checked.
 - onChange: callback function, for when the radio input is changed.
 - workflow: the workflow to display. (Panoptes Workflow Resource)

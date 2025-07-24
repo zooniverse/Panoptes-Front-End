@@ -11,7 +11,7 @@ all.
   (either pending, completed, or error-ed out).
 - Allows an existing aggregation to be deleted.
 
-Arguments:
+Component Props:
 - user: currently logged-in user. (Panoptes User Resource)
 - workflow: currently selected workflow. (Panoptes Workflow Resource)
 
@@ -49,7 +49,7 @@ export default function AggregationsChecker ({
   }
 
   function onError (err) {
-    console.error(err);
+    console.error('AggregationsChecker', err);
     setApiData({
       aggregations: null,
       status: 'error',

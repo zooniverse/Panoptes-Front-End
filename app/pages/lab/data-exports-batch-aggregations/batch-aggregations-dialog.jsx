@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
 import AggregationsChecker from './components/aggregations-checker.jsx';
 import ExpandableContainer from './components/expandable-container.jsx';
+import useWorkflowsExport from './helpers/useWorkflowsExport.js';
 
 // TODO: find a better place to put shared items
 import CloseIcon from '../../lab-pages-editor/icons/CloseIcon.jsx';
@@ -14,40 +15,7 @@ function BatchAggregationsDialog ({
   user
 }) {
   const [ workflow, setWorkflow ] = useState(undefined);
-  const [ workflowExportApiData, setWorkflowExportApiData ] = useState({
-    workflowExport: null,
-    status: 'ready',
-  });
-
-  // Checks if the workflow export has been triggered.
-  async function checkWorkflowExportStatus () {
-    if (!project) return;
-    try {
-      setWorkflowExportApiData({
-        workflowExport: null,
-        status: 'fetching'
-      });
-
-      // Yeah on Panoptes it's called workflowS (plural) export, but we present
-      // it to the users as a worklow (singluar) export.
-      const workflowExport = await project.get('workflows_export');
-      setWorkflowExportApiData({
-        workflowExport: workflowExport,
-        status: 'success'
-      });
-      console.log('+++ ', workflowExport);
-
-    } catch (err) {
-      console.error('BatchAggregationsDialog', err)
-      setWorkflowExportApiData({
-        workflowExport: null,
-        status: 'error'
-      });
-    }
-  }
-
-  // Trigger checkWorkflowExportStatus every time project changes.
-  useEffect(checkWorkflowExportStatus, [project]);
+  const { data: workflowsExportData, status: workflowsExportStatus } = useWorkflowsExport(project);
 
   if (!project) return null;
 
@@ -63,7 +31,7 @@ function BatchAggregationsDialog ({
           <CloseIcon />
         </button>
       </div>
-
+      
       <div className="dialog-body">
 
         <div className="info">
@@ -85,8 +53,7 @@ function BatchAggregationsDialog ({
           header={<span><b>2</b> Workflow</span>}
         >
           <div>
-            <i>PLACEHOLDER</i>
-            <p>✅ Workflow was last exported on <b>XYZ</b></p> 
+            <p>✅ Workflow(s!) was last exported on <b>XYZ</b></p> 
           </div>
         </ExpandableContainer>
 

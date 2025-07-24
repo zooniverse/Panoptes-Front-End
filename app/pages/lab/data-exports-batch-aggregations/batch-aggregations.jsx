@@ -22,7 +22,7 @@ function BatchAggregations ({ project, user }) {
   }
 
   // DEBUG: open modal for development's sake
-  // setTimeout(openModal, 100)
+  setTimeout(openModal, 100)
 
   return (
     <section className="batch-aggregations">

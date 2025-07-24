@@ -6,7 +6,7 @@ Displays all aggregations that belong to a project.
 - ❓ Aggregations list may or may not be sorted, we're still trying to figure out
   if the API supports this.
 
-Arguments:
+Component Props:
 - project: the project whose aggregations we want to list. (Panoptes Project Resource)
  */
 
