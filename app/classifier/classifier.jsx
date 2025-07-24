@@ -238,7 +238,7 @@ class Classifier extends React.Component {
   completeClassification(e) {
     const { actions, classification, onComplete, intervention, project, subject, translations, user, workflow } = this.props;
     const originalElement = e.currentTarget;
-    const isCmdClick = e.metaKey;
+    const isCmdClick = e.metaKey || e.type === 'contextmenu';
     const annotations = this.state.annotations.slice();
     let workflowHistory = this.state.workflowHistory.slice();
     const taskKey = workflowHistory[workflowHistory.length - 1];
