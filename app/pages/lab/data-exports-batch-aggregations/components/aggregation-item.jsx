@@ -81,21 +81,19 @@ function AggregationItem ({
   // Aggregations data, if any.
   const updatedTime = new Date(aggregation.updated_at);
   const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${aggregation.uuid}/${aggregation.links?.workflow}_aggregation.zip`;
-  const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${aggregation.uuid}/${aggregation.links?.workflow}_reductions.csv`;
+  // const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${aggregation.uuid}/${aggregation.links?.workflow}_reductions.csv`;
 
   return (
     <li className="aggregation-item">
-      <div>Aggregation #{aggregation.id}</div>
-      <div>{getAggStatusSymbol(aggregation.status)} {aggregation.status} - {updatedTime.toLocaleTimeString()}</div>
-      {aggregation.status === 'completed' && (
-        <div>
-          <a href={linkForZip}>[Download ZIP]</a>
-          &nbsp;
-          <a href={linkForCsv}>[Download CSV]</a>
-        </div>
-      )}
-      <div>
+      <div>Aggregation #{aggregation.id} for Workflow {aggregation.links?.workflow}</div>
+      <div>{getAggStatusSymbol(aggregation.status)} {aggregation.status}</div>
+      <div>Updated {updatedTime.toLocaleString()}</div>
+      <div className="flex-row">
         <button onClick={deleteAggregation}>❌ Delete</button>
+        <span className="spacer" />
+        {aggregation.status === 'completed' && (
+          <a className="plain button" href={linkForZip}>[⬇️ Download]</a>
+        )}
       </div>
     </li>
   );
