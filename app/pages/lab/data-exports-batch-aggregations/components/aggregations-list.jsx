@@ -67,7 +67,7 @@ function AggregationsList ({
         project_id: project.id,
         sort: '-workflow_id',
         page,
-        page_size: 3  // TESTING ONLY
+        // page_size: 3  // TESTING ONLY
       });
 
       // How many pages of results do we have?
