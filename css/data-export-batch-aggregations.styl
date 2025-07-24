@@ -27,12 +27,17 @@
     border: none
     cursor: pointer
   
-  // TEST
   .workflows-list
-    ul
-      max-height: 5em
-      overflow: auto
+    table
       border: 1px solid #f0f0f0
+      border-collapse: collapse
+      display: block
+      max-height: 10em
+      overflow: auto
+    
+    td, th
+      border: 1px solid #808080
+      padding: 5px 10px
 
   > dialog
     max-height: 90vh
@@ -48,7 +53,7 @@
   .batch-aggregations-dialog
     padding-bottom: 1em
 
-    .batch-aggregations-header
+    .dialog-header
       flex-row()
 
       h2
@@ -66,14 +71,19 @@
         color: #5C5C5C
         padding: 0
     
-    .batch-aggregations-info
+    .dialog-body
+      width: 90vw
+      max-width: 800px
+      max-height: 80vh
+      overflow: auto
+
+    .info
       // void
 
   .batch-aggregations-results
     // void
 
   .aggregations-list
-
     ul
       list-style: none
       padding: 0

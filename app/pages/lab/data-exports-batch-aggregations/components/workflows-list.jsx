@@ -119,12 +119,14 @@ export default function WorkflowsList ({
       )}
 
       <table>
-        <tbody>
+        <thead>
           <tr>
-            <td><b>Workflow</b></td>
-            <td><b>ID</b></td>
-            <td><b>Last Requested</b></td>
+            <th scope="col">Workflow</th>
+            <th scope="col">ID</th>
+            <th scope="col">Last Requested</th>
           </tr>
+        </thead>
+        <tbody>
           {apiData.workflows?.map((wf) => (
             <WorkflowItem
               key={wf.id}
