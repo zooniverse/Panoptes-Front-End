@@ -12,7 +12,7 @@ Displays a single aggregation item.
   - ❓ error: a theoretical state where something went wrong. Never actually
     seen in action as of Jul 2025. 
 
-Arguments:
+Component Props:
 - aggregation: the aggregation to display. (Panoptes Aggregation Resource)
 - onDelete: callback function, triggered when an aggregation is SUCCESSFULLY
   deleted.
@@ -39,6 +39,19 @@ function AggregationItem ({
     status: 'ready'
   });
 
+  function reset () {
+    setApiData({
+      status: 'ready'
+    });
+  }
+
+  function onError (err) {
+    console.error('AggregationItem', err);
+    setApiData({
+      status: 'error'
+    });
+  }
+
   async function deleteAggregation () {
     // Sanity check: if there's no aggregation, ignore.
     if (!aggregation) return reset();
@@ -55,10 +68,7 @@ function AggregationItem ({
       });
     
     } catch (err) {
-      console.error(err);
-      setApiData({
-        status: 'error'
-      });
+      onError(err);
     }
   }
 
