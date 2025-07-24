@@ -25,10 +25,10 @@ export default function WorkflowsList ({
     workflows: [],
     status: 'ready'
   });
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
 
-  async function fetchWorkflows (page = currentPage) {
+  async function fetchWorkflows () {
     // Sanity check: if there's no project, reset everything and then do nothing.
     if (!project) {
       setApiData({
@@ -73,8 +73,8 @@ export default function WorkflowsList ({
     }
   }
 
-  // Trigger fetchWorkflow every time project changes.
-  useEffect(fetchWorkflows, [project]);
+  // Trigger fetchWorkflow every time project (or page) changes.
+  useEffect(fetchWorkflows, [page, project]);
 
   // When a user clicks on a workflow, select that workflow.
   function workflowItem_onChange (e) {
@@ -88,8 +88,8 @@ export default function WorkflowsList ({
   function pageInput_onChange (e) {
     let newPage = parseInt(e?.currentTarget.value) || 1;
     newPage = Math.max(Math.min(newPage, maxPage), 1);
-    setCurrentPage(newPage);
-    fetchWorkflows(newPage);
+    setPage(newPage);
+    // fetchWorkflows() will be triggered when current page changes, due to useEffect.
   }
   
   if (!project) return null;
@@ -106,7 +106,7 @@ export default function WorkflowsList ({
           min="1"
           onChange={pageInput_onChange}
           type="number"
-          value={currentPage}
+          value={page}
         />
         &nbsp;
         of {maxPage}
