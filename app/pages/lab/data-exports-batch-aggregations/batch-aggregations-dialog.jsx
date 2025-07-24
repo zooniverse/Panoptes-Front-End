@@ -19,7 +19,7 @@ function BatchAggregationsDialog ({
 
   return (
     <div className="batch-aggregations-dialog">
-      <div className="batch-aggregations-header">
+      <div className="dialog-header">
         <h2>Batch Aggregations</h2>
         <button
           aria-label="Close dialog"
@@ -30,66 +30,59 @@ function BatchAggregationsDialog ({
         </button>
       </div>
 
-      <div className="batch-aggregations-info">
-        <p>Two exports are necessary to generate a batch aggregation.</p>
+      <div className="dialog-body">
+
+        <div className="info">
+          <p>Two exports are necessary to generate a batch aggregation.</p>
+        </div>
+
+        <ExpandableContainer
+          header={<span><b>1</b> Classifications by Workflow</span>}
+        >
+          <p>Choose which workflow to include in the export here. Only workflows with Question tasks or Survey tasks are compatible with our batch aggregation export at this time.</p>
+          <WorkflowsList
+            project={project}
+            setWorkflow={setWorkflow}
+            workflow={workflow}
+          />
+        </ExpandableContainer>
+
+        <ExpandableContainer
+          header={<span><b>2</b> Workflow(s Export)</span>}
+        >
+          <div>
+            <i>PLACEHOLDER</i>
+            <p>✅ Workflow(s!) was last exported on <b>XYZ</b></p> 
+          </div>
+        </ExpandableContainer>
+
+        <ExpandableContainer
+          header={<span><b>3</b> Summary</span>}
+        >
+          <div>
+            <i>PLACEHOLDER</i>
+            {workflow ? (
+              <p>✅ Selected workflow is valid</p>
+            ) : (
+              <p>❌ No workflow selected, OR selected workflow is valid</p>
+            )}
+            <p>✅ Workflows export is valid </p>
+          </div>
+
+          <div>
+            <button disabled={!workflow}>Generate</button>
+          </div>
+        </ExpandableContainer>
+        
+        <ExpandableContainer
+          header={<i>DEBUG</i>}
+        >
+          <AggregationsChecker
+            user={user}
+            workflow={workflow}
+          />
+        </ExpandableContainer>
       </div>
-
-      <ExpandableContainer
-        header={<span><b>1</b> Classifications by Workflow</span>}
-      >
-        <p>Choose which workflow to include in the export here. Only workflows with Question tasks or Survey tasks are compatible with our batch aggregation export at this time.</p>
-        <WorkflowsList
-          project={project}
-          setWorkflow={setWorkflow}
-          workflow={workflow}
-        />
-      </ExpandableContainer>
-
-      {/*
-      <hr/>
-
-      <p>
-        Currently chosen workflow: {workflow ? `${workflow.id} - ${workflow.display_name}` : 'none'}
-      </p>
-
-      <hr/>
-      */}
-
-      <ExpandableContainer
-        header={<span><b>2</b> Workflow(s Export)</span>}
-      >
-        <div>
-          <i>PLACEHOLDER</i>
-          <p>✅ Workflow(s!) was last exported on <b>XYZ</b></p> 
-        </div>
-      </ExpandableContainer>
-
-      <ExpandableContainer
-        header={<span><b>3</b> Summary</span>}
-      >
-        <div>
-          <i>PLACEHOLDER</i>
-          {workflow ? (
-            <p>✅ Selected workflow is valid</p>
-          ) : (
-            <p>❌ No workflow selected, OR selected workflow is valid</p>
-          )}
-          <p>✅ Workflows export is valid </p>
-        </div>
-
-        <div>
-          <button disabled={!workflow}>Generate</button>
-        </div>
-      </ExpandableContainer>
-      
-      <ExpandableContainer
-        header={<i>DEBUG</i>}
-      >
-        <AggregationsChecker
-          user={user}
-          workflow={workflow}
-        />
-      </ExpandableContainer>
     </div>
   );
 }
