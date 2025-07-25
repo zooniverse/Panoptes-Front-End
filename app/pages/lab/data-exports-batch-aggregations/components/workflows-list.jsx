@@ -6,7 +6,8 @@ which workflow they want to interact with.
 - Supports paging.
 
 Component Props:
-- project: the project whose workflows we want to list. (Panoptes Project Resource)
+- project: the project whose workflows we want to list. (Panoptes Project
+  Resource)
 - setWorkflow: sets currently selected workflow.
 - workflow: currently selected workflow. (Panoptes Workflow Resource)
  */
