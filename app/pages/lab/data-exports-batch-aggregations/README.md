@@ -13,8 +13,8 @@ Feature:
 
 Caveats:
 - ⚠ For a Workflow to be eligible for a Batch Aggregation Data Export:
-  - it must already have a Classification Export AND a Workflow Export.
-  - it must use only a certain subset of Tasks: Question and/or Survey Tasks. (Note to self: not sure what happens if a non-valid Task is mixed in.)
+  - the workflow must already have a Classification Export, AND the project must already have a Workflows Export.
+  - the workflow must use only a certain subset of Tasks: Question and/or Survey Tasks. (Note to self: not sure what happens if a non-valid Task is mixed in.)
 
 Project Notes:
 - Project lead: Cliff / Laura ; main dev: Shaun

@@ -1,3 +1,23 @@
+/*
+Aggregations Checker
+Given a workflow, this component checks if that workflow has any aggregations
+from the Panoptes /aggregations endpoint.
+
+NOTE: a workflow can only have ONE aggregation associated with it, or none at
+all.
+
+- Displays information on any existing aggregation.
+- Allows a new aggregation to be requested, if the workflow doesn't have one 
+  (either pending, completed, or error-ed out).
+- Allows an existing aggregation to be deleted.
+
+Component Props:
+- user: currently logged-in user. (Panoptes User Resource)
+- workflow: currently selected workflow. (Panoptes Workflow Resource)
+
+Currently used as a debug tool.
+ */
+
 import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import getAPIEnv from '../helpers/getAPIEnv.js';
@@ -29,7 +49,7 @@ export default function AggregationsChecker ({
   }
 
   function onError (err) {
-    console.error(err);
+    console.error('AggregationsChecker', err);
     setApiData({
       aggregations: null,
       status: 'error',
@@ -117,7 +137,7 @@ export default function AggregationsChecker ({
     }
   }
 
-  useEffect(fetchAggregations, [user, workflow]);
+  useEffect(fetchAggregations, [workflow]);
 
   if (!user || !workflow) return null;
 
@@ -145,7 +165,7 @@ export default function AggregationsChecker ({
 
       {apiData.status === 'success' && apiData.aggregations && (
         <div>
-          Aggregation #{apiData.aggregations.id} - {getAggStatusSymbol(apiData.aggregations.status)} {apiData.aggregations.status} - {updatedTime.toUTCString()}
+          Aggregation #{apiData.aggregations.id} - {getAggStatusSymbol(apiData.aggregations.status)} {apiData.aggregations.status} - {updatedTime.toLocaleTimeString()}
           <br/>
           {apiData.aggregations.status === 'completed' && (
             <span>

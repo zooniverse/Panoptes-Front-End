@@ -1,47 +1,66 @@
-import React, { useState } from 'react';
-import WorkflowsList from './components/workflows-list.jsx';
-import AggregationsChecker from './components/aggregations-checker.jsx';
+/*
+Batch Aggregations (Base Component)
+aka "Aggregate My Results"
+The base component of the Batch Aggregations feature on the Data Exports page.
+Contains two major sub-components (that actually do all the work): 1. a list of
+all existing aggregations for the project, and 2. a modal for requesting new
+aggregations for a selected workflow.
 
-const DEFAULT_HANDLER = () => {};
+Component Props:
+- project: the project whose workflows we want to list. (Panoptes Project
+  Resource)
+- user: currently logged-in user. (Panoptes User Resource)
+ */
+
+import React, { useRef } from 'react';
+import BatchAggregationsDialog from './batch-aggregations-dialog.jsx';
+import BatchAggregationsResults from './batch-aggregations-results.jsx';
 
 function BatchAggregations ({
-  closeModal = DEFAULT_HANDLER,  // This component is contained in a <dialog>, this function closes it.
   project,
   user
 }) {
-  const [ workflow, setWorkflow ] = useState(undefined);
+  const batchAggregationsDialog = useRef(null);
 
-  if (!project) return null;
+  function toggleDialog () {
+    if (batchAggregationsDialog?.current?.open) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  }
+
+  function openModal () {
+    batchAggregationsDialog?.current?.showModal();
+  }
+
+  function closeModal () {
+    batchAggregationsDialog?.current?.close();
+  }
+
+  // DEBUG: open modal for development's sake
+  // setTimeout(openModal, 100)
 
   return (
-    <div className="batch-aggregations">
-      <h4>Batch Aggregations</h4>
-
-      <WorkflowsList
-        project={project}
-        setWorkflow={setWorkflow}
-        workflow={workflow}
-      />
-
-      <hr/>
-
-      <p>
-        Currently chosen workflow: {workflow ? `${workflow.id} - ${workflow.display_name}` : 'none'}
-      </p>
-
-      <hr/>
-
-      <AggregationsChecker
-        user={user}
-        workflow={workflow}
-      />
-
-      <hr/>
-
-      <div>
-        <button onClick={closeModal}>Close</button>
+    <section className="batch-aggregations">
+      <div className="flex-row">
+        <h3>Aggregate My Results</h3>
+        <span className="spacer" />
+        <button onClick={toggleDialog}>
+          Configure
+        </button>
       </div>
-    </div>
+      <BatchAggregationsResults
+        project={project}
+      />
+      <dialog ref={batchAggregationsDialog}>
+        <BatchAggregationsDialog
+          closeModal={closeModal}
+          project={project}
+          user={user}
+        />
+      </dialog>
+    </section>
   );
 }
 
