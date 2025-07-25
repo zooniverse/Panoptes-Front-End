@@ -30,7 +30,7 @@ function WorkflowsExportChecker ({
       )}
       {status === 'no-data' && (
         <>
-          <p>❌ No export has been generated.</p>
+          <p>❌ No workflow export has been generated.</p>
           <p>A workflow export is necessary to generate a batch aggregation. Exit this configuration and generate a new a Workflows export first.</p>
         </>
       )}
