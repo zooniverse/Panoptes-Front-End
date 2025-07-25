@@ -3,6 +3,7 @@ import WorkflowsList from './components/workflows-list.jsx';
 import AggregationsChecker from './components/aggregations-checker.jsx';
 import ExpandableContainer from './components/expandable-container.jsx';
 import WorkflowsExportChecker from './components/workflows-export-checker.jsx';
+import AggregationSummary from './components/aggregation-summary.jsx';
 import useWorkflowsExport from './helpers/useWorkflowsExport.js';
 
 // TODO: find a better place to put shared items
@@ -63,19 +64,10 @@ function BatchAggregationsDialog ({
         <ExpandableContainer
           header={<span><b>3</b> Summary</span>}
         >
-          <div>
-            <i>PLACEHOLDER</i>
-            {workflow ? (
-              <p>✅ Selected workflow is valid</p>
-            ) : (
-              <p>❌ No workflow selected, OR selected workflow is valid</p>
-            )}
-            <p>✅ Workflows export is valid </p>
-          </div>
-
-          <div>
-            <button disabled={!workflow}>Generate</button>
-          </div>
+          <AggregationSummary
+            workflow={workflow}
+            workflowsExport={workflowsExportData}
+          />
         </ExpandableContainer>
         
         <ExpandableContainer
