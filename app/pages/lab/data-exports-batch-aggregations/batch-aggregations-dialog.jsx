@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
 import AggregationsChecker from './components/aggregations-checker.jsx';
 import ExpandableContainer from './components/expandable-container.jsx';
+import WorkflowsExportChecker from './components/workflows-export-checker.jsx';
 import useWorkflowsExport from './helpers/useWorkflowsExport.js';
 
 // TODO: find a better place to put shared items
@@ -51,10 +52,12 @@ function BatchAggregationsDialog ({
 
         <ExpandableContainer
           header={<span><b>2</b> Workflow</span>}
+          startExpanded={true}
         >
-          <div>
-            <p>✅ Workflow(s!) was last exported on <b>XYZ</b></p> 
-          </div>
+          <WorkflowsExportChecker
+            status={workflowsExportStatus}
+            workflowsExport={workflowsExportData}
+          />
         </ExpandableContainer>
 
         <ExpandableContainer

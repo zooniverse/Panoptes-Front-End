@@ -32,7 +32,7 @@ export default function WorkflowItem ({
     try {
       // Initialise fetching state, then fetch.
       setApiData({
-        wfcExport: undefined,
+        wfcExport: null,
         status: 'fetching'
       });
       const wfcExportData = await workflow.get('classifications_export');
@@ -46,7 +46,7 @@ export default function WorkflowItem ({
     } catch (err) {
       // On failure... it's kinda expected. A workflow with no Classifications Export returns a 404.
       setApiData({
-        wfcExport: undefined,
+        wfcExport: null,
         status: 'no-data'
       });
     }
