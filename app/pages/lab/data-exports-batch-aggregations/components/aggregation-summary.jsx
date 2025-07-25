@@ -37,6 +37,7 @@ Component Props:
 import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import AggregationItem from './aggregation-item.jsx';
+import checkIsWorkflowValid from '../helpers/checkIsWorkflowValid.js';
 
 function AggregationSummary ({
   workflow,
@@ -130,7 +131,7 @@ function AggregationSummary ({
     setTimeout(fetchAggregations, DELAY);
   }
 
-  const isWorkflowValid = true;
+  const isWorkflowValid = checkIsWorkflowValid(workflow);
 
   const showExistingAggregation = ['fetched', 'requested'].includes(apiData.status) && apiData.aggregation;
 
