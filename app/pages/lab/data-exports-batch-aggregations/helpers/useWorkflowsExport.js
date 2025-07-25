@@ -11,7 +11,7 @@ Returns:
   - data is either null, or the Panoptes resource corresponding to the
     project's Workflows Export.
   - status is a string with a value of either "ready" (initial state),
-    "fetching", "success", or "error".
+    "fetching", "success", or "no-data".
  */
 
 import React, { useEffect, useState } from 'react';
@@ -26,14 +26,6 @@ export default function useWorkflowsExport (project) {
     setApiData({
       data: null,
       status: 'ready'
-    });
-  }
-
-  function onError (err) {
-    console.error('useWorkflowsExport()', err);
-    setApiData({
-      data: null,
-      status: 'error'
     });
   }
 
@@ -54,12 +46,16 @@ export default function useWorkflowsExport (project) {
 
       // Success! Save the data.
       setApiData({
-        data: workflowsExport,
+        data: workflowsExport?.[0],
         status: 'success'
       });
 
     } catch (err) {
-      onError(err);
+      // On failure... it's kinda expected. A project with no Workflows Export returns a 404.
+      setApiData({
+        data: null,
+        status: 'no-data'
+      });
     }
   }
 
