@@ -66,6 +66,8 @@ function AggregationItem ({
       setApiData({
         status: 'deleted'
       });
+
+      onDelete()
     
     } catch (err) {
       onError(err);

@@ -124,6 +124,12 @@ function AggregationSummary ({
     }
   }
 
+  // After an existing aggregation is deleted, wait a few seconds and then re-request.
+  function onExistingAggregationDelete () {
+    const DELAY = 3000;
+    setTimeout(fetchAggregations, DELAY);
+  }
+
   const isWorkflowValid = true;
 
   const showExistingAggregation = ['fetched', 'requested'].includes(apiData.status) && apiData.aggregation;
@@ -139,6 +145,7 @@ function AggregationSummary ({
   return (
     <div className="aggregation-summary">
       <p>Aggregation Summary</p>
+
       {!workflow && (
         <p>❌ No workflow selected</p>
       )}
@@ -176,6 +183,7 @@ function AggregationSummary ({
           <ul className="single-aggregation">
             <AggregationItem
               aggregation={apiData.aggregation}
+              onDelete={onExistingAggregationDelete}
             />
           </ul>
         </>
