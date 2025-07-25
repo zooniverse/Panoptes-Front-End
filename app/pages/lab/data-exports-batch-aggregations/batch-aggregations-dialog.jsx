@@ -81,9 +81,9 @@ function BatchAggregationsDialog ({
 
         <ExpandableContainer
           header={<span><b>3</b> Summary</span>}
-          startExpanded={true}
         >
           <AggregationSummary
+            user={user}
             workflow={workflow}
             workflowsExport={workflowsExportData}
           />

@@ -82,7 +82,7 @@ function AggregationSummary ({
       // On success, save the results.
       setApiData({
         aggregation: aggregation,
-        status: 'success'
+        status: 'fetched'
       });
     
     } catch (err) {
@@ -116,7 +116,7 @@ function AggregationSummary ({
       
       setApiData({
         aggregation: aggregation,
-        status: 'success'
+        status: 'requested'
       });
     
     } catch (err) {
@@ -126,12 +126,12 @@ function AggregationSummary ({
 
   const isWorkflowValid = true;
 
-  const showExistingAggregation = apiData.status === 'success' && apiData.aggregation;
+  const showExistingAggregation = ['fetched', 'requested'].includes(apiData.status) && apiData.aggregation;
 
   const requestEnabled = (  // For the "request new batch aggregation data export" button to be enabled...
     workflow && isWorkflowValid  // ...a valid workflow must be selected.
     && workflowsExport  // ...the project must have a workflows export.
-    && (apiData.status === 'success' && !apiData.aggregation)  // ...the selected workflow must have no existing aggregation.
+    && (['fetched', 'requested'].includes(apiData.status) && !apiData.aggregation)  // ...the selected workflow must have no existing aggregation.
   );
 
   const workflowsExportUpdatedAt = workflowsExport ? new Date(workflowsExport.updated_at) : null;
@@ -167,7 +167,12 @@ function AggregationSummary ({
 
       {showExistingAggregation && (
         <>
-          <p>Aggregation already exists</p>
+          {apiData.status === 'fetched' && (
+            <p>Aggregation already exists</p>
+          )}
+          {apiData.status === 'requested' && (
+            <p>New aggregation requested</p>
+          )}
           <ul className="single-aggregation">
             <AggregationItem
               aggregation={apiData.aggregation}
