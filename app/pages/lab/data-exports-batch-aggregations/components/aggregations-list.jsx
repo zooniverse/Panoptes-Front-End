@@ -65,7 +65,7 @@ function AggregationsList ({
       });
       const aggregations = await apiClient.type('aggregations').get({
         project_id: project.id,
-        sort: '-workflow_id',
+        sort: '-updated_at',
         page,
         // page_size: 3  // TESTING ONLY
       });
