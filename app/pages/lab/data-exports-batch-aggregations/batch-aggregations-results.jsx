@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import apiClient from 'panoptes-client/lib/api-client';
-import getAPIEnv from './helpers/getAPIEnv.js';
+/*
+Batch Aggregations Results
+The part of the Batch Aggregations Data Export feature that lists all existing
+Batch Aggregation Data Exports for this project.
+
+Component Props:
+- project: the project whose workflows we want to list. (Panoptes Project
+  Resource)
+ */
+
+import React from 'react';
 import AggregationsList from './components/aggregations-list.jsx';
 import ExpandableContainer from './components/expandable-container.jsx'
 

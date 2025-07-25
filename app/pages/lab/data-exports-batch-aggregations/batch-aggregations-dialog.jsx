@@ -1,3 +1,22 @@
+/*
+Batch Aggregations Dialog/Modal
+The part of the Batch Aggregations Data Export feature that lets users request
+new aggregations for any workflow on the project. 
+
+Divided into 3 steps for the user:
+1. select workflow (that has a valid workflow classifications export)
+2. confirm that the workflows export exists.
+3. request a new batch aggregation data export for the selected workflow (if one
+   doesn't already exist).
+
+Component Props:
+- closeModal: callback function when the modal's Close button is clicked.
+  Usually it's just the parent component calling htmlDialogElement.close()
+- project: the project whose workflows we want to list. (Panoptes Project
+  Resource)
+- user: currently logged-in user. (Panoptes User Resource)
+ */
+
 import React, { useEffect, useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
 import AggregationsChecker from './components/aggregations-checker.jsx';
