@@ -92,11 +92,7 @@ export default function DataExports (props) {
               </div>
             )
           }
-          {/*
-          ❗️❗️❗️ TEMPORARILY REMOVED FOR LOCAL TESTING! IF YOU SEE THIS SUBMITTED FOR REVIEW, PLEASE FLAG IMMEDIATELY ❗️❗️❗️
-          props.project?.experimental_tools?.includes('batchAggregations') && (
-           */}
-          {(
+          {props.project?.experimental_tools?.includes('batchAggregations') && (
             <div className="row">
               <BatchAggregations
                 project={props.project}

@@ -72,7 +72,6 @@ function BatchAggregationsDialog ({
 
         <ExpandableContainer
           header={<span><b>2</b> Workflow</span>}
-          startExpanded={true}
         >
           <WorkflowsExportChecker
             status={workflowsExportStatus}
@@ -82,6 +81,7 @@ function BatchAggregationsDialog ({
 
         <ExpandableContainer
           header={<span><b>3</b> Summary</span>}
+          startExpanded={true}
         >
           <AggregationSummary
             workflow={workflow}
