@@ -25,9 +25,6 @@ import WorkflowsExportChecker from './components/workflows-export-checker.jsx';
 import AggregationSummary from './components/aggregation-summary.jsx';
 import useWorkflowsExport from './helpers/useWorkflowsExport.js';
 
-// TODO: find a better place to put shared items
-import CloseIcon from '../../lab-pages-editor/icons/CloseIcon.jsx';
-
 const DEFAULT_HANDLER = () => {};
 
 function BatchAggregationsDialog ({
@@ -49,7 +46,7 @@ function BatchAggregationsDialog ({
           className="button close-button"
           onClick={closeModal}
         >
-          <CloseIcon />
+          <span style={{ fontSize: '1.5em' }} className="fa fa-times" />
         </button>
       </div>
       
