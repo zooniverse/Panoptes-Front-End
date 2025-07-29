@@ -43,15 +43,6 @@ function AggregationsList ({
     setMaxPage(1);
   }
 
-  function onError (err) {
-    console.error(err);
-    setApiData({
-      aggregations: [],
-      status: 'error',
-      statusMessage: err
-    });
-  }
-
   async function fetchAggregations (page = currentPage) {
     // Sanity check: if there's no project, reset everything and then do nothing.
     if (!project) return reset();
@@ -86,7 +77,12 @@ function AggregationsList ({
       });
     
     } catch (err) {
-      onError(err);
+      // On failure... it's kinda expected. A project with no aggregations returns a 404.
+      setApiData({
+        aggregations: [],
+        status: 'no-data',
+        statusMessage: ''
+      });
     }
   }
 
@@ -106,36 +102,45 @@ function AggregationsList ({
 
   return (
     <div className="aggregations-list">
-      List of Aggregations: {apiData.status}
+      {apiData.status === 'fetching' && (
+        <span className="fa fa-spinner fa-spin" />
+      )}
 
-      <div>
-        Page
-        &nbsp;
-        <input
-          max={maxPage}
-          min="1"
-          onChange={pageInput_onChange}
-          type="number"
-          value={currentPage}
-        />
-        &nbsp;
-        of {maxPage}
-      </div>
+      {apiData.status === 'success' && ( 
+        <div className="paging">
+          Page
+          &nbsp;
+          <input
+            max={maxPage}
+            min="1"
+            onChange={pageInput_onChange}
+            type="number"
+            value={currentPage}
+          />
+          &nbsp;
+          of {maxPage}
+        </div>
+      )}
 
-      {apiData.status === 'success' && apiData.aggregations.length === 0 && (
+      {(
+        apiData.status === 'no-data'
+        || (apiData.status === 'success' && apiData.aggregations.length === 0)
+      ) && (
         <div className="message">
           There are no aggregations for this project.
         </div>
       )}
 
-      <ul>
-        {apiData.aggregations.map(agg => (
-          <AggregationItem
-            key={agg.id}
-            aggregation={agg}
-          />
-        ))}
-      </ul>
+      {apiData.status === 'success' && apiData.aggregations.length > 0 && (
+        <ul>
+          {apiData.aggregations.map(agg => (
+            <AggregationItem
+              key={agg.id}
+              aggregation={agg}
+            />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
