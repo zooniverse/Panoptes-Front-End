@@ -52,11 +52,40 @@
     border-radius: 8px
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #FFF
     box-shadow: 1px 1px 12px 8px rgba(0, 0, 0, 0.25)
+  
+  > .header
+    flex-row()
+    margin-bottom: 20px
+
+    h3
+      color: #404040
+      font-family: Karla
+      font-size: 16px
+      font-style: normal
+      font-weight: 600
+    
+    p
+      color: #5C5C5C
+      font-size: 12px
+      font-style: normal
+      margin: 0 0 0 20px
+      max-width: 500px
+      padding: 0
+
+      b
+        color: #000000
+        font-weight: 700
+    
+    .spacer
+      align-self: stretch
+      border-right: 0.5px solid #a6A7a9
+      margin-right: 20px
+      margin-left: 20px
 
   .batch-aggregations-dialog
-    padding: 0.5em 0 1em 0
+    padding: 1em 0
 
-    .dialog-header
+    > .header
       flex-row()
 
       h2
@@ -74,7 +103,7 @@
         color: #5C5C5C
         padding: 0
     
-    .dialog-body
+    > .body
       width: 90vw
       max-width: 800px
       max-height: 80vh

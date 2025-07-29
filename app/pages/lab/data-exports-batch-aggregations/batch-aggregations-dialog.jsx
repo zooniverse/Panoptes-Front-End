@@ -39,7 +39,7 @@ function BatchAggregationsDialog ({
 
   return (
     <div className="batch-aggregations-dialog">
-      <div className="dialog-header">
+      <div className="header">
         <h2>Batch Aggregations</h2>
         <button
           aria-label="Close dialog"
@@ -50,7 +50,7 @@ function BatchAggregationsDialog ({
         </button>
       </div>
       
-      <div className="dialog-body">
+      <div className="body">
 
         <div className="info">
           <p>Two exports are necessary to generate a batch aggregation.</p>
