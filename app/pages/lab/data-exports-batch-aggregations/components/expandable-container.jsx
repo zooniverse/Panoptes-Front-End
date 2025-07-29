@@ -25,13 +25,14 @@ export default function ExpandableContainer ({
     
   return (
     <div className="expandable-container">
-      <div className="flex-row">
+      <div className="header">
         {header}
-        <span className="spacer" />
-        <button onClick={onClick}>{expanded ? '🔼' : '🔽'}</button>
+        <button className="button" onClick={onClick}>
+          <span className={`fa ${expanded ? 'fa-chevron-up' : 'fa-chevron-down'}`} />
+        </button>
       </div>
       {expanded && (
-        <div>
+        <div className="body">
           {children}
         </div>
       )}

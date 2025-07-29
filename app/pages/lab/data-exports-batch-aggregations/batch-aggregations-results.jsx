@@ -15,10 +15,17 @@ import ExpandableContainer from './components/expandable-container.jsx'
 function BatchAggregationsResults ({
   project
 }) {
+  const header = (
+    <>
+      <span className="spacer" />
+      <span>View previous exports</span>
+    </>
+  );
+
   return (
     <div className="batch-aggregations-results">
       <ExpandableContainer
-        header="RESULTS"
+        header={header}
       >
         <AggregationsList
           project={project}

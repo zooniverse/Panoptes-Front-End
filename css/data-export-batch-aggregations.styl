@@ -29,18 +29,6 @@
     background: none
     border: none
     cursor: pointer
-  
-  .workflows-list
-    table
-      border: 1px solid #f0f0f0
-      border-collapse: collapse
-      display: block
-      max-height: 10em
-      overflow: auto
-    
-    td, th
-      border: 1px solid #808080
-      padding: 5px 10px
 
   > dialog
     max-height: 90vh
@@ -123,7 +111,12 @@
       // void
 
   .batch-aggregations-results
-    // void
+    > .expandable-container > .header
+      color: #5C5C5C
+      font-size: 16px
+      font-weight: 600
+      letter-spacing: 0.8px
+      text-transform: uppercase
 
   .aggregations-list ul, ul.single-aggregation
       list-style: none
@@ -135,13 +128,24 @@
     padding: 5px
   
   .expandable-container
-    border: 1px solid LIGHT_GREY
-    padding: 5px
 
-    > div:nth-child(1)
-      background: #f8f8f8
-      padding: 5px
+    > .header
+      flex-row()
+
+      button
+        color: #a6A7a9
     
-    > div:nth-child(2)
-      padding: 5px
-      border: 1px solid LIGHT_GREY
+    > .body
+      // void
+  
+  .workflows-list
+    table
+      border: 1px solid #f0f0f0
+      border-collapse: collapse
+      display: block
+      max-height: 10em
+      overflow: auto
+    
+    td, th
+      border: 1px solid #808080
+      padding: 5px 10px
