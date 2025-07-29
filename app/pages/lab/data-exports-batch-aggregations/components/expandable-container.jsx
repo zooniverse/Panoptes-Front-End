@@ -26,7 +26,9 @@ export default function ExpandableContainer ({
   return (
     <div className="expandable-container">
       <div className="header">
-        {header}
+        <span onClick={onClick}>
+          {header}
+        </span>
         <button className="button" onClick={onClick}>
           <span className={`fa ${expanded ? 'fa-chevron-up' : 'fa-chevron-down'}`} />
         </button>
