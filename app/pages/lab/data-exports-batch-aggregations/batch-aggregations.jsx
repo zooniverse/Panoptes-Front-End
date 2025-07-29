@@ -47,7 +47,10 @@ function BatchAggregations ({
         <h3>Aggregate My Results</h3>
         <p>Two exports are necessary to generate a batch aggregation. Before configuring, please ensure you have exported both a <b>Workflow Classification</b> export and a <b>Workflow</b> export.</p>
         <span className="spacer">&nbsp;</span>
-        <button onClick={toggleDialog}>
+        <button
+          className="button"
+          onClick={toggleDialog}
+        >
           Configure
         </button>
       </div>
