@@ -20,6 +20,9 @@ function BatchAggregationsResults ({
       <ExpandableContainer
         header="View previous exports"
       >
+        <p>
+          <span className="fa fa-info-circle" /> If you'd like to request a new export for any of these workflows, delete the previous batch aggregation.
+        </p>
         <AggregationsList
           project={project}
         />
