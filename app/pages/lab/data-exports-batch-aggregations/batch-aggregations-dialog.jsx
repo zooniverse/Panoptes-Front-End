@@ -51,15 +51,16 @@ function BatchAggregationsDialog ({
       </div>
       
       <div className="body">
-        
+
         <p className="info">
           Two exports are necessary to generate a batch aggregation.
         </p>
 
         <ExpandableContainer
           header={<span><b>1</b> Workflow Classifications</span>}
+          startExpanded={true}
         >
-          <p>Choose which workflow to include in the export here. Only workflows with Question tasks or Survey tasks are compatible with our batch aggregation export at this time.</p>
+          <p>Choose which workflow to include in the export here. Only workflows with <b>Question</b> tasks or <b>Survey</b> tasks are compatible with our batch aggregation export at this time.</p>
           <WorkflowsList
             project={project}
             setWorkflow={setWorkflow}
