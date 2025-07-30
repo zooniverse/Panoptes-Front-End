@@ -147,23 +147,36 @@ function AggregationSummary ({
 
   return (
     <div className="aggregation-summary">
-      <p>Aggregation Summary</p>
-
       {!workflow && (
-        <p>❌ No workflow selected</p>
+        <p className="bold warning">
+          <span className="fa fa-exclamation-triangle" />
+          <span>No workflow selected.</span>
+        </p>
       )}
       {workflow && !isWorkflowValid && (
-        <p>❌ Workflow {workflow.id} is invalid</p>
+        <p className="bold warning">
+          <span className="fa fa-exclamation-triangle" />
+          <span>Workflow {workflow.id} is invalid - check that the workflow only contains Question and Survey Tasks.</span>
+        </p>
       )}
       {workflow && isWorkflowValid && (
-        <p>✅ Workflow {workflow.id} is valid</p>
+        <p className="bold">
+          <span className="fa fa-check-circle-o" />
+          <span>Workflow {workflow.id} is valid.</span>
+        </p>
       )}
 
       {workflowsExport && (
-        <p>✅ Workflow export date: {workflowsExportUpdatedAt?.toLocaleString()}</p>
+        <p className="bold">
+          <span className="fa fa-check-circle-o" />
+          <span>Workflow export date: {workflowsExportUpdatedAt?.toLocaleString()}</span>
+        </p>
       )}
       {!workflowsExport && (
-        <p>❌ No workflow export has been generated.</p>
+        <p className="bold warning">
+          <span className="fa fa-exclamation-triangle" />
+          <span>No workflow export has been generated.</span>
+        </p>
       )}
 
       {!showExistingAggregation && (
@@ -178,10 +191,10 @@ function AggregationSummary ({
       {showExistingAggregation && (
         <>
           {apiData.status === 'fetched' && (
-            <p>Aggregation already exists</p>
+            <p>Aggregation already exists.</p>
           )}
           {apiData.status === 'requested' && (
-            <p>New aggregation requested</p>
+            <p>New aggregation requested.</p>
           )}
           <ul className="single-aggregation">
             <AggregationItem

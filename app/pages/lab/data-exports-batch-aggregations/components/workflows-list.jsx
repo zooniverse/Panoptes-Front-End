@@ -101,7 +101,10 @@ export default function WorkflowsList ({
   return (
     <div className="workflows-list">
       {apiData.status === 'fetching' && (
-        <span className="fa fa-spinner fa-spin" />
+        <span
+          aria-label="Fetching..."
+          className="fa fa-spinner fa-spin"
+        />
       )}
 
       {(

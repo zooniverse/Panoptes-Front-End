@@ -95,7 +95,10 @@ function AggregationsList ({
   return (
     <div className="aggregations-list">
       {apiData.status === 'fetching' && (
-        <span className="fa fa-spinner fa-spin" />
+        <span
+          aria-label="Fetching..."
+          className="fa fa-spinner fa-spin"
+        />
       )}
 
       {(
