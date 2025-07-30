@@ -58,7 +58,7 @@ export default function WorkflowsList ({
       });
 
       // How many pages of results do we have?
-      const resultsMeta = workflowResourcesArray?.[0].getMeta()
+      const resultsMeta = workflowResourcesArray?.[0]?.getMeta()
       if (resultsMeta) {
         setMaxPage(resultsMeta.page_count)
       } else {
@@ -68,7 +68,7 @@ export default function WorkflowsList ({
       // On success, save the results.
       setApiData({
         workflows: workflowResourcesArray,
-        status: 'ready'
+        status: 'success'
       });
     
     } catch (err) {
@@ -100,47 +100,56 @@ export default function WorkflowsList ({
 
   return (
     <div className="workflows-list">
-      List of workflows - {apiData.status}
+      {apiData.status === 'fetching' && (
+        <span className="fa fa-spinner fa-spin" />
+      )}
 
-      <div>
-        Page
-        &nbsp;
-        <input
-          max={maxPage}
-          min="1"
-          onChange={pageInput_onChange}
-          type="number"
-          value={page}
-        />
-        &nbsp;
-        of {maxPage}
-      </div>
-
-      {apiData.status === 'success' && apiData.workflows.length === 0 && (
+      {(
+        apiData.status === 'no-data'
+        || (apiData.status === 'success' && apiData.workflows.length === 0)
+      ) && (
         <div className="message">
           There are no workflows for this project.
         </div>
       )}
 
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Workflow</th>
-            <th scope="col">ID</th>
-            <th scope="col">Last Requested</th>
-          </tr>
-        </thead>
-        <tbody>
-          {apiData.workflows?.map((wf) => (
-            <WorkflowItem
-              key={wf.id}
-              checked={wf.id === workflow?.id}
-              onChange={workflowItem_onChange}
-              workflow={wf}
-            />
-          ))}
-        </tbody>
-      </table>
+      {(apiData.status === 'success' && apiData.workflows.length > 0) && (
+        <div className="paging">
+          Page
+          &nbsp;
+          <input
+            max={maxPage}
+            min="1"
+            onChange={pageInput_onChange}
+            type="number"
+            value={page}
+          />
+          &nbsp;
+          of {maxPage}
+        </div>
+      )}
+
+      {(apiData.status === 'success' && apiData.workflows.length > 0) && (
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Workflow</th>
+              <th scope="col">ID</th>
+              <th scope="col">Last Requested</th>
+            </tr>
+          </thead>
+          <tbody>
+            {apiData.workflows?.map((wf) => (
+              <WorkflowItem
+                key={wf.id}
+                checked={wf.id === workflow?.id}
+                onChange={workflowItem_onChange}
+                workflow={wf}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
 
     </div>
   );
