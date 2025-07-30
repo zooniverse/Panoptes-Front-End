@@ -30,6 +30,10 @@
     border: none
     cursor: pointer
 
+  .message
+    &.error
+      color: #e45950
+
   > dialog
     max-height: 90vh
     max-width: 90vw
@@ -138,6 +142,18 @@
     border-radius: 8px
     border: 1px solid #a6A7a9
     background: #ffffff
+
+    .message
+      display: flex
+      align-items: center
+      justify-content: center
+
+      grid-column: 1 / span 2
+      grid-row: 1
+      min-height: 60px
+      padding: 20px
+
+      border: 1px solid #f0f0f0
     
     .aggregation-id
       grid-column: 1 / span 2
