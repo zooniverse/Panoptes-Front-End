@@ -72,7 +72,11 @@ function AggregationItem ({
     return (
       <li className="aggregation-item">
         <div className={`message ${apiData.status === 'error' ? 'error' : ''}`}>
-          {apiData.status === 'deleting' && 'Deleting...'}
+          {apiData.status === 'deleting' && (
+            <>
+              <span className="fa fa-spinner fa-spin" /> &nbsp; Deleting...
+            </>
+          )}
           {apiData.status === 'deleted' && 'Deleted'}
           {apiData.status === 'error' && 'Error'}
         </div>
