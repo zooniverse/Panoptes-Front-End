@@ -58,7 +58,6 @@ function BatchAggregationsDialog ({
 
         <ExpandableContainer
           header={<span><b>1</b> Workflow Classifications</span>}
-          startExpanded={true}
         >
           <p>Choose which workflow to include in the export here. Only workflows with <b>Question</b> tasks or <b>Survey</b> tasks are compatible with our batch aggregation export at this time.</p>
           <WorkflowsList

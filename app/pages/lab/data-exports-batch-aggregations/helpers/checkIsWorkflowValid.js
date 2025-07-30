@@ -23,7 +23,6 @@ export default function checkIsWorkflowValid (workflow) {
   let countOfValidTasks = 0;
   let countOfInvalidTasks = 0;
 
-  console.log('+++ workflow', workflow);
   Object.values(workflow.tasks || {}).forEach(task => {
     if (VALID_TASK_TYPES.includes(task.type)) {
       countOfValidTasks++;
