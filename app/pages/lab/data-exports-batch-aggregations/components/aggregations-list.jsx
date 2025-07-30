@@ -98,7 +98,16 @@ function AggregationsList ({
         <span className="fa fa-spinner fa-spin" />
       )}
 
-      {apiData.status === 'success' && ( 
+      {(
+        apiData.status === 'no-data'
+        || (apiData.status === 'success' && apiData.aggregations.length === 0)
+      ) && (
+        <div className="message">
+          There are no aggregations for this project.
+        </div>
+      )}
+
+      {(apiData.status === 'success' && apiData.aggregations.length > 0) && (
         <div className="paging">
           Page
           &nbsp;
@@ -114,16 +123,7 @@ function AggregationsList ({
         </div>
       )}
 
-      {(
-        apiData.status === 'no-data'
-        || (apiData.status === 'success' && apiData.aggregations.length === 0)
-      ) && (
-        <div className="message">
-          There are no aggregations for this project.
-        </div>
-      )}
-
-      {apiData.status === 'success' && apiData.aggregations.length > 0 && (
+      {(apiData.status === 'success' && apiData.aggregations.length > 0) && (
         <ul>
           {apiData.aggregations.map(agg => (
             <AggregationItem
