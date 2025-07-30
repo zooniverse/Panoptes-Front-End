@@ -24,7 +24,7 @@ export default function ExpandableContainer ({
   }
     
   return (
-    <div className="expandable-container">
+    <div className={`expandable-container ${expanded ? 'expanded' : 'collapsed'}`}>
       <div className="header">
         <span onClick={onClick}>
           {header}
