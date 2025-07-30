@@ -108,7 +108,7 @@ export default function WorkflowsList ({
       )}
 
       {(
-        apiData.status === 'no-data'
+        apiData.status === 'no-data'  // NOTE: no-data can never actually occur for fetching workflows.
         || (apiData.status === 'success' && apiData.workflows.length === 0)
       ) && (
         <div className="message">

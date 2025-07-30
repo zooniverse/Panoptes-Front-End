@@ -179,12 +179,31 @@ function AggregationSummary ({
         </p>
       )}
 
+      {apiData.status === 'error' && (
+        <div className="message error">
+          Unknown Error
+        </div>
+      )}
+
       {!showExistingAggregation && (
         <button
+          className="button generate-button"
           disabled={!requestEnabled}
           onClick={requestNewAggregation}
         >
-          Generate
+          {!['fetching', 'requesting'].includes(apiData.status) && (
+            'Generate'
+          )}
+          {apiData.status === 'fetching' && (
+            <>
+              <span className="fa fa-spinner fa-spin" /> &nbsp; 'Checking...'
+            </>
+          )}
+          {apiData.status === 'requesting' && (
+            <>
+              <span className="fa fa-spinner fa-spin" /> &nbsp; 'Generating...'
+            </>
+          )}
         </button>
       )}
 
