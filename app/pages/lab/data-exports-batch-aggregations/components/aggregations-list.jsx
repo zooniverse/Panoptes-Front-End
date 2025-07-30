@@ -16,14 +16,6 @@ import apiClient from 'panoptes-client/lib/api-client';
 import getAPIEnv from '../helpers/getAPIEnv.js';
 import AggregationItem from './aggregation-item.jsx'
 
-function getAggStatusSymbol (aggStatus) {
-  switch (aggStatus) {
-    case 'pending': return '🟡';
-    case 'completed': return '🟢';
-    default: return '⚪️';
-  }
-}
-
 const DEFAULT_API_DATA = {
   aggregations: [],
   status: 'ready',
