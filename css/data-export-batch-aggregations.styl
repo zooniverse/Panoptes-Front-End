@@ -33,17 +33,6 @@
   .message
     &.error
       color: #e45950
-
-  > dialog
-    max-height: 90vh
-    max-width: 90vw
-    overflow: auto
-    padding: 5px 20px
-
-    border: none
-    border-radius: 8px
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #FFF
-    box-shadow: 1px 1px 12px 8px rgba(0, 0, 0, 0.25)
   
   > .header
     flex-row()
@@ -83,12 +72,24 @@
       font-weight: 500
       flex: 1 1 300px
       height: 40px
+  
+  > dialog
+    max-height: 90vh
+    max-width: 90vw
+    overflow: auto
+    padding: 0
+
+    border: none
+    border-radius: 8px
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #ffffff
+    box-shadow: 1px 1px 12px 8px rgba(0, 0, 0, 0.25)
 
   .batch-aggregations-dialog
     padding: 1em 0
 
     > .header
       flex-row()
+      padding: 0 20px
 
       h2
         flex: 1 1 auto
@@ -112,12 +113,38 @@
       overflow: auto
 
     .info
-      // void
+      color: #d47811;
+      font-family: Karla
+      // font-size: 12px
+      font-weight: 500
+      padding: 5px 20px
+    
+    .expandable-container
+      border-top: 0.5px solid #a6a7a9
+
+      > .header, > .body
+        padding: 20px
+      
+      > .header
+        color: #5C5C5C
+        font-size: 12px
+        font-weight: 400
+        vertical-align: center
+
+        b
+          display: inline-block
+          width: 20px
+          font-size: 16px
+          vertical-align: center
+      
+      &.expanded > .header
+        color: #404040
+        font-size: 16px
+        font-weight: 600
 
   .batch-aggregations-results
     > .expandable-container > .header
       color: #5C5C5C
-      cursor: pointer
       font-size: 16px
       font-weight: 600
       letter-spacing: 0.8px
@@ -233,6 +260,7 @@
       flex-row()
 
       > span
+        cursor: pointer
         flex: 1 1 auto
 
       button
