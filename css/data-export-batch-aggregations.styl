@@ -282,12 +282,28 @@
       display: block
     
     table
-      border: 1px solid #f0f0f0
       border-collapse: collapse
+      margin-top: 5px
+    
+    thead
+      border-radius: 4px
+      border: 0.5px solid #a6A7a9
+      color: #5C5C5C;
+      font-size: 12px
+      font-weight: 600
+      letter-spacing: 0.6px
+      text-transform: uppercase
+
+      th
+        border: 0.5px solid #a6A7a9
     
     tbody
       max-height: 120px
       overflow: auto
+      color: #000
+      font-size: 16px
+      font-weight: 400
+      letter-spacing: 0.8px
 
     tr
       display: flex
@@ -298,21 +314,28 @@
     
     td:nth-child(1), th:nth-child(1)
       flex: 1 1 auto
+
+    td:nth-child(1)
+      flex-row()
+      align-items: flex-start
+      
+      input
+        cursor: pointer
+        margin: 6px 5px auto auto
+      
+      label
+        cursor: pointer
+        flex: 1 1 auto
     
     td:nth-child(2), th:nth-child(2)
-      flex: 0 0 20%
+      flex: 0 0 10%
     
     td:nth-child(3), th:nth-child(3)
       flex: 0 0 30%
 
-    table
-      
-      max-height: 10em
-      overflow: auto
-    
-    td, th
-      border: 1px solid #808080
-      
+  .workflow-item
+    &.disabled
+      color: #a6A7a9
 
   .paging
     color: #5c5c5c
