@@ -154,6 +154,12 @@ export default function WorkflowsList ({
         </table>
       )}
 
+      {apiData.status === 'error' && (
+        <div className="message error">
+          Unknown Error
+        </div>
+      )}
+
     </div>
   );
 }
