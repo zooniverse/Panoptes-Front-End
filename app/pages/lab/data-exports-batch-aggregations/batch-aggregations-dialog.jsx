@@ -85,15 +85,6 @@ function BatchAggregationsDialog ({
             workflowsExport={workflowsExportData}
           />
         </ExpandableContainer>
-        
-        <ExpandableContainer
-          header={<i>DEBUG</i>}
-        >
-          <AggregationsChecker
-            user={user}
-            workflow={workflow}
-          />
-        </ExpandableContainer>
       </div>
     </div>
   );
