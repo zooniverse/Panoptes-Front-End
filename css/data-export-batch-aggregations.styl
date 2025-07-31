@@ -278,16 +278,41 @@
       // void
   
   .workflows-list
+    table, thead, tbody
+      display: block
+    
     table
       border: 1px solid #f0f0f0
       border-collapse: collapse
-      display: block
+    
+    tbody
+      max-height: 120px
+      overflow: auto
+
+    tr
+      display: flex
+
+    td, th
+      padding: 5px 10px
+      overflow: auto
+    
+    td:nth-child(1), th:nth-child(1)
+      flex: 1 1 auto
+    
+    td:nth-child(2), th:nth-child(2)
+      flex: 0 0 20%
+    
+    td:nth-child(3), th:nth-child(3)
+      flex: 0 0 30%
+
+    table
+      
       max-height: 10em
       overflow: auto
     
     td, th
       border: 1px solid #808080
-      padding: 5px 10px
+      
 
   .paging
     color: #5c5c5c
