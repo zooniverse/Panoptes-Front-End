@@ -20,6 +20,7 @@ Component Props:
 
 import React, { useState } from 'react';
 import getAPIEnv from '../helpers/getAPIEnv.js';
+import generateAggregationDownloadUrl from '../helpers/generateAggregationDownloadUrl.js';
 
 function getAggStatusSymbol (aggStatus) {
   switch (aggStatus) {
@@ -88,12 +89,10 @@ function AggregationItem ({
     );
   }
 
-  const env = getAPIEnv();
-
   // Aggregations data, if any.
   const updatedTime = new Date(aggregation.updated_at);
-  const linkForZip = `https://aggregationdata.blob.core.windows.net/${env}/${aggregation.uuid}/${aggregation.links?.workflow}_aggregation.zip`;
-  // const linkForCsv = `https://aggregationdata.blob.core.windows.net/${env}/${aggregation.uuid}/${aggregation.links?.workflow}_reductions.csv`;
+  const env = getAPIEnv();
+  const linkForZip = generateAggregationDownloadUrl(aggregation, env, 'zip');
 
   return (
     <li className="aggregation-item">
