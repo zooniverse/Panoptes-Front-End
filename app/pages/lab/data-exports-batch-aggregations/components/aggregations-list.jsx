@@ -3,11 +3,12 @@ Aggregations List
 Displays all aggregations that belong to a project.
 
 - Supports paging.
-- ❓ Aggregations list may or may not be sorted, we're still trying to figure out
-  if the API supports this.
+- Aggregations are sorted by most recently updated.
+  (Dev note: see fetchAggregations() for how we request this from Panoptes) 
 
 Component Props:
-- project: the project whose aggregations we want to list. (Panoptes Project Resource)
+- project: the project whose aggregations we want to list. (Panoptes Project
+  Resource)
  */
 
 import React, { useEffect, useState } from 'react';
