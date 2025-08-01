@@ -24,23 +24,21 @@ function getAggStatusSymbol (aggStatus) {
   }
 }
 
+const DEFAULT_API_DATA = {
+  aggregations: [],
+  status: 'ready',
+  statusMessage: '',
+};
+
 function AggregationsList ({
   project
 }) {
-  const [apiData, setApiData] = useState({
-    aggregations: [],
-    status: 'ready',
-    statusMessage: '',
-  });
+  const [apiData, setApiData] = useState(DEFAULT_API_DATA);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
 
   function reset () {
-    setApiData({
-      aggregations: [],
-      status: 'ready',
-      statusMessage: ''
-    });
+    setApiData(DEFAULT_API_DATA);
     setCurrentPage(1);
     setMaxPage(1);
   }
@@ -62,7 +60,8 @@ function AggregationsList ({
       // Initialise fetching state, then fetch.
       setApiData({
         aggregations: [],
-        status: 'fetching'
+        status: 'fetching',
+        statusMessage: ''
       });
       const aggregations = await apiClient.type('aggregations').get({
         project_id: project.id,
@@ -82,7 +81,8 @@ function AggregationsList ({
       // On success, save the results.
       setApiData({
         aggregations: aggregations,
-        status: 'success'
+        status: 'success',
+        statusMessage: ''
       });
     
     } catch (err) {

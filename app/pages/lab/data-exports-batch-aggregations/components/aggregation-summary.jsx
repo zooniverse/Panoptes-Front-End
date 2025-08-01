@@ -39,23 +39,21 @@ import apiClient from 'panoptes-client/lib/api-client';
 import AggregationItem from './aggregation-item.jsx';
 import checkIsWorkflowValid from '../helpers/checkIsWorkflowValid.js';
 
+const DEFAULT_API_DATA = {
+  aggregation: null,
+  status: 'ready',
+  statusMessage: '',
+};
+
 function AggregationSummary ({
   workflow,
   workflowsExport,
   user
 }) {
-  const [apiData, setApiData] = useState({
-    aggregation: null,
-    status: 'ready',
-    statusMessage: '',
-  });
+  const [apiData, setApiData] = useState(DEFAULT_API_DATA);
 
   function reset () {
-    setApiData({
-      aggregation: null,
-      status: 'ready',
-      statusMessage: ''
-    });
+    setApiData(DEFAULT_API_DATA);
   }
 
   function onError (err) {
@@ -75,7 +73,8 @@ function AggregationSummary ({
       // Initialise fetching state, then fetch.
       setApiData({
         aggregation: null,
-        status: 'fetching'
+        status: 'fetching',
+        statusMessage: ''
       });
       const aggregationsResourcesArray = await apiClient.type('aggregations').get({ workflow_id: workflow.id  });
       const aggregation = aggregationsResourcesArray?.[0];
@@ -83,7 +82,8 @@ function AggregationSummary ({
       // On success, save the results.
       setApiData({
         aggregation: aggregation,
-        status: 'fetched'
+        status: 'fetched',
+        statusMessage: ''
       });
     
     } catch (err) {
@@ -101,7 +101,8 @@ function AggregationSummary ({
       // Initialise requesting state, then post.
       setApiData({
         aggregation: null,
-        status: 'requesting'
+        status: 'requesting',
+        statusMessage: ''
       });
       const url = '/aggregations';
       const payload = {
@@ -117,7 +118,8 @@ function AggregationSummary ({
       
       setApiData({
         aggregation: aggregation,
-        status: 'requested'
+        status: 'requested',
+        statusMessage: ''
       });
     
     } catch (err) {

@@ -16,28 +16,35 @@ import React, { useEffect, useState } from 'react';
 import WorkflowItem from './workflow-item.jsx';
 
 const DEFAULT_HANDLER = () => {};
+const DEFAULT_API_DATA = {
+  workflows: [],
+  status: 'ready'
+};
 
 export default function WorkflowsList ({
   project,
   setWorkflow = DEFAULT_HANDLER,
   workflow,
 }) {
-  const [apiData, setApiData] = useState({
-    workflows: [],
-    status: 'ready'
-  });
+  const [apiData, setApiData] = useState(DEFAULT_API_DATA);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
 
+  function reset () {
+    setApiData(DEFAULT_API_DATA);
+  }
+
+  function onError (err) {
+    console.error('WorkflowsList: ', err);
+    setApiData({
+      workflows: [],
+      status: 'error'
+    });
+  }
+
   async function fetchWorkflows () {
     // Sanity check: if there's no project, reset everything and then do nothing.
-    if (!project) {
-      setApiData({
-        workflows: [],
-        status: 'ready'
-      });
-      return;
-    }
+    if (!project) return reset();
 
     try {
       // Initialise fetching state, then fetch.
@@ -66,11 +73,7 @@ export default function WorkflowsList ({
     
     } catch (err) {
       // On failure, set error state.
-      console.error('WorkflowsList: ', err);
-      setApiData({
-        workflow: [],
-        status: 'error'
-      });
+      onError(err);
     }
   }
 

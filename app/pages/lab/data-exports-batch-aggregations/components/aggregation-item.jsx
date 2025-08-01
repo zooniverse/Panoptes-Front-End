@@ -31,19 +31,18 @@ function getAggStatusSymbol (aggStatus) {
 }
 
 const DEFAULT_HANDLER = () => {};
+const DEFAULT_API_DATA = {
+  status: 'ready'
+};
 
 function AggregationItem ({
   aggregation,
   onDelete = DEFAULT_HANDLER
 }) {
-  const [apiData, setApiData] = useState({
-    status: 'ready'
-  });
+  const [apiData, setApiData] = useState(DEFAULT_API_DATA);
 
   function reset () {
-    setApiData({
-      status: 'ready'
-    });
+    setApiData(DEFAULT_API_DATA);
   }
 
   function onError (err) {

@@ -16,17 +16,16 @@ Returns:
 
 import React, { useEffect, useState } from 'react';
 
+const DEFAULT_API_DATA = {
+  data: null,
+  status: 'ready'
+};
+
 export default function useWorkflowsExport (project) {
-  const [ apiData, setApiData ] = useState({
-    data: null,
-    status: 'ready',
-  });
+  const [ apiData, setApiData ] = useState(DEFAULT_API_DATA);
 
   function reset () {
-    setApiData({
-      data: null,
-      status: 'ready'
-    });
+    setApiData(DEFAULT_API_DATA);
   }
 
   // Checks if the workflow export has been triggered.
