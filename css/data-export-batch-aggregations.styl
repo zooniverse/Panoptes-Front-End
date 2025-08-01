@@ -1,0 +1,105 @@
+// Batch Aggregations
+// ------------------
+// Found in: Lab/Project Builder => Data Export => Batch Aggregations
+// See /app/pages/data-export-batch-aggregations for corresponding components
+//
+// Note that the CSS class names are called .batch-aggregations instead of
+// the more accurate but more mouthful .data-exports-batch-aggregations
+
+.batch-aggregations
+  border: 1px solid LIGHT_GREY
+  padding: 10px
+
+  flex-row()
+    align-items: center
+    display: flex
+    flex-direction: row
+    gap: 10px
+
+  .flex-row
+    flex-row()
+  
+  .flex-item, .spacer
+    flex: 1 1 auto
+
+  .button
+    background: none
+    border: none
+    cursor: pointer
+  
+  .workflows-list
+    table
+      border: 1px solid #f0f0f0
+      border-collapse: collapse
+      display: block
+      max-height: 10em
+      overflow: auto
+    
+    td, th
+      border: 1px solid #808080
+      padding: 5px 10px
+
+  > dialog
+    max-height: 90vh
+    max-width: 90vw
+    overflow: auto
+    padding: 5px 20px
+
+    border: none
+    border-radius: 8px
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #FFF
+    box-shadow: 1px 1px 12px 8px rgba(0, 0, 0, 0.25)
+
+  .batch-aggregations-dialog
+    padding: 0.5em 0 1em 0
+
+    .dialog-header
+      flex-row()
+
+      h2
+        flex: 1 1 auto
+        color: #000
+        leading-trim: both
+        text-edge: cap
+        font-size: 18px
+        font-style: normal
+        font-weight: 600
+        line-height: normal
+        letter-spacing: 0.9px
+
+      .close-button
+        color: #5C5C5C
+        padding: 0
+    
+    .dialog-body
+      width: 90vw
+      max-width: 800px
+      max-height: 80vh
+      overflow: auto
+
+    .info
+      // void
+
+  .batch-aggregations-results
+    // void
+
+  .aggregations-list ul, ul.single-aggregation
+      list-style: none
+      padding: 0
+    
+  .aggregation-item
+    border: 1px solid LIGHT_GREY
+    margin: 5px
+    padding: 5px
+  
+  .expandable-container
+    border: 1px solid LIGHT_GREY
+    padding: 5px
+
+    > div:nth-child(1)
+      background: #f8f8f8
+      padding: 5px
+    
+    > div:nth-child(2)
+      padding: 5px
+      border: 1px solid LIGHT_GREY
