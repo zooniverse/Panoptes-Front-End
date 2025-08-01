@@ -94,7 +94,7 @@ function AggregationsList ({
 
   // When user changes the page number, fetch a new page of workflows
   function pageInput_onChange (e) {
-    let newPage = parseInt(e?.currentTarget.value) || 1;
+    let newPage = parseInt(e?.currentTarget.value, 10) || 1;
     newPage = Math.max(Math.min(newPage, maxPage), 1);
     setCurrentPage(newPage);
     fetchAggregations(newPage);
