@@ -19,7 +19,6 @@ Component Props:
 
 import React, { useEffect, useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
-import AggregationsChecker from './components/aggregations-checker.jsx';
 import ExpandableContainer from './components/expandable-container.jsx';
 import WorkflowsExportChecker from './components/workflows-export-checker.jsx';
 import AggregationSummary from './components/aggregation-summary.jsx';

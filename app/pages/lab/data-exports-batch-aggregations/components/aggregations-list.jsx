@@ -13,7 +13,6 @@ Component Props:
 
 import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import getAPIEnv from '../helpers/getAPIEnv.js';
 import AggregationItem from './aggregation-item.jsx'
 
 const DEFAULT_API_DATA = {
