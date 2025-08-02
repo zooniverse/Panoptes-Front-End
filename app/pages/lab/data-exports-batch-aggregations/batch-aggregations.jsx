@@ -43,10 +43,14 @@ function BatchAggregations ({
 
   return (
     <section className="batch-aggregations">
-      <div className="flex-row">
+      <div className="header">
         <h3>Aggregate My Results</h3>
-        <span className="spacer" />
-        <button onClick={toggleDialog}>
+        <p>Two exports are necessary to generate a batch aggregation. Before configuring, please ensure you have exported both a <b>Workflow Classification</b> export and a <b>Workflow</b> export.</p>
+        <span className="spacer">&nbsp;</span>
+        <button
+          className="button"
+          onClick={toggleDialog}
+        >
           Configure
         </button>
       </div>

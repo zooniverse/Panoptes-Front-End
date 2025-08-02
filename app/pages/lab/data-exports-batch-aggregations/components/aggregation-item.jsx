@@ -22,14 +22,6 @@ import React, { useState } from 'react';
 import getAPIEnv from '../helpers/getAPIEnv.js';
 import generateAggregationDownloadUrl from '../helpers/generateAggregationDownloadUrl.js';
 
-function getAggStatusSymbol (aggStatus) {
-  switch (aggStatus) {
-    case 'pending': return '🟡';
-    case 'completed': return '🟢';
-    default: return '⚪️';
-  }
-}
-
 const DEFAULT_HANDLER = () => {};
 const DEFAULT_API_DATA = {
   status: 'ready'
@@ -80,7 +72,11 @@ function AggregationItem ({
     return (
       <li className="aggregation-item">
         <div className={`message ${apiData.status === 'error' ? 'error' : ''}`}>
-          {apiData.status === 'deleting' && 'Deleting...'}
+          {apiData.status === 'deleting' && (
+            <>
+              <span className="fa fa-spinner fa-spin" /> &nbsp; Deleting...
+            </>
+          )}
           {apiData.status === 'deleted' && 'Deleted'}
           {apiData.status === 'error' && 'Error'}
         </div>
@@ -95,14 +91,48 @@ function AggregationItem ({
 
   return (
     <li className="aggregation-item">
-      <div>Aggregation #{aggregation.id} for Workflow {aggregation.links?.workflow}</div>
-      <div>{getAggStatusSymbol(aggregation.status)} {aggregation.status}</div>
-      <div>Updated {updatedTime.toLocaleString()}</div>
-      <div className="flex-row">
-        <button onClick={deleteAggregation}>❌ Delete</button>
-        <span className="spacer" />
+      <div className="aggregation-id">
+        <h6>Aggregation #{aggregation.id}</h6>
+      </div>
+      <div className="aggregation-info">
+        <p className="workflow-id">
+          Workflow #{aggregation.links?.workflow}
+        </p>
+        <p className="aggregation-updated-at">
+          Last updated {updatedTime.toLocaleString()}
+        </p>
+      </div>
+      <div className="aggregation-status">
+        {aggregation.status === 'pending' && (
+          <>
+            <p className="aggregation-status-pending">An export is being generated.</p>
+            <p>This process may take a while.<br/>Check your email for updates.</p>
+          </>
+        )}
         {aggregation.status === 'completed' && (
-          <a className="plain button" href={linkForZip}>[⬇️ Download]</a>
+          <>
+            <p className="aggregation-status-completed"><span className="fa fa-check-circle-o" /> Successful Export.</p>
+            <p>Completed {updatedTime.toLocaleString()}</p>
+          </>
+        )}
+        {!['pending', 'completed'].includes(aggregation.status) && (
+          <p>Status: {aggregation.status}</p>
+        )}
+      </div>
+      <div className="aggregation-controls">
+        <button
+          className="button delete-button"
+          onClick={deleteAggregation}
+        >
+          Delete <span className="fa fa-trash" />
+        </button>
+        {aggregation.status === 'completed' && (
+          <a
+            className="button download-button"
+            href={linkForZip}
+          >
+            Download <span className="fa fa-download" />
+          </a>
         )}
       </div>
     </li>

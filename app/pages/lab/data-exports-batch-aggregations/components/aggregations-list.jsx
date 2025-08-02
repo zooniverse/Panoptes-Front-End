@@ -13,16 +13,7 @@ Component Props:
 
 import React, { useEffect, useState } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import getAPIEnv from '../helpers/getAPIEnv.js';
 import AggregationItem from './aggregation-item.jsx'
-
-function getAggStatusSymbol (aggStatus) {
-  switch (aggStatus) {
-    case 'pending': return '🟡';
-    case 'completed': return '🟢';
-    default: return '⚪️';
-  }
-}
 
 const DEFAULT_API_DATA = {
   aggregations: [],
@@ -41,15 +32,6 @@ function AggregationsList ({
     setApiData(DEFAULT_API_DATA);
     setCurrentPage(1);
     setMaxPage(1);
-  }
-
-  function onError (err) {
-    console.error(err);
-    setApiData({
-      aggregations: [],
-      status: 'error',
-      statusMessage: err
-    });
   }
 
   async function fetchAggregations (page = currentPage) {
@@ -86,7 +68,12 @@ function AggregationsList ({
       });
     
     } catch (err) {
-      onError(err);
+      // On failure... it's kinda expected. A project with no aggregations returns a 404.
+      setApiData({
+        aggregations: [],
+        status: 'no-data',
+        statusMessage: ''
+      });
     }
   }
 
@@ -102,40 +89,50 @@ function AggregationsList ({
 
   if (!project) return null;
 
-  const env = getAPIEnv();
-
   return (
     <div className="aggregations-list">
-      List of Aggregations: {apiData.status}
-
-      <div>
-        Page
-        &nbsp;
-        <input
-          max={maxPage}
-          min="1"
-          onChange={pageInput_onChange}
-          type="number"
-          value={currentPage}
+      {apiData.status === 'fetching' && (
+        <span
+          aria-label="Fetching..."
+          className="fa fa-spinner fa-spin"
         />
-        &nbsp;
-        of {maxPage}
-      </div>
+      )}
 
-      {apiData.status === 'success' && apiData.aggregations.length === 0 && (
+      {(
+        apiData.status === 'no-data'
+        || (apiData.status === 'success' && apiData.aggregations.length === 0)
+      ) && (
         <div className="message">
           There are no aggregations for this project.
         </div>
       )}
 
-      <ul>
-        {apiData.aggregations.map(agg => (
-          <AggregationItem
-            key={agg.id}
-            aggregation={agg}
+      {(apiData.status === 'success' && apiData.aggregations.length > 0) && (
+        <div className="paging">
+          Page
+          &nbsp;
+          <input
+            max={maxPage}
+            min="1"
+            onChange={pageInput_onChange}
+            type="number"
+            value={currentPage}
           />
-        ))}
-      </ul>
+          &nbsp;
+          of {maxPage}
+        </div>
+      )}
+
+      {(apiData.status === 'success' && apiData.aggregations.length > 0) && (
+        <ul>
+          {apiData.aggregations.map(agg => (
+            <AggregationItem
+              key={agg.id}
+              aggregation={agg}
+            />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
