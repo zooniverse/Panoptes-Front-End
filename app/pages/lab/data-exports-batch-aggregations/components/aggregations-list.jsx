@@ -90,8 +90,6 @@ function AggregationsList ({
 
   if (!project) return null;
 
-  const env = getAPIEnv();
-
   return (
     <div className="aggregations-list">
       {apiData.status === 'fetching' && (
