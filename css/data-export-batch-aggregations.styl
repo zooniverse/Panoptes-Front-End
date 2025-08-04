@@ -119,7 +119,7 @@
       font-weight: 500
       padding: 5px 20px
     
-    .expandable-container
+    .accordion
       border-top: 0.5px solid #a6a7a9
 
       > .header, > .body
@@ -151,7 +151,7 @@
           font-weight: 400
 
   .batch-aggregations-results
-    > .expandable-container > .header
+    > .accordion > .header
       color: #5C5C5C
       font-size: 16px
       font-weight: 600
@@ -159,7 +159,7 @@
       text-align: right
       text-transform: uppercase
     
-    > .expandable-container > .body > p
+    > .accordion > .body > p
       text-align: right
       color: #5C5C5C
       font-size: 12px
@@ -262,16 +262,16 @@
       .download-button
         color: #000000
   
-  .expandable-container
+  .accordion
 
     > .header
       flex-row()
+      background: none
+      border: none
+      cursor: pointer
+      width: 100%
 
-      > span
-        cursor: pointer
-        flex: 1 1 auto
-
-      button
+      .fa
         color: #a6A7a9
     
     > .body

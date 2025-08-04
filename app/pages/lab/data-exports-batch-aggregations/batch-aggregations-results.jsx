@@ -19,6 +19,7 @@ function BatchAggregationsResults ({
     <div className="batch-aggregations-results">
       <ExpandableContainer
         header="View previous exports"
+        headerAlign="right"
       >
         <p>
           <span className="fa fa-info-circle" /> If you'd like to request a new export for any of these workflows, delete the previous batch aggregation.
