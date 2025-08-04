@@ -19,7 +19,7 @@ Component Props:
 
 import React, { useEffect, useState } from 'react';
 import WorkflowsList from './components/workflows-list.jsx';
-import ExpandableContainer from './components/expandable-container.jsx';
+import Accordion from './components/accordion.jsx';
 import WorkflowsExportChecker from './components/workflows-export-checker.jsx';
 import AggregationSummary from './components/aggregation-summary.jsx';
 import useWorkflowsExport from './helpers/useWorkflowsExport.js';
@@ -55,7 +55,7 @@ function BatchAggregationsDialog ({
           Two exports are necessary to generate a batch aggregation.
         </p>
 
-        <ExpandableContainer
+        <Accordion
           header={<span><b>1</b> Workflow Classifications</span>}
         >
           <p>Choose which workflow to include in the export here. Only workflows with <b>Question</b> tasks or <b>Survey</b> tasks are compatible with our batch aggregation export at this time.</p>
@@ -64,18 +64,18 @@ function BatchAggregationsDialog ({
             setWorkflow={setWorkflow}
             workflow={workflow}
           />
-        </ExpandableContainer>
+        </Accordion>
 
-        <ExpandableContainer
+        <Accordion
           header={<span><b>2</b> Workflow</span>}
         >
           <WorkflowsExportChecker
             status={workflowsExportStatus}
             workflowsExport={workflowsExportData}
           />
-        </ExpandableContainer>
+        </Accordion>
 
-        <ExpandableContainer
+        <Accordion
           header={<span><b>3</b> Summary</span>}
         >
           <AggregationSummary
@@ -83,7 +83,7 @@ function BatchAggregationsDialog ({
             workflow={workflow}
             workflowsExport={workflowsExportData}
           />
-        </ExpandableContainer>
+        </Accordion>
       </div>
     </div>
   );

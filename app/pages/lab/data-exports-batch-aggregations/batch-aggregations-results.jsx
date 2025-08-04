@@ -10,14 +10,14 @@ Component Props:
 
 import React from 'react';
 import AggregationsList from './components/aggregations-list.jsx';
-import ExpandableContainer from './components/expandable-container.jsx'
+import Accordion from './components/accordion.jsx'
 
 function BatchAggregationsResults ({
   project
 }) {
   return (
     <div className="batch-aggregations-results">
-      <ExpandableContainer
+      <Accordion
         header="View previous exports"
         headerAlign="right"
       >
@@ -27,7 +27,7 @@ function BatchAggregationsResults ({
         <AggregationsList
           project={project}
         />
-      </ExpandableContainer>
+      </Accordion>
     </div>
   );
 }

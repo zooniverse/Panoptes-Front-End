@@ -13,7 +13,7 @@ TODO: accessibility pass
 
 import React, { useState } from 'react';
 
-export default function ExpandableContainer ({
+export default function Accordion ({
   children,
   header,
   headerAlign = "left",
