@@ -43,18 +43,26 @@ export default function Accordion ({
       className={`accordion ${expanded ? 'expanded' : 'collapsed'}`}
       aria-expanded={expanded ? 'true' : 'false'}
     >
-      <button className="header" onClick={onClick}>
+      <button
+        aria-controls={bodyId}
+        id={headerId}
+        className="header"
+        onClick={onClick}
+      >
         {headerAlign === 'right' && (<span className="spacer" />)}
         {header}
-        {headerId} {bodyId}
         {headerAlign === 'left' && (<span className="spacer" />)}
         <span className={`fa ${expanded ? 'fa-chevron-up' : 'fa-chevron-down'}`} />
       </button>
-      {expanded && (
-        <div className="body">
-          {children}
-        </div>
-      )}
+      <div
+        aria-labelledby={headerId}
+        id={bodyId}
+        className="body"
+        hidden={!expanded}
+        role="region"
+      >
+        {children}
+      </div>
     </div>
   );
 }
