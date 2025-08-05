@@ -44,7 +44,7 @@ function WorkflowsExportChecker ({
             <span>No export has been generated.</span>
           </p>
           <p>
-            A workflow export is necessary to generate a batch aggregation. Exit this configuration and generate a new a Workflows export first.
+            A workflow export is necessary to generate a batch aggregation. Exit this configuration and generate a new a <b>Workflows</b> export first.
           </p>
         </>
       )}

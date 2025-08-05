@@ -148,35 +148,52 @@ function AggregationSummary ({
   return (
     <div className="aggregation-summary">
       {!workflow && (
-        <p className="bold warning">
+        <div className="summary-item">
           <span className="fa fa-exclamation-triangle" />
-          <span>No workflow selected.</span>
-        </p>
+          <div>
+            <p className="mega-bold warning">No workflow selected.</p>
+            <p>Workflow Classifications</p>
+          </div>
+        </div>
       )}
       {workflow && !isWorkflowValid && (
-        <p className="bold warning">
+        <div className="summary-item">
           <span className="fa fa-exclamation-triangle" />
-          <span>Workflow {workflow.id} is invalid - check that the workflow only contains Question and Survey Tasks.</span>
-        </p>
+          <div>
+            <p className="mega-bold">Workflow #{workflow.id}</p>
+            <p>Workflow Classifications</p>
+            <p className="bold warning">Please select a valid workflow.</p>
+            <p className="warning">Only workflows with Question tasks or Survey tasks are compatible with our batch aggregation export at this time.</p>
+          </div>
+        </div>
       )}
       {workflow && isWorkflowValid && (
-        <p className="bold">
+        <div className="summary-item">
           <span className="fa fa-check-circle-o" />
-          <span>Workflow {workflow.id} is valid.</span>
-        </p>
+          <div>
+            <p className="mega-bold">Workflow #{workflow.id}</p>
+            <p>Workflow Classifications</p>
+          </div>
+        </div>
       )}
 
       {workflowsExport && (
-        <p className="bold">
+        <div className="summary-item">
           <span className="fa fa-check-circle-o" />
-          <span>Workflow export date: {workflowsExportUpdatedAt?.toLocaleString()}</span>
-        </p>
+          <div>
+            <p className="mega-bold">Export date: {workflowsExportUpdatedAt?.toLocaleString()}</p>
+            <p>Workflow</p>
+          </div>
+        </div>
       )}
       {!workflowsExport && (
-        <p className="bold warning">
+        <div className="summary-item">
           <span className="fa fa-exclamation-triangle" />
-          <span>No workflow export has been generated.</span>
-        </p>
+          <div>
+            <p className="mega-bold warning">No workflow export has been generated.</p>
+            <p>Workflow</p>
+          </div>
+        </div>
       )}
 
       {apiData.status === 'error' && (

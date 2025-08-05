@@ -350,21 +350,6 @@
 
   .workflows-export-checker, .aggregation-summary
     
-    > p
-      flex-row()
-      color: #5C5C5C
-      font-size: 12px
-      font-weight: 400
-
-    > p.bold
-      color: #000000
-      font-size: 16px
-      font-weight: 500
-    
-    > p.warning, > p.bold.warning
-      background: none
-      color: #e45950
-    
     .fa-check-circle-o
       color: #52db72
       font-size: 24px
@@ -381,7 +366,48 @@
       font-size: 24px
       margin-right: 10px
       vertical-align: middle
+  
+  .workflows-export-checker
+        
+    > p
+      flex-row()
+      color: #5C5C5C
+      font-size: 12px
+      font-weight: 400
+
+    > p.bold
+      color: #000000
+      font-size: 16px
+      font-weight: 500
     
+    > p.warning, > p.bold.warning
+      background: none
+      color: #e45950
+  
+  .aggregation-summary
+
+    .summary-item
+      flex-row()
+      align-items: flex-start
+      margin: 4px auto
+      width: 300px
+      max-width: 100%
+
+      > .fa
+        margin-top: 8px
+      
+      p
+        margin: 4px 0
+
+    .warning, .bold.warning, .mega-bold.warning
+      background: none
+      color: #e45950
+    
+    .mega-bold
+      color: #404040
+      font-size: 16px
+      font-weight: 600
+        
     .generate-button
       display: block
       border-radius: 4px
