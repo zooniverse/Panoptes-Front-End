@@ -7,8 +7,14 @@
 // the more accurate but more mouthful .data-exports-batch-aggregations
 
 .batch-aggregations
-  border: 1px solid LIGHT_GREY
-  padding: 10px
+  border-radius: 8px
+  border: 0.5px solid #A6A7A9
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #ffffff
+  box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.25)
+  padding: 20px
+
+  *
+    box-sizing: border-box
 
   flex-row()
     align-items: center
@@ -26,35 +32,67 @@
     background: none
     border: none
     cursor: pointer
-  
-  .workflows-list
-    table
-      border: 1px solid #f0f0f0
-      border-collapse: collapse
-      display: block
-      max-height: 10em
-      overflow: auto
-    
-    td, th
-      border: 1px solid #808080
-      padding: 5px 10px
 
+  .message
+    &.error
+      color: #e45950
+  
+  > .header
+    flex-row()
+    margin-bottom: 20px
+
+    h3
+      color: #404040
+      font-family: Karla
+      font-size: 16px
+      font-style: normal
+      font-weight: 600
+    
+    p
+      color: #5C5C5C
+      font-size: 12px
+      font-style: normal
+      margin: 0 0 0 20px
+      max-width: 500px
+      padding: 0
+
+      b
+        color: #000000
+        font-weight: 700
+    
+    .spacer
+      align-self: stretch
+      border-right: 0.5px solid #a6A7a9
+      margin-right: 20px
+      margin-left: 20px
+    
+    .button
+      border-radius: 4px
+      border: 0.5px solid #d47811
+      background: linear-gradient(91deg, rgba(240, 178, 0, 0.10) 0%, rgba(212, 120, 17, 0.10) 100%), #ffffff
+      color: #000000
+      font-size: 16px
+      font-weight: 500
+      flex: 0 1 300px
+      height: 40px
+  
   > dialog
     max-height: 90vh
     max-width: 90vw
     overflow: auto
-    padding: 5px 20px
+    padding: 0
 
     border: none
     border-radius: 8px
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #FFF
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(239, 242, 245, 0.40) 100%), #ffffff
     box-shadow: 1px 1px 12px 8px rgba(0, 0, 0, 0.25)
 
   .batch-aggregations-dialog
-    padding: 0.5em 0 1em 0
+    padding: 1em 0
 
-    .dialog-header
+    > .header
       flex-row()
+      padding: 0 20px
 
       h2
         flex: 1 1 auto
@@ -71,35 +109,326 @@
         color: #5C5C5C
         padding: 0
     
-    .dialog-body
+    > .body
       width: 90vw
       max-width: 800px
       max-height: 80vh
       overflow: auto
 
     .info
-      // void
+      color: #d47811
+      font-family: Karla
+      font-size: 12px
+      font-weight: 500
+      padding: 5px 20px
+    
+    .accordion
+      border-top: 0.5px solid #a6a7a9
+
+      > .header, > .body
+        padding: 20px
+      
+      > .header
+        color: #5C5C5C
+        font-size: 12px
+        font-weight: 400
+        vertical-align: center
+
+        b
+          display: inline-block
+          width: 20px
+          font-size: 16px
+          vertical-align: center
+      
+      &.expanded > .header > span:nth-child(1)
+        color: #404040
+        font-size: 16px
+        font-weight: 600
+      
+      > .body
+        margin-top: -30px
+      
+        > p
+          color: #5C5C5C
+          font-size: 12px
+          font-weight: 400
 
   .batch-aggregations-results
-    // void
+    > .accordion > .header
+      color: #5C5C5C
+      font-size: 16px
+      font-weight: 400
+      letter-spacing: 0.8px
+      text-align: right
+      text-transform: uppercase
+    
+    > .accordion > .body > p
+      text-align: right
+      color: #5C5C5C
+      font-size: 12px
+      font-weight: 400
+    
+    .aggregations-list ul
+      display: grid
+      grid-template-columns: 49% auto
+      gap: 20px
 
   .aggregations-list ul, ul.single-aggregation
       list-style: none
       padding: 0
     
   .aggregation-item
-    border: 1px solid LIGHT_GREY
-    margin: 5px
-    padding: 5px
-  
-  .expandable-container
-    border: 1px solid LIGHT_GREY
-    padding: 5px
+    display: grid
+    grid-template-columns: 50% auto
+    grid-template-rows: auto auto auto
 
-    > div:nth-child(1)
-      background: #f8f8f8
-      padding: 5px
+    border-radius: 8px
+    border: 1px solid #a6A7a9
+    background: #ffffff
+
+    .message
+      display: flex
+      align-items: center
+      justify-content: center
+
+      grid-column: 1 / span 2
+      grid-row: 1
+      min-height: 60px
+      padding: 20px
+
+      border: 1px solid #f0f0f0
     
-    > div:nth-child(2)
-      padding: 5px
-      border: 1px solid LIGHT_GREY
+    .aggregation-id
+      grid-column: 1 / span 2
+      grid-row: 1
+      gap: 10px
+
+      h6
+        display: inline-block
+        margin: -1px auto auto -1px
+        padding: 7px 18px
+
+        border-radius: 8px 0 16px 0
+        background: linear-gradient(276deg, rgba(240, 178, 0, 0.80) 0%, rgba(212, 120, 17, 0.80) 100%), #f6d885
+        color: #404040
+        font-size: 14px
+        font-weight: 600
+
+    .aggregation-info
+      grid-column: 1
+      grid-row: 2
+      margin-left: 20px
+
+      color: #404040
+      font-size: 12px
+      font-weight: 400
+
+      .workflow-id
+        font-size: 14px
+        font-weight: 600
+      
+      .aggregation-updated-at
+        // void
+    
+    .aggregation-status
+      grid-column: 2
+      grid-row: 2
+      margin-right: 20px
+
+      color: #404040
+      font-size: 12px
+      font-weight: 400
+      text-align: right
+
+      .aggregation-status-completed
+        color: #52db72
+      
+      .aggregation-status-pending
+        color: #d47811
+    
+    .aggregation-controls
+      grid-column: 1 / span 2
+      grid-row: 3
+      margin: 0 20px 20px 20px
+      text-align: right
+
+      .button
+        font-size: 16px
+        font-weight: 500
+        margin: 0 10px
+        padding: 5px 10px
+        text-decoration: underline
+
+      .delete-button
+        color: #e45950
+      
+      .download-button
+        color: #000000
+  
+  .accordion
+
+    > .header
+      flex-row()
+      background: none
+      border: none
+      cursor: pointer
+      width: 100%
+
+      .fa
+        color: #a6A7a9
+    
+    > .body
+      // void
+  
+  .workflows-list
+    table, thead, tbody
+      display: block
+    
+    table
+      border-collapse: collapse
+      margin-top: 5px
+    
+    thead
+      color: #5C5C5C;
+      font-size: 12px
+      font-weight: 600
+      letter-spacing: 0.6px
+      text-transform: uppercase
+
+      th
+        border: 0.5px solid #a6A7a9
+
+        &:first-child
+          border-radius: 4px 0 0 4px
+        
+        &:last-child
+          border-radius: 0 4px 4px 0
+
+        &:not(:first-child)
+          border-left: none
+    
+    tbody
+      max-height: 120px
+      overflow: auto
+      color: #000
+      font-size: 16px
+      font-weight: 400
+      letter-spacing: 0.8px
+
+    tr
+      display: flex
+
+    td, th
+      padding: 5px 10px
+      overflow: auto
+    
+    td:nth-child(1), th:nth-child(1)
+      flex: 1 1 auto
+
+    td:nth-child(1)
+      flex-row()
+      align-items: flex-start
+      
+      input
+        cursor: pointer
+        margin: 6px 5px auto auto
+      
+      label
+        cursor: pointer
+        flex: 1 1 auto
+    
+    td:nth-child(2), th:nth-child(2)
+      flex: 0 0 10%
+    
+    td:nth-child(3), th:nth-child(3)
+      flex: 0 0 40%
+
+  .workflow-item
+    &.disabled
+      color: #a6A7a9
+
+    input[type=radio]
+      accent-color: #d47811
+
+  .paging
+    color: #5c5c5c
+    text-align: right
+    font-size: 12px
+    font-style: normal
+    font-weight: 400
+    letter-spacing: 0.6px
+
+  .workflows-export-checker, .aggregation-summary
+    
+    .fa-check-circle-o
+      color: #52db72
+      font-size: 24px
+      margin-right: 10px
+      vertical-align: middle
+
+    .fa-exclamation-triangle
+      color: #e45950
+      font-size: 20px
+      margin-right: 10px
+      vertical-align: middle
+    
+    .fa-info-circle
+      font-size: 24px
+      margin-right: 10px
+      vertical-align: middle
+  
+  .workflows-export-checker
+        
+    > p
+      flex-row()
+      color: #5C5C5C
+      font-size: 12px
+      font-weight: 400
+
+    > p.bold
+      color: #000000
+      font-size: 16px
+      font-weight: 500
+    
+    > p.warning, > p.bold.warning
+      background: none
+      color: #e45950
+  
+  .aggregation-summary
+
+    .summary-item
+      flex-row()
+      align-items: flex-start
+      margin: 4px auto
+      width: 300px
+      max-width: 100%
+
+      > .fa
+        margin-top: 8px
+      
+      p
+        margin: 4px 0
+
+    .warning, .bold.warning, .mega-bold.warning
+      background: none
+      color: #e45950
+    
+    .mega-bold
+      color: #404040
+      font-size: 16px
+      font-weight: 600
+        
+    .generate-button
+      display: block
+      border-radius: 4px
+      border: 0.5px solid #d47811
+      background: #d47811
+      box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.25)
+      color: #000000
+      padding: 10px
+      width: 300px
+      max-width: 100%
+      margin: 20px auto 0 auto
+
+      &[disabled]
+        opacity: 0.4

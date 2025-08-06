@@ -20,18 +20,32 @@ function WorkflowsExportChecker ({
   return (
     <div className="workflows-export-checker">
       {status === 'fetching' && (
-        <p>🔄 Checking...</p>
+        <span
+          aria-label="Fetching..."
+          className="fa fa-spinner fa-spin"
+        />
       )}
       {status === 'success' && workflowsExport && (
         <>
-          <p>✅ Use the last export, generated {workflowsExportUpdatedAt?.toLocaleString()}</p>
-          <p>ℹ️ Want to include a newer export? Exit this configuration and generate a new Workflows export on the Data Exports tab of the Project Builder.</p>
+          <p className="bold">
+            <span className="fa fa-check-circle-o" />
+            <span>Use the last export, generated {workflowsExportUpdatedAt?.toLocaleString()}.</span>
+          </p>
+          <p>
+            <span className="fa fa-info-circle" />
+            <span>Want to include a newer export? Exit this configuration and generate a new Workflow export on the Data Exports tab of the Project Builder.</span>
+          </p>
         </>
       )}
       {status === 'no-data' && (
         <>
-          <p>❌ No workflow export has been generated.</p>
-          <p>A workflow export is necessary to generate a batch aggregation. Exit this configuration and generate a new a Workflows export first.</p>
+          <p className="bold warning">
+            <span className="fa fa-exclamation-triangle" />
+            <span>No export has been generated.</span>
+          </p>
+          <p>
+            A workflow export is necessary to generate a batch aggregation. Exit this configuration and generate a new a <b>Workflows</b> export first.
+          </p>
         </>
       )}
     </div>

@@ -61,8 +61,7 @@ export default function WorkflowItem ({
 
   return (
     <tr
-      className="workflow-item"
-      style={{ color: (selectionDisabled) ? '#a0a0a0' : undefined }}
+      className={`workflow-item ${(selectionDisabled) ? 'disabled' : ''}`}
     >
       <td>
         <input
@@ -81,7 +80,6 @@ export default function WorkflowItem ({
       <td>
         {workflow.id}
       </td>
-
       <td>
         {(apiData.status === 'success') && (
           <span>
@@ -94,7 +92,6 @@ export default function WorkflowItem ({
           </span>
         )}
       </td>
-
     </tr>
   );
 }
