@@ -10,20 +10,24 @@ Component Props:
 
 import React from 'react';
 import AggregationsList from './components/aggregations-list.jsx';
-import ExpandableContainer from './components/expandable-container.jsx'
+import Accordion from './components/accordion.jsx'
 
 function BatchAggregationsResults ({
   project
 }) {
   return (
     <div className="batch-aggregations-results">
-      <ExpandableContainer
-        header="RESULTS"
+      <Accordion
+        header="View previous exports"
+        headerAlign="right"
       >
+        <p>
+          <span className="fa fa-info-circle" /> If you'd like to request a new export for any of these workflows, delete the previous batch aggregation.
+        </p>
         <AggregationsList
           project={project}
         />
-      </ExpandableContainer>
+      </Accordion>
     </div>
   );
 }

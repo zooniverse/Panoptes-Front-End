@@ -31,7 +31,7 @@ export const SLUGS = [
   'bldigital/in-the-spotlight',
   'md68135/notes-from-nature-labs',
   'fulsdavid/the-daily-minor-planet',
-  'blicksam/human-machine-collaborative-transcription',
+  'blicksam/human-machine-transcription-sandbox',
   'zooniverse/gravity-spy',
   'communitiesandcrowds/how-did-we-get-here',
   'zooniverse/snapshot-serengeti',
