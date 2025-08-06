@@ -33,7 +33,7 @@ function WorkflowsExportChecker ({
           </p>
           <p>
             <span className="fa fa-info-circle" />
-            <span>Want to include a newer export? Exit this configuration and generate a new Workflows export on the Data Exports tab of the Project Builder.</span>
+            <span>Want to include a newer export? Exit this configuration and generate a new Workflow export on the Data Exports tab of the Project Builder.</span>
           </p>
         </>
       )}
