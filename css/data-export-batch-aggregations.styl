@@ -289,8 +289,6 @@
       margin-top: 5px
     
     thead
-      border-radius: 4px
-      border: 0.5px solid #a6A7a9
       color: #5C5C5C;
       font-size: 12px
       font-weight: 600
@@ -299,6 +297,15 @@
 
       th
         border: 0.5px solid #a6A7a9
+
+        &:first-child
+          border-radius: 4px 0 0 4px
+        
+        &:last-child
+          border-radius: 0 4px 4px 0
+
+        &:not(:first-child)
+          border-left: none
     
     tbody
       max-height: 120px
