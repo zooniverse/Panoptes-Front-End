@@ -12,7 +12,7 @@ jobs:
 
    steps:
     # See: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow#using-the-checkout-action
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Use Node.js 20
       uses: actions/setup-node@v4
       with:
