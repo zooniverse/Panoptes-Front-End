@@ -123,6 +123,11 @@ function DataManager({
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
 
   // Safety check: does this workflow belong to this project?
+  /*
+  // ⚠️ 2025.08.13 update: this safety check is now disabled! Project data can
+  // sometimes be stale, causing newly-created workflows to be misidentified as
+  // "not belonging to the project"
+  // See https://github.com/zooniverse/Panoptes-Front-End/issues/7343
   if (apiData.workflow && apiData.project) {
     const isWorkflowPartOfProject = checkIsWorkflowPartOfProject(apiData.workflow, apiData.project);
     if (!isWorkflowPartOfProject) {
@@ -133,6 +138,7 @@ function DataManager({
       );
     }
   }
+  */
 
   // NOTE: no need to check for !workflow.
   // This is automatically handled by "Error: could not fetch data"
