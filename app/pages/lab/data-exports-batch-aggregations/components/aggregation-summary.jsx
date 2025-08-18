@@ -147,41 +147,90 @@ function AggregationSummary ({
 
   return (
     <div className="aggregation-summary">
-      <p>Aggregation Summary</p>
-
       {!workflow && (
-        <p>❌ No workflow selected</p>
+        <div className="summary-item">
+          <span className="fa fa-exclamation-triangle" />
+          <div>
+            <p className="mega-bold warning">No workflow selected.</p>
+            <p>Workflow Classifications</p>
+          </div>
+        </div>
       )}
       {workflow && !isWorkflowValid && (
-        <p>❌ Workflow {workflow.id} is invalid</p>
+        <div className="summary-item">
+          <span className="fa fa-exclamation-triangle" />
+          <div>
+            <p className="mega-bold">Workflow #{workflow.id}</p>
+            <p>Workflow Classifications</p>
+            <p className="bold warning">Please select a valid workflow.</p>
+            <p className="warning">Only workflows with Question tasks or Survey tasks are compatible with our batch aggregation export at this time.</p>
+          </div>
+        </div>
       )}
       {workflow && isWorkflowValid && (
-        <p>✅ Workflow {workflow.id} is valid</p>
+        <div className="summary-item">
+          <span className="fa fa-check-circle-o" />
+          <div>
+            <p className="mega-bold">Workflow #{workflow.id}</p>
+            <p>Workflow Classifications</p>
+          </div>
+        </div>
       )}
 
       {workflowsExport && (
-        <p>✅ Workflow export date: {workflowsExportUpdatedAt?.toLocaleString()}</p>
+        <div className="summary-item">
+          <span className="fa fa-check-circle-o" />
+          <div>
+            <p className="mega-bold">Export date: {workflowsExportUpdatedAt?.toLocaleString()}</p>
+            <p>Workflow</p>
+          </div>
+        </div>
       )}
       {!workflowsExport && (
-        <p>❌ No workflow export has been generated.</p>
+        <div className="summary-item">
+          <span className="fa fa-exclamation-triangle" />
+          <div>
+            <p className="mega-bold warning">No workflow export has been generated.</p>
+            <p>Workflow</p>
+          </div>
+        </div>
+      )}
+
+      {apiData.status === 'error' && (
+        <div className="message error">
+          Unknown Error
+        </div>
       )}
 
       {!showExistingAggregation && (
         <button
+          className="button generate-button"
           disabled={!requestEnabled}
           onClick={requestNewAggregation}
         >
-          Generate
+          {!['fetching', 'requesting'].includes(apiData.status) && (
+            'Generate'
+          )}
+          {apiData.status === 'fetching' && (
+            <>
+              <span className="fa fa-spinner fa-spin" /> &nbsp; 'Checking...'
+            </>
+          )}
+          {apiData.status === 'requesting' && (
+            <>
+              <span className="fa fa-spinner fa-spin" /> &nbsp; 'Generating...'
+            </>
+          )}
         </button>
       )}
 
       {showExistingAggregation && (
         <>
           {apiData.status === 'fetched' && (
-            <p>Aggregation already exists</p>
+            <p>Aggregation already exists.</p>
           )}
           {apiData.status === 'requested' && (
-            <p>New aggregation requested</p>
+            <p>New aggregation requested.</p>
           )}
           <ul className="single-aggregation">
             <AggregationItem

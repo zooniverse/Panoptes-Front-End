@@ -88,7 +88,12 @@ var config = {
         loader: 'babel-loader',
         options: { cacheDirectory: true }
       }, {
-        loader: 'coffee-loader'
+        loader: 'coffee-loader',
+        options: {
+          transpile: {
+            presets: ['@babel/env'],
+          },
+        },
       }, {
         loader: path.resolve('./webpack/cjsx-loader.js')
       }]
@@ -98,7 +103,12 @@ var config = {
         loader: 'babel-loader',
         options: { cacheDirectory: true }
       }, {
-        loader: 'coffee-loader'
+        loader: 'coffee-loader',
+        options: {
+          transpile: {
+            presets: ['@babel/env'],
+          },
+        },
       }]
     }, {
       test: /\.css$/,
