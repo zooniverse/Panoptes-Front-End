@@ -18,6 +18,7 @@ import Tutorials from './workflow-components/tutorials.jsx';
 import TaskOptions from './workflow-components/task-options.jsx';
 import TaskPicker from './workflow-components/task-picker.jsx';
 import TaskEditor from './workflow-components/task-editor.jsx';
+import CaesarStatus from './workflow-components/caesar-status.jsx';
 import removeTaskKeyFromWorkflow from './helpers/removeTaskKeyFromWorkflow.js';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
@@ -460,6 +461,12 @@ class EditWorkflowPage extends Component {
               <br />
               <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='https://www.zooniverse.org/about#contact'>Contact Us</a> page.</small>
             </p>
+
+            <hr />
+
+            <CaesarStatus
+              workflow={this.props.workflow}
+            />
 
             <hr />
 
