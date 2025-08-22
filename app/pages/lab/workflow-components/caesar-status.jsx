@@ -6,25 +6,22 @@ configuration on Caesar.
  */
 
 import { useEffect, useState } from 'react';
-import { gql, GraphQLClient } from 'graphql-request';
-
-function getCaesarClient (env) {
-  switch (env) {
-    case 'production': {
-      return new GraphQLClient('https://caesar.zooniverse.org/graphql')
-    }
-    default: {
-      return new GraphQLClient('https://caesar-staging.zooniverse.org/graphql')
-    }
-  }
-}
-
-const caesarClient = getCaesarClient(getAPIEnv());
+import auth from 'panoptes-client/lib/auth';
 
 const DEFAULT_API_DATA = {
   caesar: undefined,
   status: 'ready'
 };
+
+const env = getAPIEnv();
+
+function getCaesarStatusUrl (workflowId = 0) {
+  if (!workflowId) return;
+
+  return (env === 'production')
+    ? `https://caesar.zooniverse.org/workflows/${parseInt(workflowId)}`
+    : `https://caesar-staging.zooniverse.org/workflows/${parseInt(workflowId)}`  
+}
 
 export default function CaesarStatus ({ workflow }) {
   const [apiData, setApiData] = useState(DEFAULT_API_DATA);
@@ -37,18 +34,19 @@ export default function CaesarStatus ({ workflow }) {
       });
 
       console.log('+++ fetching 1... ');
+      const caesarData = {};
 
-      const query = gql`{
-        workflow(id: ${parseInt(workflow.id)}) {
-          id
-        }
-      }`
+      const bearerToken = await auth.checkBearerToken();
+      console.log('+++ bearerToken', bearerToken);
 
-      console.log('+++ fetching 2... ');
+      const url = getCaesarStatusUrl(workflow.id);
+      const headers = {
+        authorization: (bearerToken) ? `Bearer ${bearerToken}` : ''
+      }
 
-      const caesarData = await caesarClient.request(query);
-
-      console.log('+++ fetched: ', caesarData);
+      const res = await fetch(url, { headers });
+      console.log('+++ res', res)
+      if (res?.status !== 200) throw new Error('no-data');
 
       setApiData({
         caesar: caesarData,
@@ -69,7 +67,6 @@ export default function CaesarStatus ({ workflow }) {
 
   if (!workflow) return;
 
-  const env = getAPIEnv();
   const caesarConfigUrl = (env === 'production')
     ? `https://caesar.zooniverse.org/workflows/${parseInt(workflow.id)}`
     : `https://caesar-staging.zooniverse.org/workflows/${parseInt(workflow.id)}`;
