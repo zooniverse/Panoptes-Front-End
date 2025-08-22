@@ -34,11 +34,8 @@ export default function CaesarStatus ({ workflow }) {
       });
 
       console.log('+++ fetching 1... ');
-      const caesarData = {};
 
       const bearerToken = await auth.checkBearerToken();
-      console.log('+++ bearerToken', bearerToken);
-
       const url = getCaesarStatusUrl(workflow.id);
       const headers = {
         Accept: 'application/json',
@@ -49,6 +46,10 @@ export default function CaesarStatus ({ workflow }) {
       const res = await fetch(url, { headers });
       console.log('+++ res', res)
       if (res?.status !== 200) throw new Error('no-data');
+
+      const caesarData = await res.json();
+
+      console.log('+++ caesarData: ', caesarData);
 
       setApiData({
         caesar: caesarData,
