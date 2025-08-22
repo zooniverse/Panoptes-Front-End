@@ -41,7 +41,9 @@ export default function CaesarStatus ({ workflow }) {
 
       const url = getCaesarStatusUrl(workflow.id);
       const headers = {
-        Authorization: (bearerToken) ? `Bearer ${bearerToken}` : ''
+        Accept: 'application/json',
+        Authorization: (bearerToken) ? `Bearer ${bearerToken}` : '',
+        'Content-Type': 'application/json',
       }
 
       const res = await fetch(url, { headers });
