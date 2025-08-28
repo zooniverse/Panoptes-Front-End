@@ -18,7 +18,7 @@ import Tutorials from './workflow-components/tutorials.jsx';
 import TaskOptions from './workflow-components/task-options.jsx';
 import TaskPicker from './workflow-components/task-picker.jsx';
 import TaskEditor from './workflow-components/task-editor.jsx';
-import CaesarStatus from './workflow-components/caesar-status.jsx';
+import CaesarStatus from '../../fem-shared/components/caesar-status.jsx';
 import removeTaskKeyFromWorkflow from './helpers/removeTaskKeyFromWorkflow.js';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'

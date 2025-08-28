@@ -78,6 +78,8 @@ export default function CaesarStatus ({ workflow }) {
     <div className="caesar-status">
       <span class="form-label">👑 Caesar Status</span>
 
+      <span className="fa fa-spinner fa-spin" />
+
       {apiData.status === 'fetching' && (<p>Checking...</p>)}
       {apiData.status === 'no-data' && (<p>✖ Nothing in Caesar, sorry.</p>)}
       {apiData.status === 'success' && (<p>✅ This workflow has <a href={caesarConfigUrl}>a Caesar config!</a></p>)}
