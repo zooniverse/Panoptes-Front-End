@@ -19,7 +19,7 @@ import Tutorials from '../lab/workflow-components/tutorials.jsx';
 import TaskOptions from '../lab/workflow-components/task-options.jsx';
 import TaskEditor from '../lab/workflow-components/task-editor.jsx';
 import TaskPicker from '../lab/workflow-components/task-picker.jsx';
-import CaesarStatus from '../lab/workflow-components/caesar-status.jsx';
+import CaesarStatus from '../../fem-shared/components/caesar-status.jsx';
 import { isThisProjectUsingFEMLab, isWorkflowUsingJSONSubjects, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
 import removeTaskKeyFromWorkflow from '../lab/helpers/removeTaskKeyFromWorkflow.js';
 
