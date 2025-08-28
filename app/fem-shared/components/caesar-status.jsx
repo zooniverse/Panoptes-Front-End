@@ -76,7 +76,7 @@ export default function CaesarStatus ({ workflow }) {
 
   return (
     <div className="caesar-status">
-      <span class="form-label">👑 Caesar Status</span>
+      <span className="form-label">👑 Caesar Status</span>
 
       <span className="fa fa-spinner fa-spin" />
 
