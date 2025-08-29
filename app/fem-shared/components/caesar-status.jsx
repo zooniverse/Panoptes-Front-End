@@ -45,8 +45,7 @@ export default function CaesarStatus ({ workflow }) {
       if (res?.status !== 200) throw new Error('no-data');
 
       const caesarData = await res.json();
-      console.log('+++ caesarData: ', caesarData);
-
+      
       setApiData({
         caesar: caesarData,
         status: 'success'
@@ -90,6 +89,21 @@ export default function CaesarStatus ({ workflow }) {
             <span className="caesar-status-badge-center">Caesar</span>
             <span className="caesar-status-badge-right">§</span>
           </a>
+
+          <span className="caesar-status-value">
+            <span>Extractors</span>
+            <span>{apiData?.caesar?.extractors_count ?? '?'}</span>
+          </span>
+
+          <span className="caesar-status-value">
+            <span>Reducers</span>
+            <span>{apiData?.caesar?.reducers_count ?? '?'}</span>
+          </span>
+
+          <span className="caesar-status-value">
+            <span>Rules</span>
+            <span>{apiData?.caesar?.subject_rules_count ?? '?'}</span>
+          </span>
         </>
       )}
     </div>
