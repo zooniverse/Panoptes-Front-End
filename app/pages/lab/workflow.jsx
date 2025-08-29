@@ -462,8 +462,6 @@ class EditWorkflowPage extends Component {
               <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='https://www.zooniverse.org/about#contact'>Contact Us</a> page.</small>
             </p>
 
-            <hr />
-
             <CaesarStatus
               workflow={this.props.workflow}
             />
