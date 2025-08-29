@@ -33,8 +33,6 @@ export default function CaesarStatus ({ workflow }) {
         status: 'fetching'
       });
 
-      console.log('+++ fetching 1... ');
-
       const bearerToken = await auth.checkBearerToken();
       const url = getCaesarStatusUrl(workflow.id);
       const headers = {
@@ -44,11 +42,9 @@ export default function CaesarStatus ({ workflow }) {
       }
 
       const res = await fetch(url, { headers });
-      console.log('+++ res', res)
       if (res?.status !== 200) throw new Error('no-data');
 
       const caesarData = await res.json();
-
       console.log('+++ caesarData: ', caesarData);
 
       setApiData({
@@ -58,7 +54,6 @@ export default function CaesarStatus ({ workflow }) {
 
     } catch (err) {
       // On failure... it's kinda expected. A workflow with no Caesar config returns a 404.
-      console.log('+++ Error: ', err)
       setApiData({
         caesar: undefined,
         status: 'no-data'
@@ -76,13 +71,27 @@ export default function CaesarStatus ({ workflow }) {
 
   return (
     <div className="caesar-status">
-      <span className="form-label">👑 Caesar Status</span>
+      {apiData.status === 'fetching' && (
+        <span
+          aria-label="Checking Caesar..."
+          className="fa fa-spinner fa-spin"
+        />
+      )}
 
-      <span className="fa fa-spinner fa-spin" />
+      {apiData.status === 'no-data' && null}
 
-      {apiData.status === 'fetching' && (<p>Checking...</p>)}
-      {apiData.status === 'no-data' && (<p>✖ Nothing in Caesar, sorry.</p>)}
-      {apiData.status === 'success' && (<p>✅ This workflow has <a href={caesarConfigUrl}>a Caesar config!</a></p>)}
+      {apiData.status === 'success' && (
+        <>
+          <a
+            className="caesar-status-badge"
+            href={caesarConfigUrl}
+          >
+            <span className="caesar-status-badge-left">§</span>
+            <span className="caesar-status-badge-center">Caesar</span>
+            <span className="caesar-status-badge-right">§</span>
+          </a>
+        </>
+      )}
     </div>
   );
 }
