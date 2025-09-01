@@ -53,12 +53,12 @@ export default function CaesarStatus ({ workflow }) {
 
   useEffect(checkCaesar, [workflow?.id]);
 
-  if (!workflow) return;
+  if (!workflow) return null;
 
   const caesarWorkflowUrl = getCaesarWorkflowUrl(workflow?.id);
 
   return (
-    <div className="caesar-status">
+    <div className="caesar-status" data-status={apiData.status}>
       {apiData.status === 'fetching' && (
         <span
           aria-label="Checking Caesar..."
