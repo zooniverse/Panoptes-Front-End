@@ -34,7 +34,7 @@ export default function CaesarStatus ({ workflow }) {
       });
 
       const bearerToken = await auth.checkBearerToken();
-      const url = getCaesarStatusUrl(workflow.id);
+      const url = getCaesarStatusUrl(workflow?.id);
       const headers = {
         Accept: 'application/json',
         Authorization: (bearerToken) ? `Bearer ${bearerToken}` : '',
@@ -60,16 +60,16 @@ export default function CaesarStatus ({ workflow }) {
     }
   }
 
-  useEffect(checkCaesar, [workflow.id]);
+  useEffect(checkCaesar, [workflow?.id]);
 
-  if (!workflow) return;
+  if (!workflow) return null;
 
   const caesarConfigUrl = (env === 'production')
-    ? `https://caesar.zooniverse.org/workflows/${parseInt(workflow.id)}`
-    : `https://caesar-staging.zooniverse.org/workflows/${parseInt(workflow.id)}`;
+    ? `https://caesar.zooniverse.org/workflows/${parseInt(workflow?.id)}`
+    : `https://caesar-staging.zooniverse.org/workflows/${parseInt(workflow?.id)}`;
 
   return (
-    <div className="caesar-status">
+    <div className="caesar-status" data-status={apiData.status}>
       {apiData.status === 'fetching' && (
         <span
           aria-label="Checking Caesar..."

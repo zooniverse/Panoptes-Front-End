@@ -2,6 +2,7 @@ import { useWorkflowContext } from '../../context.js';
 import AssociatedSubjectSets from './components/AssociatedSubjectSets.jsx';
 import AssociatedTutorial from './components/AssociatedTutorial.jsx';
 import WorkflowVersion from '../WorkflowVersion.jsx';
+import CaesarStatus from '../../../../fem-shared/components/caesar-status.jsx'
 
 // Use ?advanced=true to enable advanced mode.
 // - switches from simpler "linear workflow" to "manual workflow".
@@ -70,6 +71,8 @@ export default function WorkflowSettingsPage() {
       </div>
 
       <div className="column-group col-1">
+        <CaesarStatus workflow={workflow} />
+        
         <fieldset>
           <legend>Associated Subject Sets</legend>
           <p>Choose the set of subjects you want to use for this workflow. Add subject sets in the Subject Sets tab.</p>
