@@ -37,6 +37,7 @@ module.exports = createReactClass
     taskPrefix: ''
 
   render: ->
+    [root, taskKey] = @props.taskPrefix.split '.'
     handleChange = handleInputChange.bind @props.workflow
 
     [mainTextKey, choicesKey] = switch @props.task.type
@@ -131,7 +132,7 @@ module.exports = createReactClass
                       <div className="workflow-choice-setting">
                         <AutoSave resource={@props.workflow}>
                           Next task{' '}
-                          <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
+                          <NextTaskSelector taskKey={taskKey} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
                         </AutoSave>
                       </div>
 
@@ -305,7 +306,7 @@ module.exports = createReactClass
         <div>
           <AutoSave resource={@props.workflow}>
             Next task{' '}
-            <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
+            <NextTaskSelector taskKey={taskKey} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
           </AutoSave>
         </div>}
     </div>
