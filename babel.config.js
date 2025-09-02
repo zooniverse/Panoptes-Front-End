@@ -11,7 +11,9 @@ module.exports = function (api) {
       ]
     ],
     presets: [
-      '@babel/preset-env',
+      ['@babel/preset-env', {
+        modules: 'commonjs'
+      }],
       ['@babel/preset-react', { runtime: 'automatic' }]
     ],
     env: {
