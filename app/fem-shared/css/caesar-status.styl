@@ -1,0 +1,49 @@
+.caesar-status
+  // border: 1px solid #808080
+  display: flex
+  flex-direction: row
+  align-items: center
+
+  .caesar-status-badge
+    border-radius: 16px
+    border: 0.5px solid #A6A7A9
+    background: #323845
+    color: #ffffff
+    display: flex
+    flex-direction: row
+    font-size: 10px
+    font-weight: 700
+    padding: 5px 15px
+    text-decoration: none
+
+    > *
+      display: block
+      flex: 0 0 auto
+      
+    .caesar-status-badge-left
+      color: #488359
+      transform: skew(15deg, 0) scale(-1, 1.5)
+    
+    .caesar-status-badge-center
+      margin: 0 5px
+    
+    .caesar-status-badge-right
+      color: #488359
+      transform: skew(-15deg, 0) scale(1, 1.5)
+
+  .caesar-status-value
+    font-size: 10px
+    margin-left: 10px
+    line-height: 16px
+    
+    span:nth-child(1)
+      color: #5C5C5C
+      font-weight: 400
+
+    span:nth-child(2)
+      border-radius: 8px
+      background: #005D69
+      color: #ffffff
+      font-weight: 500
+      margin-left: 5px
+      padding: 1px 5px
