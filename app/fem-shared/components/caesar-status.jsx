@@ -7,21 +7,12 @@ configuration on Caesar.
 
 import { useEffect, useState } from 'react';
 import auth from 'panoptes-client/lib/auth';
+import getCaesarWorkflowUrl from '../helpers/getCaesarWorkflowUrl.js'
 
 const DEFAULT_API_DATA = {
   caesar: undefined,
   status: 'ready'
 };
-
-const env = getAPIEnv();
-
-function getCaesarStatusUrl (workflowId = 0) {
-  if (!workflowId) return;
-
-  return (env === 'production')
-    ? `https://caesar.zooniverse.org/workflows/${parseInt(workflowId)}`
-    : `https://caesar-staging.zooniverse.org/workflows/${parseInt(workflowId)}`  
-}
 
 export default function CaesarStatus ({ workflow }) {
   const [apiData, setApiData] = useState(DEFAULT_API_DATA);
@@ -34,7 +25,7 @@ export default function CaesarStatus ({ workflow }) {
       });
 
       const bearerToken = await auth.checkBearerToken();
-      const url = getCaesarStatusUrl(workflow.id);
+      const url = getCaesarWorkflowUrl(workflow?.id);
       const headers = {
         Accept: 'application/json',
         Authorization: (bearerToken) ? `Bearer ${bearerToken}` : '',
@@ -60,13 +51,11 @@ export default function CaesarStatus ({ workflow }) {
     }
   }
 
-  useEffect(checkCaesar, [workflow.id]);
+  useEffect(checkCaesar, [workflow?.id]);
 
   if (!workflow) return;
 
-  const caesarConfigUrl = (env === 'production')
-    ? `https://caesar.zooniverse.org/workflows/${parseInt(workflow.id)}`
-    : `https://caesar-staging.zooniverse.org/workflows/${parseInt(workflow.id)}`;
+  const caesarWorkflowUrl = getCaesarWorkflowUrl(workflow?.id);
 
   return (
     <div className="caesar-status">
@@ -83,7 +72,7 @@ export default function CaesarStatus ({ workflow }) {
         <>
           <a
             className="caesar-status-badge"
-            href={caesarConfigUrl}
+            href={caesarWorkflowUrl}
           >
             <span className="caesar-status-badge-left">§</span>
             <span className="caesar-status-badge-center">Caesar</span>
