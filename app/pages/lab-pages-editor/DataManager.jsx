@@ -13,23 +13,23 @@ and the workflow's preview URL.)
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/require-default-props */
 
-import { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import apiClient from 'panoptes-client/lib/api-client';
-import { WorkflowContext } from './context.js';
-import checkIsPFEWorkflow from './helpers/checkIsPFEWorkflow.js';
-import checkIsWorkflowPartOfProject from './helpers/checkIsWorkflowPartOfProject.js';
+import { useEffect, useMemo, useState } from "react";
+import PropTypes from "prop-types";
+import apiClient from "panoptes-client/lib/api-client";
+import { WorkflowContext } from "./context.js";
+import checkIsPFEWorkflow from "./helpers/checkIsPFEWorkflow.js";
+import checkIsWorkflowPartOfProject from "./helpers/checkIsWorkflowPartOfProject.js";
 
 function DataManager({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
   children = null,
   projectId = '',
-  workflowId = ''
+  workflowId = '',
 }) {
   const [apiData, setApiData] = useState({
     project: null,
     workflow: null,
-    status: 'ready'
+    status: 'ready',
   });
   const [updateCounter, setUpdateCounter] = useState(0); // Number of updates so far, only used to trigger useMemo.
   const isPFEWorkflow = checkIsPFEWorkflow(apiData.workflow);
@@ -45,12 +45,12 @@ function DataManager({
         setApiData({
           project: null,
           workflow: null,
-          status: 'fetching'
+          status: 'fetching',
         });
 
-        const [ proj, wf ] = await Promise.all([
+        const [proj, wf] = await Promise.all([
           apiClient.type('projects').get(projectId),
-          apiClient.type('workflows').get(workflowId)
+          apiClient.type('workflows').get(workflowId),
         ]);
         if (!proj) throw new Error('No project');
         if (!wf) throw new Error('No workflow');
@@ -58,15 +58,14 @@ function DataManager({
         setApiData({
           project: proj,
           workflow: wf,
-          status: 'ready'
+          status: 'ready',
         });
-
       } catch (err) {
         console.error('DataManager: ', err);
         setApiData({
           project: null,
           workflow: null,
-          status: 'error'
+          status: 'error',
         });
       }
     }
@@ -97,34 +96,45 @@ function DataManager({
 
       setApiData((prevState) => ({
         ...prevState,
-        status: 'updating'
+        status: 'updating',
       }));
 
-      const newWorkflow = await wf.update(data).save();
+      try {
+        const newWorkflow = await wf.update(data).save();
 
-      setApiData((prevState) => ({
-        ...prevState,
-        workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
-        status: 'ready'
-      }));
+        setApiData((prevState) => ({
+          ...prevState,
+          workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
+          status: 'ready',
+        }));
 
-      return newWorkflow;
+        return newWorkflow;
+      } catch (err) {
+        console.error('DataManager update error:', err);
+        setApiData((prevState) => ({
+          ...prevState,
+          status: 'error',
+        }));
+      }
     }
 
     return {
       project: apiData.project,
       status: apiData.status,
       workflow: apiData.workflow,
-      update
+      update,
     };
   }, [apiData.project, apiData.workflow, apiData.status, updateCounter]);
 
   // Safety check: did this component receive its minimum input?
-  if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
+  if (!workflowId) return <div>ERROR: no Workflow ID specified</div>;
 
   // Safety check: does this workflow belong to this project?
   if (apiData.workflow && apiData.project) {
-    const isWorkflowPartOfProject = checkIsWorkflowPartOfProject(apiData.workflow, apiData.project);
+    const isWorkflowPartOfProject = checkIsWorkflowPartOfProject(
+      apiData.workflow,
+      apiData.project
+    );
     if (!isWorkflowPartOfProject) {
       return (
         <div className="status-banner error">
@@ -139,16 +149,14 @@ function DataManager({
   // // if (!workflow) return null
 
   return (
-    <WorkflowContext.Provider
-      value={contextData}
-    >
+    <WorkflowContext.Provider value={contextData}>
       {apiData.status === 'fetching' && (
         <div className="status-banner fetching">Fetching data...</div>
       )}
       {apiData.status === 'error' && (
-        <div className="status-banner error">ERROR: could not fetch data</div>
+        <div className="status-banner error">ERROR: could not fetch or update data</div>
       )}
-      {isPFEWorkflow ? <PFEWorkflowWarning /> : children }
+      {isPFEWorkflow ? <PFEWorkflowWarning /> : children}
     </WorkflowContext.Provider>
   );
 }
@@ -163,7 +171,10 @@ first before allowing them
 function PFEWorkflowWarning() {
   return (
     <div className="pfe-workflow-warning">
-      <p>Sorry, but the new workflow editor doesn't support traditional workflows.</p>
+      <p>
+        Sorry, but the new workflow editor doesn't support traditional
+        workflows.
+      </p>
       <p>Please check back with us later, as we improve the workflow editor.</p>
     </div>
   );
@@ -172,10 +183,10 @@ function PFEWorkflowWarning() {
 DataManager.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
+    PropTypes.node,
   ]),
   projectId: PropTypes.string,
-  workflowId: PropTypes.string
+  workflowId: PropTypes.string,
 };
 
 export default DataManager;

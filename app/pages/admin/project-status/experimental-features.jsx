@@ -20,6 +20,7 @@ const experimentalFeatures = [
   'freehandShape',
   'general feedback',
   'Gravity Spy Gold Standard',
+  'hideNotLaunchApprovedBanner', // Some projects do not want to be listed on the /projects landing page, but are actually approved by Zooniverse.
   'highlighter',
   'indexedSubjectSetNextPrevButtons',  // FEM only. Enables the "Next" and "Previous" buttons to appear on the SubjectSetProgressBanner, if and only if the Subject Set is indexed on the Subject Set Search API. Originally designed for Engaging Crowds 2021.
   'mini-course',

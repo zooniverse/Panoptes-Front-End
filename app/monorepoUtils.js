@@ -104,7 +104,29 @@ export const SLUGS = [
   'mschwamb/planet-hunters-ngts',
   'orionnau/active-asteroids',
   'bg557/field-journal-fix-up',
-  'healion90/weather-archive-africa'
+  'healion90/weather-archive-africa',
+  'fwc/everglades-wildlife-watch',
+  'aicensusuhu/iberian-camera-trap-project',
+  'dangogh/wheres-walleye',
+  'zooniverse/radio-meteor-zoo',
+  'h-spiers/etch-a-cell-immunoexplorers',
+  'marckuchner/backyard-worlds-planet-9',
+  'marek-slipski/cloudspotting-on-mars',
+  'matteocrismani/cloudspotting-on-mars-shapes',
+  'reinforce/new-particle-search-at-cern',
+  'kelseyswieca/plankton-portal',
+  'aprajita/space-warps-esa-euclid',
+  'stephenresearch/beluga-bits',
+  'jberkhei/gravity-wave-zoo',
+  'ajnorton/superwasp-variable-stars',
+  'ssilverberg/disk-detective',
+  'amylien/burst-chaser',
+  'gregtroiani/cosmic-collisions',
+  'reinforce/gwitchhunters',
+  'mbarrierz/monkey-health-explorer',
+  'jeyhansk/redshift-wrangler',
+  'lolasolebo/eyes-on-eyes',
+  'teolixx/sunspot-detectives'
 ];
 
 export function usesMonorepo(slug) {
