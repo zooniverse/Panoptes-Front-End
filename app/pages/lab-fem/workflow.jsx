@@ -909,6 +909,7 @@ EditWorkflowPage.defaultProps = {
 const defaultParams = {
   workflowID: ''
 }
+
 export default function EditWorkflowPageWrapper({
   params = defaultParams,
   ...props
