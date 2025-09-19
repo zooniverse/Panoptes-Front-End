@@ -73,6 +73,8 @@ export default function CaesarStatus ({ workflow }) {
           <a
             className="caesar-status-badge"
             href={caesarWorkflowUrl}
+            rel="noopener noreferrer"
+            target="_blank"
           >
             <span className="caesar-status-badge-left">§</span>
             <span className="caesar-status-badge-center">Caesar</span>
