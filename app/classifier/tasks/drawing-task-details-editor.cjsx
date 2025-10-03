@@ -20,13 +20,14 @@ module.exports = createReactClass
 
   render: ->
     GenericTaskEditor = require './generic-editor' # Work around circular dependency.
+    taskDetails = @getTaskDetails()
 
     <div className="drawing-task-details-editor">
       <div className="sub-tasks">
-        {if @props.details.length is 0
+        {if taskDetails.length is 0
           <span className="form-help">No sub-tasks defined for this tool</span>
         else
-          for subtask, i in @props.details
+          for subtask, i in taskDetails
             subtask._key ?= Math.random()
             <div key={subtask._key} className="drawing-task-details-editor-subtask-wrapper">
               {
@@ -114,6 +115,12 @@ module.exports = createReactClass
   canUseTask: (task)->
     task in @props.project.experimental_tools
 
+  getTaskDetails: ->
+    if @props.task.type is 'subjectGroupComparison'
+      @props.task.details
+    else
+      @props.task.tools?[@props.toolIndex]?.details ? []
+
   handleAddTask: (task) ->
     switch task
       when 'single'
@@ -124,12 +131,21 @@ module.exports = createReactClass
         TaskChoice = require('./slider').default
       when 'dropdown'
         TaskChoice = require('./dropdown').default
-    @props.task.tools[@props.toolIndex].details.push TaskChoice.getDefaultTask()
-    @props.workflow.update 'tasks'
+
+    taskDetails = @getTaskDetails()
+    taskDetails.push TaskChoice.getDefaultTask()
+
+    # For SGC tasks, need to update the specific path, not just 'tasks'
+    if @props.task.type is 'subjectGroupComparison'
+      changes = {}
+      changes["#{@props.toolPath}.details"] = @props.task.details
+      @props.workflow.update(changes)
+    else
+      @props.workflow.update 'tasks'
+
     @props.workflow.save()
 
   handleSubtaskChange: (subtaskIndex, path, value) ->
-    console?.log 'Handling subtask change', arguments...
     taskKey = (key for key, description of @props.workflow.tasks when description is @props.task)[0]
     changes = {}
     changes["#{@props.toolPath}.details.#{subtaskIndex}.#{path}"] = value
@@ -137,5 +153,5 @@ module.exports = createReactClass
     console?.log changes, @props.workflow
 
   handleSubtaskDelete: (subtaskIndex) ->
-    @props.task.tools[@props.toolIndex].details.splice subtaskIndex, 1
+    @getTaskDetails().splice subtaskIndex, 1
     @props.workflow.update('tasks').save()

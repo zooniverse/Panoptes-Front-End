@@ -909,6 +909,7 @@ EditWorkflowPage.defaultProps = {
 const defaultParams = {
   workflowID: ''
 }
+
 export default function EditWorkflowPageWrapper({
   params = defaultParams,
   ...props
@@ -924,7 +925,20 @@ export default function EditWorkflowPageWrapper({
         setError(error);
         return null;
       })
-      .then(setWorkflow);
+      .then(workflow => {
+        // TESTING: Simulate old workflow without details property for SGC tasks
+        Object.keys(workflow.tasks).forEach(taskKey => {
+          const task = workflow.tasks[taskKey];
+          if (task.type === 'subjectGroupComparison' && task.details) {
+            delete task.details;
+            console.log(`TESTING: Deleted task.details from ${taskKey} to simulate old workflow`);
+          }
+        });
+        workflow.update('tasks');
+
+        // Remove from comment above to here to "revert" code
+        setWorkflow(workflow);
+      });
   }, [params.workflowID]);
 
   useEffect(function subscribeToWorkflow() {
