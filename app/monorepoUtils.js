@@ -126,7 +126,36 @@ export const SLUGS = [
   'mbarrierz/monkey-health-explorer',
   'jeyhansk/redshift-wrangler',
   'lolasolebo/eyes-on-eyes',
-  'teolixx/sunspot-detectives'
+  'teolixx/sunspot-detectives',
+  'lauraporturas/notes-from-nature-aphids-unfamiliar',
+  'albasu/climateviz',
+  'citizenreaders/picturing-childrens-stories',
+  'siren-project/siren-project',
+  'fwc/indigo-snake-watch',
+  'stephaniewilliams-ncdhc/north-carolina-primary-source-transcription',
+  'benjamin-dot-richards/oceaneyes',
+  'andreavarela89/iguanas-from-above',
+  'birgus2/western-shield-camera-watch',
+  'american-prairie/cameras-for-conservation',
+  'cindy-cifuentes/wesselman-woods-wildlife-watch',
+  'londonhogwatch/london-hogwatch-richmond-park',
+  'londonhogwatch/london-hogwatch',
+  'coolneighbors/backyard-worlds-cool-neighbors',
+  'caroline-cox/cloudcatcher',
+  'orionnau/rubin-comet-catchers',
+  'jebehm/wild-behavior-philadelphia',
+  'ywyh/delve-dwarf-galaxy-quest-milky-way-neighbors',
+  'alex-andersson/bursts-from-space-meerkat',
+  'ucla-seti-group/are-we-alone-in-the-universe',
+  'leslieazwell/back-bay-bird-identification',
+  'rebeccarhelm/the-living-sailor',
+  'chrismrp/radio-galaxy-zoo-lofar',
+  'rowan-aspire/drones-for-ducks',
+  'hongming-tang/radio-galaxy-zoo-emu',
+  'lcjohnso/local-group-cluster-search',
+  'mhnc-dot-up/dear-monsieur-sampaio-dot-dot-dot',
+  'physicsjosh/tag-trees'
+
 ];
 
 export function usesMonorepo(slug) {
