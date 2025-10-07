@@ -39,7 +39,8 @@ SubjectGroupComparisonTask.getDefaultTask = () => {
     type: 'subjectGroupComparison',
     question: 'Enter a question.',
     help: '',
-    required: false
+    required: false,
+    details: []
   };
 };
 SubjectGroupComparisonTask.getTaskText = (task) => {
@@ -57,7 +58,8 @@ SubjectGroupComparisonTask.propTypes = {
     {
       question: PropTypes.string,
       help: PropTypes.string,
-      required: PropTypes.bool
+      required: PropTypes.bool,
+      details: []
     }
   ),
   translation: PropTypes.shape({
