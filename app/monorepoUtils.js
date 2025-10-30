@@ -154,8 +154,8 @@ export const SLUGS = [
   'hongming-tang/radio-galaxy-zoo-emu',
   'lcjohnso/local-group-cluster-search',
   'mhnc-dot-up/dear-monsieur-sampaio-dot-dot-dot',
-  'physicsjosh/tag-trees'
-
+  'physicsjosh/tag-trees',
+  'blicksam/bounding-box-bonanza'
 ];
 
 export function usesMonorepo(slug) {
