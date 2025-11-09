@@ -34,6 +34,8 @@ const ProjectHomePage = (props) => {
 
   const showGetStartedLink = (!props.showWorkflowButtons && projectIsNotRedirected) || props.splits['workflow.assignment']
 
+  const hideNotLaunchApprovedBanner = props.project.experimental_tools?.includes('hideNotLaunchApprovedBanner')
+
   return (
     <div className="project-home-page">
       <div className="project-page project-background" style={backgroundStyle}>
@@ -73,7 +75,7 @@ const ProjectHomePage = (props) => {
               <i className="fa fa-external-link" />
             </a>}
         </div>
-        {!props.project.launch_approved &&
+        {!props.project.launch_approved && !hideNotLaunchApprovedBanner &&
           <Translate
             component="p"
             className="project-disclaimer"

@@ -131,7 +131,10 @@ module.exports = createReactClass
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     subjectLocations = getSubjectLocations @props.subject
-    if subjectIsLikelyAudioPlusImage @props.subject
+
+    if @props.subject?.metadata['metadata:volumetric']
+      mainDisplay = @renderFrame @state.frame, { isVolumetric: true }
+    else if subjectIsLikelyAudioPlusImage @props.subject
       mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
     else if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame

@@ -19,6 +19,7 @@ import Tutorials from '../lab/workflow-components/tutorials.jsx';
 import TaskOptions from '../lab/workflow-components/task-options.jsx';
 import TaskEditor from '../lab/workflow-components/task-editor.jsx';
 import TaskPicker from '../lab/workflow-components/task-picker.jsx';
+import CaesarStatus from '../../fem-shared/components/caesar-status.jsx';
 import { isThisProjectUsingFEMLab, isWorkflowUsingJSONSubjects, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
 import removeTaskKeyFromWorkflow from '../lab/helpers/removeTaskKeyFromWorkflow.js';
 
@@ -521,6 +522,10 @@ class EditWorkflowPage extends Component {
               <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='https://www.zooniverse.org/about#contact'>Contact Us</a> page.</small>
             </p>
 
+            <CaesarStatus
+              workflow={this.props.workflow}
+            />
+
             <hr />
 
             {Array.from(this.props.project.experimental_tools).includes('caesarDataFetching') ?
@@ -904,6 +909,7 @@ EditWorkflowPage.defaultProps = {
 const defaultParams = {
   workflowID: ''
 }
+
 export default function EditWorkflowPageWrapper({
   params = defaultParams,
   ...props

@@ -16,11 +16,16 @@ export default class DataExportDownloadLink extends React.Component {
 
         this.getExport = this.getExport.bind(this);
         this.recentAndReady = this.recentAndReady.bind(this);
+        this.recentAndFailed = this.recentAndFailed.bind(this);
         this.pending = this.pending.bind(this);
     }
 
     recentAndReady(exported) {
         return exported?.metadata && (exported.metadata.state === 'ready' || !exported.metadata.state);
+    }
+
+    recentAndFailed(exported) {
+        return exported?.metadata && (exported.metadata.state === 'failed' || !exported.metadata.state);
     }
 
     pending(exported) {
@@ -56,6 +61,10 @@ export default class DataExportDownloadLink extends React.Component {
             return (<span>
                 {`Most recent data available requested ${moment(this.state.mostRecent.updated_at).fromNow()}, `}
                 <a href={this.state.mostRecent.src}>download your data export</a>.
+              </span >);
+        } else if (this.recentAndFailed(this.state.mostRecent)) {
+            return (<span>
+                {`❌ Something went wrong while creating this export (${moment(this.state.mostRecent.updated_at).fromNow()})`}
               </span >);
         } else if (this.pending(this.state.mostRecent)) {
             return (<span>Export is being generated.</span>);
