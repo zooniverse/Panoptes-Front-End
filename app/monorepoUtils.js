@@ -155,7 +155,10 @@ export const SLUGS = [
   'lcjohnso/local-group-cluster-search',
   'mhnc-dot-up/dear-monsieur-sampaio-dot-dot-dot',
   'physicsjosh/tag-trees',
-  'blicksam/bounding-box-bonanza'
+  'blicksam/bounding-box-bonanza',
+  'citizenreaders/the-senses-of-stories',
+  'vickitoyedens/space-umbrella',
+  'astrohayley/galaxy-zoo-tidal-tales'
 ];
 
 export function usesMonorepo(slug) {
