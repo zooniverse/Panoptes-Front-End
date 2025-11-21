@@ -1,6 +1,6 @@
 # Panoptes (front end)
 
-![Build Status](https://github.com/zooniverse/Panoptes-Front-End/actions/workflows/ci-tests.yml/badge.svg?branch=master)
+![Build Status](https://github.com/zooniverse/Panoptes-Front-End/actions/workflows/ci-tests.yml/badge.svg?branch=main)
 
 [![Coverage Status](https://coveralls.io/repos/github/zooniverse/Panoptes-Front-End/badge.svg)](https://coveralls.io/github/zooniverse/Panoptes-Front-End)
 
@@ -70,7 +70,7 @@ The app can be configured using the following environment variables:
 #### Configuration notes
 
 - Some of these environment variables are set by commands in the `package.json` `scripts` block; in order to override them, you'll need to modify `package.json`.
-- To see the defaults set by the `NODE_ENV` environment variable, see [`config.js`](https://github.com/zooniverse/panoptes-javascript-client/blob/master/lib/config.js) in [panoptes-javascript-client](https://github.com/zooniverse/panoptes-javascript-client).
+- To see the defaults set by the `NODE_ENV` environment variable, see [`config.js`](https://github.com/zooniverse/panoptes-javascript-client/blob/main/lib/config.js) in [panoptes-javascript-client](https://github.com/zooniverse/panoptes-javascript-client).
 
 ### Development
 
@@ -102,7 +102,7 @@ Deployment is handled by Github Action.
 
 On opening of pull requests, a Github Action is triggered to deploy to a branch staging location. The blob storage location depends on the pull request number, e.g. `https://pr-5926.pfe-preview.zooniverse.org`.
 
-On push to master, a Github Action is triggered to deploy to master staging found at `https://master.pfe-preview.zooniverse.org`.
+On push to `main`, a Github Action is triggered to deploy to main staging found at `https://main.pfe-preview.zooniverse.org`.
 
 ### Production
 
