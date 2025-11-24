@@ -14,8 +14,8 @@ name: "Code scanning - action"
 on:
   push:
     branches: 
-      # Push events on master branch only
-      - master
+      # Push events on main branch only
+      - main
   pull_request:
   schedule:
     - cron: '0 13 * * 3'
