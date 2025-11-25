@@ -48,6 +48,7 @@ module.exports = createReactClass
       when 'highlighter' then ['instruction', 'highlighterLabels']
       when 'dataVisAnnotation' then ['instruction', 'tools']
       when 'volumetric' then ['instruction']
+      when 'geoDrawing' then ['instruction', 'tools']
 
     isAQuestion = @props.task.type in ['single', 'multiple']
     canBeRequired = @props.task.type in ['single', 'multiple', 'text']
@@ -80,12 +81,13 @@ module.exports = createReactClass
         </div>}
       {' '}
 
-      <label className="pill-button">
-        <AutoSave resource={@props.workflow}>
-          <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
-          Allow hiding marks
-        </AutoSave>
-      </label>
+      {unless @props.task.type is 'geoDrawing'
+        <label className="pill-button">
+          <AutoSave resource={@props.workflow}>
+            <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
+            Allow hiding marks
+          </AutoSave>
+        </label>}
 
       {if isAQuestion
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
@@ -254,7 +256,28 @@ module.exports = createReactClass
                     <div key="details" className="workflow-choice-setting">
                       <button type="button" onClick={@editToolDetails.bind this, @props.task, index}>Sub-tasks ({choice.details?.length ? 0})</button>{' '}
                       <small className="form-help">Ask users a question about what they’ve just drawn.</small>
-                    </div>]}
+                    </div>]
+
+                  when 'geoDrawing'
+                    [<div
+                      key="type" 
+                      className="workflow-choice-setting"
+                    >
+                      <AutoSave resource={@props.workflow}>
+                        Type{' '}
+                        <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
+                          <option key="geoPoint" value="geoPoint">geoPoint</option>
+                        </select>
+                      </AutoSave>
+                    </div>
+
+                    <MinMaxEditor
+                      key='min-max'
+                      workflow={@props.workflow}
+                      name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                      choice={choice}
+                    />]
+                }
               </div>
 
               <AutoSave resource={@props.workflow}>
@@ -354,6 +377,10 @@ module.exports = createReactClass
         label: 'Tool name'
         color: '#00ff00'
         details: []
+    if @props.task.type is 'geoDrawing'
+      @props.task.tools.push
+        type: 'geoPoint'
+        label: 'Tool name'
     if @props.task.type is 'dataVisAnnotation'
       # data selection uses the same colours as the text selection tool.
       highlighterLabelColors = highlighterLabelColorOptions.map((option) => option.value)

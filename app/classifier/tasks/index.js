@@ -14,6 +14,7 @@ import TranscriptionTask from './transcription';
 import SubjectGroupComparisonTask from './subjectGroupComparison';
 import DataVisAnnotationTask from './dataVisAnnotation'
 import VolumetricTask from './volumetric';
+import GeoDrawingTask from './geoDrawing';
 
 const tasks = {
   combo: ComboTask,
@@ -31,7 +32,8 @@ const tasks = {
   transcription: TranscriptionTask,
   subjectGroupComparison: SubjectGroupComparisonTask,
   dataVisAnnotation: DataVisAnnotationTask,
-  volumetric: VolumetricTask
+  volumetric: VolumetricTask,
+  geoDrawing: GeoDrawingTask
 };
 
 export default tasks;
