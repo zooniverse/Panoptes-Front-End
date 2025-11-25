@@ -49,7 +49,7 @@ ComboTaskEditor = createReactClass
   render: ->
     tasks = require('..').default
     <div>
-      <p>Add any number of tasks here and they'll be shown in one step.</p>
+      <p>Add any number of tasks here and they will be shown in one step.</p>
       {if @props.task.tasks.length is 0
         <p className="form-help">No tasks in this combo.</p>
       else

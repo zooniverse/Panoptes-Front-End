@@ -12,6 +12,7 @@ export default function TaskIcon({ type }) {
     case 'slider': return <i className="fa fa-sliders fa-fw"></i>;
     case 'highlighter': return <i className="fa fa-i-cursor"></i>;
     case 'transcription': return <i className="fa fa-font fa-fw"></i>;
+    case 'geoDrawing': return <i className="fa fa-map-marker fa-fw"></i>;
   }
   return null
 }
