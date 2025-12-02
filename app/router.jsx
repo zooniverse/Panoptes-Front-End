@@ -291,6 +291,18 @@ export const routes = (
       <IndexRoute component={(require('./pages/organization/organization-page').default)} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="stats" component={(require('./pages/organization/stats').default)} />
+      <Route path="talk" component={require('./pages/organization/talk').default}>
+        <IndexRoute component={require('./talk/init')} />
+        <Route path="recents" component={require('./talk/recents')} />
+        <Route path="not-found" component={NotFoundPage} />
+        <Route path="search" component={require('./talk/search')} />
+        <Route path="moderations" component={require('./talk/moderations')} />
+        <Route path="subjects/:id" component={SubjectPageController} />
+        <Route path="recents/:board" component={require('./talk/recents')} />
+        <Route path="tags/:tag" component={require('./talk/tags')} />
+        <Route path=":board" component={require('./talk/board')} />
+        <Route path=":board/:discussion" component={require('./talk/discussion')} />
+      </Route>
     </Route>
 
     <Route path="notifications" component={NotificationsPage} />
