@@ -426,6 +426,7 @@ class ProjectStatus extends Component {
                   >
                     <option value="none">None Selected</option>
                     <option value="dataImage">Data Image DEPRECATED</option>
+                    <option value='geoMap'>Geographic Map</option>
                     <option value="imageAndText">Image and Text</option>
                     <option value="jsonData">JSON data charts</option>
                     <option value="lightcurve">(D3/TESS) Light Curve DEPRECATED</option>
