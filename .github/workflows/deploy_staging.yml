@@ -4,7 +4,7 @@ on:
     # Run this workflow on creation (or sync to source branch) of a new pull request
     push:
         branches:
-          - master
+          - main
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
     needs: build
     with:
       source: 'dist'
-      target: 'preview.zooniverse.org/panoptes-front-end/master'
+      target: 'preview.zooniverse.org/panoptes-front-end/main'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
 
