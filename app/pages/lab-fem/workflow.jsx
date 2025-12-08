@@ -295,7 +295,7 @@ class EditWorkflowPage extends Component {
                             <small><strong>Subject Group Comparison (aka "Grid")</strong></small>
                           </button>
                         </AutoSave> : undefined}{' '}
-                        { this.state.workflowUsesJSONSubjects ?
+                      {this.state.workflowUsesJSONSubjects ?
                         <AutoSave resource={this.props.workflow}>
                           <button type="button" className="minor-button" onClick={this.addNewTask.bind(this, 'dataVisAnnotation')} title="Data annotation: the volunteer can select chart data.">
                             <i className="fa fa-i-cursor fa-2x"></i>
@@ -309,6 +309,14 @@ class EditWorkflowPage extends Component {
                             <i className="fa fa-th fa-2x"></i>
                             <br />
                             <small><strong>Volumetric Task</strong></small>
+                          </button>
+                        </AutoSave> : undefined}{' '}
+                      {this.canUseTask(this.props.project, "mapping") ?
+                        <AutoSave resource={this.props.workflow}>
+                          <button type="button" className="minor-button" onClick={this.addNewTask.bind(this, "geoDrawing")} title="Geospatial Drawing Task: the volunteer marks or draws directly on a map using tools that you specify.">
+                            <i className="fa fa-map-marker fa-2x"></i>
+                            <br />
+                            <small><strong>GeoDrawing</strong></small>
                           </button>
                         </AutoSave> : undefined}{' '}
                       </div> : undefined}
