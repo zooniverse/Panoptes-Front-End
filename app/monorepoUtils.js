@@ -1,3 +1,4 @@
+rhs
 /*
 These utilities are used to determine if a Zooniverse project should be using
 the FEM (Front-End-Monorepo) Classifier + project page.
@@ -175,7 +176,7 @@ export const SLUGS = [
   'gobiogobio/the-secret-life-of-the-mersey-estuary',
   'wyzz-yoshi/cosmic-ray-tracks-in-cmos-darks',
   'codypayne1992/noddac-aurora-cameras',
-  'nathanlancs25/rhs-wisley-bug-watch',
+  'samoates/rhs-wisley-bug-watch',
   'ariehammond/discover-the-nat-glass-photographs',
   'astridlpo43/abc-meygal-volcanic-sucs-43',
   'alliebatt34/spot-the-debris',
