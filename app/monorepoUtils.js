@@ -184,7 +184,8 @@ export const SLUGS = [
   'alliebatt34/spot-the-debris',
   'jaybirddccb/snapshot-dubuque-iowa',
   'sumbredolphin/dolphin-spotting',
-  'jordan-green/wildlife-vehicle-conflict-in-virginia'
+  'jordan-green/wildlife-vehicle-conflict-in-virginia',
+  'kieraponting/adelie-penguins-on-ross-island'
 ];
 
 export function usesMonorepo(slug) {
