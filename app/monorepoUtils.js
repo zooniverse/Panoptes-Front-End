@@ -159,7 +159,6 @@ export const SLUGS = [
   'citizenreaders/the-senses-of-stories',
   'vickitoyedens/space-umbrella',
   'astrohayley/galaxy-zoo-tidal-tales',
-  'hripsi-19/atmoselec-atmospheric-electricity-for-climate',
   'p-teleti/monsoon-voyages',
   'meteonetwork/redata',
   'zooniverse/snapshot-wisconsin',
