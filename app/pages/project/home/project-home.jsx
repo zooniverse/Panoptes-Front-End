@@ -110,7 +110,7 @@ const ProjectHomePage = (props) => {
             }
             return (
               <div className="project-home-page__talk-image" key={subject.id}>
-                <Link to={`/projects/${props.project.slug}/talk/subjects/${subject.id}`} >
+                <a href={`https://www.zooniverse.org/projects/${props.project.slug}/talk/subjects/${subject.id}`} >
                   <Thumbnail
                     alt=""
                     controls={false}
@@ -119,7 +119,7 @@ const ProjectHomePage = (props) => {
                     src={src}
                     width={600}
                   />
-                </Link>
+                </a>
               </div>
             );
           })}

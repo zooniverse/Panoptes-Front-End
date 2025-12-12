@@ -142,7 +142,7 @@ module.exports = createReactClass
       componentSubjectIds = @props.subject?.metadata?['#group_subject_ids']?.split('-') || []
       mainDisplay = @props.subject.locations.map (frame, index) =>
         groupSubjectId = componentSubjectIds[index]
-        groupSubjectLink = "/projects/#{@props.project?.slug}/talk/subjects/#{componentSubjectIds[index]}"      
+        groupSubjectLink = "https://www.zooniverse.org/projects/#{@props.project?.slug}/talk/subjects/#{componentSubjectIds[index]}"
         @renderFrame index, {key: "frame-#{index}", isGroupSubject: true, groupSubjectId, groupSubjectLink}
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>

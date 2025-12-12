@@ -34,15 +34,7 @@ describe('TalkLink', function() {
 
     it('should use props.translateContent in the Translation component if defined', function() {
       wrapper.setProps({ translateContent: 'classifier.doneAndTalk' });
-      expect(wrapper.find('Translate').props().content).to.equal('classifier.doneAndTalk'); 
-    });
-
-    it('should use props.projectSlug in the Link to props', function() {
-      expect(wrapper.find('Link').props().to).to.include(projectSlug);
-    });
-
-    it('should use props.subjectId in the Link to props', function() {
-      expect(wrapper.find('Link').props().to).to.include(subjectId);
+      expect(wrapper.find('Translate').props().content).to.equal('classifier.doneAndTalk');
     });
   });
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { darken, lighten } from 'polished';
@@ -26,10 +25,10 @@ const commonStyles = `
   white-space: nowrap;
 `;
 
-export const StyledTalkLink = styled(Link)`
+export const StyledTalkLink = styled.a`
   ${commonStyles}
-  cursor: pointer;    
-  
+  cursor: pointer;
+
   background: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
     light: TALK_LINK_BLUE
@@ -91,7 +90,7 @@ export function TalkLink({ disabled, onClick, projectSlug, subjectId, theme, tra
     <ThemeProvider theme={{ mode: theme }}>
       <StyledTalkLink
         onClick={onClick}
-        to={`/projects/${projectSlug}/talk/subjects/${subjectId}`}
+        href={`https://www.zooniverse.org/projects/${projectSlug}/talk/subjects/${subjectId}`}
       >
         <Translate content={translateContent} />
       </StyledTalkLink>

@@ -7,7 +7,6 @@
  */
 import { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router';
 import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
 import intersection from 'lodash/intersection';
@@ -113,9 +112,9 @@ function SubjectNode({
         isFavorite={isFavorite}
       >
         {!selecting ?
-          <Link className="subject-link" to={`/projects/${project?.slug}/talk/subjects/${subject.id}`}>
+          <a className="subject-link" href={`https://www.zooniverse.org/projects/${project?.slug}/talk/subjects/${subject.id}`}>
             <span></span>
-          </Link> : undefined}
+          </a> : undefined}
         {canCollaborate && !selecting ?
           <button
             type="button"
