@@ -104,11 +104,11 @@ export default class TalkTags extends React.Component {
                   return (
                     <div className="tagged-subject talk-module" key={`tag-${tag.id}`}>
                       <p>
-                        <Link
-                          to={`/projects/${this.props.params.owner}/${this.props.params.name}/talk/subjects/${tag.subject.id}`}
+                        <a
+                          href={`https://www.zooniverse.org/projects/${this.props.params.owner}/${this.props.params.name}/talk/subjects/${tag.subject.id}`}
                         >
                           Subject {tag.subject.id}
-                        </Link>
+                        </a>
                       </p>
                       <Thumbnail
                         src={subjectLocation.src}
@@ -134,7 +134,7 @@ export default class TalkTags extends React.Component {
                   )
                 })}
               </section>
-      
+
               <div className="talk-sidebar">
                 <section>
                   <PopularTags
@@ -158,7 +158,7 @@ export default class TalkTags extends React.Component {
             <Paginator page={+this.state.meta.page} pageCount = {this.state.meta.page_count} />
           </div>
         </div>}
-      
+
       {this.state.tags && this.state.tags.length < 1 &&
         <p>No tags found.</p>}
 

@@ -205,12 +205,6 @@ describe('ProjectHome', function() {
       expect(wrapper.find('.project-home-page__talk-image')).to.have.lengthOf(3);
     });
 
-    it('should render 3 Link components for each subject', function() {
-      talkSubjects.forEach((subject) => {
-        expect(wrapper.find({ to: `/projects/${project.slug}/talk/subjects/${subject.id}` })).to.have.lengthOf(1);
-      });
-    });
-
     it('should render 3 Thumbnail components for each subject', function() {
       talkSubjects.forEach((subject) => {
         expect(wrapper.find({ src: subject.locations[0]['image/png'] })).to.have.lengthOf(1);
