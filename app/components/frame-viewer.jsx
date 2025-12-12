@@ -113,10 +113,10 @@ export default class FrameViewer extends React.Component {
       );
     } else if (this.props.isGroupSubject) {
       return (
-        <Link
+        <a
           className="linked-image"
           title={`Subject ${this.props.groupSubjectId}`}
-          to={this.props.groupSubjectLink}
+          href={this.props.groupSubjectLink} // This is the Subject Level Talk Page
         >
           <FileViewer
             src={src}
@@ -128,7 +128,7 @@ export default class FrameViewer extends React.Component {
             registerProgressObject={this.props.registerProgressObject}
             {...modellingProps}
           />
-        </Link>
+        </a>
       )
     } else {
       return (

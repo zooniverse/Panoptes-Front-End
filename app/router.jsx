@@ -199,7 +199,7 @@ export const routes = (
         <Route path="not-found" component={NotFoundPage} />
         <Route path="search" component={require('./talk/search')} />
         <Route path="moderations" component={require('./talk/moderations')} />
-        <Route path="subjects/:id" onEnter={redirectSubjectTalkPage} />
+        <Route path="subjects/:id" onEnter={redirectToStaticProxy} />
         <Route path="recents/:board" component={require('./talk/recents')} />
         <Route path="tags/:tag" component={TalkTags} />
         <Route path=":board" component={require('./talk/board')} />
