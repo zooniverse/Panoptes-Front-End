@@ -22,6 +22,7 @@ import EditProjectTalk from './pages/lab/talk';
 import EditMediaPage from './pages/lab/media';
 import UserProfilePage from './pages/profile/index';
 import NotificationsPage from './pages/notifications';
+import SubjectPageController from './subjects';
 import WorkflowsContainer from './pages/lab/workflows-container';
 import WorkflowsList from './pages/lab/workflows';
 import SubjectSetsContainer from './pages/lab/subject-sets-container';
@@ -199,7 +200,7 @@ export const routes = (
         <Route path="not-found" component={NotFoundPage} />
         <Route path="search" component={require('./talk/search')} />
         <Route path="moderations" component={require('./talk/moderations')} />
-        <Route path="subjects/:id" onEnter={redirectToStaticProxy} />
+        <Route path="subjects/:id" component={SubjectPageController} />
         <Route path="recents/:board" component={require('./talk/recents')} />
         <Route path="tags/:tag" component={TalkTags} />
         <Route path=":board" component={require('./talk/board')} />
@@ -254,7 +255,7 @@ export const routes = (
         <Route path="not-found" component={NotFoundPage} />
         <Route path="search" component={require('./talk/search')} />
         <Route path="moderations" component={require('./talk/moderations')} />
-        <Route path="subjects/:id" component={redirectToStaticProxy} />
+        <Route path="subjects/:id" component={SubjectPageController} />
         <Route path="recents/:board" component={require('./talk/recents')} />
         <Route path="tags/:tag" component={TalkTags} />
         <Route path=":board" component={require('./talk/board')} />
