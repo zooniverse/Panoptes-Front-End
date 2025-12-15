@@ -160,7 +160,6 @@ export const SLUGS = [
   'vickitoyedens/space-umbrella',
   'astrohayley/galaxy-zoo-tidal-tales',
   'p-teleti/monsoon-voyages',
-  'meteonetwork/redata',
   'zooniverse/snapshot-wisconsin',
   'sandiegozooglobal/wildwatch-kenya',
   'kearins/science-for-bumble-bees',
