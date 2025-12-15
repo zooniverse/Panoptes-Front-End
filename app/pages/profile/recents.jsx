@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import SubjectViewer from '../../components/subject-viewer';
 import Thumbnail from '../../components/thumbnail';
@@ -55,9 +54,9 @@ function Recents({ project, user }) {
                     subject={fakeSubject}
                     user={user}
                   >
-                    <Link
+                    <a
                       className="subject-link"
-                      to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}
+                      href={`https://www.zooniverse.org/projects/${project.slug}/talk/subjects/${recent.links.subject}`}
                     >
                       <Thumbnail
                         alt={`Subject ${recent.links.subject}`}
@@ -66,7 +65,7 @@ function Recents({ project, user }) {
                         format={format}
                         height={250}
                       />
-                    </Link>
+                    </a>
                   </SubjectViewer>
                 </li>
               );

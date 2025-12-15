@@ -23,7 +23,6 @@ import EditMediaPage from './pages/lab/media';
 import UserProfilePage from './pages/profile/index';
 import NotificationsPage from './pages/notifications';
 import SubjectPageController from './subjects';
-import WorkflowsPage from './pages/lab/workflows';
 import WorkflowsContainer from './pages/lab/workflows-container';
 import WorkflowsList from './pages/lab/workflows';
 import SubjectSetsContainer from './pages/lab/subject-sets-container';
@@ -36,7 +35,7 @@ import SecurityPolicy from './pages/security-policy';
 import AdminPage from './pages/admin';
 import SignInPage from './pages/sign-in';
 import AccountsPage from './pages/accounts';
-import RubinPage from './rubin-2025/rubin-page.jsx';  // Part of Rubin 2025 project. See /app/rubin-2025 
+import RubinPage from './rubin-2025/rubin-page.jsx';  // Part of Rubin 2025 project. See /app/rubin-2025
 import NotFoundPage from './pages/not-found';
 import ResetPasswordPage from './pages/reset-password/reset-password';
 import Recents from './pages/profile/recents';
@@ -69,10 +68,11 @@ class ONE_UP_REDIRECT extends React.Component {
   }
 }
 
-function redirectAboutPage (nextState, replace, done) {
+// Use this when links should not route interally and instead point to the Zooniverse static proxy
+function redirectToStaticProxy (nextState, replace, done) {
   try {
     const { pathname } = nextState.location
-    let newUrl = `https://fe-root.preview.zooniverse.org${pathname}`
+    let newUrl = `https://frontend.preview.zooniverse.org${pathname}`
     if (window.location.hostname === 'www.zooniverse.org') {
       newUrl = `https://www.zooniverse.org${pathname}`
     }
@@ -100,22 +100,22 @@ export const routes = (
     <IndexRoute component={() => <ExternalRedirect newUrl='https://www.zooniverse.org' />} />
     <Route path="home" component={ONE_UP_REDIRECT} />
 
-    <Route path="about" onEnter={redirectAboutPage} ignoreScrollBehavior>
-      <Route path="team" onEnter={redirectAboutPage} />
-      <Route path="publications" onEnter={redirectAboutPage} />
-      <Route path="acknowledgements" onEnter={redirectAboutPage} />
-      <Route path="resources" onEnter={redirectAboutPage} />
-      <Route path="contact" onEnter={redirectAboutPage} />
-      <Route path="faq" onEnter={redirectAboutPage} />
-      <Route path="highlights" onEnter={redirectAboutPage} />
-      <Route path="mobile-app" onEnter={redirectAboutPage} />
-      <Route path="donate" onEnter={redirectAboutPage} />
+    <Route path="about" onEnter={redirectToStaticProxy} ignoreScrollBehavior>
+      <Route path="team" onEnter={redirectToStaticProxy} />
+      <Route path="publications" onEnter={redirectToStaticProxy} />
+      <Route path="acknowledgements" onEnter={redirectToStaticProxy} />
+      <Route path="resources" onEnter={redirectToStaticProxy} />
+      <Route path="contact" onEnter={redirectToStaticProxy} />
+      <Route path="faq" onEnter={redirectToStaticProxy} />
+      <Route path="highlights" onEnter={redirectToStaticProxy} />
+      <Route path="mobile-app" onEnter={redirectToStaticProxy} />
+      <Route path="donate" onEnter={redirectToStaticProxy} />
     </Route>
 
 
-    <Route path="get-involved" onEnter={redirectAboutPage} ignoreScrollBehavior>
-      <Route path="call-for-projects" onEnter={redirectAboutPage} />
-      <Route path="education" onEnter={redirectAboutPage} />
+    <Route path="get-involved" onEnter={redirectToStaticProxy} ignoreScrollBehavior>
+      <Route path="call-for-projects" onEnter={redirectToStaticProxy} />
+      <Route path="education" onEnter={redirectToStaticProxy} />
       <Redirect from="callForProjects" to="call-for-projects" />
     </Route>
 
