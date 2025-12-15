@@ -285,8 +285,8 @@ class Classifier extends React.Component {
       .then(() => {
         actions.classify.completeClassification(annotations);
         if (!showIntervention && !isCmdClick && originalElement.href) {
-          const subjectTalkPath = `https://www.zooniverse.org/projects/${project.slug}/talk/subjects/${subject.id}`;
-          window.location = subjectTalkPath
+          const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
+          browserHistory.push(subjectTalkPath);
         }
       })
       .then(() => {
