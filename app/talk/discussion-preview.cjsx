@@ -4,6 +4,7 @@ createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
+baseURL = require('./lib/base-url').default
 getSubjectLocation = require('../lib/getSubjectLocation').default
 
 # `import Thumbnail from '../components/thumbnail';`
@@ -19,15 +20,14 @@ module.exports = createReactClass
     project: {}
 
   discussionLink: ->
-    {discussion} = @props
+    {discussion, project} = @props
 
-    if (@props.params?.owner and @props.params?.name) # get from url if possible
+    if (project && @props.params?.owner and @props.params?.name) # get from url if possible
       {owner, name} = @props.params
-      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
+      "/#{baseURL(project)}/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
-    else if @props.project.slug # otherwise fetch from project
-      [owner, name] = @props.project.slug.split('/')
-      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
+    else if (project && project.slug) # otherwise fetch from project
+      "/#{baseURL(project)}/#{project.slug}/talk/#{discussion.board_id}/#{discussion.id}"
 
     else # link to zooniverse main talk
       "/talk/#{discussion.board_id}/#{discussion.id}"

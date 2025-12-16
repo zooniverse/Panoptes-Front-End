@@ -227,6 +227,7 @@ class OrganizationContainer extends React.Component {
   }
 
   render() {
+    const { user } = this.context;
     const { children, params } = this.props;
     const {
       collaboratorView,
@@ -256,7 +257,8 @@ class OrganizationContainer extends React.Component {
         organizationProjects,
         projectAvatars,
         quoteObject,
-        toggleCollaboratorView: this.toggleCollaboratorView
+        toggleCollaboratorView: this.toggleCollaboratorView,
+        user
       });
     } else if (fetchingOrganization) {
       return (

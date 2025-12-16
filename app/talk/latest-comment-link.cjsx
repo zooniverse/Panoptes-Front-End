@@ -3,6 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 {timeAgo} = require './lib/time'
+baseURL = require('./lib/base-url').default
 DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'
 {Link} = require 'react-router'
@@ -54,9 +55,9 @@ module.exports = createReactClass
     locationObject =
       pathname: "/talk/#{@props.discussion.board_id}/#{@props.discussion.id}"
       query: query
-    if @props.params?.owner and @props.params?.name
+    if @props.project and @props.params?.owner and @props.params?.name
       {owner, name} = @props.params
-      locationObject.pathname = "/projects/#{owner}/#{name}" + locationObject.pathname
+      locationObject.pathname = "/#{baseURL(@props.project)}/#{owner}/#{name}" + locationObject.pathname
 
     <Link className={className} onClick={logClick?.bind(this, childtext)} to={@context.router.createHref(locationObject)}>
       {childtext}
@@ -74,7 +75,7 @@ module.exports = createReactClass
 
     baseLink = "/"
     if @props.project? and @props.project.slug?
-      baseLink += "projects/#{@props.project.slug}/"
+      baseLink += "#{baseURL(@props.project)}/#{@props.project.slug}/"
 
     <div className="talk-latest-comment-link">
       <div className="talk-discussion-link">

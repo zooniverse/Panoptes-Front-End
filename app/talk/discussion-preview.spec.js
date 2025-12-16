@@ -5,6 +5,9 @@ import { shallow } from 'enzyme';
 import DiscussionPreview from './discussion-preview';
 
 const validProject = {
+  _type: {
+    _name: 'projects'
+  },
   id: 34,
   slug: 'test/project'
 };

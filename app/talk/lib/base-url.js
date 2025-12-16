@@ -1,0 +1,1 @@
+export default resource => resource && resource._type._name
