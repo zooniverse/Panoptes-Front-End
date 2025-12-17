@@ -108,9 +108,9 @@ module.exports = createReactClass
   commentSubjectTitle: (comment, subject) ->
     {owner, name} = @props.params
     if (comment.focus_type is 'Subject') and (owner and name)
-      <Link to="/projects/#{owner}/#{name}/talk/subjects/#{comment.focus_id}" onClick={@logItemClick.bind this, "view-subject-direct"}>
+      <a href="https://www.zooniverse.org/projects/#{owner}/#{name}/talk/subjects/#{comment.focus_id}" onClick={@logItemClick.bind this, "view-subject-direct"}>
         Subject {subject.id}
-      </Link>
+      </a>
     else
       <span>Subject {subject.id}</span>
 
