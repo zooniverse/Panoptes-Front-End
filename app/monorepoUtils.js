@@ -185,7 +185,8 @@ export const SLUGS = [
   'jordan-green/wildlife-vehicle-conflict-in-virginia',
   'kieraponting/adelie-penguins-on-ross-island',
   'sunnymurphyiecl/coyote-cam',
-  'fwc/marine-lens-florida-keys'
+  'fwc/marine-lens-florida-keys',
+  'icecubeobservatory/name-that-neutrino'
 ];
 
 export function usesMonorepo(slug) {
