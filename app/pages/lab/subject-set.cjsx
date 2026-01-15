@@ -18,6 +18,8 @@ isAdmin = require '../../lib/is-admin'
 NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.mp4', '.m4a', '.mpeg', '.txt', '.json']
+VALID_FEM_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.mp4', '.mpeg', '.txt', '.json']
+
 VALID_FILE_TYPES = [
   'text/csv',
   'text/plain',
@@ -230,8 +232,10 @@ EditSubjectSetPage = createReactClass
             Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
             Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers in the main classification interface or in the Talk discussion tool.<br />
             Headers that begin with "!" denote fields that <strong>will not</strong> be visible to classifiers in the main classification interface but <strong>will be </strong> visible after classification in the Talk discussion tool.<br />
-            Subject images can be up to {MAX_FILE_SIZE / 1024}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
+            Subject images can be up to {MAX_FILE_SIZE / 1024}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_FEM_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
             and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}<br />
+            <br />
+            If you have .svg, .m4a, or .mp3 subjects, please email us at contact@zooniverse.org. We can host your project on our legacy architecture until these formats are supported on our <a href='https://blog.zooniverse.org/2024/04/23/navigating-the-future-zooniverses-frontend-codebase-migration-and-design-evolution/'>new architecture</a>.
           </UploadDropTarget>
         </p>}
       <div className="manifests-and-subjects">
