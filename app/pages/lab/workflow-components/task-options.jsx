@@ -13,5 +13,5 @@ function TaskOption({ definition, taskKey}) {
 
 export default function TaskOptions({ tasks }) {
   const taskEntries = Object.entries(tasks);
-  return taskEntries.map(([taskKey, definition]) => <TaskOption taskKey={taskKey} definition={definition} />);
+  return taskEntries.map(([taskKey, definition]) => <TaskOption key={taskKey} taskKey={taskKey} definition={definition} />);
 }
