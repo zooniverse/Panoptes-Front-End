@@ -91,14 +91,14 @@ function EditProjectPage({
           <h2 className="nav-list-header">Project #{project.id}</h2>
           <ul className="nav-list">
             <li>
-              <Link
-                to={projectLink}
+              <a
+                href={projectLink}
                 className="standard-button view-project-button"
                 target="_blank"
                 title="Open the current project in a new tab."
               >
                 View project
-              </Link>
+              </a>
             </li>
             <li>
               <IndexLink
