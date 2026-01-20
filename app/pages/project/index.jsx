@@ -49,22 +49,36 @@ class ProjectPageController extends React.Component {
   }
 
   componentDidMount() {
+    const pathname = this.props.location.pathname  // e.g. "/projects/penguintom79/penguin-watch"
+    const locationRegex = /^\/projects\/([^\/]*)\/([^\/]*)/.exec(pathname)
+    const paramsOwner = this.props.params.owner || locationRegex?.[1]
+    const paramsName = this.props.params.name || locationRegex?.[2]
+
     this._boundForceUpdate = this.forceUpdate.bind(this);
     if (this.context.initialLoadComplete) {
-      this.fetchProjectData(this.props.params.owner, this.props.params.name, this.props.user);
+      this.fetchProjectData(paramsOwner, paramsName, this.props.user);
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const { owner, name } = nextProps.params;
-    const pathChanged = (owner !== this.props.params.owner) || (name !== this.props.params.name);
+    const pathname = this.props.location.pathname  // e.g. "/projects/penguintom79/penguin-watch"
+    const locationRegex = /^\/projects\/([^\/]*)\/([^\/]*)/.exec(pathname)
+    const paramsOwner = this.props.params.owner || locationRegex?.[1]
+    const paramsName = this.props.params.name || locationRegex?.[2]
+
+    const nextPathname = nextProps.location.pathname  // e.g. "/projects/penguintom79/penguin-watch"
+    const nextLocationRegex = /^\/projects\/([^\/]*)\/([^\/]*)/.exec(nextPathname)
+    const nextOwner = nextProps.params.owner || nextLocationRegex?.[1]
+    const nextName = nextProps.params.name || nextLocationRegex?.[2]
+
+    const pathChanged = (nextOwner !== paramsOwner) || (nextName !== paramsName);
     const userChanged = nextContext.initialLoadComplete && (nextProps.user !== this.props.user);
     const initialLoadCompleted = nextContext.initialLoadComplete === !this.context.initialLoadComplete;
 
     // Wait until we know if there's a user
     if (pathChanged || userChanged || (initialLoadCompleted && (this.state.project === null))) {
       if (!this.state.loading) {
-        this.fetchProjectData(owner, name, nextProps.user);
+        this.fetchProjectData(nextOwner, nextName, nextProps.user);
       }
     }
   }
@@ -143,6 +157,7 @@ class ProjectPageController extends React.Component {
     return apiClient.type('projects').get({ slug, include: 'avatar,background,owners' })
       .then(([project]) => {
         this.setState({ project });
+        console.log('+++ slug', slug)
 
         if (project) {
           let locale = project.primary_language
@@ -286,7 +301,12 @@ class ProjectPageController extends React.Component {
   }
 
   render() {
-    const slug = `${this.props.params.owner}/${this.props.params.name}`;
+    const pathname = this.props.location.pathname  // e.g. "/projects/penguintom79/penguin-watch"
+    const locationRegex = /^\/projects\/([^\/]*)\/([^\/]*)/.exec(pathname)
+    const paramsOwner = this.props.params.owner || locationRegex?.[1]
+    const paramsName = this.props.params.name || locationRegex?.[2]
+
+    const slug = `${paramsOwner}/${paramsName}`;
     const betaApproved = this.state.project ? this.state.project.beta_approved : undefined;
     const launchApproved = this.state.project ? this.state.project.launch_approved : undefined;
     const displayName = this.state.project ? this.state.project.display_name : undefined;
@@ -299,10 +319,10 @@ class ProjectPageController extends React.Component {
           <div className="beta-border" /> : undefined}
 
         {!!this.state.ready &&
-          <Translations
+          /*<Translations
             original={this.state.project}
             type="project"
-          >
+          >*/
             <ProjectPage
               {...this.props}
               background={this.state.background}
@@ -321,7 +341,7 @@ class ProjectPageController extends React.Component {
               splits={this.state.splits}
               workflow={this.props.workflow}
             />
-          </Translations>
+          /*</Translations>*/
         }
         {!!this.state.loading &&
           <div className="content-container">
