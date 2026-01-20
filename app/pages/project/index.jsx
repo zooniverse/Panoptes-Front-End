@@ -319,10 +319,10 @@ class ProjectPageController extends React.Component {
           <div className="beta-border" /> : undefined}
 
         {!!this.state.ready &&
-          /*<Translations
+          <Translations
             original={this.state.project}
             type="project"
-          >*/
+          >
             <ProjectPage
               {...this.props}
               background={this.state.background}
@@ -341,7 +341,7 @@ class ProjectPageController extends React.Component {
               splits={this.state.splits}
               workflow={this.props.workflow}
             />
-          /*</Translations>*/
+          </Translations>
         }
         {!!this.state.loading &&
           <div className="content-container">
