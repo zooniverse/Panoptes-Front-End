@@ -19,7 +19,7 @@ function PFEProjectRoutes() {
 
 PFEProjectRoutes.createRouteFromReactElement = (element, parentRoute) => {
   const pfeProjectRoutes = createRoutesFromReactChildren(
-    <Route path='projects' component={require('./pages/project').default}>
+    <Route path='projects'>
       {PFE_SLUGS.map(slug => <PFEProjectRoute key={slug} path={slug} />)}
       <Route path=':locale'>
         {PFE_SLUGS.map(slug => <PFEProjectRoute key={slug} path={slug} />)}
