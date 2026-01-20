@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../../../lib/is-admin';
-import { usesMonorepo, monorepoURL } from '../../../../monorepoUtils';
+import { monorepoURL, usesPFEClassifier } from '../../../../monorepoUtils';
 
 import { getProjectLinks } from '../../../../lib/nav-helpers';
 import ProjectNavbar from './ProjectNavbar';
@@ -94,9 +94,16 @@ class ProjectNavbarContainer extends Component {
     const navLinks = isResourceAProject(this.props.project) ? this.getNavLinks() : [];
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = isResourceAProject(this.props.project) ? `/projects/${this.props.project.slug}${query}` : `/organizations/${this.props.project.slug}${query}`;
-    let redirect = this.props.project.redirect ? this.props.project.redirect : '';
     const underReview = this.props.project.beta_approved;
-    if (usesMonorepo(this.props.project.slug)) {
+    const hasExternalFrontend = this.props.project.redirect
+    let redirect = this.props.project.redirect ? this.props.project.redirect : '';
+
+    /**
+      Unless a project is whitelisted to stay on PFE's classiifer, the link to a project's homepage
+      about pages, or classify page should go to FEM which expects locale to formatted as
+      /projects/locale/owner/projectName
+     */
+    if (!usesPFEClassifier(this.props.project.slug)) {
       const i18nSlug = locale === 'en' ? this.props.project.slug : `${locale}/${this.props.project.slug}`;
       const envQuery = env === 'staging' ? '?env=staging' : '';
       redirect = `${monorepoURL(i18nSlug)}${envQuery}`;
@@ -106,6 +113,7 @@ class ProjectNavbarContainer extends Component {
       <ProjectNavbar
         avatarSrc={avatarSrc}
         backgroundSrc={backgroundSrc}
+        hasExternalFrontend={hasExternalFrontend}
         launched={launched}
         navLinks={navLinks}
         project={this.props.project}
@@ -113,7 +121,7 @@ class ProjectNavbarContainer extends Component {
         projectLink={projectLink}
         redirect={redirect}
         underReview={underReview}
-        usesMonorepo={usesMonorepo(this.props.project.slug)}
+        usesPFEClassifier={usesPFEClassifier(this.props.project.slug)}
       />
     );
   }

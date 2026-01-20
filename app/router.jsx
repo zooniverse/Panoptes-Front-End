@@ -45,7 +45,7 @@ import EmailSettingsPage from './pages/settings/email';
 import DevClassifierPage from './pages/dev-classifier';
 import DataExports from './pages/lab/data-exports';
 import TalkTags from './talk/tags';
-import MonorepoRoutes from './MonorepoRoutes';
+import PFEProjectRoutes from './PFEProjectRoutes';
 import FEMLabRouter from './pages/lab-fem/fem-lab-router'
 import IIIFSubjectSet from './pages/lab/iiif'
 import projectLab from './pages/lab/project.jsx'
@@ -54,7 +54,6 @@ import PagesEditor from './pages/lab-pages-editor'
 import ProjectStatsPage from './pages/project/stats'
 
 // <Redirect from="home" to="/" /> doesn't work.
-
 class ONE_UP_REDIRECT extends React.Component {
   componentDidMount () {
     let givenPathSegments = this.props.location.pathname.split('/')
@@ -68,7 +67,7 @@ class ONE_UP_REDIRECT extends React.Component {
   }
 }
 
-// Use this when links should not route interally and instead point to the Zooniverse static proxy
+// Use this when links should not route internally and instead point to the Zooniverse static proxy
 function redirectToStaticProxy (nextState, replace, done) {
   try {
     const { pathname } = nextState.location
@@ -165,7 +164,7 @@ export const routes = (
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
-    <MonorepoRoutes />
+    <PFEProjectRoutes />
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
@@ -177,21 +176,24 @@ export const routes = (
     */
     <Redirect from="projects/mike-walmsley/bursts-from-space" to="projects/mikewalmsley/bursts-from-space"/>
 
+    {/* By default, all project homepages, classify pages, and about pages redirect to the
+    static proxy UNLESS the project is whitelisted to stay on PFE's classifier. Those project
+    routes are above in PFEProjectRoutes */}
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
-      <IndexRoute component={ProjectHomePage} />
-      <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="classify" component={require('./pages/project/classify').default} />
+      <IndexRoute onEnter={redirectToStaticProxy} />
+      <Route path="home" onEnter={redirectToStaticProxy} />
+      <Route path="classify" onEnter={redirectToStaticProxy} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
       <Redirect from="education" to="about/education"/>
-      <Route path="about" component={AboutProject}>
+      <Route path="about" onEnter={redirectToStaticProxy}>
         <IndexRedirect to="research" />
-        <Route path="research" component={AboutProjectResearch} />
-        <Route path="results" component={AboutProjectResults} />
-        <Route path="faq" component={AboutProjectFAQ} />
-        <Route path="education" component={AboutProjectEducation} />
-        <Route path="team" component={AboutProjectTeam} />
+        <Route path="research" onEnter={redirectToStaticProxy} />
+        <Route path="results" onEnter={redirectToStaticProxy} />
+        <Route path="faq" onEnter={redirectToStaticProxy} />
+        <Route path="education" onEnter={redirectToStaticProxy} />
+        <Route path="team" onEnter={redirectToStaticProxy} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require('./pages/project/talk')}>
@@ -232,6 +234,10 @@ export const routes = (
       <Route path="recents" component={Recents} />
     </Route>
 
+    {/*
+      This is FEM's projects/locale pattern. These routes only apply if the react-router
+      somehow intercepts a request to i.e /projects/es/penguintom79/penguin-watch
+    */}
     <Route path="projects/:locale/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />

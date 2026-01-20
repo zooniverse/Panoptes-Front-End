@@ -23,7 +23,7 @@ class ProjectNavbar extends Component {
     // `size` is undefined when the component is first mounted, as there hasn't
     // been time for the callback to fire.
     // size.width will be 0 when the navbar begins to render, so ignore that too.
-    
+
     if (size && size.width) {
       const useWide = size.width < document.body.clientWidth;
       const newState = (this.state.loading) ? { useWide, loading: false } : { useWide };
@@ -68,7 +68,6 @@ ProjectNavbar.defaultProps = {
   projectTitle: '',
   redirect: '',
   underReview: false,
-  usesMonorepo: false
 };
 
 ProjectNavbar.propTypes = {
@@ -80,7 +79,6 @@ ProjectNavbar.propTypes = {
   projectLink: PropTypes.string,
   redirect: PropTypes.string,
   underReview: PropTypes.bool,
-  usesMonorepo: PropTypes.bool
 };
 
 export default ProjectNavbar;
