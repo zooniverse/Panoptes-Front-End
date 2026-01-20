@@ -52,7 +52,7 @@ module.exports = createReactClass
         </label>
       </p>
 
-      <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
+      <p className="form-help">Note: The “Private Project” option is not yet available in our <a href='https://blog.zooniverse.org/2024/04/23/navigating-the-future-zooniverses-frontend-codebase-migration-and-design-evolution'>new architecture</a>. For the rare cases where a team needs a Private Project (hosted on our legacy architecture), please email us at <a mailto='contact@zooniverse.org'>contact@zooniverse.org</a>.</p>
 
       <hr/>
 
@@ -104,5 +104,5 @@ module.exports = createReactClass
         }
 
       </div>
-  
+
     </div>
