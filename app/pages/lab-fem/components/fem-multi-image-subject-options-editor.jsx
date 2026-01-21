@@ -35,17 +35,33 @@ export default function FemMultiImageSubjectLayoutEditor ({
     })
   }
 
+  function handleSelectMode (e) {
+    const mode = e.target.value;
+    return workflow.update({
+      'configuration.multi_image_mode': mode
+    })
+  }
+
   const enableSwitchingChecked = !!workflow?.configuration?.enable_switching_flipbook_and_separate
+  const showSeparateFramesOptions = enableSwitchingChecked || workflow?.configuration?.multi_image_mode === 'separate'
   const enableAutoplayChecked = !!workflow?.configuration?.flipbook_autoplay
   const iterations = workflow?.configuration?.playIterations >= 0 ? workflow.configuration.playIterations : 3
   const layout = workflow?.configuration?.multi_image_layout || 'col'
   const cloneMarksChecked = !!workflow?.configuration?.multi_image_clone_markers
-
+  const mode = workflow?.configuration?.multi_image_mode || 'flipbook'
 
   return (
     <div className='multi-image-subject-layout-editor'>
       <span className="form-label">{`Multi-image options (Flipbook Viewer)`}</span><br/>
       <small className="form-help">Choose how to display subjects with multiple images.</small>
+      <div style={{ marginTop: '5px' }}>
+        <select id='multi_image_mode' onChange={handleSelectMode} value={mode}>
+          <option value='flipbook'>Show flipbook</option>
+          <option value='separate'>Show separate frames</option>
+        </select>
+        <label htmlFor='multi_image_mode'>{' '}View</label>
+        <small> - choose the view volunteers see first</small>
+      </div>
       <div>
         <select id='flipbook-play-iterations' onChange={handleSelectPlayIterations} value={iterations}>
           <option value=''>Infinite</option>
@@ -73,10 +89,10 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={enableSwitchingChecked}
             onChange={toggleEnableSwitching}
           />
-          Allow Separate Frames View - <small>volunteers can choose flipbook or a separate frames view</small>
+          Allow to Choose View - <small>volunteers can choose flipbook or a separate frames view</small>
         </label>
       </div>
-      
+
       <div>
         <label>
           <input
@@ -88,7 +104,7 @@ export default function FemMultiImageSubjectLayoutEditor ({
         </label>
       </div>
 
-      {enableSwitchingChecked && <div>
+      {showSeparateFramesOptions && <div>
         <br />
         <span>Show separate frames as:</span>
         <br />

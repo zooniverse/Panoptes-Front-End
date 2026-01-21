@@ -7,7 +7,7 @@ var projectActions = {
   createProject: function(projectData) {
     var allProjectData = Object.assign({
       primary_language: counterpart.getLocale(),
-      private: true
+      private: false
     }, projectData);
 
     return projects.create(allProjectData).save();
