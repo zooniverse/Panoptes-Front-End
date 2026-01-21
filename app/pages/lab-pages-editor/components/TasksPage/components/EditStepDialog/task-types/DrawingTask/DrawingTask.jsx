@@ -11,8 +11,7 @@ import DrawingTool, { randomlySelectColor } from './DrawingTool.jsx'
 
 function DrawingTask({
   deleteTask = DEFAULT_HANDLER,
-  isFirstTaskInStep = true,
-  stepHasManyTasks = false,
+  showDeleteButton = false,
   task,
   taskKey,
   updateTask = DEFAULT_HANDLER
@@ -113,11 +112,6 @@ function DrawingTask({
     update({ tools: newTools })
   }
 
-  const [ showHelpField, setShowHelpField ] = useState(isFirstTaskInStep || task?.help?.length > 0)
-  function toggleShowHelpField() {
-    setShowHelpField(!showHelpField)
-  }
-
   return (
     <div className="drawing-task">
       <TaskHeader
@@ -131,7 +125,7 @@ function DrawingTask({
       <TaskInstructionField
         deleteTask={deleteTask}
         setValue={setInstruction}
-        showDeleteButton={stepHasManyTasks}
+        showDeleteButton={showDeleteButton}
         taskKey={taskKey}
         update={update}
         value={instruction}
@@ -184,9 +178,7 @@ function DrawingTask({
       <TaskHelpField
         help={help}
         setHelp={setHelp}
-        showHelpField={showHelpField}
         taskKey={taskKey}
-        toggleShowHelpField={toggleShowHelpField}
         update={update}
       />
     </div>
@@ -195,8 +187,7 @@ function DrawingTask({
 
 DrawingTask.propTypes = {
   deleteTask: PropTypes.func,
-  isFirstTaskInStep: PropTypes.bool,
-  stepHasManyTasks: PropTypes.bool,
+  showDeleteButton: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateTask: PropTypes.func

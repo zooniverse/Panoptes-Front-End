@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 're
 import PropTypes from 'prop-types'
 
 import EditTaskForm from './EditTaskForm.jsx'
+import checkIsFixedStep from '../../../../helpers/checkIsFixedStep.js'
 import CloseIcon from '../../../../icons/CloseIcon.jsx'
 import OptionsIcon from '../../../../icons/OptionsIcon.jsx'
 
@@ -62,7 +63,10 @@ function EditStepDialogWithRef({
     setShowOptions(!showOptions)
   }
 
+  const tasksInStep = taskKeys.map(taskKey => allTasks[taskKey] )
+  const isFixedStep = checkIsFixedStep(tasksInStep)
   const stepHasManyTasks = taskKeys?.length > 1
+  const showDeleteButtonOnEachTask = stepHasManyTasks && !isFixedStep
 
   return (
     <dialog
@@ -106,14 +110,14 @@ function EditStepDialogWithRef({
         className="dialog-body"
         onSubmit={onSubmit}
       >
-        {taskKeys.map((taskKey, index) => {
+        {taskKeys.map(taskKey => {
           const task = allTasks[taskKey]
           return (
             <EditTaskForm
               key={`editTaskForm-${taskKey}`}
               deleteTask={deleteTask}
               enforceLimitedBranchingRule={enforceLimitedBranchingRule}
-              stepHasManyTasks={stepHasManyTasks}
+              showDeleteButton={showDeleteButtonOnEachTask}
               task={task}
               taskKey={taskKey}
               updateTask={updateTask}
@@ -122,13 +126,15 @@ function EditStepDialogWithRef({
         })}
       </form>
       <div className="dialog-footer">
-        <button
-          className="button add-task-button"
-          onClick={doAddTask}
-          type="button"
-        >
-          Add another task to this page
-        </button>
+        {(!isFixedStep) && ( 
+          <button
+            className="button add-task-button"
+            onClick={doAddTask}
+            type="button"
+          >
+            Add another task to this page
+          </button>
+        )}
         <button
           className="button done-button"
           onClick={closeDialog}

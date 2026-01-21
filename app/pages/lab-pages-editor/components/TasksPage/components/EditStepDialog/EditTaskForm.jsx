@@ -15,7 +15,7 @@ const taskTypes = {
 function EditTaskForm({  // It's not actually a form, but a fieldset that's part of a form.
   deleteTask,
   enforceLimitedBranchingRule,
-  stepHasManyTasks,
+  showDeleteButton = false,
   task,
   taskKey,
   updateTask
@@ -30,7 +30,7 @@ function EditTaskForm({  // It's not actually a form, but a fieldset that's part
       <TaskForm
         deleteTask={deleteTask}
         enforceLimitedBranchingRule={enforceLimitedBranchingRule}
-        stepHasManyTasks={stepHasManyTasks}
+        showDeleteButton={showDeleteButton}
         task={task}
         taskKey={taskKey}
         updateTask={updateTask}
@@ -44,7 +44,7 @@ EditTaskForm.propTypes = {
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
   }),
-  stepHasManyTasks: PropTypes.bool,
+  showDeleteButton: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateTask: PropTypes.func
