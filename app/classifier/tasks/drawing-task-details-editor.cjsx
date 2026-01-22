@@ -88,17 +88,22 @@ module.exports = createReactClass
                 <small><strong>Question</strong></small>
               </button>{' '}
 
-              <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
-                <i className="fa fa-sliders fa-2x"></i>
-                <br />
-                <small><strong>Slider</strong></small>
-              </button>{' '}
+              {
+                if 'slider' in @props.project.experimental_tools
+                  <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
+                    <i className="fa fa-sliders fa-2x"></i>
+                    <br />
+                    <small><strong>Slider</strong></small>
+                  </button>
+              }
+              {if 'slider' in @props.project.experimental_tools then ' '}
 
               <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
                 <i className="fa fa-file-text-o fa-2x"></i>
                 <br />
                 <small><strong>Text</strong></small>
               </button>{' '}
+
               {
                 if 'dropdown' in @props.project.experimental_tools
                   <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects a text label from a list.">
