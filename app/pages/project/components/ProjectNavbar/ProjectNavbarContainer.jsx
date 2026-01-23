@@ -95,7 +95,7 @@ class ProjectNavbarContainer extends Component {
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = isResourceAProject(this.props.project) ? `/projects/${this.props.project.slug}${query}` : `/organizations/${this.props.project.slug}${query}`;
     const underReview = this.props.project.beta_approved;
-    const hasExternalFrontend = this.props.project.redirect
+    const hasExternalFrontend = !!this.props.project.redirect
     let redirect = this.props.project.redirect ? this.props.project.redirect : '';
 
     /**

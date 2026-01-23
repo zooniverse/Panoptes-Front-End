@@ -60,13 +60,13 @@ PFEProjectRoute.createRouteFromReactElement = (element, parentRoute) => {
     parentRoute
   )[0]
   pfeProjectRoute.component = props => {
+
     return (
-      <ProjectPageController>
-        Loading…
+      <>
         {React.Children.map(props.children, child =>
           React.cloneElement(child, { path })
         )}
-      </ProjectPageController>
+        </>
     )
   }
   return pfeProjectRoute

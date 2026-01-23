@@ -52,6 +52,8 @@ import projectLab from './pages/lab/project.jsx'
 import Collaborators from './pages/lab/collaborators.jsx'
 import PagesEditor from './pages/lab-pages-editor'
 import ProjectStatsPage from './pages/project/stats'
+import ProjectPageController from './pages/project/index'
+import { PFE_SLUGS } from './monorepoUtils.js';
 
 // <Redirect from="home" to="/" /> doesn't work.
 class ONE_UP_REDIRECT extends React.Component {
@@ -93,6 +95,38 @@ class ExternalRedirect extends React.Component {
     return null
   }
 }
+
+class PFEProject extends React.Component {
+  render () {
+    const pathname = this.props.location.pathname  // e.g. "/projects/penguintom79/penguin-watch"
+    const locationRegex = /^\/projects\/([^\/]*)\/([^\/]*)/.exec(pathname)
+    const owner = locationRegex?.[1]
+    const name = locationRegex?.[2]
+    const props = {...this.props, params: { owner, name }}
+    return <ProjectPageController {...props} />
+  }
+}
+
+const pfeRoutes = PFE_SLUGS.map((slug) => {
+  return (
+    <Route key={slug} path={`projects/${slug}`} component={PFEProject}>
+    <IndexRoute component={ProjectHomePage} />
+      <Route path="home" component={ONE_UP_REDIRECT} />
+      <Route path="classify" component={require('./pages/project/classify').default} />
+      <Redirect from="research" to="about/research"/>
+      <Redirect from="results" to="about/results"/>
+      <Redirect from="faq" to="about/faq"/>
+      <Redirect from="education" to="about/education"/>
+      <Route path="about" component={AboutProject}>
+        <IndexRedirect to="research" />
+        <Route path="research" component={AboutProjectResearch} />
+        <Route path="results" component={AboutProjectResults} />
+        <Route path="faq" component={AboutProjectFAQ} />
+        <Route path="education" component={AboutProjectEducation} />
+        <Route path="team" component={AboutProjectTeam} />
+      </Route>
+    </Route>
+)})
 
 export const routes = (
   <Route path="/" component={require('./partials/app')}>
@@ -164,22 +198,26 @@ export const routes = (
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
-    <PFEProjectRoutes />
+{   /* This doesn't work */}
+    {/* {...pfeRoutes} */}
+
+    {/* But this does for /mschwamb/planet-four */}
+    {pfeRoutes[pfeRoutes.length - 1]}
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
-    /*
+    {/*
     2022 Feb Temporary fix: a recent issue of "Sky and Telescope" misprinted the
     URL for the Bursts from Space project. This is a workaround.
     See https://zooniverse.slack.com/archives/C14TTCLNN/p1643655013402769
     Please remove in 6 months time.
-    */
+    */}
     <Redirect from="projects/mike-walmsley/bursts-from-space" to="projects/mikewalmsley/bursts-from-space"/>
 
     {/* By default, all project homepages, classify pages, and about pages redirect to the
     static proxy UNLESS the project is whitelisted to stay on PFE's classifier. Those project
     routes are above in PFEProjectRoutes */}
-    <Route path="projects/:owner/:name" component={require('./pages/project').default}>
+    <Route path="projects/:owner/:name" component={ProjectPageController}>
       <IndexRoute onEnter={redirectToStaticProxy} />
       <Route path="home" onEnter={redirectToStaticProxy} />
       <Route path="classify" onEnter={redirectToStaticProxy} />
@@ -385,3 +423,5 @@ export const routes = (
     <Route path="*" component={NotFoundPage} />
   </Route>
 )
+
+console.log('ROUTES', routes)
