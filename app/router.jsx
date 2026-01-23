@@ -418,5 +418,3 @@ export const routes = (
     <Route path="*" component={NotFoundPage} />
   </Route>
 )
-
-console.log('ROUTES', routes)
