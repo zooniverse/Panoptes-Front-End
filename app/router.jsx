@@ -45,7 +45,6 @@ import EmailSettingsPage from './pages/settings/email';
 import DevClassifierPage from './pages/dev-classifier';
 import DataExports from './pages/lab/data-exports';
 import TalkTags from './talk/tags';
-import PFEProjectRoutes from './PFEProjectRoutes';
 import FEMLabRouter from './pages/lab-fem/fem-lab-router'
 import IIIFSubjectSet from './pages/lab/iiif'
 import projectLab from './pages/lab/project.jsx'
@@ -198,11 +197,7 @@ export const routes = (
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
-{   /* This doesn't work */}
-    {/* {...pfeRoutes} */}
-
-    {/* But this does for /mschwamb/planet-four */}
-    {pfeRoutes[pfeRoutes.length - 1]}
+    {pfeRoutes}
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
