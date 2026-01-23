@@ -264,19 +264,54 @@ module.exports = createReactClass
                       className="workflow-choice-setting"
                     >
                       <AutoSave resource={@props.workflow}>
-                        Type{' '}
+                        Geometry type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
-                          <option key="geoPoint" value="geoPoint">geoPoint</option>
+                          <option key="Point" value="Point">Point</option>
                         </select>
                       </AutoSave>
                     </div>
 
-                    <MinMaxEditor
-                      key='min-max'
-                      workflow={@props.workflow}
-                      name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
-                      choice={choice}
-                    />]
+                    <div
+                      key="color"
+                      className="workflow-choice-setting"
+                    >
+                      <AutoSave resource={@props.workflow}>
+                        Color{' '}
+                        <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                          <option value="#ff0000">Red</option>
+                          <option value="#ffff00">Yellow</option>
+                          <option value="#00ff00">Green</option>
+                          <option value="#00ffff">Cyan</option>
+                          <option value="#0000ff">Blue</option>
+                          <option value="#ff00ff">Magenta</option>
+                          <option value="#000000">Black</option>
+                          <option value="#ffffff">White</option>
+                        </select>
+                      </AutoSave>
+                    </div>
+                    
+                    if choice.type is 'Point'
+                      <div
+                        key="uncertainty_circle"
+                        className="workflow-choice-setting"
+                      >
+                        <label>
+                          <AutoSave resource={@props.workflow}>
+                            Show uncertainty circle<sup>*</sup>:{' '}
+                            <input
+                              type="checkbox"
+                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.uncertainty_circle"
+                              checked={choice.uncertainty_circle}
+                              onChange={handleChange}
+                            />{' '}
+                            <br />
+                            <small><sup>*</sup>per GeoJSON feature&apos;s <code>properties.uncertainty_radius</code> value (integer).</small>{' '}
+                          </AutoSave>
+                        </label>
+                      </div>
+                    else
+                      null
+                    ]
                 }
               </div>
 
@@ -379,8 +414,9 @@ module.exports = createReactClass
         details: []
     if @props.task.type is 'geoDrawing'
       @props.task.tools.push
-        type: 'geoPoint'
-        label: 'Tool name'
+        type: 'Point'
+        label: 'Tool name',
+        color: '#ff0000'
     if @props.task.type is 'dataVisAnnotation'
       # data selection uses the same colours as the text selection tool.
       highlighterLabelColors = highlighterLabelColorOptions.map((option) => option.value)
