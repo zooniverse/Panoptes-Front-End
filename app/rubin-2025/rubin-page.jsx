@@ -94,9 +94,9 @@ function RubinPage ({
               </p>
               <ul className="call-to-action">
                 <li>
-                  <Link to="/projects?discipline=astronomy&page=1&status=live">
+                  <a href="https://www.zooniverse.org/projects?discipline=space">
                     <Translate content='rubinPage.callToAction.toZooniverseProjects' />
-                  </Link>
+                  </a>
                 </li>
                 <li>
                   <a href="https://rubinobservatory.org/" rel="noopener nofollow noreferrer" target="_blank">
