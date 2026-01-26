@@ -52,7 +52,7 @@ import Collaborators from './pages/lab/collaborators.jsx'
 import PagesEditor from './pages/lab-pages-editor'
 import ProjectStatsPage from './pages/project/stats'
 import ProjectPageController from './pages/project/index'
-import { PFE_SLUGS } from './monorepoUtils.js';
+import PFE_SLUGS from './slugList.js';
 
 // <Redirect from="home" to="/" /> doesn't work.
 class ONE_UP_REDIRECT extends React.Component {
