@@ -201,14 +201,6 @@ export const routes = (
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
-    {/*
-    2022 Feb Temporary fix: a recent issue of "Sky and Telescope" misprinted the
-    URL for the Bursts from Space project. This is a workaround.
-    See https://zooniverse.slack.com/archives/C14TTCLNN/p1643655013402769
-    Please remove in 6 months time.
-    */}
-    <Redirect from="projects/mike-walmsley/bursts-from-space" to="projects/mikewalmsley/bursts-from-space"/>
-
     {/* By default, all project homepages, classify pages, and about pages redirect to the
     static proxy UNLESS the project is whitelisted to stay on PFE's classifier. Those project
     routes are above in PFEProjectRoutes */}
@@ -409,7 +401,6 @@ export const routes = (
       <Route path="organization-status/:owner/:name" component={OrganizationStatus} />
     </Route>
 
-    <Route path="todo" component={() => <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
     <Route path="dev/workflow-tasks-editor" component={require('./components/workflow-tasks-editor')} />
     <Route path="dev/classifier" component={(process.env.NODE_ENV === 'production')
       ? NotFoundPage
