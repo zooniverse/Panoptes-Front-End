@@ -94,14 +94,13 @@ const SiteNav = createReactClass({
             <Translate content="siteNav.home" />
           </a>
         }
-        <Link
-          to="/projects"
+        <a
+          href="https://www.zooniverse.org/projects"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.projects') : null}
         >
           <Translate content="siteNav.projects" />
-        </Link>{' '}
+        </a>{' '}
         <a href='https://www.zooniverse.org/about' className="site-nav__link">
           <Translate content="siteNav.about" />
         </a>{' '}

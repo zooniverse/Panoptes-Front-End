@@ -161,8 +161,8 @@ export const routes = (
       <Route path="email" component={EmailSettingsPage} />
     </Route>
 
-    <Route path="projects" component={ProjectsPage}>
-      <IndexRoute component={FilteredProjectsList} />
+    <Route path="projects" onEnter={redirectToStaticProxy}>
+      <IndexRoute onEnter={redirectToStaticProxy} />
     </Route>
 
     <MonorepoRoutes />

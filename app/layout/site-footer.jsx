@@ -81,9 +81,9 @@ class AppFooter extends React.Component {
           <nav className="app-footer__section app-footer__nav-lists">
             <ul className="app-footer__nav-list">
               <li>
-                {this.loggableLink(<Link to="/projects">
+                <a href="https://www.zooniverse.org/projects">
                   <Translate content="footer.discover.projectList" />
-                </Link>, 'footer.discover.projectList')}
+                </a>
               </li>
               <li>
                 {this.loggableLink(<Link to="/collections">
