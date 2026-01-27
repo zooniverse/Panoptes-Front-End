@@ -11,6 +11,8 @@ TagSearch = require '../../components/tag-search'
 alert = require('../../lib/alert').default
 Select = require('react-select').default
 getAllLinked = require('../../lib/get-all-linked').default
+{ usesPFEClassifier } = require('../../monorepoUtils')
+
 `import DISCIPLINES from '../../constants/disciplines';`
 `import CharLimit from '../../components/char-limit';`
 `import ExternalLinksEditor from './external-links-editor';`
@@ -110,15 +112,16 @@ module.exports = createReactClass
 
           <hr />
 
-          <p>
+          {if usesPFEClassifier(@props.project.slug) then <p>
             <AutoSave tag="label" resource={@props.project}>
               {checked = @props.project.configuration?.user_chooses_workflow}
-              <input type="checkbox" name="configuration.user_chooses_workflow" defaultChecked={checked} defaultValue={checked} onChange={handleInputChange.bind @props.project} />{' '}
+              <input type="checkbox" name="configuration.user_chooses_workflow" defaultChecked={checked} defaultValue={checked} onChange={handleInputChange.bind @props.project}/>{' '}
               Volunteers can choose which workflow they work on
             </AutoSave>
             <br />
             <small className="form-help">If you have multiple workflows, check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly.</small>
           </p>
+          else null }
         </div>
 
         <div className="column">

@@ -62,6 +62,8 @@ class EditWorkflowPage extends Component {
       showTaskAddButtons: false,
       workflowUsesJSONSubjects: false
     };
+    // This is a break in the typical pattern of reading an experimental flag to enable a task
+    // in the project builder. See https://github.com/zooniverse/Panoptes-Front-End/pull/6808
     isWorkflowUsingJSONSubjects(props.workflow)
       .then(workflowUsesJSONSubjects => this.setState({ workflowUsesJSONSubjects }))
   }
@@ -179,7 +181,7 @@ class EditWorkflowPage extends Component {
           <div className="column">
             <div>
               <AutoSave tag="label" resource={this.props.workflow}>
-                <label className="form-label" for="displayName">Workflow title</label>
+                <label className="form-label" htmlFor="displayName">Workflow title</label>
                 <br />
                 <input type="text" id="displayName" name="display_name" value={this.props.workflow.display_name} className="standard-input full" onChange={handleWorkflowChange} />
               </AutoSave>
@@ -295,6 +297,8 @@ class EditWorkflowPage extends Component {
                             <small><strong>Subject Group Comparison (aka "Grid")</strong></small>
                           </button>
                         </AutoSave> : undefined}{' '}
+                      {/* This is a break in the typical pattern of reading an experimental flag to enable a task
+                        in the project builder. See https://github.com/zooniverse/Panoptes-Front-End/pull/6808 */}
                       {this.state.workflowUsesJSONSubjects ?
                         <AutoSave resource={this.props.workflow}>
                           <button type="button" className="minor-button" onClick={this.addNewTask.bind(this, 'dataVisAnnotation')} title="Data annotation: the volunteer can select chart data.">
