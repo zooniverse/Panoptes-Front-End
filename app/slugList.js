@@ -8,6 +8,37 @@
 */
 
 const PFE_SLUGS = [
+  // Projects with a project.redirect property
+  'zooniverse/moon-zoo',
+  'zooniverse/solar-stormwatch',
+  'zooniverse/planet-hunters',
+  'zooniverse/old-weather',
+  'zooniverse/whale-fm',
+  'zooniverse/seti-live',
+  'zooniverse/seafloor-explorer',
+  'zooniverse/cyclone-center',
+  'zooniverse/bat-detective',
+  'zooniverse/cell-slider',
+  'zooniverse/planet-four-ouroboros',
+  'zooniverse/worm-watch-lab',
+  'zooniverse/plankton-portal-ouroboros',
+  'zooniverse/radio-galaxy-zoo',
+  'zooniverse/operation-war-diary',
+  'zooniverse/disk-detective-1-dot-0',
+  'zooniverse/sunspotter',
+  'zooniverse/condor-watch',
+  'zooniverse/asteroid-zoo',
+  'zooniverse/floating-forests-v1',
+  'zooniverse/higgs-hunters',
+  'zooniverse/science-gossip',
+  'zooniverse/orchid-observers',
+  'zooniverse/chimp-and-see-ouroboros',
+  'zooniverse/measuring-the-anzacs-original',
+  'drrogg/annotate',
+  'nypl/emigrant-city',
+  'bostonpubliclibrary/anti-slavery-manuscripts',
+  'judaicadh/scribes-of-the-cairo-geniza',
+  // Private Projects
   'a-alam/classification-of-complex-radio-sources',
   'a-gordon/galaxy-tidal-feature-classifications',
   'ahendy/reading-the-fossil-record',
@@ -63,6 +94,8 @@ const PFE_SLUGS = [
   'chris1010010/test-1961-census-liberated',
   'chrispattison/icg-drone-imagery-hack-day',
   'christy-dot-tremonti/manga-metallicity-maps',
+  'clara0/classifying-the-stage-of-ram-pressure-stripping-of-galaxies-in-the-hydra-i-cluster',
+  'clara0/classify-the-stage-of-ram-pressure-stripping-of-galaxies-in-the-hydra-i-cluster-old-version',
   'clolson/palmer-amaranth-project-3-25-2020-8-30-16-am',
   'cloud-class/clouds-with-a-type',
   'cole-dot-johnston/sphere',
@@ -156,6 +189,7 @@ const PFE_SLUGS = [
   'leeskelvin/green-valley-census',
   'lennea/testing-itcz-image-classification',
   'lesb20/x-ray-lab-lets-go',
+  'llomeli/cosmos-jwst-galaxy',
   'ltom/artillery-crater-analysis-and-detection-engine-arcade',
   'lucasgautheron/pretty-diagrams-and-the-evolution-of-costly-cultural-norms',
   'maayane/ztf-transients-hosts-identification',
@@ -280,16 +314,15 @@ const PFE_SLUGS = [
   'alicemead/sudan-road-access-logistics-cluster',
   'aprajita/space-warps-des-vision-transformer', // Subject image sizes difficult in FEM's classifier layout
   'artem-dot-reshetnikov/saint-george-on-a-bike',
-  'astorino/sovraimpressioni',  // Issue with its combo task
+  'astorino/sovraimpressioni', // Issue with its combo task
   'astro-lab-ncmns/spiral-graph', // Freehand segment line and freehand shape deprecated from FEM
   'cmnbotany/notes-from-nature-capture-the-collections',
   'creisdorf/savanna-spy-sound', // Audio subject with spectrogram isn't supported in FEM
   'dwhiter/aurora-zoo', // Subject image sizes difficult in FEM's classifier layout
   'gaia-zooniverse/gaia-vari', // SVG subjects aren't supported in FEM
   'hannah-dot-slesinski/chirp-check', // Audio subject with spectrogram isn't supported in FEM
-  'hripsi-19/atmoselec-atmospheric-electricity-for-climate',  // Issue with its combo task
+  'hripsi-19/atmoselec-atmospheric-electricity-for-climate', // Issue with its combo task
   'hugo-ferreira/where-is-spoony', // Uses experimental "slider" subtask
-  'judaicadh/scribes-of-the-cairo-geniza',
   'laac-lscp/maturity-of-baby-sounds', // Audio subjects aren't supported in FEM's classifier
   'low-sky/bubblezoo-v1', // Oval drawing tool is a worse experience in FEM
   'marywestwood/the-cricket-wing', // Audio subject with spectrogram isn't supported in FEM
@@ -302,6 +335,7 @@ const PFE_SLUGS = [
   'md68135/notes-from-nature-southeastern-us-biodiversity',
   'md68135/notes-from-nature-terrestrial-parasite-tracker', // Dependent dropdowns aren't supported in FEM
   'md68135/notes-from-nature-wedigflplants',
+  'md68135/notes-from-nature-natural-history-at-rom-revealed',
   'mikewalmsley/galaxy-zoo-mobile',
   'msbrhonclif/science-scribbler-key2cat', // Subject image sizes difficult in FEM's classifier layout
   'msbrhonclif/science-scribbler-placenta-profiles', // Subject image sizes difficult in FEM's classifier layout
