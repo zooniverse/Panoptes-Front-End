@@ -10,7 +10,7 @@ import { usesPFEClassifier } from '../../monorepoUtils';
 
   Please see the associated /app/monorepoUtils.js, and modifications to the app's router,
   which use separate checks to determine if the project should use a certain classifier.
- */
+*/
 
 /**
   isThisProjectUsingFEMLab() does exactly what it says on the tin.
@@ -31,7 +31,7 @@ export function isThisProjectUsingFEMLab (project, location) {
   }
 }
 
-export const FEM_LAB_PREVIEW_HOST = 'https://frontend.preview.zooniverse.org'
+export const FEM_LAB_PREVIEW_HOST = 'https://www.zooniverse.org'
 
 /* This is a break in the typical pattern of reading an experimental flag to enable a task
    in the project builder. See https://github.com/zooniverse/Panoptes-Front-End/pull/6808
