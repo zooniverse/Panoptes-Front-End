@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { IndexLink } from 'react-router';
 import styled from 'styled-components';
 
 import Avatar from '../../../../../project/components/ProjectNavbar/components/Avatar';
@@ -17,7 +16,7 @@ export const StyledAvatar = styled(Avatar)`
   margin-right: .5em;
 `;
 
-export const StyledLink = styled(IndexLink)`
+export const StyledLink = styled.a`
   border-bottom: 2px solid transparent;
   color: #5C5C5C;
   font-weight: bold;

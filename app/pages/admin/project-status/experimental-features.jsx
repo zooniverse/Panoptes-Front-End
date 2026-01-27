@@ -77,6 +77,7 @@ class ExperimentalFeatures extends Component {
     return (
       <div className='project-status__section'>
         <h4>Experimental Features</h4>
+        <p>See the <a href='https://github.com/zooniverse/how-to-zooniverse/blob/master/ProjectLifecycle/experimental_tools.md'>how-to-zooniverse documentation</a> and its latest <a href='https://github.com/zooniverse/how-to-zooniverse/pull/324'>Pull Request</a> for more information</p>
         <AutoSave resource={this.props.project}>
           <div className='project-status__section-table'>
             {experimentalFeatures.map((feature) => (

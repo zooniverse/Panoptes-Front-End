@@ -89,6 +89,7 @@ function EditProjectPage({
         <Helmet title={`${counterpart('projectLab.edit')} » ${project.display_name}`} />
         <nav aria-label="Lab navigation">
           <h2 className="nav-list-header">Project #{project.id}</h2>
+          {project?.private && thisProjectUsesFEM && <p>&#9888; Project visibility is set to private. Only public projects can be previewed.</p>}
           <ul className="nav-list">
             <li>
               <a

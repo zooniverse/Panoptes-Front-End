@@ -370,34 +370,6 @@ class EditWorkflowPage extends Component {
 
             <hr />
 
-            <div className="deprecated">
-              <AutoSave resource={this.props.workflow}>
-              <span className="form-label">Set annotation persistence</span><br />
-              <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
-              <br />
-              <label>
-                <input ref="persistAnnotation" type="checkbox" checked={persist_annotations} onChange={this.handlePersistAnnotationsToggle} />
-                Persist annotations
-              </label>
-              </AutoSave>
-              <hr />
-            </div>
-
-            <div className="deprecated">
-              <AutoSave resource={this.props.project}>
-                <span className="form-label">Set as default</span><br />
-                <small className="form-help">If you have more than one workflow, you can set which should be default. Only one can be default.</small>
-                {projectLiveWorkflowInactive ? <span><br /><small className="form-help">Inactive workflows on live projects cannot be made default.</small></span> : undefined}
-                <br />
-                <label>
-                  <input ref="defaultWorkflow" type="checkbox" disabled={projectLiveWorkflowInactive} checked={this.props.project.configuration?.default_workflow === this.props.workflow.id} onChange={this.handleDefaultWorkflowToggle} />
-                  Default workflow
-                </label>
-              </AutoSave>
-            </div>
-
-            <hr />
-
             <div ref="link-tutorials-section">
               <span className="form-label">Associated tutorial {this.props.project?.experimental_tools.includes('mini-course') ? "and/or mini-course" : undefined}</span><br />
               <small className="form-help">Choose the tutorial {this.props.project?.experimental_tools.includes('mini-course') ? "and/or mini-course" : undefined} you want to use for this workflow.</small><br />
@@ -411,22 +383,6 @@ class EditWorkflowPage extends Component {
             </div>
 
             <hr />
-
-            <div>
-              <div className="deprecated">
-                <AutoSave resource={this.props.workflow}>
-                  <span className="form-label">Classification summaries</span><br />
-                  <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
-                  <br />
-                  <label>
-                    <input ref="hideClassificationSummaries" type="checkbox" checked={hide_classification_summaries} onChange={this.handleSetHideClassificationSummaries} />
-                    Hide classification summaries
-                  </label>
-                </AutoSave>
-              </div>
-
-              <hr />
-            </div>
 
             {Array.from(this.props.project.experimental_tools).includes('sim notification') ?
               <div className="unsupported">
@@ -446,24 +402,6 @@ class EditWorkflowPage extends Component {
                 <hr />
               </div> : undefined}
 
-            {Array.from(this.props.project.experimental_tools).includes('Gravity Spy Gold Standard') ?
-              <div className="deprecated">
-                <div>
-                  <AutoSave resource={this.props.workflow}>
-                    <span className="form-label">Gravity Spy Gold Standard</span><br />
-                    <small className="form-help">Notify a user how they&apos;ve classified a Gold Standard subject.</small>
-                    <br />
-                    <label>
-                      <input type="checkbox" onChange={this.handleSetGravitySpyGoldStandard} checked={this.props.workflow.configuration.gravity_spy_gold_standard}/>
-                      Gravity Spy Gold Standard
-                    </label>
-                  </AutoSave>
-                </div>
-
-                <hr />
-
-              </div> : undefined}
-
             {Array.from(this.props.project.experimental_tools).includes('subjectGroupViewer') ?
               <div>
                 <SubjectGroupViewerEditor
@@ -471,22 +409,6 @@ class EditWorkflowPage extends Component {
                 />
                 <hr />
               </div> : undefined}
-
-            <div>
-              <div className="deprecated">
-                <AutoSave resource={this.props.workflow}>
-                  <span className="form-label">Pan and zoom</span><br />
-                  <small className="form-help">Pan and zoom allows the user to zoom in and out and pan image subjects in the classification interface.</small>
-                  <br />
-                  <label>
-                    <input ref="panAndZoomToggle" type="checkbox" checked={this.props.workflow.configuration.pan_and_zoom} onChange={this.handleSetPanAndZoom} />
-                    Pan and Zoom
-                  </label>
-                </AutoSave>
-              </div>
-
-              <hr />
-            </div>
 
             <div>
               <AutoSave tag="div" resource={this.props.workflow}>
@@ -554,25 +476,6 @@ class EditWorkflowPage extends Component {
                   <br />
                   <small className="form-help">Enabling Caesar data fetching allows the website to pull in subject reductions when the subject loads in the classifier.</small>
                 </p>
-
-                <hr />
-
-              </div> : undefined}
-
-
-            {Array.from(this.props.project.experimental_tools).includes('worldwide telescope') ?
-              <div>
-                <div className="deprecated">
-                  <AutoSave resource={this.props.workflow}>
-                    <span className="form-label">Use World Wide Telescope API</span><br />
-                    <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
-                    <br />
-                    <label htmlFor="world_wide_telescope_summary">
-                      <input type="checkbox" onChange={this.handleSetWorldWideTelescope} checked={this.telescopeValue()}/>
-                      WorldWide Telescope
-                    </label>
-                  </AutoSave>
-                </div>
 
                 <hr />
 

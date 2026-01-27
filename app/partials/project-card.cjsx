@@ -4,7 +4,7 @@ createReactClass = require 'create-react-class'
 FlexibleLink = require('../components/flexible-link').default
 Translate = require 'react-translate-component'
 
-{ monorepoURL, usesMonorepo } = require('../monorepoUtils')
+{ monorepoURL, usesPFEClassifier } = require('../monorepoUtils')
 
 ProjectCard = createReactClass
   displayName: 'ProjectCard'
@@ -39,10 +39,10 @@ ProjectCard = createReactClass
       @props.project.redirect
     else if !!@props.href
       @props.href
-    else if usesMonorepo(@props.project.slug)
-      monorepoURL(@props.project.slug)
-    else
+    else if usesPFEClassifier(@props.project.slug)
       '/projects/' + @props.project.slug
+    else
+      monorepoURL(@props.project.slug)
 
     <FlexibleLink to={href}>
       <div className="project-card #{this.props.className}" ref="projectCard" style={conditionalStyle}>

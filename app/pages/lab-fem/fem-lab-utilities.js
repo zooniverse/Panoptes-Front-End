@@ -1,11 +1,12 @@
 import apiClient from 'panoptes-client/lib/api-client';
+import { usesPFEClassifier } from '../../monorepoUtils';
 /*
   These utilities are used to determine if a Zooniverse project should be using
   the FEM-compatible (Front-End-Monorepo) version of the Project Builder (Lab).
 
   Context: this code was created during the 2020/2021 transitory period where
   we're migrating _some_ (but not _all_ ) projects to use FEM. However, now we want
-  ALL newly-created projects to use FEM with the exception of experimental_tools?.includes('pfeLab').
+  ALL newly-created projects to use FEM's classifier and lab.
 
   Please see the associated /app/monorepoUtils.js, and modifications to the app's router,
   which use separate checks to determine if the project should use a certain classifier.
@@ -21,9 +22,7 @@ import apiClient from 'panoptes-client/lib/api-client';
   Returns: true or false
 */
 export function isThisProjectUsingFEMLab (project, location) {
-  if (project?.experimental_tools?.includes('pfeLab')) {
-    return false
-  } else if (location?.query?.pfeLab === 'true') {
+  if (usesPFEClassifier(project?.slug)) {
     return false
   } else if (location?.query?.femLab === 'false') {
     return false
