@@ -13,6 +13,7 @@ const experimentalFeatures = [
   'enable subject flags',
   'expert comparison summary',
   'fan',
+  'femLab',  // Indicates that the Project should use the FEM-compatible Project Builder (lab) pages
   'freehandLine',
   'freehandSegmentLine',
   'freehandSegmentShape',
@@ -25,7 +26,6 @@ const experimentalFeatures = [
   'mapping', // Enables geographic map tasks and tools in the project/workflow builder. Tasks only work in FEM Classifier.
   'mini-course',
   'museum-role',
-  'pfeLab', // Indicates that the Project should use the PFE-compatible Project Builder (lab) pages
   'quicktalk', // Enables "QuickTalk" component in FEM Classifier, which allows users to access Talk discussions on the Classifier page.
   'shortcut',
   'sim notification',
