@@ -82,7 +82,6 @@ class ResetPasswordPage extends React.Component {
           resetSuccess: true,
         });
         alert(resolve => <LoginDialog onSuccess={resolve} />);
-        this.context.router.push('/projects');
       })
       .catch((error) => {
         this.setState({

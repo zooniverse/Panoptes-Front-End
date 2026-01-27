@@ -49,6 +49,7 @@ export class ProjectNavbarNarrow extends Component {
       avatarSrc,
       backgroundSrc,
       children,
+      hasExternalFrontend,
       height,
       launched,
       projectLink,
@@ -56,7 +57,7 @@ export class ProjectNavbarNarrow extends Component {
       navLinks,
       redirect,
       underReview,
-      usesMonorepo
+      usesPFEClassifier
     } = this.props;
 
     return (
@@ -72,12 +73,13 @@ export class ProjectNavbarNarrow extends Component {
               size={40}
             />
             <ProjectTitle
+              hasExternalFrontend={hasExternalFrontend}
               launched={launched}
               link={projectLink}
               redirect={redirect}
               title={projectTitle}
               underReview={underReview}
-              usesMonorepo={usesMonorepo}
+              usesPFEClassifier={usesPFEClassifier}
             />
             <NarrowMenuButton
               open={this.state.menuOpen}
@@ -101,17 +103,20 @@ ProjectNavbarNarrow.defaultProps = {
   avatarSrc: '',
   backgroundSrc: '',
   children: null,
+  hasExternalFrontend: false,
   navLinks: [
     { url: '' }
   ],
   projectLink: '',
-  projectTitle: ''
+  projectTitle: '',
+  usesPFEClassifier: false
 };
 
 ProjectNavbarNarrow.propTypes = {
   avatarSrc: PropTypes.string,
   backgroundSrc: PropTypes.string,
   children: PropTypes.node,
+  hasExternalFrontend: PropTypes.bool,
   height: PropTypes.number,
   launched: PropTypes.bool,
   navLinks: PropTypes.arrayOf(PropTypes.shape({
@@ -121,7 +126,7 @@ ProjectNavbarNarrow.propTypes = {
   projectTitle: PropTypes.string,
   redirect: PropTypes.string,
   underReview: PropTypes.bool,
-  usesMonorepo: PropTypes.bool
+  usesPFEClassifier: PropTypes.bool
 };
 
 const mapSizesToProps = ({ height }) => ({

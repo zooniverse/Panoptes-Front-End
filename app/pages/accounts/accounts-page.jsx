@@ -89,9 +89,9 @@ function AccountsPage ({
                   </Link>
                 </li>
                 <li>
-                  <Link to="/projects">
+                  <a href="https://www.zooniverse.org/projects">
                     <Translate content="newAccountsPage.alreadySignedInLinks.gotoProjects" />
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>

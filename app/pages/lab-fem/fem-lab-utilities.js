@@ -9,7 +9,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 
   Please see the associated /app/monorepoUtils.js, and modifications to the app's router,
   which use separate checks to determine if the project should use a certain classifier.
-*/
+ */
 
 /**
   isThisProjectUsingFEMLab() does exactly what it says on the tin.
