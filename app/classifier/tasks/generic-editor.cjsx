@@ -9,20 +9,7 @@ DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 isAdmin = require '../../lib/is-admin'
-
-highlighterLabelColorOptions = [
-  { value: "#e65252", label: "Red Orange" },
-  { value: "#f1ae45", label: "Goldenrod" },
-  { value: "#fced54", label: "Laser Lemon" },
-  { value: "#ee7bcf", label: "Cotton Candy" },
-  { value: "#c7f55b", label: "Granny Smith Apple" },
-  { value: "#65eeca", label: "Jungle Green" },
-  { value: "#52db72", label: "Screamin Green" },
-  { value: "#7cdff2", label: "Robin's Egg Blue" },
-  { value: "#8aa0d3", label: "Indigo" },
-  { value: "#c17ddf", label: "Violet" },
-  { value: "#e7bbe3", label: "Wisteria" }
-];
+TOOL_COLOR_OPTIONS = require('../../constants/toolColors').default
 
 # `import MinMaxEditor from './drawing/min-max-editor';`
 MinMaxEditor = require('./drawing/min-max-editor').default
@@ -142,7 +129,7 @@ module.exports = createReactClass
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
                         <select style={{background: choice.color}} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          {for labelOption in highlighterLabelColorOptions
+                          {for labelOption in TOOL_COLOR_OPTIONS
                             <option
                               key={labelOption.value}
                               style={{ background: labelOption.value }}
@@ -159,7 +146,7 @@ module.exports = createReactClass
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
                         <select style={{background: choice.color}} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          {for labelOption in highlighterLabelColorOptions
+                          {for labelOption in TOOL_COLOR_OPTIONS
                             <option
                               key={labelOption.value}
                               style={{ background: labelOption.value }}
@@ -207,6 +194,8 @@ module.exports = createReactClass
                       <AutoSave resource={@props.workflow}>
                         Color{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                          # These are historic PFE task tool colors,
+                          # for new development consider using TOOL_COLOR_OPTIONS.
                           <option value="#ff0000">Red</option>
                           <option value="#ffff00">Yellow</option>
                           <option value="#00ff00">Green</option>
@@ -277,15 +266,20 @@ module.exports = createReactClass
                     >
                       <AutoSave resource={@props.workflow}>
                         Color{' '}
-                        <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <option value="#ff0000">Red</option>
-                          <option value="#ffff00">Yellow</option>
-                          <option value="#00ff00">Green</option>
-                          <option value="#00ffff">Cyan</option>
-                          <option value="#0000ff">Blue</option>
-                          <option value="#ff00ff">Magenta</option>
-                          <option value="#000000">Black</option>
-                          <option value="#ffffff">White</option>
+                        <select
+                          style={{background: choice.color}} 
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color"
+                          value={choice.color}
+                          onChange={handleChange}
+                        >
+                          {for labelOption in TOOL_COLOR_OPTIONS
+                            <option
+                              key={labelOption.value}
+                              style={{ background: labelOption.value }}
+                              value={labelOption.value}
+                            >
+                              {labelOption.label}
+                            </option>}
                         </select>
                       </AutoSave>
                     </div>
@@ -396,9 +390,9 @@ module.exports = createReactClass
     @props.onChange @props.task
 
   addHighlighterLabels: ->
-    highlighterLabelColors = highlighterLabelColorOptions.map((option) => option.value)
+    toolLabelColors = TOOL_COLOR_OPTIONS.map((option) => option.value)
     taskColors = @props.task.highlighterLabels.map((label) => label.color)
-    newColor = highlighterLabelColors.find((color) => taskColors.indexOf(color) == -1) || highlighterLabelColors[0]
+    newColor = toolLabelColors.find((color) => taskColors.indexOf(color) == -1) || toolLabelColors[0]
 
     @props.task.highlighterLabels.push
       color: newColor
@@ -413,15 +407,17 @@ module.exports = createReactClass
         color: '#00ff00'
         details: []
     if @props.task.type is 'geoDrawing'
+      toolLabelColors = TOOL_COLOR_OPTIONS.map((option) => option.value)
+      taskColors = @props.task.tools.map((tool) => tool.color)
+      newColor = toolLabelColors.find((color) => taskColors.indexOf(color) == -1) || toolLabelColors[0]      
       @props.task.tools.push
         type: 'Point'
         label: 'Tool name',
-        color: '#ff0000'
+        color: newColor
     if @props.task.type is 'dataVisAnnotation'
-      # data selection uses the same colours as the text selection tool.
-      highlighterLabelColors = highlighterLabelColorOptions.map((option) => option.value)
+      toolLabelColors = TOOL_COLOR_OPTIONS.map((option) => option.value)
       taskColors = @props.task.tools.map((tool) => tool.color)
-      newColor = highlighterLabelColors.find((color) => taskColors.indexOf(color) == -1) || highlighterLabelColors[0]
+      newColor = toolLabelColors.find((color) => taskColors.indexOf(color) == -1) || toolLabelColors[0]
       @props.task.tools.push
         type: 'graph2dRangeX'
         label: 'Tool name'
