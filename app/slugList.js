@@ -336,6 +336,7 @@ const PFE_SLUGS = [
   'md68135/notes-from-nature-terrestrial-parasite-tracker', // Dependent dropdowns aren't supported in FEM
   'md68135/notes-from-nature-wedigflplants',
   'md68135/notes-from-nature-natural-history-at-rom-revealed',
+  'meteonetwork/redata',
   'mikewalmsley/galaxy-zoo-mobile',
   'msbrhonclif/science-scribbler-key2cat', // Subject image sizes difficult in FEM's classifier layout
   'msbrhonclif/science-scribbler-placenta-profiles', // Subject image sizes difficult in FEM's classifier layout
