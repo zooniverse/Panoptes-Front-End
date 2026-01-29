@@ -26,7 +26,7 @@ import { useEffect, useState } from 'react'
 export default function FieldGuideCleaner ({
   fieldGuide,
   icons = {},
-  userIsAdmin = true,
+  userIsAdmin = false,
 }) {
   if (!fieldGuide || !userIsAdmin) return null
 
