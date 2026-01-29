@@ -7,6 +7,7 @@ ArticleEditor = require './article-editor'
 FieldGuideCleaner = require('./field-guide-cleaner').default
 actions = require('./actions').default
 getAllLinked = require('../../../lib/get-all-linked').default
+isAdmin = require('../../../lib/is-admin')
 
 unless process.env.NODE_ENV is 'production'
   DEV_GUIDE = apiClient.type('field_guides').create
@@ -147,10 +148,13 @@ FieldGuideEditor = createReactClass
       <div className="form-help">
         <p>Information can be grouped into different sections, and each section should have a title and an icon. Content for each section is rendered with Markdown, so you can include any media you've uploaded for your project there.</p>
 
-        <FieldGuideCleaner
-          fieldGuide={@state.guide}
-          icons={@state.icons}
-        />
+        {isAdmin() && (
+          <FieldGuideCleaner
+            fieldGuide={@state.guide}
+            icons={@state.icons}
+            userIsAdmin={isAdmin()}
+          />
+        )}
       </div>
 
       {if @state.editing?
