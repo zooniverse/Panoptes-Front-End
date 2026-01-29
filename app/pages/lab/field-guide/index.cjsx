@@ -4,6 +4,7 @@ createReactClass = require 'create-react-class'
 ArticleList = require './article-list'
 Dialog = require 'modal-form/dialog'
 ArticleEditor = require './article-editor'
+FieldGuideCleaner = require('./field-guide-cleaner').default
 actions = require('./actions').default
 getAllLinked = require('../../../lib/get-all-linked').default
 
@@ -81,6 +82,7 @@ FieldGuideEditor = createReactClass
 
   handleArticleSave: (newData) ->
     {icon, title, content} = newData
+    console.log('+++ DEBUG')
 
     awaitIconAction = if icon?
       if icon is ArticleEditor.SHOULD_REMOVE_ICON
@@ -145,6 +147,11 @@ FieldGuideEditor = createReactClass
 
       <div className="form-help">
         <p>Information can be grouped into different sections, and each section should have a title and an icon. Content for each section is rendered with Markdown, so you can include any media you've uploaded for your project there.</p>
+
+        <FieldGuideCleaner
+          fieldGuide={@state.guide}
+          icons={@state.icons}
+        />
       </div>
 
       {if @state.editing?
