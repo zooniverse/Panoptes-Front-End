@@ -82,7 +82,6 @@ FieldGuideEditor = createReactClass
 
   handleArticleSave: (newData) ->
     {icon, title, content} = newData
-    console.log('+++ DEBUG')
 
     awaitIconAction = if icon?
       if icon is ArticleEditor.SHOULD_REMOVE_ICON
