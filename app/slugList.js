@@ -323,6 +323,7 @@ const PFE_SLUGS = [
   'hannah-dot-slesinski/chirp-check', // Audio subject with spectrogram isn't supported in FEM
   'hripsi-19/atmoselec-atmospheric-electricity-for-climate', // Issue with its combo task
   'hugo-ferreira/where-is-spoony', // Uses experimental "slider" subtask
+  'icecubeobservatory/name-that-neutrino',
   'laac-lscp/maturity-of-baby-sounds', // Audio subjects aren't supported in FEM's classifier
   'low-sky/bubblezoo-v1', // Oval drawing tool is a worse experience in FEM
   'marywestwood/the-cricket-wing', // Audio subject with spectrogram isn't supported in FEM
