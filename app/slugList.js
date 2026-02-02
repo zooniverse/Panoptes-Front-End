@@ -339,6 +339,7 @@ const PFE_SLUGS = [
   'md68135/notes-from-nature-natural-history-at-rom-revealed',
   'meteonetwork/redata',
   'mikewalmsley/galaxy-zoo-mobile',
+  'mollysimon/galaxy-zoo-crowdsourcing-activity', // Classrooms
   'msbrhonclif/science-scribbler-key2cat', // Subject image sizes difficult in FEM's classifier layout
   'msbrhonclif/science-scribbler-placenta-profiles', // Subject image sizes difficult in FEM's classifier layout
   'mschwamb/planet-four', // Uses experimental "fan tool"
@@ -359,7 +360,9 @@ const PFE_SLUGS = [
   'yli/humbug', // Audio subject with spectrogram isn't supported in FEM
   'zookeeper/galaxy-zoo', // Uses experimental "slider" subtask
   'zooniverse/floating-forests',
-  'zooniverse/measuring-the-anzacs'
+  'zooniverse/intro2astro-hubbles-law', // Classrooms
+  'zooniverse/measuring-the-anzacs',
+  'zooniverse/zooniverse-in-schools' // Classrooms
 ]
 
 export default PFE_SLUGS
