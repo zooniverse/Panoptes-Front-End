@@ -22,9 +22,11 @@ import { usesPFEClassifier } from '../../monorepoUtils';
   Returns: true or false
 */
 export function isThisProjectUsingFEMLab (project, location) {
-  if (usesPFEClassifier(project?.slug)) {
-    return false
+  if (location?.query?.femLab === 'true') {
+    return true
   } else if (location?.query?.femLab === 'false') {
+    return false
+  } else if (usesPFEClassifier(project?.slug)) {
     return false
   } else {
     return true
