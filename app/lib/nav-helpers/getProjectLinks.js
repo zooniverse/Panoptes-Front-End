@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import isAdmin from '../is-admin';
 import userHasLabAccess from './userHasLabAccess';
-import { monorepoURL, usesMonorepo } from '../../monorepoUtils';
+import { monorepoURL, usesPFEClassifier } from '../../monorepoUtils';
 
 function getProjectLinks({ project, projectRoles, user }) {
   const { id, redirect, slug } = project;
@@ -63,7 +63,12 @@ function getProjectLinks({ project, projectRoles, user }) {
 
   const canClassify = project.links.active_workflows && project.links.active_workflows.length > 0;
 
-  if (usesMonorepo(slug)) {
+  /*
+    Unless a project is whitelisted to stay on PFE's classifier, the link to a project's homepage
+    about pages, or classify page should go to FEM which expects locale to formatted as
+    /projects/locale/owner/projectName
+  */
+  if (!usesPFEClassifier(slug)) {
     const i18nSlug = locale === 'en' ? slug : `${locale}/${slug}`;
     const envQuery = env === 'staging' ? '?env=staging' : '';
     links.about.url = `${monorepoURL(i18nSlug)}/about${envQuery}`;
@@ -72,7 +77,7 @@ function getProjectLinks({ project, projectRoles, user }) {
     links.classify.isMonorepoLink = true;
   }
 
-  // For projects with external front ends
+  // For projects with external front ends (excluding FEM)
   if (redirect) {
     const redirectUrl = `${redirect.replace(/\/+$/, '')}/classify`;
     links.classify.url = redirectUrl;

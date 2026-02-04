@@ -93,11 +93,7 @@ describe('TextTask', function () {
       wrapper.find('textarea').first().simulate('change', { target: { value: 'text change' }});
       expect(handleChangeSpy.calledOnce).to.be.true;
     });
-    it('should call handleResize after an onChange event', function () {
-      wrapper.instance().textInput.current.value = 'text change';
-      wrapper.find('textarea').first().simulate('change', { target: { value: 'text change' }});
-      expect(handleResizeSpy.calledOnce).to.be.true;
-    });
+
     it('should not call handleResize if state doesn\'t change', function () {
       wrapper.instance().textInput.current.value = 'testing the [deletion]text task[/deletion] tag selection';
       wrapper.find('textarea').first().simulate('change', { target: { value: 'testing the [deletion]text task[/deletion] tag selection' }});

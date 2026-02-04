@@ -76,7 +76,7 @@ The app can be configured using the following environment variables:
 
 New GitHub PRs from within the Zooniverse organisation will be staged by Jenkins as part of the CI process. Once CI finishes, your changes should be staged at https://pr-{PR-Number}.pfe-preview.zooniverse.org. Jenkins sometimes times out before finishing the build. If a PR build fails, use the link to Jenkins (from your PR) to log in and try restarting the build.
 
-For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/projects?env=production`. Note that it is removed on every page refresh.
+For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/lab?env=production`. Note that it is removed on every page refresh.
 
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
 

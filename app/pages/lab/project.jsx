@@ -92,14 +92,14 @@ function EditProjectPage({
           {project?.private && thisProjectUsesFEM && <p>&#9888; Project visibility is set to private. Only public projects can be previewed.</p>}
           <ul className="nav-list">
             <li>
-              <Link
-                to={projectLink}
+              <a
+                href={projectLink}
                 className="standard-button view-project-button"
                 target="_blank"
                 title="Open the current project in a new tab."
               >
                 View project
-              </Link>
+              </a>
             </li>
             <li>
               <IndexLink

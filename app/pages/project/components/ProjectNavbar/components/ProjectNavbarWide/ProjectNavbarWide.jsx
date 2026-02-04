@@ -27,7 +27,7 @@ export const StyledOuterWrapper = styled.div`
 
 export const StyledAvatar = styled(Avatar)`
   margin: 0 ${pxToRem(20)} 0 0;
-  
+
   .rtl & {
     margin: 0 0 0 ${pxToRem(20)};
   }
@@ -81,13 +81,14 @@ function ProjectNavbarWide(props) {
     avatarSrc,
     backgroundSrc,
     children,
+    hasExternalFrontend,
     launched,
     navLinks,
     projectTitle,
     projectLink,
     redirect,
     underReview,
-    usesMonorepo,
+    usesPFEClassifier,
     ...otherProps
   } = props;
 
@@ -103,12 +104,13 @@ function ProjectNavbarWide(props) {
             size={80}
           />
           <ProjectTitle
+            hasExternalFrontend={hasExternalFrontend}
             launched={launched}
             link={projectLink}
             redirect={redirect}
             title={projectTitle}
             underReview={underReview}
-            usesMonorepo={usesMonorepo}
+            usesPFEClassifier={usesPFEClassifier}
           />
           <Nav>
             <List>
@@ -128,6 +130,7 @@ ProjectNavbarWide.propTypes = {
   avatarSrc: PropTypes.string,
   backgroundSrc: PropTypes.string,
   children: PropTypes.node,
+  hasExternalFrontend: PropTypes.bool,
   launched: PropTypes.bool,
   navLinks: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string
@@ -136,7 +139,7 @@ ProjectNavbarWide.propTypes = {
   projectTitle: PropTypes.string,
   redirect: PropTypes.string,
   underReview: PropTypes.bool,
-  usesMonorepo: PropTypes.bool
+  usesPFEClassifier: PropTypes.bool
 };
 
 export default ProjectNavbarWide;

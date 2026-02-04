@@ -46,9 +46,9 @@ module.exports = createReactClass
             <Translate content="labLanding.buttons.signIn" />
           </button>
 
-          <Link to="/projects" className="call-to-action standard-button landing-button">
+          <a href="https://www.zooniverse.org/projects" className="call-to-action standard-button landing-button">
             <Translate content="labLanding.buttons.backToProjects" />
-          </Link>
+          </a>
         </div>
 
         <div className="landing-links">

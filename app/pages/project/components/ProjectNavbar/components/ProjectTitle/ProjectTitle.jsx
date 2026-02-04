@@ -6,7 +6,6 @@ import { IndexLink } from 'react-router';
 import counterpart from 'counterpart';
 import { pxToRem, zooTheme } from '../../../../../../theme';
 
-
 export const H1 = styled.h1`
   color: white;
   display: flex;
@@ -75,8 +74,8 @@ export const StyledUnderReview = styled.small`
 `;
 
 
-function ProjectTitle({ launched, link, redirect, title, underReview, usesMonorepo }) {
-  const TitleComponent = (redirect || usesMonorepo) ? StyledRedirect : StyledLink;
+function ProjectTitle({ launched, hasExternalFrontend, link, redirect, title, underReview, usesPFEClassifier }) {
+  const TitleComponent = usesPFEClassifier && !redirect ? StyledLink : StyledRedirect;
   const zooniverseApprovedTranslation = counterpart('project.nav.zooniverseApproved');
 
   return (
@@ -87,7 +86,7 @@ function ProjectTitle({ launched, link, redirect, title, underReview, usesMonore
         <TitleComponent to={link} href={redirect}>
           <span>
             {title}
-            {redirect && !usesMonorepo && <span>{' '}<i className="fa fa-external-link" /></span>}
+            {hasExternalFrontend && <span>{' '}<i className="fa fa-external-link" /></span>}
           </span>
         </TitleComponent>
         {launched &&
@@ -106,21 +105,23 @@ function ProjectTitle({ launched, link, redirect, title, underReview, usesMonore
 }
 
 ProjectTitle.defaultProps = {
+  hasExternalFrontend: false,
   launched: false,
   link: '',
   redirect: '',
   title: '',
   underReview: false,
-  usesMonorepo: false
+  usesPFEClassifier: false
 };
 
 ProjectTitle.propTypes = {
+  hasExternalFrontend: PropTypes.bool,
   launched: PropTypes.bool,
   link: PropTypes.string,
   redirect: PropTypes.string,
   title: PropTypes.string,
   underReview: PropTypes.bool,
-  usesMonorepo: PropTypes.bool
+  usesPFEClassifier: PropTypes.bool
 };
 
 export default ProjectTitle;
