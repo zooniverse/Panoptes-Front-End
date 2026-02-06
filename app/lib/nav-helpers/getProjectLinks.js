@@ -73,7 +73,17 @@ function getProjectLinks({ project, projectRoles, user }) {
     const envQuery = env === 'staging' ? '?env=staging' : '';
     links.about.url = `${monorepoURL(i18nSlug)}/about${envQuery}`;
     links.about.isMonorepoLink = true;
-    links.classify.url = `${monorepoURL(i18nSlug)}/classify${envQuery}`;
+
+    // Hack/Fix: add a randomiser the to /classify route for FEM projects
+    // This overrides old/existing 308 Permanent Redirects for single-workflow
+    // projects on FEM.
+    // See https://github.com/zooniverse/front-end-monorepo/issues/7193
+    // REMOVE THIS on Mar 2027. All existing 308s will expire by then.
+    const classifyRandomiser = (envQuery.startsWith('?'))
+      ? `&rnd=${Math.floor(Math.random() * 1000000)}`
+      : `?rnd=${Math.floor(Math.random() * 1000000)}`;
+
+    links.classify.url = `${monorepoURL(i18nSlug)}/classify${envQuery}${classifyRandomiser}`;
     links.classify.isMonorepoLink = true;
   }
 
