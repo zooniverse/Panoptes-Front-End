@@ -322,7 +322,6 @@ const PFE_SLUGS = [
   'gaia-zooniverse/gaia-vari', // SVG subjects aren't supported in FEM
   'hripsi-19/atmoselec-atmospheric-electricity-for-climate', // Issue with its combo task
   'hugo-ferreira/where-is-spoony', // Uses experimental "slider" subtask
-  'icecubeobservatory/name-that-neutrino',
   'low-sky/bubblezoo-v1', // Oval drawing tool is a worse experience in FEM
   'md68135/notes-from-nature-big-bee-bonanza',
   'md68135/notes-from-nature-calbug', // Dependent dropdowns aren't supported in FEM
