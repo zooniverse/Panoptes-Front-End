@@ -310,6 +310,7 @@ const PFE_SLUGS = [
   'yjangordon/vlass-variables',
   'yntzevanderhoek/nkuba',
   'zoeyyy/glitch-classificationslug',
+  // Assorted Special Cases
   'acre-ar/meteororum-ad-extremum-terrae', // Subject image sizes difficult in FEM's classifier layout
   'alicemead/sudan-road-access-logistics-cluster',
   'aprajita/space-warps-des-vision-transformer', // Subject image sizes difficult in FEM's classifier layout
@@ -317,15 +318,12 @@ const PFE_SLUGS = [
   'astorino/sovraimpressioni', // Issue with its combo task
   'astro-lab-ncmns/spiral-graph', // Freehand segment line and freehand shape deprecated from FEM
   'cmnbotany/notes-from-nature-capture-the-collections',
-  'creisdorf/savanna-spy-sound', // Audio subject with spectrogram isn't supported in FEM
   'dwhiter/aurora-zoo', // Subject image sizes difficult in FEM's classifier layout
   'gaia-zooniverse/gaia-vari', // SVG subjects aren't supported in FEM
-  'hannah-dot-slesinski/chirp-check', // Audio subject with spectrogram isn't supported in FEM
   'hripsi-19/atmoselec-atmospheric-electricity-for-climate', // Issue with its combo task
   'hugo-ferreira/where-is-spoony', // Uses experimental "slider" subtask
-  'laac-lscp/maturity-of-baby-sounds', // Audio subjects aren't supported in FEM's classifier
   'low-sky/bubblezoo-v1', // Oval drawing tool is a worse experience in FEM
-  'marywestwood/the-cricket-wing', // Audio subject with spectrogram isn't supported in FEM
+  'mappingprejudice/mapping-prejudice',
   'md68135/notes-from-nature-big-bee-bonanza',
   'md68135/notes-from-nature-calbug', // Dependent dropdowns aren't supported in FEM
   'md68135/notes-from-nature-capturing-californias-flowers', // Dependent dropdowns aren't supported in FEM
@@ -338,12 +336,11 @@ const PFE_SLUGS = [
   'md68135/notes-from-nature-natural-history-at-rom-revealed',
   'meteonetwork/redata',
   'mikewalmsley/galaxy-zoo-mobile',
+  'mollysimon/galaxy-zoo-crowdsourcing-activity', // Classrooms
   'msbrhonclif/science-scribbler-key2cat', // Subject image sizes difficult in FEM's classifier layout
   'msbrhonclif/science-scribbler-placenta-profiles', // Subject image sizes difficult in FEM's classifier layout
   'mschwamb/planet-four', // Uses experimental "fan tool"
   'nora-dot-eisner/planet-hunters-tess-mobile',
-  'ollibruuh/bird-find', // Audio subjects aren't supported in FEM's classifier
-  'ollibruuh/frog-find', // Audio subjects aren't supported in FEM's classifier
   'panettafordham/shadows-on-stone-identifying-sing-sings-incarcerated',
   'penguintom79/penguin-watch', // Uses experimental "shortcut"
   'penguintom79/seabirdwatch', // Uses experimental "shortcut"
@@ -355,10 +352,30 @@ const PFE_SLUGS = [
   'wildcam/wildcam-darien',
   'wwt/stream-team-emerging-insect-explorer',
   'xbonnin/solar-radio-burst-tracker', // Freehand segment line and freehand shape deprecated from FEM
-  'yli/humbug', // Audio subject with spectrogram isn't supported in FEM
   'zookeeper/galaxy-zoo', // Uses experimental "slider" subtask
   'zooniverse/floating-forests',
-  'zooniverse/measuring-the-anzacs'
+  'zooniverse/intro2astro-hubbles-law', // Classrooms
+  'zooniverse/measuring-the-anzacs', // Classrooms
+  'zooniverse/zooniverse-in-schools', // Classrooms
+  // Audio Projects
+  'annelistens/ocean-voices',
+  'cblume27/rhythms-of-the-night',
+  'creisdorf/fire-and-birds',
+  'creisdorf/savanna-spy-sound', // Audio subject with spectrogram isn't supported in FEM
+  'cslab-upm/sky-sounds',
+  'hannah-dot-slesinski/chirp-check', // Audio subject with spectrogram isn't supported in FEM
+  'laac-lscp/maturity-of-baby-sounds', // Audio subjects aren't supported in FEM's classifier
+  'laaczooniverse/what-do-babies-say',
+  'library-of-congress/transcribe-american-dialect-recordings',
+  'lydiakatsis/forest-sounds',
+  'marywestwood/the-cricket-wing', // Audio subject with spectrogram isn't supported in FEM
+  'ollibruuh/bird-find', // Audio subjects aren't supported in FEM's classifier
+  'ollibruuh/frog-find', // Audio subjects aren't supported in FEM's classifier
+  'sandorkruk/istrox',
+  'sladeaa/audioclassification',
+  'uw-leap/tots-and-tunes',
+  'wingkitty/filk-archive',
+  'yli/humbug' // Audio subject with spectrogram isn't supported in FEM
 ]
 
 export default PFE_SLUGS
