@@ -19,8 +19,9 @@ This is how the FEM-Compatible Project Builder works:
 At the moment, this is how the FEMLabRouter determine if we should use a
 FEM-compatible pages:
 - Always, unless:
+  - `?femLab=false` query param is set; the code respects both `true` and `false`
+    settings for `femLab` param, allowing manual override of defaults.
   -  a project's slug is listed in pfeSlugs.js
-  - `?femLab=false` query param is set
 
 Context: in 2019(-ish?), the Zooniverse started to migrate its front end
 website/classifier from the Panoptes-Front-End (PFE) codebase to the newer
