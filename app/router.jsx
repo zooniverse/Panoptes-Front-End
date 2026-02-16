@@ -67,6 +67,15 @@ class ONE_UP_REDIRECT extends React.Component {
   }
 }
 
+/**
+ * Redirect project pages to the static proxy unless the project slug is whitelisted in PFE_SLUGS.
+ * @param {Object} nextState
+ * @param {Object} nextState.params
+ * @param {string} nextState.params.owner
+ * @param {string} nextState.params.name
+ * @param {Function} replace 
+ * @param {Function} done 
+ */
 function redirectPfeToFem(nextState, replace, done) {
   try {
     const { owner, name } = nextState.params
@@ -81,7 +90,15 @@ function redirectPfeToFem(nextState, replace, done) {
   }
 }
 
-// Use this when links should not route internally and instead point to the Zooniverse static proxy
+/**
+ * Client-side redirect a route to the static proxy, by replacing the browser window location.
+ * @param {Object} nextState
+ * @param {Object} nextState.location
+ * @param {string} nextState.location.pathname
+ * @param {string} nextState.location.search
+ * @param {Function} replace 
+ * @param {Function} done 
+ */
 function redirectToStaticProxy(nextState, replace, done) {
   try {
     const { pathname, search } = nextState.location
@@ -158,11 +175,10 @@ export const routes = (
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
     {/* By default, all project homepages, classify pages, and about pages redirect to the
-    static proxy UNLESS the project is whitelisted to stay on PFE's classifier. Those project
-    routes are above in PFEProjectRoutes */}
+    static proxy UNLESS the project is whitelisted to stay on PFE's classifier. */}
     <Route path="projects/:owner/:name" component={ProjectPageController}>
       <IndexRoute onEnter={redirectPfeToFem} component={ProjectHomePage} />
-      <Route path="home" onEnter={redirectPfeToFem} component={ONE_UP_REDIRECT} />
+      <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" onEnter={redirectPfeToFem} component={ProjectClassifyPage} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
@@ -219,21 +235,21 @@ export const routes = (
       This is FEM's projects/locale pattern. These routes only apply if the react-router
       somehow intercepts a request to i.e /projects/es/penguintom79/penguin-watch
     */}
-    <Route path="projects/:locale/:owner/:name" component={require('./pages/project').default}>
-      <IndexRoute component={ProjectHomePage} />
+    <Route path="projects/:locale/:owner/:name" component={ProjectPageController}>
+      <IndexRoute onEnter={redirectPfeToFem} component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="classify" component={require('./pages/project/classify').default} />
+      <Route path="classify" onEnter={redirectPfeToFem} component={ProjectClassifyPage} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
       <Redirect from="education" to="about/education"/>
-      <Route path="about" component={AboutProject}>
+      <Route path="about" onEnter={redirectPfeToFem} component={AboutProject}>
         <IndexRedirect to="research" />
-        <Route path="research" component={AboutProjectResearch} />
-        <Route path="results" component={AboutProjectResults} />
-        <Route path="faq" component={AboutProjectFAQ} />
-        <Route path="education" component={AboutProjectEducation} />
-        <Route path="team" component={AboutProjectTeam} />
+        <Route path="research" onEnter={redirectPfeToFem} component={AboutProjectResearch} />
+        <Route path="results" onEnter={redirectPfeToFem} component={AboutProjectResults} />
+        <Route path="faq" onEnter={redirectPfeToFem} component={AboutProjectFAQ} />
+        <Route path="education" onEnter={redirectPfeToFem} component={AboutProjectEducation} />
+        <Route path="team" onEnter={redirectPfeToFem} component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require('./pages/project/talk')}>
@@ -362,6 +378,7 @@ export const routes = (
       ? NotFoundPage
       : DevClassifierPage
     } />
+    {/* Any routes not specified above should be handled by the monorepo apps. */}
     <Route path="*" onEnter={redirectToStaticProxy} />
   </Route>
 )
