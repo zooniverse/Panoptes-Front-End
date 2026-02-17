@@ -349,11 +349,11 @@ const PFE_SLUGS = [
   'rsengar/einstein-at-home-pulsar-seekers', // Feedback per step isn't supported in FEM
   'sassydumbledore/chimp-and-see', // Video in a flipbook isn't supported in FEM
   'tawakitom/penguins-from-above', // Subject image sizes difficult in FEM's classifier layout
+  'tingard/galaxy-builder', // custom slider interface on finished project
   'watchablewildlife/nebraska-wildlife-watch',
   'wildcam/wildcam-darien',
   'wwt/stream-team-emerging-insect-explorer',
   'xbonnin/solar-radio-burst-tracker', // Freehand segment line and freehand shape deprecated from FEM
-  'zookeeper/galaxy-zoo', // Uses experimental "slider" subtask
   'zooniverse/floating-forests',
   'zooniverse/intro2astro-hubbles-law', // Classrooms
   'zooniverse/measuring-the-anzacs', // Classrooms
