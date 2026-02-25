@@ -1,12 +1,11 @@
 import {IndexRoute, IndexRedirect, Route, Redirect} from 'react-router'
 import React from 'react'
 
-import ProjectsPage from './pages/projects/index';
-import FilteredProjectsList from './pages/projects/filtered-projects-list';
 import CollectionPageWrapper from './collections/show';
 import CollectionSettings from './collections/settings';
 import CollectionCollaborators from './collections/collaborators';
 import ProjectHomePage from './pages/project/home';
+import ProjectClassifyPage from './pages/project/classify';
 import AboutProject from './pages/project/about/index';
 import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';
 import AboutProjectTeam from './pages/project/about/team';
@@ -68,13 +67,44 @@ class ONE_UP_REDIRECT extends React.Component {
   }
 }
 
-// Use this when links should not route internally and instead point to the Zooniverse static proxy
-function redirectToStaticProxy (nextState, replace, done) {
+/**
+ * Redirect project pages to the static proxy unless the project slug is whitelisted in PFE_SLUGS.
+ * @param {Object} nextState
+ * @param {Object} nextState.params
+ * @param {string} nextState.params.owner
+ * @param {string} nextState.params.name
+ * @param {Function} replace 
+ * @param {Function} done 
+ */
+function redirectPfeToFem(nextState, replace, done) {
   try {
-    const { pathname } = nextState.location
-    let newUrl = `https://frontend.preview.zooniverse.org${pathname}`
+    const { owner, name } = nextState.params
+    const isPFEProject = PFE_SLUGS.includes(`${owner}/${name}`)
+    if (isPFEProject) {
+      done()
+    } else {
+      redirectToStaticProxy(nextState, replace, done)
+    }
+  } catch (error) {
+    done(error)
+  }
+}
+
+/**
+ * Client-side redirect a route to the static proxy, by replacing the browser window location.
+ * @param {Object} nextState
+ * @param {Object} nextState.location
+ * @param {string} nextState.location.pathname
+ * @param {string} nextState.location.search
+ * @param {Function} replace 
+ * @param {Function} done 
+ */
+function redirectToStaticProxy(nextState, replace, done) {
+  try {
+    const { pathname, search } = nextState.location
+    let newUrl = `https://frontend.preview.zooniverse.org${pathname}${search}`
     if (window.location.hostname === 'www.zooniverse.org') {
-      newUrl = `https://www.zooniverse.org${pathname}`
+      newUrl = `https://www.zooniverse.org${pathname}${search}`
     }
     window.location.replace(newUrl)
     done()
@@ -95,61 +125,10 @@ class ExternalRedirect extends React.Component {
   }
 }
 
-class PFEProject extends React.Component {
-  render () {
-    const pathname = this.props.location.pathname  // e.g. "/projects/penguintom79/penguin-watch"
-    const locationRegex = /^\/projects\/([^\/]*)\/([^\/]*)/.exec(pathname)
-    const owner = locationRegex?.[1]
-    const name = locationRegex?.[2]
-    const props = {...this.props, params: { owner, name }}
-    return <ProjectPageController {...props} />
-  }
-}
-
-const pfeRoutes = PFE_SLUGS.map((slug) => {
-  return (
-    <Route key={slug} path={`projects/${slug}`} component={PFEProject}>
-    <IndexRoute component={ProjectHomePage} />
-      <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="classify" component={require('./pages/project/classify').default} />
-      <Redirect from="research" to="about/research"/>
-      <Redirect from="results" to="about/results"/>
-      <Redirect from="faq" to="about/faq"/>
-      <Redirect from="education" to="about/education"/>
-      <Route path="about" component={AboutProject}>
-        <IndexRedirect to="research" />
-        <Route path="research" component={AboutProjectResearch} />
-        <Route path="results" component={AboutProjectResults} />
-        <Route path="faq" component={AboutProjectFAQ} />
-        <Route path="education" component={AboutProjectEducation} />
-        <Route path="team" component={AboutProjectTeam} />
-      </Route>
-    </Route>
-)})
-
 export const routes = (
   <Route path="/" component={require('./partials/app')}>
     <IndexRoute component={() => <ExternalRedirect newUrl='https://www.zooniverse.org' />} />
     <Route path="home" component={ONE_UP_REDIRECT} />
-
-    <Route path="about" onEnter={redirectToStaticProxy} ignoreScrollBehavior>
-      <Route path="team" onEnter={redirectToStaticProxy} />
-      <Route path="publications" onEnter={redirectToStaticProxy} />
-      <Route path="acknowledgements" onEnter={redirectToStaticProxy} />
-      <Route path="resources" onEnter={redirectToStaticProxy} />
-      <Route path="contact" onEnter={redirectToStaticProxy} />
-      <Route path="faq" onEnter={redirectToStaticProxy} />
-      <Route path="highlights" onEnter={redirectToStaticProxy} />
-      <Route path="mobile-app" onEnter={redirectToStaticProxy} />
-      <Route path="donate" onEnter={redirectToStaticProxy} />
-    </Route>
-
-
-    <Route path="get-involved" onEnter={redirectToStaticProxy} ignoreScrollBehavior>
-      <Route path="call-for-projects" onEnter={redirectToStaticProxy} />
-      <Route path="education" onEnter={redirectToStaticProxy} />
-      <Redirect from="callForProjects" to="call-for-projects" />
-    </Route>
 
     <Route path="reset-password" component={ResetPasswordPage} />
 
@@ -193,32 +172,25 @@ export const routes = (
       <Route path="email" component={EmailSettingsPage} />
     </Route>
 
-    <Route path="projects" onEnter={redirectToStaticProxy}>
-      <IndexRoute onEnter={redirectToStaticProxy} />
-    </Route>
-
-    {pfeRoutes}
-
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
     {/* By default, all project homepages, classify pages, and about pages redirect to the
-    static proxy UNLESS the project is whitelisted to stay on PFE's classifier. Those project
-    routes are above in PFEProjectRoutes */}
+    static proxy UNLESS the project is whitelisted to stay on PFE's classifier. */}
     <Route path="projects/:owner/:name" component={ProjectPageController}>
-      <IndexRoute onEnter={redirectToStaticProxy} />
-      <Route path="home" onEnter={redirectToStaticProxy} />
-      <Route path="classify" onEnter={redirectToStaticProxy} />
+      <IndexRoute onEnter={redirectPfeToFem} component={ProjectHomePage} />
+      <Route path="home" component={ONE_UP_REDIRECT} />
+      <Route path="classify" onEnter={redirectPfeToFem} component={ProjectClassifyPage} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
       <Redirect from="education" to="about/education"/>
-      <Route path="about" onEnter={redirectToStaticProxy}>
+      <Route path="about" onEnter={redirectPfeToFem} component={AboutProject}>
         <IndexRedirect to="research" />
-        <Route path="research" onEnter={redirectToStaticProxy} />
-        <Route path="results" onEnter={redirectToStaticProxy} />
-        <Route path="faq" onEnter={redirectToStaticProxy} />
-        <Route path="education" onEnter={redirectToStaticProxy} />
-        <Route path="team" onEnter={redirectToStaticProxy} />
+        <Route path="research" onEnter={redirectPfeToFem} component={AboutProjectResearch} />
+        <Route path="results" onEnter={redirectPfeToFem} component={AboutProjectResults} />
+        <Route path="faq" onEnter={redirectPfeToFem} component={AboutProjectFAQ} />
+        <Route path="education" onEnter={redirectPfeToFem} component={AboutProjectEducation} />
+        <Route path="team" onEnter={redirectPfeToFem} component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require('./pages/project/talk')}>
@@ -263,21 +235,21 @@ export const routes = (
       This is FEM's projects/locale pattern. These routes only apply if the react-router
       somehow intercepts a request to i.e /projects/es/penguintom79/penguin-watch
     */}
-    <Route path="projects/:locale/:owner/:name" component={require('./pages/project').default}>
-      <IndexRoute component={ProjectHomePage} />
+    <Route path="projects/:locale/:owner/:name" component={ProjectPageController}>
+      <IndexRoute onEnter={redirectPfeToFem} component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="classify" component={require('./pages/project/classify').default} />
+      <Route path="classify" onEnter={redirectPfeToFem} component={ProjectClassifyPage} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
       <Redirect from="education" to="about/education"/>
-      <Route path="about" component={AboutProject}>
+      <Route path="about" onEnter={redirectPfeToFem} component={AboutProject}>
         <IndexRedirect to="research" />
-        <Route path="research" component={AboutProjectResearch} />
-        <Route path="results" component={AboutProjectResults} />
-        <Route path="faq" component={AboutProjectFAQ} />
-        <Route path="education" component={AboutProjectEducation} />
-        <Route path="team" component={AboutProjectTeam} />
+        <Route path="research" onEnter={redirectPfeToFem} component={AboutProjectResearch} />
+        <Route path="results" onEnter={redirectPfeToFem} component={AboutProjectResults} />
+        <Route path="faq" onEnter={redirectPfeToFem} component={AboutProjectFAQ} />
+        <Route path="education" onEnter={redirectPfeToFem} component={AboutProjectEducation} />
+        <Route path="team" onEnter={redirectPfeToFem} component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require('./pages/project/talk')}>
@@ -406,6 +378,7 @@ export const routes = (
       ? NotFoundPage
       : DevClassifierPage
     } />
-    <Route path="*" component={NotFoundPage} />
+    {/* Any routes not specified above should be handled by the monorepo apps. */}
+    <Route path="*" onEnter={redirectToStaticProxy} />
   </Route>
 )
