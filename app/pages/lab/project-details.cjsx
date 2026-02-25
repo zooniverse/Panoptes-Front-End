@@ -101,6 +101,38 @@ module.exports = createReactClass
 
           <p><small className="form-help">Pick a logo to represent your project. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50 KB.</small></p>
 
+          {
+            # Show a preview of the logo, but in circular form.
+            # The style here should match the FEM project logo, e.g. on https://www.zooniverse.org/projects/darkeshard/test-project-2022
+            # In practice, the BACKGROUND matters since the project header uses a background image if available, but we'll just use a teal background here, just to have some contrast for projects with transparent logos.
+            # (Projects shouldn't have transparent logos.)
+            if @state.avatar?.src
+              <div>
+                <p><small className="form-help">Your image will also be displayed as a circular logo on the project page. This is an example of how it will look like:</small></p>
+                <div
+                  style={{
+                    background: 'rgb(0, 151, 157)',
+                    borderRadius: '5px',
+                    padding: '1em'
+                  }}
+                >
+                  <img
+                    style={{
+                      borderRadius: '100%',
+                      boxShadow: 'rgba(0, 0, 0, 0.22) 5px 10px 20px',
+                      objectFit: 'cover',
+                      overflow: 'hidden',
+                      width: '80px',
+
+                      display: 'block',
+                      margin: '0 auto',
+                    }}
+                    src={@state.avatar?.src}
+                  />
+                </div>
+              </div>
+          }
+
           <hr />
 
           Background image<br />
