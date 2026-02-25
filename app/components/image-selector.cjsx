@@ -31,10 +31,14 @@ module.exports = createReactClass
     removeEventListener 'resize', @updateWidth
 
   render: ->
-    <div className="image-selector" style={
-      width: @state.rootWidth || 'auto'
-      position: 'relative'
-    }>
+    <div
+      className="image-selector"
+      data-imageSelected={if @props.src then 'true' else 'false'}
+      style={
+        width: @state.rootWidth || 'auto'
+        position: 'relative'
+      }
+    >
       {if @props.src
         <img className="image-selector-preview" src={@props.src} style={
           display: 'block'
