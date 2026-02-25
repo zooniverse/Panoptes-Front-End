@@ -102,7 +102,7 @@ module.exports = createReactClass
           <p><small className="form-help">
             Pick a logo to represent your project.
             To add an image, either drag and drop or click to open your file viewer.
-            Use an image of not more than 50 KB, and not that your logo will appear both as a square and as a circle.
+            Use an image of not more than 50 KB, and note that your logo will appear both as a square and as a circle.
             {if @state.avatar?.src
               <span>(Hover over the square image above to preview it as a circle.)</span>
             }
