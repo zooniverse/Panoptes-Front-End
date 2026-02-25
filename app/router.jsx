@@ -104,7 +104,7 @@ function redirectToStaticProxy(nextState, replace, done) {
     const { pathname, search } = nextState.location
     let newUrl = `https://frontend.preview.zooniverse.org${pathname}${search}`
     if (window.location.hostname === 'www.zooniverse.org') {
-      newUrl = `https://www.zooniverse.org${pathname}{search}`
+      newUrl = `https://www.zooniverse.org${pathname}${search}`
     }
     window.location.replace(newUrl)
     done()
