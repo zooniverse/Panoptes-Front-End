@@ -1,5 +1,38 @@
 import { Chart } from 'chart.js/auto';
 
+function getXYData(data) {
+  return {
+    data: data.x.map((x, index) => ({ x, y: data.y[index] })),
+    pointStyle: 'circle',
+    backgroundColor: '#ffffff',
+    borderColor: '#000000'
+  }
+}
+
+function getSeriesData(series, index) {
+  const { seriesData, seriesOptions } = series;
+  return {
+    data: seriesData,
+    label: seriesOptions.label || `Series ${index + 1}`,
+    pointStyle: seriesOptions.glyph,
+    backgroundColor: seriesOptions.color,
+    borderColor: '#000000'
+  };
+}
+
+function getDatasets(data) {
+  if (data?.datasets) {
+    return data.datasets;
+  }
+  if (data?.map) {
+    return data.map(getSeriesData);
+  }
+  if (data?.x && data?.y) {
+    return [getXYData(data)];
+  }
+  return [];
+}
+
 // Help at http://www.chartjs.org/docs/latest
 class LinePlotModel {
   constructor(canvas, { frame, src }, { onLoad, modelDidError }) {
@@ -8,24 +41,23 @@ class LinePlotModel {
     this.frame = frame;
     fetch(`${src}?=`)
       .then(response => response.json())
-      .then((data) => {
-        let datasets;
-        const { chartOptions, data: FEMdata, ...rest } = data;
-        if (FEMdata) {
-          datasets = FEMdata.map( (data, index) => {
-            const { seriesData, seriesOptions } = data
-            return {
-              data: seriesData,
-              label: seriesOptions.label || `Series ${index + 1}`,
-              pointStyle: seriesOptions.glyph,
-              backgroundColor: seriesOptions.color,
-              borderColor: '#000000'
+      .then(data => {
+        if(data.x && data.y) {
+          return {
+            data: {
+              x: data.x,
+              y: data.y
+            },
+            chartOptions: {
+              xAxisLabel: 'Days',
+              yAxisLabel: 'Brightness'
             }
-          });
+          };
         }
-        if (data.datasets) {
-          datasets = data.datasets
-        }
+        return data;
+      })
+      .then(({ data, chartOptions, ...rest }) => {
+        const datasets = getDatasets(data);
         console.log({
           type: 'scatter',
           data: {
