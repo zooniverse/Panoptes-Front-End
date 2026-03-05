@@ -1,11 +1,24 @@
 import { useState, useEffect } from 'react';
-import { object, string } from 'prop-types';
+import { func, object, string } from 'prop-types';
 import LoadingIndicator from '../loading-indicator';
 
 const cache = {};
 
+function createLoadEvent(data) {
+  return {
+    target: {
+      naturalWidth: 100,
+      naturalHeight: 100,
+      videoWidth: 0,
+      videoHeight: 0
+    },
+    data
+  };
+}
+
 function JSONViewer({
   className,
+  onLoad,
   prefetchedJSON,
   src,
   style
@@ -14,11 +27,18 @@ function JSONViewer({
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(!prefetchedJSON);
 
+  function handleOnLoad(formattedContent) {
+    if (!onLoad) return;
+
+    onLoad(createLoadEvent(formattedContent));
+  }
+
   function displayJSON(data) {
     const formattedContent = JSON.stringify(data, null, 2);
     setContent(formattedContent);
     setLoading(false);
     setError(null);
+    handleOnLoad(formattedContent);
   }
 
   function loadJSON(src) {
@@ -27,6 +47,7 @@ function JSONViewer({
       setContent(cachedContent);
       setLoading(false);
       setError(null);
+      handleOnLoad(cachedContent);
     } else {
       setLoading(true);
       setError(null);
@@ -46,6 +67,7 @@ function JSONViewer({
           setContent(formattedContent);
           setLoading(false);
           setError(null);
+          handleOnLoad(formattedContent);
         })
         .catch(error => {
           const errorMessage = `Unable to load JSON: ${error.message}`;
@@ -95,6 +117,7 @@ function JSONViewer({
 
 JSONViewer.propTypes = {
   className: string,
+  onLoad: func,
   prefetchedJSON: object,
   src: string,
   style: object
