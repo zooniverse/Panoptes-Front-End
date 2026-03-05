@@ -18,14 +18,14 @@ function createLoadEvent(data) {
 
 function JSONViewer({
   className,
+  jsonData,
   onLoad,
-  prefetchedJSON,
   src,
   style
 }) {
   const [content, setContent] = useState('Loading…');
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(!prefetchedJSON);
+  const [loading, setLoading] = useState(!jsonData);
 
   function handleOnLoad(formattedContent) {
     if (!onLoad) return;
@@ -79,12 +79,12 @@ function JSONViewer({
   }
 
   useEffect(() => {
-    if (prefetchedJSON) {
-      displayJSON(prefetchedJSON);
+    if (jsonData) {
+      displayJSON(jsonData);
     } else if (src) {
       loadJSON(src);
     }
-  }, [src, prefetchedJSON]);
+  }, [src, jsonData]);
 
   if (error) {
     return (
@@ -117,8 +117,8 @@ function JSONViewer({
 
 JSONViewer.propTypes = {
   className: string,
+  jsonData: object,
   onLoad: func,
-  prefetchedJSON: object,
   src: string,
   style: object
 };

@@ -5,7 +5,7 @@ import JSONViewer from './json-viewer';
 import CanvasViewer from './canvas-viewer';
 
 function JSONContainer(props) {
-  const [prefetchedJSON, setPrefetchedJSON] = useState(null);
+  const [jsonData, setJsonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -29,7 +29,7 @@ function JSONContainer(props) {
         return response.json();
       })
       .then(data => {
-        setPrefetchedJSON(data);
+        setJsonData(data);
         setLoading(false);
         setError(null);
       })
@@ -37,7 +37,7 @@ function JSONContainer(props) {
         // On fetch error, still pass through to CanvasViewer
         // CanvasViewer/models will handle the error
         console.warn('JSONContainer fetch error:', err);
-        setPrefetchedJSON(null);
+        setJsonData(null);
         setLoading(false);
         setError(err.message);
       });
@@ -53,16 +53,16 @@ function JSONContainer(props) {
   }
 
   // If detected as GeoJSON (type === 'Feature' or 'FeatureCollection'), use JSONViewer
-  if (prefetchedJSON?.type === 'Feature' || prefetchedJSON?.type === 'FeatureCollection') {
-    return <JSONViewer {...props} prefetchedJSON={prefetchedJSON} />;
+  if (jsonData?.type === 'Feature' || jsonData?.type === 'FeatureCollection') {
+    return <JSONViewer {...props} jsonData={jsonData} />;
   }
 
   // Otherwise, use CanvasViewer for canvas model rendering
-  // Pass prefetchedJSON if available to avoid duplicate src requests
+  // Pass jsonData if available to avoid duplicate src requests
   return (
     <CanvasViewer 
       {...props} 
-      prefetchedJSON={prefetchedJSON}
+      jsonData={jsonData}
     />
   );
 }

@@ -122,7 +122,7 @@ class CanvasViewer extends React.Component {
             metadata: this.props.subject.metadata,
             src: this.props.src,
             sizing: this.props.viewBoxDimensions,
-            prefetchedJSON: this.props.prefetchedJSON
+            jsonData: this.props.jsonData
           },
           // pass event handlers
           {
@@ -182,8 +182,8 @@ CanvasViewer.propTypes = {
   annotation: PropTypes.object,
   annotations: PropTypes.array,
   frame: PropTypes.number,
+  jsonData: PropTypes.object,
   overlayStyle: PropTypes.object,
-  prefetchedJSON: PropTypes.object,
   src: PropTypes.string,
   style: PropTypes.object,
   /* eslint-disable react/no-unused-prop-types */

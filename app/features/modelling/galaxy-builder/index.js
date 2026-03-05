@@ -6,7 +6,7 @@ import { convolvePSF, calculateDifference, scaleModel, maskImage, panZoom } from
 import { parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctions';
 
 class GalaxyBuilderModel extends baseModel {
-  constructor(canvas, { frame, metadata, src, sizing, prefetchedJSON }, eventHandlers) {
+  constructor(canvas, { frame, metadata, src, sizing, jsonData }, eventHandlers) {
     const modelErrorMessage = `
     Sorry, this project requires features which are not supported by your
     device. Please try again on a different computer, and let us know in talk
@@ -18,9 +18,9 @@ class GalaxyBuilderModel extends baseModel {
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
     
-    // Use prefetchedJSON if available to avoid duplicate fetch
-    if (prefetchedJSON) {
-      this.handleDataLoad(prefetchedJSON);
+    // Use jsonData if available to avoid duplicate fetch
+    if (jsonData) {
+      this.handleDataLoad(jsonData);
     } else if (src) {
       // fallback: fire off the fetch event
       fetch(`${src}?=`)

@@ -2,14 +2,14 @@ import { Chart } from 'chart.js/auto';
 
 // Help at http://www.chartjs.org/docs/latest
 class LinePlotModel {
-  constructor(canvas, { frame, src, prefetchedJSON }, { onLoad, modelDidError }) {
+  constructor(canvas, { frame, src, jsonData }, { onLoad, modelDidError }) {
     this.ctx = canvas.getContext('2d');
     console.log('Line Plot', this.ctx, frame, src);
     this.frame = frame;
     
-    // Use prefetchedJSON if available to avoid duplicate fetch
-    if (prefetchedJSON) {
-      this.processData(prefetchedJSON, canvas, onLoad);
+    // Use jsonData if available to avoid duplicate fetch
+    if (jsonData) {
+      this.processData(jsonData, canvas, onLoad);
     } else {
       fetch(`${src}?=`)
         .then(response => response.json())
