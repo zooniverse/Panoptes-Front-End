@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import { cloneDeep } from 'lodash';
 import VideoPlayer from './video-player';
 import AudioPlayer from './audio-player';
 import TextViewer from './text-viewer';
 import ImageViewer from './image-viewer';
 import CanvasViewer from './canvas-viewer';
+import JSONContainer from './json-container';
 import VolumetricViewer from './volumetric-viewer';
 
 function DefaultViewer(props) {
@@ -35,6 +35,12 @@ function subjectViewerSelector(props) {
       return VIEWERS.audio;
     }
     // ... add other here if necessary
+  }
+  // if type is application/json,
+  // use JSONContainer to fetch and inspect the JSON,
+  // then return appropriate viewer based on JSON content
+  if (props.type === 'application' && props.format === 'json') {
+    return JSONContainer;
   }
   return VIEWERS[props.type] || DefaultViewer;
 }
