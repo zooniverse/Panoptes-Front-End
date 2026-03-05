@@ -16,7 +16,7 @@ function createLoadEvent(data) {
   };
 }
 
-function JSONViewer({
+function RawJSONViewer({
   className,
   jsonData,
   onLoad,
@@ -115,7 +115,7 @@ function JSONViewer({
   );
 }
 
-JSONViewer.propTypes = {
+RawJSONViewer.propTypes = {
   className: string,
   jsonData: object,
   onLoad: func,
@@ -123,4 +123,4 @@ JSONViewer.propTypes = {
   style: object
 };
 
-export default JSONViewer;
+export default RawJSONViewer;
