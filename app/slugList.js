@@ -295,7 +295,6 @@ const PFE_SLUGS = [
   'sydney-sherman19/shela-b6-eazy-py-massive-vi',
   'sydneyunilibrary/detective-fiction',
   'sydsherman19/shela-b4-eazy-py-massive-vi',
-  'tbutrum/overlap-zoo',
   'tharinduj/g-band-variables-test',
   'tstewart656/morphology-of-spogs',
   'vardanp91/frick',
