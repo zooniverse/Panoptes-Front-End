@@ -376,6 +376,7 @@ const PFE_SLUGS = [
   'uw-leap/tots-and-tunes',
   'wingkitty/filk-archive',
   'tuc04/ruby-3-dot-2-testing-2-4-2026-7-07-26-pm',
+  'tuc04/rails-7-dot-2-testing'
   'yli/humbug' // Audio subject with spectrogram isn't supported in FEM
 ]
 
