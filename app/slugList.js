@@ -295,7 +295,6 @@ const PFE_SLUGS = [
   'sydney-sherman19/shela-b6-eazy-py-massive-vi',
   'sydneyunilibrary/detective-fiction',
   'sydsherman19/shela-b4-eazy-py-massive-vi',
-  'tbutrum/overlap-zoo',
   'tharinduj/g-band-variables-test',
   'tstewart656/morphology-of-spogs',
   'vardanp91/frick',
@@ -322,8 +321,9 @@ const PFE_SLUGS = [
   'gaia-zooniverse/gaia-vari', // SVG subjects aren't supported in FEM
   'hripsi-19/atmoselec-atmospheric-electricity-for-climate', // Issue with its combo task
   'hugo-ferreira/where-is-spoony', // Uses experimental "slider" subtask
-  'icecubeobservatory/name-that-neutrino',
+  'jenbays/beaver-dams', // CSSI project
   'low-sky/bubblezoo-v1', // Oval drawing tool is a worse experience in FEM
+  'mappingprejudice/mapping-prejudice',
   'md68135/notes-from-nature-big-bee-bonanza',
   'md68135/notes-from-nature-calbug', // Dependent dropdowns aren't supported in FEM
   'md68135/notes-from-nature-capturing-californias-flowers', // Dependent dropdowns aren't supported in FEM
@@ -348,11 +348,11 @@ const PFE_SLUGS = [
   'rsengar/einstein-at-home-pulsar-seekers', // Feedback per step isn't supported in FEM
   'sassydumbledore/chimp-and-see', // Video in a flipbook isn't supported in FEM
   'tawakitom/penguins-from-above', // Subject image sizes difficult in FEM's classifier layout
+  'tingard/galaxy-builder', // custom slider interface on finished project
   'watchablewildlife/nebraska-wildlife-watch',
   'wildcam/wildcam-darien',
   'wwt/stream-team-emerging-insect-explorer',
   'xbonnin/solar-radio-burst-tracker', // Freehand segment line and freehand shape deprecated from FEM
-  'zookeeper/galaxy-zoo', // Uses experimental "slider" subtask
   'zooniverse/floating-forests',
   'zooniverse/intro2astro-hubbles-law', // Classrooms
   'zooniverse/measuring-the-anzacs', // Classrooms
