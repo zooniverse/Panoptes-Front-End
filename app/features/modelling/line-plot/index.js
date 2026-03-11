@@ -1,12 +1,21 @@
 import { Chart } from 'chart.js/auto';
-
+/**
+ * @typedef {Object} ChartData
+ * @property {Object} data - The data for the chart, which can be in various formats (e.g., x/y arrays, series data).
+ * @property {Object} chartOptions - Optional chart configuration options (e.g., axis labels, invert axes).
+ * @property {string} chartOptions.xAxisLabel - Label for the x-axis.
+ * @property {string} chartOptions.yAxisLabel - Label for the y-axis.
+ * @property {Object} chartOptions.invertAxes - Optional configuration to invert axes.
+ * @property {boolean} chartOptions.invertAxes.x - Whether to invert the x-axis.
+ * @property {boolean} chartOptions.invertAxes.y - Whether to invert the y-axis.
+ */
 /**
  * Convert PH TESS data format (with x and y arrays) into a ChartData object
  * that includes the data and chart options.
  * @param {Object} data
  * @param {Array} data.x
  * @param {Array} data.y 
- * @returns {Object} A ChartData object matching other Zooniverse JSON subjects.
+ * @returns {ChartData} A ChartData object matching other Zooniverse JSON subjects.
  */
 function convertPHTessDataToChartData(data) {
   if(data?.x && data?.y) {
@@ -113,7 +122,7 @@ class LinePlotModel {
    * suitable for Chart.js before rendering.
    * @param {Object} apiData 
    * @param {Object} apiData.data - The data for the chart, which can be in various formats (e.g., x/y arrays, series data).
-   * @param {Object} apiData.chartOptions - Optional chart configuration options (e.g., axis labels, invert axes).
+   * @param {ChartData.chartOptions} apiData.chartOptions - Optional chart configuration options (e.g., axis labels, invert axes).
    * @param {HTMLCanvasElement} canvas The canvas element where the chart will be rendered.
    * @param {Function} onLoad Callback that fires after the chart is rendered, providing the dimensions of the canvas for any necessary adjustments in the parent component.
    * @returns {void}
