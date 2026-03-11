@@ -9,7 +9,7 @@ import { Chart } from 'chart.js/auto';
  * @returns {Object} A ChartData object matching other Zooniverse JSON subjects.
  */
 function convertPHTessDataToChartData(data) {
-  if(data.x && data.y) {
+  if(data?.x && data?.y) {
     return {
       data: {
         x: data.x,
@@ -68,14 +68,14 @@ function getSeriesData(series, index) {
  * - A map of series data in the `map` property, which will be converted using `getSeriesData`.
  * - Separate x and y arrays, which will be converted using `getXYData`.
  * If none of these formats are present, an empty array is returned.
- * @param {Object} data - The data object which may contain datasets, a map of series data, or x/y arrays.
+ * @param {Object} data - The data object which may contain datasets, an array of series data, or x/y arrays.
  * @returns {Array} An array of Chart.js dataset objects.
  */
 function getDatasets(data) {
   if (data?.datasets) {
     return data.datasets;
   }
-  if (data?.map) {
+  if (Array.isArray(data)) {
     return data.map(getSeriesData);
   }
   if (data?.x && data?.y) {
