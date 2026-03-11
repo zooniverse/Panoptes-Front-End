@@ -74,7 +74,7 @@ function getSeriesData(series, index) {
 /**
  * Convert Zooniverse data into an array of Chart.js dataset objects. The data can be in various formats, such as:
  * - An array of datasets directly in the `datasets` property.
- * - A map of series data in the `map` property, which will be converted using `getSeriesData`.
+ * - An array of series data, which will be converted using `getSeriesData` on each series.
  * - Separate x and y arrays, which will be converted using `getXYData`.
  * If none of these formats are present, an empty array is returned.
  * @param {Object} data - The data object which may contain datasets, an array of series data, or x/y arrays.
