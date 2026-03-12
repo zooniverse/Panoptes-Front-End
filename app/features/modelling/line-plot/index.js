@@ -1,4 +1,19 @@
 import { Chart } from 'chart.js/auto';
+
+/**
+ * Check if the provided data is in the PH TESS format, which consists of exactly
+ * two properties: x and y, both of which are arrays.
+ * @param {Object} data - The data object to check.
+ * @returns {boolean} True if the data is in PH TESS format, false otherwise.
+ */
+function isPHTessData(data) {
+  return Object.keys(data).length === 2
+    && data?.x 
+    && data?.y
+    && Array.isArray(data.x)
+    && Array.isArray(data.y);
+}
+
 /**
  * @typedef {Object} ChartData
  * @property {Object} data - The data for the chart, which can be in various formats (e.g., x/y arrays, series data).
@@ -18,7 +33,7 @@ import { Chart } from 'chart.js/auto';
  * @returns {ChartData} A ChartData object matching other Zooniverse JSON subjects.
  */
 function convertPHTessDataToChartData(data) {
-  if(data?.x && data?.y) {
+  if(isPHTessData(data)) {
     return {
       data: {
         x: data.x,
