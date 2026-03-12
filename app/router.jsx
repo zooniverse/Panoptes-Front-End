@@ -357,7 +357,7 @@ export const routes = (
 
     <Route path="lab" component={require('./pages/lab')} />
     <Route path="lab/:projectID" component={projectLab}>
-      <IndexRoute component={require('./pages/lab/project-details')} />
+      <IndexRoute component={require('./pages/lab/project-details.jsx').default} />
       <Route path="about" component={require('./pages/lab/about')}>
         <IndexRedirect to='research' />
         <Route path="research" component={require('./pages/lab/about/research')} />
