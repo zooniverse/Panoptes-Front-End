@@ -32,14 +32,14 @@ const MAX_BACKGROUND_SIZE = 256000;
 
 const DISCIPLINE_NAMES = (Array.from(DISCIPLINES).map((discipline) => discipline.value));
 
-
 // Get organizations linked to this project.
 // In 2026, projects started to support multiple linked organizations.
 // - Previously, it would be project.links.organization = "123" (or null).
-// - Now, it's project.links.organization = ["123"] (or [])
+// - Now, it's project.links.organizations = ["123"] (or [])
+// - That's organization(S), plural.
 //
 // Input: project resource.
-// Output: array containing IDs of linked organizations, e.g. ["123", "456"]  
+// Output: array containing IDs of linked organizations, e.g. ["123", "456"]
 function getLinkedOrganizations (project) {
   if (Array.isArray(project?.links?.organizations)) return project.links.organizations;
   if (project?.links?.organization) return [project?.links?.organization];  // Fallback, only required during the 2026 transition period.
