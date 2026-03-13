@@ -32,6 +32,20 @@ const MAX_BACKGROUND_SIZE = 256000;
 
 const DISCIPLINE_NAMES = (Array.from(DISCIPLINES).map((discipline) => discipline.value));
 
+
+// Get organizations linked to this project.
+// In 2026, projects started to support multiple linked organizations.
+// - Previously, it would be project.links.organization = "123" (or null).
+// - Now, it's project.links.organization = ["123"] (or [])
+//
+// Input: project resource.
+// Output: array containing IDs of linked organizations, e.g. ["123", "456"]  
+function getLinkedOrganizations (project) {
+  if (Array.isArray(project?.links?.organizations)) return project.links.organizations;
+  if (project?.links?.organization) return [project?.links?.organization];  // Fallback, only required during the 2026 transition period.
+  return []
+}
+
 class EditProjectDetails extends React.Component {
   constructor (props) {
     super(props)
@@ -43,7 +57,7 @@ class EditProjectDetails extends React.Component {
       researchers: [],
       avatar: null,
       background: null,
-      organization: null,
+      organizations: [],
       error: null
     };
   }
@@ -57,12 +71,11 @@ class EditProjectDetails extends React.Component {
       });
     });
 
-    if (this.props.project.links?.organization) {
-      this.props.project.get('organization')
-        .then(organization => {
-          return this.setState({ organization });
-      }).catch(error => {
-          return console.error(error);
+    // Fetch linked organizations.
+    let linkedOrganizations = getLinkedOrganizations(this.props.project)
+    if (linkedOrganizations.length > 0) {
+      apiClient.type('organizations').get({ id: linkedOrganizations.join(',') }).then(orgs => {
+        return this.setState({ organizations: orgs });
       });
     }
 
@@ -109,6 +122,7 @@ class EditProjectDetails extends React.Component {
     let checked;
     const avatarPlaceholder = <div className="form-help content-container">Drop an avatar image here</div>;
     const backgroundPlaceholder = <div className="form-help content-container">Drop a background image here</div>;
+    const linkedOrganizations = getLinkedOrganizations(this.props.project)
 
     return (
       <div>
@@ -147,14 +161,24 @@ class EditProjectDetails extends React.Component {
           </div>
 
           <div className="column">
-            {this.props.project.links?.organization ?
+            
+            {linkedOrganizations.length > 0 && (
               <div>
-                {this.state.organization ?
-                  <p>This project is part of the <Link to={`/organizations/${this.state.organization.slug}`}>{this.state.organization.display_name}</Link> organization.</p>
-                :
-                  <p>This project is linked to <strong>Organization #{this.props.project.links.organization}</strong>.</p>}
+                {this.state.organizations.length === linkedOrganizations.length ? (
+                  <p>
+                    This project is part of the following {this.state.organizations.length > 1 ? 'organizations' : 'organization'}:&nbsp;
+                    <span>
+                      {this.state.organizations.map(org => (
+                        <Link style={{ marginLeft: '0.25em' }} key={`org-${org.slug}`} to={`/organizations/${org.slug}`}>{org.display_name}</Link>
+                      ))}
+                    </span>
+                  </p>
+                ) : (
+                  <p><i>Fetching linked organization data...</i></p>
+                )}
                 <p>If you are not a collaborator on the organization, please coordinate with this project's other collaborators for additional information regarding the affiliated organization.</p>
-              </div> : undefined}
+              </div>
+            )}
 
             <DisplayNameSlugEditor resource={this.props.project} resourceType="project" />
 
