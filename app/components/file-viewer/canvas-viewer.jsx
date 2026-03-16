@@ -121,7 +121,8 @@ class CanvasViewer extends React.Component {
             frame: this.props.frame,
             metadata: this.props.subject.metadata,
             src: this.props.src,
-            sizing: this.props.viewBoxDimensions
+            sizing: this.props.viewBoxDimensions,
+            jsonData: this.props.jsonData
           },
           // pass event handlers
           {
@@ -181,6 +182,7 @@ CanvasViewer.propTypes = {
   annotation: PropTypes.object,
   annotations: PropTypes.array,
   frame: PropTypes.number,
+  jsonData: PropTypes.object,
   overlayStyle: PropTypes.object,
   src: PropTypes.string,
   style: PropTypes.object,
