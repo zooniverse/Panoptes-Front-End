@@ -128,6 +128,7 @@ module.exports = createReactClass
                       margin: '0 auto',
                     }}
                     src={@state.avatar?.src}
+                    alt='Preview of project avatar cropped to a circle'
                   />
                 </div>
               </div>
