@@ -94,17 +94,16 @@ function redirectPfeToFem(nextState, replace, done) {
  * Client-side redirect a route to the static proxy, by replacing the browser window location.
  * @param {Object} nextState
  * @param {Object} nextState.location
- * @param {string} nextState.location.pathname
- * @param {string} nextState.location.search
  * @param {Function} replace 
  * @param {Function} done 
  */
 function redirectToStaticProxy(nextState, replace, done) {
   try {
-    const { pathname, search } = nextState.location
-    let newUrl = `https://frontend.preview.zooniverse.org${pathname}${search}`
+    const newUrl = new URL(nextState.location);
     if (window.location.hostname === 'www.zooniverse.org') {
-      newUrl = `https://www.zooniverse.org${pathname}${search}`
+      newUrl.origin = 'https://www.zooniverse.org'
+    } else {
+      newUrl.origin = 'https://frontend.preview.zooniverse.org'
     }
     window.location.replace(newUrl)
     done()
@@ -186,11 +185,11 @@ export const routes = (
       <Redirect from="education" to="about/education"/>
       <Route path="about" onEnter={redirectPfeToFem} component={AboutProject}>
         <IndexRedirect to="research" />
-        <Route path="research" onEnter={redirectPfeToFem} component={AboutProjectResearch} />
-        <Route path="results" onEnter={redirectPfeToFem} component={AboutProjectResults} />
-        <Route path="faq" onEnter={redirectPfeToFem} component={AboutProjectFAQ} />
-        <Route path="education" onEnter={redirectPfeToFem} component={AboutProjectEducation} />
-        <Route path="team" onEnter={redirectPfeToFem} component={AboutProjectTeam} />
+        <Route path="research" component={AboutProjectResearch} />
+        <Route path="results" component={AboutProjectResults} />
+        <Route path="faq" component={AboutProjectFAQ} />
+        <Route path="education" component={AboutProjectEducation} />
+        <Route path="team" component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require('./pages/project/talk')}>
@@ -245,11 +244,11 @@ export const routes = (
       <Redirect from="education" to="about/education"/>
       <Route path="about" onEnter={redirectPfeToFem} component={AboutProject}>
         <IndexRedirect to="research" />
-        <Route path="research" onEnter={redirectPfeToFem} component={AboutProjectResearch} />
-        <Route path="results" onEnter={redirectPfeToFem} component={AboutProjectResults} />
-        <Route path="faq" onEnter={redirectPfeToFem} component={AboutProjectFAQ} />
-        <Route path="education" onEnter={redirectPfeToFem} component={AboutProjectEducation} />
-        <Route path="team" onEnter={redirectPfeToFem} component={AboutProjectTeam} />
+        <Route path="research" component={AboutProjectResearch} />
+        <Route path="results" component={AboutProjectResults} />
+        <Route path="faq" component={AboutProjectFAQ} />
+        <Route path="education" component={AboutProjectEducation} />
+        <Route path="team" component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require('./pages/project/talk')}>
