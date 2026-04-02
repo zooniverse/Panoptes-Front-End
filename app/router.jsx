@@ -94,16 +94,17 @@ function redirectPfeToFem(nextState, replace, done) {
  * Client-side redirect a route to the static proxy, by replacing the browser window location.
  * @param {Object} nextState
  * @param {Object} nextState.location
+ * @param {string} nextState.location.pathname
+ * @param {string} nextState.location.search
  * @param {Function} replace 
  * @param {Function} done 
  */
 function redirectToStaticProxy(nextState, replace, done) {
+  const { pathname, search } = nextState.location;
   try {
-    const newUrl = new URL(nextState.location);
+    let newUrl = `https://frontend.preview.zooniverse.org${pathname}${search}`;
     if (window.location.hostname === 'www.zooniverse.org') {
-      newUrl.origin = 'https://www.zooniverse.org'
-    } else {
-      newUrl.origin = 'https://frontend.preview.zooniverse.org'
+      newUrl = `https://www.zooniverse.org${pathname}${search}`;
     }
     window.location.replace(newUrl)
     done()
