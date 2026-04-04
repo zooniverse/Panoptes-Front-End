@@ -1,0 +1,45 @@
+@require 'ol/ol.css'
+
+.geojson-viewer
+  width: 100%
+
+  .ol-map
+    height: 300px
+    width: 100%
+
+  .talk & .ol-control button
+    background: transparent
+    border: 0
+    border-color: transparent
+    color: var(--ol-subtle-foreground-color)
+    cursor: pointer
+    display: block
+    font: inherit
+    font-weight: 700
+    line-height: inherit
+    margin: 1px
+    padding: 0
+    text-decoration: none
+    text-align: center
+    height: 1.375em
+    width: 1.375em
+
+  .talk & .ol-control button:focus,
+  .talk & .ol-control button:hover
+    background: var(--ol-background-color)
+    border-color: transparent
+    color: var(--ol-foreground-color)
+    text-decoration: none
+
+  .ol-zoom,
+  .ol-rotate,
+  .ol-zoom-extent,
+  .ol-full-screen
+    z-index: 1
+
+  dl
+    display: grid
+    grid-template-columns: 1fr 4fr
+
+    dt
+      font-weight: bold
