@@ -66,7 +66,9 @@ var config = {
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
-    modules: ['.', 'node_modules'],
+    // Use an absolute project root for module lookup. A relative '.' can make
+    // bare imports (e.g. 'rbush') resolve against nested issuer directories.
+    modules: [path.resolve(__dirname), 'node_modules'],
     fallback: {
       fs: false,
       // for markdown-it plugins
