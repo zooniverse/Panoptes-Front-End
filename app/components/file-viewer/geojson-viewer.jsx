@@ -1,17 +1,15 @@
 // MapComponent.js
-import { Fragment, useEffect, useMemo, useRef } from 'react';
+import { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Map, View } from 'ol';
 import { defaults as defaultControls } from 'ol/control/defaults';
 import ScaleLine from 'ol/control/ScaleLine';
 import Feature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
-import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorSource from 'ol/source/Vector';
-import VectorLayer from 'ol/layer/Vector';
 import { Circle, Fill, Stroke, Style } from 'ol/style';
+import { Map, TileLayer, VectorLayer, useMap } from 'react-openlayers';
 
 const geoJsonFormat = new GeoJSON();
 
@@ -53,47 +51,49 @@ function getPointStyles(feature, resolution) {
 };
 
 function getFeatureStyles(feature, resolution) {
-  if (feature.getGeometry().getType() === 'Point') {
+  const featureType = feature.getGeometry().getType();
+  if (featureType === 'Point') {
     return getPointStyles(feature, resolution);
   }
-  // Add styles for other geometry types as needed
-  return [];
+  // Add styles for other geometry types as needed here, e.g. LineString, Polygon, etc.
+  return undefined; // use OpenLayers default styles for LineString, Polygon, etc. for now.
 };
 
 /**
- * Initialise a map and vector source with a list of geoJSON features.
- * @param {HTMLElement} target 
- * @param {Feature[]} features 
- * @returns {{map: Map, vectorSource: VectorSource}}
+ * A vector layer that fits the map view to its extent.
+ * @param {props} props
+ * @param {Feature[]} props.features - An array of OpenLayers features to display on the map. 
+ * @returns {JSX.Element|null} A vector layer containing the provided features, with the map view fitted to their extent. Returns null if the map is not available.
  */
-function createMap(target, features) {
-  const osmLayer = new TileLayer({
-    preload: Infinity,
-    source: new OSM(),
-  });
-  const view = new View();
-  const controls = defaultControls().extend([
-    new ScaleLine()
-  ]);
-  
-  const vectorSource = new VectorSource({ features });
-  const vectorLayer = new VectorLayer({
-    source: vectorSource,
-    style: getFeatureStyles
-  });
-  const layers = [osmLayer, vectorLayer];
+function FittedVectorLayer({ features }) {
+  const vectorSource = useMemo(() => new VectorSource({ features }), [features]);
+  const map = useMap();
+  if (!map) return null;
+  const view = map.getView();
   const extent = vectorSource.getExtent();
+
   if (extent) {
     view.fit(extent, {
       padding: [100, 100, 100, 100],
       maxZoom: 12,
-      duration: 250
     });
   }
-  const map = new Map({ target, layers, view, controls });
 
-  return { map, vectorSource };
-};
+  return <VectorLayer source={vectorSource} style={getFeatureStyles} />;
+}
+
+function ReferenceData({ data }) {
+  return (
+    <dl>
+      {Object.entries(data).map(([key, value]) => (
+        <Fragment key={key}>
+          <dt>{key}</dt>
+          <dd>{value}</dd>
+        </Fragment>
+      ))}
+    </dl>
+  );
+}
 
 /**
  * A subject viewer for WGS 84 GeoJSON features. Displays features on an OpenLayers map,
@@ -109,40 +109,23 @@ function GeoJSONViewer({
   jsonData,
   style
 }) {
-  const mapRef = useRef(null);
   const features = useMemo(() => geoJsonFormat.readFeatures(jsonData, {
     dataProjection: 'EPSG:4326', // incoming data is WGS 84.
     featureProjection: 'EPSG:3857', // rendered map is Web Mercator.
     featureClass: RenderFeature // render read-only features on the map.
   }), [jsonData]);
   const referenceData = jsonData.reference_data;
-
-  useEffect(() => {
-    if (!mapRef.current) return;
-    const { map, vectorSource} = createMap(mapRef.current, features);
-
-    return () => {
-      map.setTarget(undefined);
-      vectorSource?.clear();
-    };
-  }, [features]);
+  const osm = useMemo(() => new OSM(), []);
+  const controls = useMemo(() => defaultControls().extend([new ScaleLine()]), []);
 
   return (
     <div className="geojson-viewer" style={style}>
-      <div
-        className="ol-map"
-        ref={mapRef}
-        tabIndex={0}
-      />
+      <Map className="ol-map" controls={controls}>
+        <TileLayer source={osm} />
+        <FittedVectorLayer features={features} />
+      </Map>
       {referenceData && (
-        <dl>
-          {Object.entries(referenceData || {}).map(([key, value]) => (
-            <Fragment key={key}>
-              <dt>{key}</dt>
-              <dd>{value}</dd>
-            </Fragment>
-          ))}
-        </dl>
+        <ReferenceData data={referenceData} />
       )}
     </div>
   );

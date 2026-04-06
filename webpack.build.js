@@ -85,6 +85,13 @@ module.exports = {
   },
   module: {
     rules: [{
+      test: /\.m?js$/,
+      include: /node_modules\/react-openlayers\/dist/,
+      // react-openlayers emits extensionless deep imports (e.g. ol/interaction/Link).
+      resolve: {
+        fullySpecified: false
+      }
+    }, {
       test: /\.jsx?$/,
       exclude: /node_modules\/(?!(markdown-it-anchor|markdown-it-table-of-contents|striptags)\/).*/,
       // markdown-it-anchor, markdown-it-table-of-contents and striptags are written in ES6.
