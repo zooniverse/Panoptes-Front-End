@@ -65,7 +65,7 @@ var config = {
     new DashboardPlugin({ port: 3736 }) // Change this here and in the package.json start script if needed.
   ],
   resolve: {
-    extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
+    extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
     // Use an absolute project root for module lookup. A relative '.' can make
     // bare imports (e.g. 'rbush') resolve against nested issuer directories.
     modules: [path.resolve(__dirname), 'node_modules'],
@@ -80,6 +80,13 @@ var config = {
   },
   module: {
     rules: [{
+      test: /\.m?js$/,
+      include: /node_modules\/react-openlayers\/dist/,
+      // react-openlayers emits extensionless deep imports (e.g. ol/interaction/Link).
+      resolve: {
+        fullySpecified: false
+      }
+    }, {
       test: /\.jsx?$/,
       exclude: /node_modules/,
       use: 'babel-loader'
