@@ -163,7 +163,7 @@ class EditProjectDetails extends React.Component {
                       display: 'block',
                       margin: '0 auto',
                     }}
-                    src={@state.avatar?.src}
+                    src={this.state.avatar?.src}
                     alt='Preview of project avatar cropped to a circle'
                   />
                 </div>
