@@ -308,7 +308,7 @@ const PFE_SLUGS = [
   'wragge/sydney-stock-exchange',
   'yjangordon/vlass-variables',
   'yntzevanderhoek/nkuba',
-  'zoeyyy/glitch-classificationslug',
+  'zoeyyy/glitch-classification',
   // Assorted Special Cases
   'acre-ar/meteororum-ad-extremum-terrae', // Subject image sizes difficult in FEM's classifier layout
   'alicemead/sudan-road-access-logistics-cluster',
