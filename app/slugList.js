@@ -174,6 +174,7 @@ const PFE_SLUGS = [
   'jonesr8/phoenix-zoo-trailblazers-wildlife-watch',
   'jonnypierce/do-agn-triggering-mechanisms-vary-with-radio-power',
   'joseph-meli/the-malta-dockyard-collection',
+  'jotto2/boss-occam-clusters',
   'justacea/genome-instability',
   'jypark/something-odd-about-that-plant',
   'karts/eye-on-the-apostles',
