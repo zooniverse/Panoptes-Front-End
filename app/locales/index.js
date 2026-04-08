@@ -27,6 +27,7 @@ export default {
   ru: require('./ru').default,
   sv: require('./sv').default,
   sw: require('./sw').default,
+  ta: require('./ta').default,
   te: require('./te').default,
   tr: require('./tr').default,
   uk: require('./uk').default,

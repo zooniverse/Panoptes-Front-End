@@ -28,6 +28,7 @@ export default {
   ru: 'русский', // Russian
   sw: 'Kiswahili', // Swahili
   sv: 'Svenska', // Swedish
+  ta: 'தமிழ்', // Tamil (not in Lokalise)
   te: 'తెలుగు', // Telugu
   tn: 'Setswana', // Tswana (not in Lokalise)
   tr: 'Türkçe', // Turkish
