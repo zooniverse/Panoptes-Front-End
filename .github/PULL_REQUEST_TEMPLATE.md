@@ -1,4 +1,4 @@
-Note: We are no longer actively developing new features for this app. Open a PR to fix a bug, edit translations, or propose code changes related to new features being developed over at [front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/).
+Note: We are no longer actively developing new features for this app. Open a PR to fix a bug, edit translations, or propose code changes related to new features being developed over at [front-end-monorepo](https://github.com/zooniverse/front-end-monorepo/).
 
 ## Linked Issue and/or Talk Post
 
