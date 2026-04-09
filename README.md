@@ -2,11 +2,11 @@
 
 ![Build Status](https://github.com/zooniverse/Panoptes-Front-End/actions/workflows/ci-tests.yml/badge.svg?branch=main)
 
-[![Coverage Status](https://coveralls.io/repos/github/zooniverse/Panoptes-Front-End/badge.svg)](https://coveralls.io/github/zooniverse/Panoptes-Front-End)
-
 ## Getting started
 
-We are no longer actively developing features for this app. PRs will be accepted for bug fixes, translations, and content updates. Active feature development is happening at [https://github.com/zooniverse/front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/)
+We are no longer actively developing features for this app. PRs will be accepted for bug fixes, translations, and content updates. Active feature development is happening at [https://github.com/zooniverse/front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/) (FEM).
+
+Zooniverse projects now default to using FEM's classifier. The only projects "held back" on PFE are listed in /app/slugList.js.
 
 ### With Docker
 
@@ -74,7 +74,7 @@ The app can be configured using the following environment variables:
 
 ### Development
 
-New GitHub PRs from within the Zooniverse organisation will be staged by Jenkins as part of the CI process. Once CI finishes, your changes should be staged at https://pr-{PR-Number}.pfe-preview.zooniverse.org. Jenkins sometimes times out before finishing the build. If a PR build fails, use the link to Jenkins (from your PR) to log in and try restarting the build.
+New GitHub PRs from within the Zooniverse organisation will be staged as part of the CI process. Once CI finishes, your changes should be staged at https://pr-{PR-Number}.pfe-preview.zooniverse.org.
 
 For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/lab?env=production`. Note that it is removed on every page refresh.
 
@@ -336,5 +336,3 @@ Thanks to [BrowserStack](https://www.browserstack.com) for supporting open
 source and allowing us to test this project on multiple platforms.
 
 [![BrowserStack logo](https://static.zooniverse.org/browserstack-logo-300x158.png)](https://www.browserstack.com)
-
-[![pullreminders](https://pullreminders.com/badge.svg)](https://pullreminders.com?ref=badge)

@@ -1,32 +1,29 @@
-Staging branch URL: https://pr-{NUMBER}.pfe-preview.zooniverse.org
+Note: We are no longer actively developing new features for this app. Open a PR to fix a bug, edit translations, or propose code changes related to new features being developed over at [front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/).
 
-Fixes # .
+## Linked Issue and/or Talk Post
 
-Describe your changes.
+## Describe your changes
 
-# Required Manual Testing
+## How to Review
+- What user actions should my reviewer step through to review this PR?
+- Are there plans for follow up PR’s to further fix this bug or develop this feature?
 
-- [ ] Does the non-logged in home page render correctly?
-- [ ] Does the logged in home page render correctly?
-- [ ] Does the projects page render correctly?
-- [ ] Can you load project home pages?
-- [ ] Can you load the classification page?
-- [ ] Can you submit a classification?
-- [ ] Does talk load correctly?
-- [ ] Can you post a talk comment?
+## Checklist
 
-# Review Checklist
+### General UX
+- [ ] Staging branch URL: https://pr-{NUMBER}.pfe-preview.zooniverse.org/lab
+- [ ] The component is accessible (double check especially if adding new code to this codebase). We recognize that not all legacy components of PFE will pass accessibility guidelines.
+  - Can be used with a screen reader [BBC guide to VoiceOver](https://bbc.github.io/accessibility-news-and-you/assistive-technology/testing-steps/voiceover-mac.html)
+  - Can be used from the keyboard [WebAIM guide to keyboard testing](https://webaim.org/techniques/keyboard/#testing)
 
-- [ ] Does it work in all major browsers: Firefox, Chrome, Edge, Safari?
-- [ ] Does it work on mobile?
-- [ ] Can you `npm ci` and app works as expected?
-- [ ] If the component is in coffeescript, is it converted to ES6? Is it free of eslint errors? Is the conversion its own commit?
-- [ ] Are the tests passing locally and on GitHub Actions?
+### Bug Fix
+- [ ] The PR creator has listed user actions to use when testing if bug is fixed
+- [ ] The bug is fixed
+- [ ] Unit tests are added or updated
 
-# Optional
+### Refactoring
+- [ ] The PR creator has described the reason for refactoring
+- [ ] The refactored component(s) continue to work as expected
 
-- [ ] Have you replaced any `ChangeListener` or `PromiseRenderer` components with code that updates component state?
-- [ ] If changes are made to the classifier, does the dev classifier still work?
-- [ ] Have you [resized and compressed](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization) any image you've added?
-- [ ] Have you added in [flow type annotations](https://flowtype.org/docs/type-annotations.html)?
-- [ ] Have you followed the [Springer guidelines for commit messages](https://github.com/springernature/frontend-playbook/blob/master/git/git.md#commit-messages)?
+### Maintenance
+- [ ] If not from dependabot, the PR creator has described the update (major, minor, or patch version, changelog)
