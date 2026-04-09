@@ -2,8 +2,6 @@
 
 ![Build Status](https://github.com/zooniverse/Panoptes-Front-End/actions/workflows/ci-tests.yml/badge.svg?branch=main)
 
-[![Coverage Status](https://coveralls.io/repos/github/zooniverse/Panoptes-Front-End/badge.svg)](https://coveralls.io/github/zooniverse/Panoptes-Front-End)
-
 ## Getting started
 
 We are no longer actively developing features for this app. PRs will be accepted for bug fixes, translations, and content updates. Active feature development is happening at [https://github.com/zooniverse/front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/)
