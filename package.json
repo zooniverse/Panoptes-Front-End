@@ -122,7 +122,6 @@
   },
   "repository": "zooniverse/Panoptes-Front-End",
   "scripts": {
-    "coverage": "nyc report --reporter=lcov",
     "start": "export NODE_ENV=development; check-engines && check-dependencies && webpack-dashboard -p 3736 -- webpack-dev-server --config ./webpack.dev.js",
     "_build": "export HEAD_COMMIT=$(git rev-parse --short HEAD); check-engines && check-dependencies && rimraf dist; webpack --config ./webpack.build.js --progress --color",
     "build-production": "export NODE_ENV=production; npm run _build",
