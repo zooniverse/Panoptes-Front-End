@@ -2,6 +2,7 @@ export default {
   af: 'Afrikaans', // Afrikaans (not in Lokalise)
   ar: 'العربية', // Arabic
   bn: 'বাংলা', // Bengali
+  ca: 'Català', // Catalan (not in Lokalise)
   cs: 'Čeština', // Czech
   da: 'Dansk', // Danish
   de: 'Deutsch', // German
