@@ -25,6 +25,20 @@ function logToSentry(error, info) {
   });
 }
 
+// Get organizations linked to this project.
+// In 2026, projects started to support multiple linked organizations.
+// - Previously, it would be project.links.organization = "123" (or null).
+// - Now, it's project.links.organizations = ["123"] (or [])
+// - That's organization(S), plural.
+//
+// Input: project resource.
+// Output: array containing IDs of linked organizations, e.g. ["123", "456"]
+function getLinkedOrganizations (project) {
+  if (Array.isArray(project?.links?.organizations)) return project.links.organizations;
+  if (project?.links?.organization) return [project?.links?.organization];  // Fallback, only required during the 2026 transition period.
+  return []
+}
+
 class ProjectPageController extends React.Component {
   constructor() {
     super();
@@ -154,18 +168,24 @@ class ProjectPageController extends React.Component {
           }
           actions.translations.setLocale(locale);
           // Use apiClient with cached resources from include to get out of cache
-          let awaitOrganization;
           const awaitBackground = apiClient.type('backgrounds').get(project.links.background.id)
           .catch(error => {
             if (error.status === 404) { return { src: '' }; } else { return console.error(error); }
           });
 
-          if (project.links?.organization) {
-            const query = isAdmin() ? null : { listed: true }
-            awaitOrganization = project.get('organization', query)
+          // Fetch _all_ Organizations linked to this Project.
+          // - Only fetch an Organization if it's listed ("public & approved").
+          // - Note that in Promise.resolve() later, we'll only use _one_
+          //   Organization, since PFE's UI isn't designed to support multiple.
+          const linkedOrganizations = getLinkedOrganizations(project);
+          let awaitOrganizations;
+          if (linkedOrganizations.length > 0) {
+            const id = linkedOrganizations.join(',');
+            const query = isAdmin() ? { id } : { id, listed: true };
+            awaitOrganizations = apiClient.type('organizations').get(query)
               .catch(error => null);
           } else {
-            awaitOrganization = Promise.resolve(null);
+            awaitOrganizations = Promise.resolve(null);
           }
 
           const awaitOwner = apiClient.type('users').get(project.links.owner.id).catch(error => console.error(error));
@@ -184,7 +204,7 @@ class ProjectPageController extends React.Component {
 
           Promise.all([
             awaitBackground,
-            awaitOrganization,
+            awaitOrganizations,
             awaitOwner,
             awaitPages,
             awaitProjectAvatar,
@@ -195,7 +215,7 @@ class ProjectPageController extends React.Component {
           ])
           .then(([
             background,
-            organization,
+            organizations,
             owner,
             pages,
             projectAvatar,
@@ -204,6 +224,7 @@ class ProjectPageController extends React.Component {
             projectPreferences,
             splits
           ]) => {
+            const organization = organizations?.[0];  // ⚠️ For PFE, we only use the ONE of the organizations that a project may belong to.
             const ready = true;
             this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
             this.loadFieldGuide(project.id, locale);
