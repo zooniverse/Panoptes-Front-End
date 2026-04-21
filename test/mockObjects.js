@@ -59,6 +59,41 @@ export const projectWithRedirect = {
   workflow_description: ''
 };
 
+// As of 2026, any project that's not listed in the PFE_SLUGS exception list
+// (see app/slugList.js) is counted as an FEM project. 
+export const femProjectWithOneActiveWorkflow = {
+  id: '101',
+  slug: 'zooniverse/pet-the-cat',
+  title: 'Pet the Cat',
+  urls: [socialMediaUrl, externalUrl],
+  links: {
+    active_workflows: ['1011']
+  },
+  workflow_description: ''
+}
+
+export const femProjectWithThreeActiveWorkflows = {
+  id: '102',
+  slug: 'zooniverse/high-five-dogs',
+  title: 'High Five Dogs',
+  urls: [socialMediaUrl, externalUrl],
+  links: {
+    active_workflows: ['1021', '1022', '1023']
+  },
+  workflow_description: ''
+}
+
+export const femProjectWithNoActiveWorkflows = {
+  id: '103',
+  slug: 'zooniverse/stare-at-fish',
+  title: 'Stare at Fish',
+  urls: [socialMediaUrl, externalUrl],
+  links: {
+    active_workflows: []
+  },
+  workflow_description: ''
+}
+
 export const workflow = { id: '35' };
 
 export const background = {
