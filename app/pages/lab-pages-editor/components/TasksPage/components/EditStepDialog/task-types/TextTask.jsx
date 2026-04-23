@@ -11,7 +11,7 @@ const TEXT_TAGS = ['deletion', 'insertion', 'unclear']
 function TextTask({
   deleteTask = DEFAULT_HANDLER,
   isSubTask = false,
-  stepHasManyTasks = false,
+  showDeleteButton = false,
   task,
   taskKey,
   updateTask = DEFAULT_HANDLER
@@ -83,7 +83,7 @@ function TextTask({
         isSubTask={isSubTask}
         label={isSubTask ? 'Text Sub-Task Instructions' : null}
         setValue={setInstruction}
-        showDeleteButton={stepHasManyTasks}
+        showDeleteButton={showDeleteButton}
         taskKey={taskKey}
         update={update}
         value={instruction}
@@ -147,7 +147,7 @@ function TextTask({
 TextTask.propTypes = {
   deleteTask: PropTypes.func,
   isSubTask: PropTypes.bool,
-  stepHasManyTasks: PropTypes.bool,
+  showDeleteButton: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateTask: PropTypes.func
