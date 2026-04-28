@@ -3,6 +3,9 @@ import apiClient from 'panoptes-client/lib/api-client';
 import getProjectLinks from './getProjectLinks';
 import {
   adminUser,
+  femProjectWithNoActiveWorkflows,
+  femProjectWithOneActiveWorkflow,
+  femProjectWithThreeActiveWorkflows,
   projectOwnerUser,
   projectCollabUser,
   projectRoles,
@@ -26,6 +29,21 @@ describe('getProjectLinks', function() {
     expect(Object.keys(navLinks).indexOf('classify') > -1).to.be.true;
     expect(Object.keys(navLinks).indexOf('talk') > -1).to.be.true;
     expect(Object.keys(navLinks).indexOf('collections') > -1).to.be.true;
+  });
+
+  it('for FEM projects with exactly 1 active workflow, the Classify link should link directly to that workflow', function() {
+    const navLinks = getProjectLinks({ project: femProjectWithOneActiveWorkflow });
+    expect(navLinks?.classify?.url?.endsWith('/projects/zooniverse/pet-the-cat/classify/workflow/1011')).to.be.true;
+  });
+
+  it('for FEM projects with multiple active workflows, the Classify link should link directly to the root /classify page', function() {
+    const navLinks = getProjectLinks({ project: femProjectWithThreeActiveWorkflows });
+    expect(navLinks?.classify?.url?.endsWith('/projects/zooniverse/high-five-dogs/classify')).to.be.true;
+  });
+
+  it('for FEM projects with no active workflows, the Classify link should link directly to the root /classify page', function() {
+    const navLinks = getProjectLinks({ project: femProjectWithNoActiveWorkflows });
+    expect(navLinks?.classify?.url?.endsWith('/projects/zooniverse/stare-at-fish/classify')).to.be.true;
   });
 
   describe('without a user', function() {

@@ -71,9 +71,22 @@ function getProjectLinks({ project, projectRoles, user }) {
   if (!usesPFEClassifier(slug)) {
     const i18nSlug = locale === 'en' ? slug : `${locale}/${slug}`;
     const envQuery = env === 'staging' ? '?env=staging' : '';
+
+    // About Link
     links.about.url = `${monorepoURL(i18nSlug)}/about${envQuery}`;
     links.about.isMonorepoLink = true;
-    links.classify.url = `${monorepoURL(i18nSlug)}/classify${envQuery}`;
+
+    // Classify Link
+    // - If a Project has exactly 1 active workflow, link to that workflow. 
+    // - Otherwise, link to the root /classify path.
+    // (2026.04.21) For more info, look in FEM for...
+    // - ...how the Classify link in the project nav changes if there's a "default workflow": https://github.com/zooniverse/front-end-monorepo/blob/045dd3c/packages/app-project/src/components/ProjectHeader/hooks/useProjectNavigation.js#L9
+    // - ...how a "default workflow" in FEM just means "only one active workflow": https://github.com/zooniverse/front-end-monorepo/blob/045dd3c/packages/app-project/stores/Project.js#L41
+    const projectHasExactlyOneWorkflow = project?.links?.active_workflows?.length === 1;
+    const classifyLinkUrl = (projectHasExactlyOneWorkflow)
+      ? `${monorepoURL(i18nSlug)}/classify/workflow/${project.links.active_workflows[0]}${envQuery}`
+      : `${monorepoURL(i18nSlug)}/classify${envQuery}`;
+    links.classify.url = classifyLinkUrl;
     links.classify.isMonorepoLink = true;
   }
 
