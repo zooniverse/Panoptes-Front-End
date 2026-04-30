@@ -17,7 +17,6 @@ const experimentalFeatures = [
   'freehandSegmentLine',
   'freehandSegmentShape',
   'freehandShape',
-  'general feedback',
   'Gravity Spy Gold Standard',
   'hideNotLaunchApprovedBanner', // Some projects do not want to be listed on the /projects landing page, but are actually approved by Zooniverse.
   'highlighter',

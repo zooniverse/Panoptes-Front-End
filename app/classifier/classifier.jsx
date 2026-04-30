@@ -160,7 +160,7 @@ class Classifier extends React.Component {
   loadSubject() {
     const { actions, project, subject, workflow } = this.props;
     if (actions.feedback) {
-      actions.feedback.init(project, subject, workflow);
+      actions.feedback.init(subject, workflow);
     }
 
     this.setState({

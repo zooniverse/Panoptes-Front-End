@@ -8,6 +8,9 @@
 */
 
 const PFE_SLUGS = [
+  // TEMPORARY FOR PR TESTING:
+  'markb-panoptes/feedback-testing-mb',
+  'markb-panoptes/test-project-1-mb-fem-lab',
   // Projects with a project.redirect property
   'zooniverse/moon-zoo',
   'zooniverse/solar-stormwatch',

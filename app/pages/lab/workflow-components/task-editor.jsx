@@ -56,14 +56,10 @@ export default function TaskEditor({ pfeLab = false, onDelete, project, selected
       }
       <hr />
       <br />
-
-      {project.experimental_tools?.includes('general feedback') ?
-        <FeedbackSection
-          task={task}
-          saveFn={onChange}
-        /> :
-          null
-      }
+      <FeedbackSection
+        task={task}
+        saveFn={onChange}
+      />
       <hr />
       <br />
 
