@@ -16,5 +16,5 @@ module.exports = createReactClass
   render: ->
     <div className='talk-comment-preview'>
       <h1>{@props.header}</h1>
-      <Markdown className='talk-comment-preview-content' content={@props.content} />
+      <Markdown className='talk-comment-preview-content' content={@props.content.trim()} />
     </div>
