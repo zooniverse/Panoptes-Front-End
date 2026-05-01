@@ -36,10 +36,10 @@ function subjectViewerSelector(props) {
     }
     // ... add other here if necessary
   }
-  // if type is application/json,
+  // if type is application/json or application/*+json
   // use JSONContainer to fetch and inspect the JSON,
   // then return appropriate viewer based on JSON content
-  if (props.type === 'application' && props.format === 'json') {
+  if (props.type === 'application' && props.format.endsWith('json')) {
     return JSONContainer;
   }
   return VIEWERS[props.type] || DefaultViewer;
