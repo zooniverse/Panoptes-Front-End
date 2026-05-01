@@ -24,15 +24,13 @@ change dependencies in `package.json`.
 
 ### With Node.js
 
-Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage your Node installations with **nvm**.
+Make sure you have Node 22 and `npm` 10 or greater. It's recommended you manage your Node installations with **nvm**.
 
 - `npm ci` installs dependencies.
 
 - `npm start` builds and runs the site locally.
 
-⚠️ **Note 1:** _[npm ci](https://docs.npmjs.com/cli/v8/commands/npm-ci)_ (clean install) is preferred over _npm install,_ as it doesn't modify the package lock.
-
-⚠️ **Note 2:** as of Node 16.15, running _npm ci_ results in errors such as _npm ERR! ERESOLVE could not resolve_ and _Conflicting peer dependency: foobar@x.y.z_ You can bypass this problem by instead running `npm ci --legacy-peer-deps`. Please see [issue 6155](https://github.com/zooniverse/Panoptes-Front-End/issues/6155) for more details.
+⚠️ **Note:** _[npm ci](https://docs.npmjs.com/cli/v8/commands/npm-ci)_ (clean install) is preferred over _npm install,_ as it doesn't modify the package lock.
 
 ### Viewing the Website
 
