@@ -51,6 +51,9 @@ class EditProjectDetails extends React.Component {
     super(props)
 
     const {disciplineTagList, otherTagList} = this.splitTags();
+    this.handleDisciplineTagChange = this.handleDisciplineTagChange.bind(this);
+    this.handleResearcherChange = this.handleResearcherChange.bind(this);
+    this.handleOtherTagChange = this.handleOtherTagChange.bind(this);
     this.state = {
       disciplineTagList,
       otherTagList,
