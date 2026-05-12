@@ -360,23 +360,16 @@ const PFE_SLUGS = [
   'zooniverse/measuring-the-anzacs', // Classrooms
   'zooniverse/zooniverse-in-schools', // Classrooms
   // Audio Projects
-  'annelistens/ocean-voices',
-  'cblume27/rhythms-of-the-night',
   'creisdorf/fire-and-birds',
   'creisdorf/savanna-spy-sound', // Audio subject with spectrogram isn't supported in FEM
   'cslab-upm/sky-sounds',
   'hannah-dot-slesinski/chirp-check', // Audio subject with spectrogram isn't supported in FEM
-  'laac-lscp/maturity-of-baby-sounds', // Audio subjects aren't supported in FEM's classifier
   'laaczooniverse/what-do-babies-say',
-  'library-of-congress/transcribe-american-dialect-recordings',
   'lydiakatsis/forest-sounds',
   'marywestwood/the-cricket-wing', // Audio subject with spectrogram isn't supported in FEM
-  'ollibruuh/bird-find', // Audio subjects aren't supported in FEM's classifier
-  'ollibruuh/frog-find', // Audio subjects aren't supported in FEM's classifier
   'sandorkruk/istrox',
   'sladeaa/audioclassification',
   'uw-leap/tots-and-tunes',
-  'wingkitty/filk-archive',
   'yli/humbug' // Audio subject with spectrogram isn't supported in FEM
 ]
 
