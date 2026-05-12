@@ -369,6 +369,7 @@ const PFE_SLUGS = [
   'marywestwood/the-cricket-wing', // Audio subject with spectrogram isn't supported in FEM
   'sandorkruk/istrox',
   'sladeaa/audioclassification',
+  'uw-leap/tots-and-tunes',
   'yli/humbug' // Audio subject with spectrogram isn't supported in FEM
 ]
 
