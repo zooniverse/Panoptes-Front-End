@@ -47,9 +47,9 @@ export default function reducer(state = initialState, action = {}) {
 
 // Check whether feedback is active, and set up a rule set for the current
 // subject and workflow if so.
-export function init(project, subject, workflow) {
+export function init(subject, workflow) {
   const payload = {
-    active: helpers.isFeedbackActive(project, subject, workflow)
+    active: helpers.isFeedbackActive(subject, workflow)
   };
   if (payload.active) {
     payload.rules = helpers.generateRules(subject, workflow);

@@ -9,7 +9,7 @@ counterpart.registerTranslations('en', {
     title: 'Feedback',
     enable: 'Enable feedback on this task',
     notAvailable: 'Feedback is not available for this task.',
-    help: 'Feedback can help your volunteers improve their accuracy by checking their classification of known subjects, and reporting back on the results in the classification summary.',
+    help: 'Feedback can help your volunteers improve their accuracy by checking their classification of known subjects, and reporting back on the results in the classification summary. Feedback is only available for certain task types and can be configured with a variety of rules. For more information, see %(feedbackHelpLink)s.',
     newRule: 'Create new feedback rule',
     edit: 'Edit',
     del: 'Delete'
@@ -18,6 +18,8 @@ counterpart.registerTranslations('en', {
 /* eslint-enable max-len */
 
 function FeedbackSection({ deleteRule, editRule, rules }) {
+  const feedbackHelpLink = <a href="https://help.zooniverse.org/next-steps/feedback/" target="_blank">Zooniverse Help / Next Steps / Feedback</a>;
+
   return (
     <div className="feedback-section">
       <Translate
@@ -29,6 +31,7 @@ function FeedbackSection({ deleteRule, editRule, rules }) {
         content="FeedbackSection.help"
         className="form-help"
         component="small"
+        feedbackHelpLink={feedbackHelpLink}
       />
 
       <ul>
