@@ -7,37 +7,7 @@
   and https://github.com/zooniverse/static/blob/master/nginx-special-redirects.conf
 */
 
-const PFE_SLUGS = [
-  // Projects with a project.redirect property
-  'zooniverse/moon-zoo',
-  'zooniverse/solar-stormwatch',
-  'zooniverse/planet-hunters',
-  'zooniverse/old-weather',
-  'zooniverse/whale-fm',
-  'zooniverse/seti-live',
-  'zooniverse/seafloor-explorer',
-  'zooniverse/cyclone-center',
-  'zooniverse/bat-detective',
-  'zooniverse/cell-slider',
-  'zooniverse/planet-four-ouroboros',
-  'zooniverse/worm-watch-lab',
-  'zooniverse/plankton-portal-ouroboros',
-  'zooniverse/radio-galaxy-zoo',
-  'zooniverse/operation-war-diary',
-  'zooniverse/disk-detective-1-dot-0',
-  'zooniverse/sunspotter',
-  'zooniverse/condor-watch',
-  'zooniverse/asteroid-zoo',
-  'zooniverse/floating-forests-v1',
-  'zooniverse/higgs-hunters',
-  'zooniverse/science-gossip',
-  'zooniverse/orchid-observers',
-  'zooniverse/chimp-and-see-ouroboros',
-  'zooniverse/measuring-the-anzacs-original',
-  'drrogg/annotate',
-  'nypl/emigrant-city',
-  'bostonpubliclibrary/anti-slavery-manuscripts',
-  'judaicadh/scribes-of-the-cairo-geniza',
+export const PRIVATE_PROJECT_SLUGS = [
   // Private Projects
   'a-alam/classification-of-complex-radio-sources',
   'a-gordon/galaxy-tidal-feature-classifications',
@@ -309,7 +279,40 @@ const PFE_SLUGS = [
   'wragge/sydney-stock-exchange',
   'yjangordon/vlass-variables',
   'yntzevanderhoek/nkuba',
-  'zoeyyy/glitch-classification',
+  'zoeyyy/glitch-classification'
+]
+
+const OTHER_SLUGS = [
+  // Projects with a project.redirect property
+  'zooniverse/moon-zoo',
+  'zooniverse/solar-stormwatch',
+  'zooniverse/planet-hunters',
+  'zooniverse/old-weather',
+  'zooniverse/whale-fm',
+  'zooniverse/seti-live',
+  'zooniverse/seafloor-explorer',
+  'zooniverse/cyclone-center',
+  'zooniverse/bat-detective',
+  'zooniverse/cell-slider',
+  'zooniverse/planet-four-ouroboros',
+  'zooniverse/worm-watch-lab',
+  'zooniverse/plankton-portal-ouroboros',
+  'zooniverse/radio-galaxy-zoo',
+  'zooniverse/operation-war-diary',
+  'zooniverse/disk-detective-1-dot-0',
+  'zooniverse/sunspotter',
+  'zooniverse/condor-watch',
+  'zooniverse/asteroid-zoo',
+  'zooniverse/floating-forests-v1',
+  'zooniverse/higgs-hunters',
+  'zooniverse/science-gossip',
+  'zooniverse/orchid-observers',
+  'zooniverse/chimp-and-see-ouroboros',
+  'zooniverse/measuring-the-anzacs-original',
+  'drrogg/annotate',
+  'nypl/emigrant-city',
+  'bostonpubliclibrary/anti-slavery-manuscripts',
+  'judaicadh/scribes-of-the-cairo-geniza',
   // Assorted Special Cases
   'acre-ar/meteororum-ad-extremum-terrae', // Subject image sizes difficult in FEM's classifier layout
   'alicemead/sudan-road-access-logistics-cluster',
@@ -359,18 +362,20 @@ const PFE_SLUGS = [
   'zooniverse/intro2astro-hubbles-law', // Classrooms
   'zooniverse/measuring-the-anzacs', // Classrooms
   'zooniverse/zooniverse-in-schools', // Classrooms
-  // Audio Projects
+  // Audio + Spectrogram Projects
   'creisdorf/fire-and-birds',
-  'creisdorf/savanna-spy-sound', // Audio subject with spectrogram isn't supported in FEM
+  'creisdorf/savanna-spy-sound',
   'cslab-upm/sky-sounds',
-  'hannah-dot-slesinski/chirp-check', // Audio subject with spectrogram isn't supported in FEM
+  'hannah-dot-slesinski/chirp-check',
   'laaczooniverse/what-do-babies-say',
   'lydiakatsis/forest-sounds',
-  'marywestwood/the-cricket-wing', // Audio subject with spectrogram isn't supported in FEM
+  'marywestwood/the-cricket-wing',
   'sandorkruk/istrox',
   'sladeaa/audioclassification',
   'uw-leap/tots-and-tunes',
-  'yli/humbug' // Audio subject with spectrogram isn't supported in FEM
+  'yli/humbug'
 ]
+
+const PFE_SLUGS = [...PRIVATE_PROJECT_SLUGS, ...OTHER_SLUGS]
 
 export default PFE_SLUGS

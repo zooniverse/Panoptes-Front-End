@@ -51,7 +51,7 @@ import Collaborators from './pages/lab/collaborators.jsx'
 import PagesEditor from './pages/lab-pages-editor'
 import ProjectStatsPage from './pages/project/stats'
 import ProjectPageController from './pages/project/index'
-import PFE_SLUGS from './slugList.js';
+import PFE_SLUGS, { PRIVATE_PROJECT_SLUGS } from './slugList.js';
 
 // <Redirect from="home" to="/" /> doesn't work.
 class ONE_UP_REDIRECT extends React.Component {
@@ -73,8 +73,8 @@ class ONE_UP_REDIRECT extends React.Component {
  * @param {Object} nextState.params
  * @param {string} nextState.params.owner
  * @param {string} nextState.params.name
- * @param {Function} replace 
- * @param {Function} done 
+ * @param {Function} replace
+ * @param {Function} done
  */
 function redirectPfeToFem(nextState, replace, done) {
   try {
@@ -91,13 +91,30 @@ function redirectPfeToFem(nextState, replace, done) {
 }
 
 /**
+ * Redirect ProjectStatsPage to the static proxy unless the project slug is a known private project.
+*/
+function redirectPublicProjectsToFem(nextState, replace, done) {
+    try {
+    const { owner, name } = nextState.params
+    const isPrivateProject = PRIVATE_PROJECT_SLUGS.includes(`${owner}/${name}`)
+    if (isPrivateProject) {
+      done()
+    } else {
+      redirectToStaticProxy(nextState, replace, done)
+    }
+  } catch (error) {
+    done(error)
+  }
+}
+
+/**
  * Client-side redirect a route to the static proxy, by replacing the browser window location.
  * @param {Object} nextState
  * @param {Object} nextState.location
  * @param {string} nextState.location.pathname
  * @param {string} nextState.location.search
- * @param {Function} replace 
- * @param {Function} done 
+ * @param {Function} replace
+ * @param {Function} done
  */
 function redirectToStaticProxy(nextState, replace, done) {
   const { pathname, search } = nextState.location;
@@ -205,7 +222,7 @@ export const routes = (
         <Route path=":board" component={require('./talk/board')} />
         <Route path=":board/:discussion" component={require('./talk/discussion')} />
       </Route>
-      <Route path="stats" component={ProjectStatsPage} />
+      <Route path="stats" onEnter={redirectPublicProjectsToFem} component={ProjectStatsPage} />
       <Route path="favorites" component={require('./pages/collections/index')}>
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
@@ -264,7 +281,7 @@ export const routes = (
         <Route path=":board" component={require('./talk/board')} />
         <Route path=":board/:discussion" component={require('./talk/discussion')} />
       </Route>
-      <Route path="stats" component={ProjectStatsPage} />
+      <Route path="stats" onEnter={redirectPublicProjectsToFem} component={ProjectStatsPage} />
       <Route path="favorites" component={require('./pages/collections/index')}>
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />

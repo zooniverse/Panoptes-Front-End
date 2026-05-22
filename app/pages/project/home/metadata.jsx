@@ -44,17 +44,17 @@ export default class ProjectMetadata extends React.Component {
 
   render() {
     const { project, translation } = this.props;
-    const statsLink = `/projects/${project.slug}/stats`;
+    const statsLink = `https://www.zooniverse.org/projects/${project.slug}/stats`;
 
     return (
       <div className="project-home-page__container">
         <div className="project-metadata">
-          <Link to={statsLink}>
+          <a href={statsLink}>
             <Translate
               content="project.home.metadata.statistics"
               with={{ title: translation.display_name }}
             />
-          </Link>
+          </a>
 
           {this.renderStatus()}
 
