@@ -73,8 +73,8 @@ function Recents({ project, user }) {
           </ul>
         </div>
       ) : (
-        <div>
-          <div>
+        <div className="collections-container">
+          <div className="resource-results-counter collection-results-counter">
             <Translate content="classifier.recentsEmpty" component="p" />
           </div>
         </div>
