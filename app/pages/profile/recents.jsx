@@ -22,7 +22,7 @@ function Recents({ project, user }) {
           <Translate content="classifier.recents" component="h1" />
         </div>
       </div>
-      {(recents.length > 0) &&
+      {(recents.length > 0) ? (
         <div className="content-container collection-page-with-project-context">
           <ul className="collections-show">
             {recents.map((recent) => {
@@ -72,7 +72,13 @@ function Recents({ project, user }) {
             })}
           </ul>
         </div>
-      }
+      ) : (
+        <div>
+          <div>
+            <Translate content="classifier.recentsEmpty" component="p" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
