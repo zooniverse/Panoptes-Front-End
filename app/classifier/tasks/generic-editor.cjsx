@@ -256,6 +256,7 @@ module.exports = createReactClass
                         Geometry type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           <option key="Point" value="Point">Point</option>
+                          <option key="SegmentedLine" value="SegmentedLine">Segmented line</option>
                         </select>
                       </AutoSave>
                     </div>
@@ -302,6 +303,65 @@ module.exports = createReactClass
                             <small><sup>*</sup>per GeoJSON feature&apos;s <code>properties.uncertainty_radius</code> value (integer).</small>{' '}
                           </AutoSave>
                         </label>
+                      </div>
+                    else if choice.type is 'SegmentedLine'
+                      <div
+                        key="segmented-line-bounds"
+                        className="workflow-choice-setting"
+                      >
+                        <AutoSave resource={@props.workflow}>
+                          <strong>Points per line</strong>{' '}
+                          <small>(controls vertices within a single drawn line)</small>
+                          <br />
+                          <label>
+                            Min{' '}
+                            <input
+                              type="number"
+                              min="2"
+                              placeholder="2"
+                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.min_vertices"
+                              value={choice.min_vertices || ''}
+                              onChange={handleChange}
+                            />
+                          </label>{' '}
+                          <label>
+                            Max{' '}
+                            <input
+                              type="number"
+                              min="2"
+                              placeholder="no max"
+                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.max_vertices"
+                              value={choice.max_vertices || ''}
+                              onChange={handleChange}
+                            />
+                          </label>
+                          <br />
+                          <strong>Number of lines</strong>{' '}
+                          <small>(controls how many lines the volunteer may draw)</small>
+                          <br />
+                          <label>
+                            Min{' '}
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="0"
+                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.min"
+                              value={choice.min || ''}
+                              onChange={handleChange}
+                            />
+                          </label>{' '}
+                          <label>
+                            Max{' '}
+                            <input
+                              type="number"
+                              min="1"
+                              placeholder="no max"
+                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.max"
+                              value={choice.max || ''}
+                              onChange={handleChange}
+                            />
+                          </label>
+                        </AutoSave>
                       </div>
                     else
                       null
