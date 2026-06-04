@@ -309,59 +309,25 @@ module.exports = createReactClass
                         key="segmented-line-bounds"
                         className="workflow-choice-setting"
                       >
-                        <AutoSave resource={@props.workflow}>
-                          <strong>Points per line</strong>{' '}
-                          <small>(controls vertices within a single drawn line)</small>
-                          <br />
-                          <label>
-                            Min{' '}
-                            <input
-                              type="number"
-                              min="2"
-                              placeholder="2"
-                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.min_vertices"
-                              value={choice.min_vertices || ''}
-                              onChange={handleChange}
-                            />
-                          </label>{' '}
-                          <label>
-                            Max{' '}
-                            <input
-                              type="number"
-                              min="2"
-                              placeholder="no max"
-                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.max_vertices"
-                              value={choice.max_vertices || ''}
-                              onChange={handleChange}
-                            />
-                          </label>
-                          <br />
-                          <strong>Number of lines</strong>{' '}
-                          <small>(controls how many lines the volunteer may draw)</small>
-                          <br />
-                          <label>
-                            Min{' '}
-                            <input
-                              type="number"
-                              min="0"
-                              placeholder="0"
-                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.min"
-                              value={choice.min || ''}
-                              onChange={handleChange}
-                            />
-                          </label>{' '}
-                          <label>
-                            Max{' '}
-                            <input
-                              type="number"
-                              min="1"
-                              placeholder="no max"
-                              name="#{@props.taskPrefix}.#{choicesKey}.#{index}.max"
-                              value={choice.max || ''}
-                              onChange={handleChange}
-                            />
-                          </label>
-                        </AutoSave>
+                        <strong>Number of lines</strong>{' '}
+                        <small>(controls how many lines the volunteer may draw)</small>
+                        <MinMaxEditor
+                          key='min-max-lines'
+                          workflow={@props.workflow}
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                          choice={choice}
+                        />
+                        <strong>Points per line</strong>{' '}
+                        <small>(controls vertices within a single drawn line)</small>
+                        <MinMaxEditor
+                          key='min-max-vertices'
+                          workflow={@props.workflow}
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                          choice={choice}
+                          minKey='min_vertices'
+                          maxKey='max_vertices'
+                          minLimit={2}
+                        />
                       </div>
                     else
                       null
