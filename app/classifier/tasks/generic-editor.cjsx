@@ -256,6 +256,7 @@ module.exports = createReactClass
                         Geometry type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           <option key="Point" value="Point">Point</option>
+                          <option key="SegmentedLine" value="SegmentedLine">Segmented line</option>
                         </select>
                       </AutoSave>
                     </div>
@@ -302,6 +303,31 @@ module.exports = createReactClass
                             <small><sup>*</sup>per GeoJSON feature&apos;s <code>properties.uncertainty_radius</code> value (integer).</small>{' '}
                           </AutoSave>
                         </label>
+                      </div>
+                    else if choice.type is 'SegmentedLine'
+                      <div
+                        key="segmented-line-bounds"
+                        className="workflow-choice-setting"
+                      >
+                        <strong>Number of lines</strong>{' '}
+                        <small>(controls how many lines the volunteer may draw)</small>
+                        <MinMaxEditor
+                          key='min-max-lines'
+                          workflow={@props.workflow}
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                          choice={choice}
+                        />
+                        <strong>Points per line</strong>{' '}
+                        <small>(controls vertices within a single drawn line)</small>
+                        <MinMaxEditor
+                          key='min-max-vertices'
+                          workflow={@props.workflow}
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                          choice={choice}
+                          minKey='min_vertices'
+                          maxKey='max_vertices'
+                          minLimit={2}
+                        />
                       </div>
                     else
                       null
