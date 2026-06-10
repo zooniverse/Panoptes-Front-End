@@ -37,6 +37,7 @@ export default {
       tutorialTab: 'Tutorial'
     },
     recents: 'Your recent classifications',
+    recentsEmpty: 'The 20 most recent subjects you\'ve classified from the last 90 days are shown here',
     talk: 'Talk',
     taskHelpButton: 'Need some help with this task?',
     miniCourseButton: 'Restart the project mini-course',
