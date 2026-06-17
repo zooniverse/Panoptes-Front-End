@@ -352,6 +352,7 @@ const OTHER_SLUGS = [
   'projectenigma/enigmatic-near-earth-visitors', // Video in a flipbook isn't supported in FEM
   'rsengar/einstein-at-home-pulsar-seekers', // Feedback per step isn't supported in FEM
   'sassydumbledore/chimp-and-see', // Video in a flipbook isn't supported in FEM
+  'sandorkruk/istrox', // Uses mini-course
   'tawakitom/penguins-from-above', // Subject image sizes difficult in FEM's classifier layout
   'tingard/galaxy-builder', // custom slider interface on finished project
   'watchablewildlife/nebraska-wildlife-watch',
@@ -362,19 +363,6 @@ const OTHER_SLUGS = [
   'zooniverse/intro2astro-hubbles-law', // Classrooms
   'zooniverse/measuring-the-anzacs', // Classrooms
   'zooniverse/zooniverse-in-schools', // Classrooms
-  // Audio + Spectrogram Projects
-  'ceaeay/seabird-sounds',
-  'creisdorf/fire-and-birds',
-  'creisdorf/savanna-spy-sound',
-  'cslab-upm/sky-sounds',
-  'hannah-dot-slesinski/chirp-check',
-  'laaczooniverse/what-do-babies-say',
-  'lydiakatsis/forest-sounds',
-  'marywestwood/the-cricket-wing',
-  'sandorkruk/istrox',
-  'sladeaa/audioclassification',
-  'uw-leap/tots-and-tunes',
-  'yli/humbug'
 ]
 
 const PFE_SLUGS = [...PRIVATE_PROJECT_SLUGS, ...OTHER_SLUGS]
