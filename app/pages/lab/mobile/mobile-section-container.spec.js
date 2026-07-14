@@ -118,11 +118,6 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('taskInstructionNotTooLong', validationFixtures.taskInstructionTooLong, false);
     });
 
-    it('should check whether the task uses feedback if the task type is drawing', function () {
-      testValidationProp('taskFeedbackDisabled', validationFixtures.workflowHasValidDrawingTask, true);
-      testValidationProp('taskFeedbackDisabled', validationFixtures.taskFeedbackEnabled, false);
-    });
-
     it('should check whether the workflow has a single task', function () {
       testValidationProp('workflowHasSingleTask');
       testValidationProp('workflowHasSingleTask', validationFixtures.workflowHasMultipleTasks, false);

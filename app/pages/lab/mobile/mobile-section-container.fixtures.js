@@ -95,20 +95,6 @@ const validationFixtures = {
       type: 'drawing'
     }
   },
-  taskFeedbackEnabled: {
-    task: {
-      type: 'drawing',
-      tools: [
-        {
-          type: 'rectangle',
-          details: []
-        }
-      ],
-      feedback: {
-        enabled: true
-      }
-    }
-  },
   workflowFlipbookEnabled: {
     workflow: {
       configuration: {

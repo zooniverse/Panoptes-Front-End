@@ -39,10 +39,6 @@ function taskInstructionNotTooLong({ task }) {
   return convertBooleanToValidation(instruction ? instruction.length < VALID_QUESTION_LENGTH : false);
 }
 
-function taskFeedbackDisabled({ task }) {
-  return convertBooleanToValidation(!task.feedback || !task.feedback.enabled);
-}
-
 function workflowHasSingleTask({ workflow }) {
   return convertBooleanToValidation(filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1);
 }
@@ -115,7 +111,6 @@ const validatorFns = {
   },
   drawing: {
     taskInstructionNotTooLong,
-    taskFeedbackDisabled,
     workflowHasSingleTask,
     drawingToolTypeIsValid,
     drawingTaskHasOneTool,
@@ -225,7 +220,6 @@ class MobileSectionContainer extends Component {
 MobileSectionContainer.propTypes = {
   task: PropTypes.shape({
     answers: PropTypes.array,
-    feedback: PropTypes.object,
     instruction: PropTypes.string,
     question: PropTypes.string,
     type: PropTypes.string,
@@ -247,10 +241,7 @@ MobileSectionContainer.defaultProps = {
     type: '',
     instruction: '',
     question: '',
-    answers: [],
-    feedback: {
-      enabled: false
-    }
+    answers: []
   }
 };
 
