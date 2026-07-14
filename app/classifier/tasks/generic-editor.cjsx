@@ -379,6 +379,153 @@ module.exports = createReactClass
                 </div>}
         </div>}
 
+      {if @props.task.type is 'geoDrawing'
+        tileLayers = @props.workflow.configuration?.subject_viewer_config?.tile_layers ? []
+        <div className="workflow-tile-layers-editor">
+          <hr />
+          <span className="form-label">Map tile layers</span>
+          <br />
+          <small className="form-help">Configure basemap layers volunteers can switch between in the map viewer.</small>
+          {for layer, index in tileLayers
+            urlMissingPlaceholders = layer.type is 'xyz' and (not /\{x\}/.test(layer.url ? '') or not /\{y\}/.test(layer.url ? '') or not /\{z\}/.test(layer.url ? ''))
+            layersMissing = layer.type is 'wms' and not layer.params?.LAYERS
+            urlPlaceholder = if layer.type is 'xyz'
+              'https://a.tile.opentopomap.org/{z}/{x}/{y}.png'
+            else
+              'https://example.org/cgi-bin/wms?'
+            <div key={index} className="workflow-tile-layer-row">
+              <AutoSave resource={@props.workflow}>
+                <div className="workflow-tile-layer-field workflow-tile-layer-type-row" data-field="type">
+                  <label>
+                    Type
+                    <br />
+                    <select
+                      name="configuration.subject_viewer_config.tile_layers.#{index}.type"
+                      value={layer.type || 'osm'}
+                      onChange={handleChange}
+                    >
+                      <option value="osm">OpenStreetMap (osm)</option>
+                      <option value="wms">WMS</option>
+                      <option value="xyz">XYZ tiles</option>
+                      <option value="cog">Cloud Optimized GeoTIFF (cog)</option>
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className="workflow-tile-layer-remove-button"
+                    title="Remove tile layer"
+                    onClick={@removeTileLayer.bind this, index}
+                  >&times;</button>
+                </div>
+                <div className="workflow-tile-layer-field" data-field="label">
+                  <label>
+                    Label
+                    <br />
+                    <input
+                      type="text"
+                      className="standard-input full"
+                      name="configuration.subject_viewer_config.tile_layers.#{index}.label"
+                      value={layer.label || ''}
+                      onChange={handleChange}
+                    />
+                  </label>
+                </div>
+                {unless layer.type is 'osm'
+                  <div className="workflow-tile-layer-field" data-field="url">
+                    <label>
+                      URL
+                      <br />
+                      <input
+                        type="text"
+                        className="standard-input full"
+                        placeholder={urlPlaceholder}
+                        name="configuration.subject_viewer_config.tile_layers.#{index}.url"
+                        value={layer.url || ''}
+                        onChange={handleChange}
+                      />
+                    </label>
+                    {if urlMissingPlaceholders
+                      <small
+                        className="workflow-tile-layer-error"
+                        data-field="url"
+                        role="alert"
+                      >
+                        XYZ URL must contain {'{x}'}, {'{y}'}, and {'{z}'} placeholders.
+                      </small>}
+                  </div>}
+                {if layer.type is 'wms'
+                  <div className="workflow-tile-layer-field" data-field="layers">
+                    <label>
+                      Layer
+                      <br />
+                      <input
+                        type="text"
+                        className="standard-input full"
+                        placeholder="nlcd_2019_land_cover_l48"
+                        name="configuration.subject_viewer_config.tile_layers.#{index}.params.LAYERS"
+                        value={layer.params?.LAYERS || ''}
+                        onChange={handleChange}
+                      />
+                    </label>
+                    {if layersMissing
+                      <small
+                        className="workflow-tile-layer-error"
+                        data-field="layers"
+                        role="alert"
+                      >
+                        WMS layer requires a LAYERS parameter.
+                      </small>}
+                  </div>}
+                {if layer.type is 'wms'
+                  <div className="workflow-tile-layer-field" data-field="format">
+                    <label>
+                      FORMAT
+                      <br />
+                      <select
+                        name="configuration.subject_viewer_config.tile_layers.#{index}.params.FORMAT"
+                        value={layer.params?.FORMAT || 'image/png'}
+                        onChange={handleChange}
+                      >
+                        <option value="image/png">PNG (image/png)</option>
+                        <option value="image/png; mode=8bit">PNG 8-bit (image/png; mode=8bit)</option>
+                        <option value="image/png8">PNG 8-bit (image/png8)</option>
+                        <option value="image/jpeg">JPEG (image/jpeg)</option>
+                        <option value="image/vnd.jpeg-png">JPEG/PNG hybrid (image/vnd.jpeg-png)</option>
+                        <option value="image/vnd.jpeg-png8">JPEG/PNG8 hybrid (image/vnd.jpeg-png8)</option>
+                        <option value="image/gif">GIF (image/gif)</option>
+                        <option value="image/tiff">TIFF (image/tiff)</option>
+                        <option value="image/tiff8">TIFF 8-bit (image/tiff8)</option>
+                        <option value="image/geotiff">GeoTIFF (image/geotiff)</option>
+                        <option value="image/geotiff8">GeoTIFF 8-bit (image/geotiff8)</option>
+                        <option value="image/svg+xml">SVG (image/svg+xml)</option>
+                        <option value="image/webp">WebP (image/webp)</option>
+                        <option value="image/bmp">BMP (image/bmp)</option>
+                        <option value="application/pdf">PDF (application/pdf)</option>
+                      </select>
+                    </label>
+                  </div>}
+                {if tileLayers.length > 1
+                  <div className="workflow-tile-layer-field" data-field="default">
+                    <label>
+                      <input
+                        type="radio"
+                        name="workflow-tile-layer-default"
+                        checked={!!layer.default}
+                        onChange={@setBasemapDefault.bind this, index}
+                      />{' '}
+                      Default basemap
+                    </label>
+                  </div>}
+              </AutoSave>
+            </div>}
+          <button
+            type="button"
+            className="workflow-tile-layer-add-button"
+            title="Add tile layer"
+            onClick={@addTileLayer}
+          >+ Add tile layer</button>
+        </div>}
+
       {unless @props.task.type is 'single' or @props.isSubtask
         <div>
           <AutoSave resource={@props.workflow}>
@@ -469,3 +616,19 @@ module.exports = createReactClass
   removeChoice: (choicesName, index) ->
     @props.task[choicesName].splice index, 1
     @props.onChange @props.task
+
+  addTileLayer: ->
+    current = (@props.workflow.configuration?.subject_viewer_config?.tile_layers ? []).slice()
+    current.push { label: '', type: 'osm', url: '', params: { FORMAT: 'image/png' } }
+    @props.workflow.update 'configuration.subject_viewer_config.tile_layers': current
+
+  removeTileLayer: (index) ->
+    current = (@props.workflow.configuration?.subject_viewer_config?.tile_layers ? []).slice()
+    current.splice index, 1
+    @props.workflow.update 'configuration.subject_viewer_config.tile_layers': current
+
+  setBasemapDefault: (index) ->
+    current = @props.workflow.configuration?.subject_viewer_config?.tile_layers ? []
+    next = current.map (layer, i) ->
+      Object.assign {}, layer, default: i is index
+    @props.workflow.update 'configuration.subject_viewer_config.tile_layers': next
