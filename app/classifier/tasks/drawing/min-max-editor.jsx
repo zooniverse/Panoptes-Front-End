@@ -9,12 +9,14 @@ class MinMaxEditor extends React.Component {
     workflow: PropTypes.object,
     minKey: PropTypes.string,
     maxKey: PropTypes.string,
+    maxPlaceholder: PropTypes.string,
     minLimit: PropTypes.number,
   };
 
   static defaultProps = {
     minKey: 'min',
     maxKey: 'max',
+    maxPlaceholder: '∞',
     minLimit: 0,
   };
 
@@ -92,7 +94,7 @@ class MinMaxEditor extends React.Component {
             name={`${this.props.name}.${this.props.maxKey}`}
             min={this.state.tool[this.props.minKey] ? this.state.tool[this.props.minKey] : this.props.minLimit}
             value={this.state.tool[this.props.maxKey]}
-            placeholder="∞"
+            placeholder={this.props.maxPlaceholder}
             size="5"
             style={{ width: '5ch' }}
             onChange={this.onChangeMax}
