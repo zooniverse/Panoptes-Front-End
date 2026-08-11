@@ -206,6 +206,7 @@ export const PRIVATE_PROJECT_SLUGS = [
   'nelvy/beard-satellites-clasification-test2',
   'newberry/art-in-miniature',
   'newberry/postcard-tag-old',
+  'newberry/postcard-tag',
   'nicholasfoster/te-manahuna-aoraki',
   'nicoadams/environment-project-clump-vetting',
   'nora-dot-eisner/classifying-the-classified',
