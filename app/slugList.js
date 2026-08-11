@@ -206,7 +206,6 @@ export const PRIVATE_PROJECT_SLUGS = [
   'nelvy/beard-satellites-clasification-test2',
   'newberry/art-in-miniature',
   'newberry/postcard-tag-old',
-  'newberry/postcard-tag',
   'nicholasfoster/te-manahuna-aoraki',
   'nicoadams/environment-project-clump-vetting',
   'nora-dot-eisner/classifying-the-classified',
@@ -346,6 +345,7 @@ const OTHER_SLUGS = [
   'msbrhonclif/science-scribbler-key2cat', // Subject image sizes difficult in FEM's classifier layout
   'msbrhonclif/science-scribbler-placenta-profiles', // Subject image sizes difficult in FEM's classifier layout
   'mschwamb/planet-four', // Uses experimental "fan tool"
+  'newberry/postcard-tag', // Requested revert to PFE classifier with nexted combo tasks
   'nora-dot-eisner/planet-hunters-tess-mobile',
   'panettafordham/shadows-on-stone-identifying-sing-sings-incarcerated',
   'penguintom79/penguin-watch', // Uses experimental "shortcut"
