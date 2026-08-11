@@ -5,6 +5,22 @@ import AutoSave from '../../../components/auto-save';
 import alert from  '../../../lib/alert';
 import SubTaskEditor from './SubtaskEditor';
 
+function ColourPatch ({ colour = '#000000' }) {
+  console.log(colour)
+  return (
+    <svg
+      style={{
+        display: 'inline',
+        height: '10px',
+        width: '10px',
+      }}
+      viewBox='0 0 10 10'
+    >
+      <rect x='0' y='0' width='10' height='10' fill={colour} />
+    </svg>
+  )
+}
+
 export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) {
   const handleChange = handleInputChange.bind(workflow)
 
@@ -54,13 +70,13 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
         <small className="form-help">
           This is a 2-click line mark tool which has pre-set colors. These colors map to the following states:
           <dl>
-            <dt><img src='https://via.placeholder.com/10x10.png/06FE76?text=+' /> Green</dt>
+            <dt><ColourPatch colour='#06FE76' /> Green</dt>
             <dd>A transcription line mark currently selected by the volunteer.</dd>
-            <dt><img src='https://via.placeholder.com/10x10.png/235DFF?text=+' /> Blue</dt>
+            <dt><ColourPatch colour='#235DFF' /> Blue</dt>
             <dd>A transcription line mark made by the volunteer.</dd>
-            <dt><img src='https://via.placeholder.com/10x10.png/FF40FF?text=+' /> Pink </dt>
+            <dt><ColourPatch colour='#FF40FF' /> Pink </dt>
             <dd>A transcription line mark made previously by another volunteer. This mark can be selected to create a new transcription to submit.</dd>
-            <dt><img src='https://via.placeholder.com/10x10.png/979797?text=+' /> Gray</dt>
+            <dt><ColourPatch colour='#a6a7a9' /> Gray</dt> {/* This was previously #979797 */}
             <dd>A transcription line mark which has reached consensus. The mark and transcriptions are view only.</dd>
           </dl>
         </small>
