@@ -42,6 +42,7 @@ ComboTaskEditor = createReactClass
     taskDescription._key ?= Math.random()
     TaskComponent = tasks[taskDescription.type]
     <li key={taskDescription._key}>
+      {taskKey}{': '}
       {TaskComponent.getTaskText taskDescription}{' '}
       <button type="button" onClick={@removeTask.bind this, i}>Remove</button>
     </li>
@@ -62,7 +63,7 @@ ComboTaskEditor = createReactClass
             {Object.keys(@props.workflow.tasks).map (taskKey) =>
               taskDescription = @props.workflow.tasks[taskKey]
               TaskComponent = tasks[taskDescription.type]
-              <option key={taskKey} value={taskKey} disabled={taskDescription.type is 'crop'}>{TaskComponent.getTaskText taskDescription}</option>}
+              <option key={taskKey} value={taskKey} disabled={taskDescription.type is 'crop'}>{taskKey}: {TaskComponent.getTaskText taskDescription}</option>}
           </select>
         </label>
       </p>
