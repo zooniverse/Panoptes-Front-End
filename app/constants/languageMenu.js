@@ -9,6 +9,7 @@ export default {
   en: 'English', // English
   es: 'Español', // Spanish
   el: 'Ελληνικά', // Greek
+  fa: 'فارسی', // Persian / Farsi
   fi: 'Suomi', // Finnish
   fr: 'Français', // French
   ha: 'Hausa', // Hausa
@@ -29,7 +30,7 @@ export default {
   ru: 'русский', // Russian
   sw: 'Kiswahili', // Swahili
   sv: 'Svenska', // Swedish
-  ta: 'தமிழ்', // Tamil (not in Lokalise)
+  ta: 'தமிழ்', // Tamil
   te: 'తెలుగు', // Telugu
   tn: 'Setswana', // Tswana (not in Lokalise)
   tr: 'Türkçe', // Turkish

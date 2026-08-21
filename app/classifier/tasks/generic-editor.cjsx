@@ -286,7 +286,7 @@ module.exports = createReactClass
                     </div>
                     
                     if choice.type is 'Point'
-                      <div
+                      [<div
                         key="uncertainty_circle"
                         className="workflow-choice-setting"
                       >
@@ -304,6 +304,21 @@ module.exports = createReactClass
                           </AutoSave>
                         </label>
                       </div>
+
+                      <div
+                        key="point-bounds"
+                        className="workflow-choice-setting"
+                      >
+                        <strong>Number of points</strong>{' '}
+                        <small>(controls how many points the volunteer may create; leave Max blank so volunteers can only move points already in the subject)</small>
+                        <MinMaxEditor
+                          key='min-max-points'
+                          workflow={@props.workflow}
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                          choice={choice}
+                          maxPlaceholder='0'
+                        />
+                      </div>]
                     else if choice.type is 'SegmentedLine'
                       <div
                         key="segmented-line-bounds"
