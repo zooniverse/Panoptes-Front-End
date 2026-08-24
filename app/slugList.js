@@ -341,7 +341,6 @@ const OTHER_SLUGS = [
   'md68135/notes-from-nature-wedigflplants',
   'md68135/notes-from-nature-natural-history-at-rom-revealed',
   'meteonetwork/redata',
-  'mikewalmsley/galaxy-zoo-mobile',
   'mollysimon/galaxy-zoo-crowdsourcing-activity', // Classrooms
   'msbrhonclif/science-scribbler-key2cat', // Subject image sizes difficult in FEM's classifier layout
   'msbrhonclif/science-scribbler-placenta-profiles', // Subject image sizes difficult in FEM's classifier layout
