@@ -25,5 +25,5 @@ module.exports = createReactClass
           text = tasks[definition.type]?.getTaskText definition
           if text and text.length > MAX_TEXT_LENGTH_IN_MENU
             text = text[0...MAX_TEXT_LENGTH_IN_MENU] + '...'
-          <option key={key}, value={key}>{text}</option>}
+          <option key={key}, value={key}>{key}: {text}</option>}
     </select>

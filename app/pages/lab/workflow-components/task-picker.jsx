@@ -21,7 +21,7 @@ function TaskButton({ active, definition, firstTask, onClick, value }) {
       >
         <TaskIcon type={definition.type} />
         {' '}
-        {taskDefinition || 'Task editor is unavailable'}
+        {taskDefinition?.substring(0, 100) || 'Task editor is unavailable'}
         {firstTask ? <small> <em>(first)</em></small> : undefined}
         <small style={{float: 'right'}}>{value}</small>
       </button>
