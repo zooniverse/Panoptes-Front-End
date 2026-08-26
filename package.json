@@ -71,7 +71,7 @@
     "copy-webpack-plugin": "~11.0.0",
     "css-loader": "~7.1.2",
     "ejs": "~3.1.10",
-    "engine.io-client": "~6.6.0",
+    "engine.io-client": "~6.6.6",
     "enzyme": "~3.11.0",
     "eslint": "~8.55.0",
     "eslint-config-airbnb": "~19.0.4",
