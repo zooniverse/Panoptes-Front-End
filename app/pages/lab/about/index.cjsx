@@ -32,10 +32,5 @@ module.exports = createReactClass
           FAQ
         </Link>
       </span>
-      <p className="form-help about-tab-editor">
-        In this section:<br/>
-        Header 1 will appear <strong>orange</strong>.<br/>
-        Headers 2 - 6 and hyperlinks will appear <strong>dark-blue</strong>.
-      </p>
       {React.cloneElement(@props.children, {project: @props.project, user: @props.user})}
     </div>
