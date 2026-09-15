@@ -117,7 +117,30 @@ describe('feedback: generateRules', function () {
         const subject = mockSubjectWithRule('1');
         expect(generateRules(subject, workflow)).to.be.empty;
       });
-      
+
+    })
+
+    describe('when the workflow rule has no runnable strategy', function () {
+      const workflow = {
+        tasks: {
+          T0: {
+            feedback: {
+              enabled: true,
+              rules: [{
+                id: '51',
+                strategy: 'geoRadial',
+                failureEnabled: true,
+                successEnabled: true
+              }]
+            }
+          }
+        }
+      };
+
+      it('should skip the rule instead of throwing', function () {
+        const subject = mockSubjectWithRule('51');
+        expect(generateRules(subject, workflow)).to.be.empty;
+      });
     })
   });
 });

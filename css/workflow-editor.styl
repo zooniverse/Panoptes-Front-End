@@ -147,3 +147,34 @@
 
 .workflow-tile-layer-add-button
   margin-top: 1em
+
+.workflow-overlay-layer-row
+  margin-bottom: 1.5em
+
+.workflow-overlay-layer-type-row
+  align-items: flex-end
+  display: flex
+  gap: 0.5em
+  justify-content: space-between
+
+  > label
+    flex: 0 0 auto
+
+  .workflow-overlay-layer-remove-button
+    flex: 0 0 auto
+
+.workflow-overlay-layer-remove-button
+  @extends $reset-button
+  background: gray
+  border-radius: 50%
+  box-shadow: 0 1px 1px rgba(black, 0.1)
+  color: white
+  height: 1.25em
+  line-height: 1
+  width: 1.25em
+
+  &:hover
+    background: red
+
+.workflow-overlay-layer-add-button
+  margin-top: 1em
