@@ -310,7 +310,7 @@ module.exports = createReactClass
                         className="workflow-choice-setting"
                       >
                         <strong>Number of points</strong>{' '}
-                        <small>(controls how many points the volunteer may draw)</small>
+                        <small>(controls how many points can exist, provided or drawn)</small>
                         <MinMaxEditor
                           key='min-max-points'
                           workflow={@props.workflow}
