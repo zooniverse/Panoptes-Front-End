@@ -6,7 +6,6 @@ import alert from  '../../../lib/alert';
 import SubTaskEditor from './SubtaskEditor';
 
 function ColourPatch ({ colour = '#000000' }) {
-  console.log(colour)
   return (
     <svg
       style={{
