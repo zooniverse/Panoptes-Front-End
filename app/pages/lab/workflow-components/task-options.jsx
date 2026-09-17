@@ -4,7 +4,7 @@ function TaskOption({ definition, taskKey}) {
   if (definition.type !== 'shortcut') {
     return (
       <option key={taskKey} value={taskKey}>
-        {taskComponents[definition.type]?.getTaskText(definition)}
+        {taskKey}: {taskComponents[definition.type]?.getTaskText(definition)?.substring(0, 100)}
       </option>
     );
   }
