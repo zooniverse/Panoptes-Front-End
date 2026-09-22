@@ -2,8 +2,8 @@ import LabComponent from '../lab-component';
 import validations from '../../drawing/validations';
 
 export default {
-  id: 'geoRadial',
+  id: 'geoLine',
   labComponent: LabComponent,
-  title: 'Geo Radial',
+  title: 'Geo Line',
   validations
 };
