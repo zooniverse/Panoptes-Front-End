@@ -1,4 +1,4 @@
-import LabComponent from '../../drawing/lab-component';
+import LabComponent from '../lab-component';
 import validations from '../../drawing/validations';
 
 export default {
