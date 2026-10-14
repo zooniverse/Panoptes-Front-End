@@ -37,7 +37,7 @@ Message = createReactClass
         <strong><Link to="/users/#{@state.commentOwner?.login}">{@state.commentOwner?.display_name}</Link> (@{@state.commentOwner?.login})</strong>{' '}
         <span>{timestamp(@props.data.updated_at)}</span>
       </span>
-      <Markdown>{@props.data.body}</Markdown>
+      <Markdown>{@props.data.body.trim()}</Markdown>
     </div>
 
 module.exports = createReactClass
