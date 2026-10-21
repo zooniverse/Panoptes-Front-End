@@ -9,6 +9,7 @@ import LayoutOptions from './components/layout-options.jsx';
 import FemMultiImageSubjectOptionsEditor from './components/fem-multi-image-subject-options-editor.jsx';
 import MapTileLayersEditor from './components/map-tile-layers-editor.jsx';
 import MapOverlayLayersEditor from './components/map-overlay-layers-editor.jsx';
+import ExternalWorkflowEditor from './components/external-workflow-editor.jsx';
 import taskComponents from '../../classifier/tasks/index.js';
 import AutoSave from '../../components/auto-save.coffee';
 import WorkflowCreateForm from '../lab/workflow-create-form.cjsx';
@@ -29,7 +30,7 @@ const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
 : '1166'; // Ghosts
 
-class EditWorkflowPage extends Component {
+export class EditWorkflowPage extends Component {
   constructor (props) {
     super(props);
 
@@ -119,6 +120,15 @@ class EditWorkflowPage extends Component {
   isThereNotADefinedTask() {
     const workflowTasks = Object.keys(this.props.workflow.tasks);
     return workflowTasks.length === 0;
+  }
+
+  isExternalWorkflow() {
+    return this.canUseTask(this.props.project, 'external workflow') &&
+      !!this.props.workflow.configuration?.external_workflow_url?.trim();
+  }
+
+  canTestWorkflow() {
+    return !this.isThereNotADefinedTask() || this.isExternalWorkflow();
   }
 
   showTaskAddButtons() {
@@ -420,6 +430,12 @@ class EditWorkflowPage extends Component {
                 <hr />
               </div> : undefined}
 
+            {this.canUseTask(this.props.project, 'external workflow') ?
+              <div>
+                <ExternalWorkflowEditor workflow={this.props.workflow} />
+                <hr />
+              </div> : undefined}
+
             <div>
               <AutoSave tag="div" resource={this.props.workflow}>
                 <FemMultiImageSubjectOptionsEditor workflow={this.props.workflow} />
@@ -491,8 +507,8 @@ class EditWorkflowPage extends Component {
 
               </div> : undefined}
 
-            <div className={this.isThereNotADefinedTask() ? 'disabled-section' : ''}>
-              {!this.isThereNotADefinedTask() ?
+            <div className={this.canTestWorkflow() ? '' : 'disabled-section'}>
+              {this.canTestWorkflow() ?
                 <a
                   href={this.workflowLink()}
                   className="standard-button"
@@ -500,12 +516,12 @@ class EditWorkflowPage extends Component {
                   onClick={this.handleViewClick}
                 >
                   Test this workflow
-                </a> : undefined}
-              {this.isThereNotADefinedTask() ?
+                </a>
+              :
                 <div>
                   <span className="standard-button">Test this workflow</span>
                   <p>You need to add a task and content to be able to test this workflow.</p>
-                </div> : undefined}
+                </div>}
             </div>
 
             <hr />

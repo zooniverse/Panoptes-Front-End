@@ -12,6 +12,7 @@ const experimentalFeatures = [
   'dropdown',
   'enable subject flags',
   'expert comparison summary',
+  'external workflow', // FEM only. Lets a workflow point at an external custom front end; the classify page shows a departure screen instead of the classifier.
   'fan',
   'freehandLine',
   'freehandSegmentLine',
