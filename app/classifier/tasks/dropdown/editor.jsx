@@ -120,6 +120,7 @@ export default class DropdownEditor extends React.Component {
   }
 
   render() {
+    const [root, taskKey] = this.props.taskPrefix.split('.');
     const handleChange = handleInputChange.bind(this.props.workflow);
 
     const selects = this.props.task.selects;
@@ -218,7 +219,7 @@ export default class DropdownEditor extends React.Component {
           <span className="form-label">Next task</span>
           <br />
           <NextTaskSelector
-            task={this.props.task}
+            taskKey={taskKey}
             workflow={this.props.workflow}
             name={`${this.props.taskPrefix}.next`}
             value={this.props.task.next || ''}
@@ -248,5 +249,6 @@ DropdownEditor.propTypes = {
 
 DropdownEditor.defaultProps = {
   task: {},
+  taskPrefix: '',
   workflow: {}
 };

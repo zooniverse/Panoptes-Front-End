@@ -12,6 +12,7 @@ module.exports = createReactClass
   getDefaultProps: ->
     workflow: {}
     task: {}
+    taskPrefix: ''
 
   tagExists:(tag) ->
     if @props.task.text_tags
@@ -31,6 +32,7 @@ module.exports = createReactClass
 
 
   render: ->
+    [root, taskKey] = @props.taskPrefix.split '.'
     handleChange = handleInputChange.bind @props.workflow
     requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
 
@@ -86,6 +88,6 @@ module.exports = createReactClass
         <AutoSave resource={@props.workflow}>
           <span className="form-label">Next task</span>
           <br />
-          <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
+          <NextTaskSelector taskKey={taskKey} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
         </AutoSave>}
     </div>
