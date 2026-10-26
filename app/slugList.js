@@ -341,6 +341,7 @@ const OTHER_SLUGS = [
   'md68135/notes-from-nature-natural-history-at-rom-revealed',
   'meteonetwork/redata',
   'mollysimon/galaxy-zoo-crowdsourcing-activity', // Classrooms
+  'mollysimon/planet-hunters-practice-module', // Classrooms
   'msbrhonclif/science-scribbler-key2cat', // Subject image sizes difficult in FEM's classifier layout
   'msbrhonclif/science-scribbler-placenta-profiles', // Subject image sizes difficult in FEM's classifier layout
   'mschwamb/planet-four', // Uses experimental "fan tool"
