@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import LoadingIndicator from '../loading-indicator';
-import RawJSONViewer from './raw-json-viewer';
+import GeoJSONViewer from './geojson-viewer';
 import CanvasViewer from './canvas-viewer';
 
 function JSONContainer(props) {
@@ -52,9 +52,9 @@ function JSONContainer(props) {
     );
   }
 
-  // If detected as GeoJSON (type === 'Feature' or 'FeatureCollection'), use RawJSONViewer
-  if (jsonData?.type === 'Feature' || jsonData?.type === 'FeatureCollection') {
-    return <RawJSONViewer {...props} jsonData={jsonData} />;
+  // If detected as GeoJSON (or JSON with type === 'Feature' or 'FeatureCollection'), use GeoJSONViewer
+  if (props.format === 'geo+json' || jsonData?.type === 'Feature' || jsonData?.type === 'FeatureCollection') {
+    return <GeoJSONViewer {...props} jsonData={jsonData} />;
   }
 
   // Otherwise, use CanvasViewer for canvas model rendering

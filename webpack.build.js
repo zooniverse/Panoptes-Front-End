@@ -71,7 +71,9 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
-    modules: ['.', 'node_modules'],
+    // Use an absolute project root for module lookup. A relative '.' can make
+    // bare imports (e.g. 'rbush') resolve against nested issuer directories.
+    modules: [path.resolve(__dirname), 'node_modules'],
     fallback: {
       fs: false,
       // for markdown-it plugins
@@ -83,6 +85,13 @@ module.exports = {
   },
   module: {
     rules: [{
+      test: /\.m?js$/,
+      include: /node_modules\/react-openlayers\/dist/,
+      // react-openlayers emits extensionless deep imports (e.g. ol/interaction/Link).
+      resolve: {
+        fullySpecified: false
+      }
+    }, {
       test: /\.jsx?$/,
       exclude: /node_modules\/(?!(markdown-it-anchor|markdown-it-table-of-contents|striptags)\/).*/,
       // markdown-it-anchor, markdown-it-table-of-contents and striptags are written in ES6.
