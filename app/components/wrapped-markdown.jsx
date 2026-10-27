@@ -3,6 +3,10 @@ import React from 'react';
 import { Markdown } from 'markdownz';
 import { browserHistory } from 'react-router';
 
+const components = {
+  img: (props) => <img loading="lazy" {...props} />
+}
+
 class WrappedMarkdown extends React.Component {
   static propTypes = {
     content: PropTypes.string,
@@ -33,6 +37,7 @@ class WrappedMarkdown extends React.Component {
           content={this.props.content}
           project={this.props.project}
           header={this.props.header}
+          components={components}
         />
       </div>
     );
