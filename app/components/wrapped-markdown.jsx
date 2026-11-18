@@ -30,7 +30,7 @@ class WrappedMarkdown extends React.Component {
       <div onClick={this.onClick}>
         <Markdown
           relNofollow
-          content={this.props.content}
+          content={this.props.content.trim()}
           project={this.props.project}
           header={this.props.header}
         />
