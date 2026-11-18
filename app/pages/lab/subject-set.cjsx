@@ -17,7 +17,6 @@ isAdmin = require '../../lib/is-admin'
 
 NOOP = Function.prototype
 
-VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.mp4', '.m4a', '.mpeg', '.txt', '.json']
 VALID_FEM_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.mp3', '.mp4', '.m4a', '.mpeg', '.txt', '.json']
 
 VALID_FILE_TYPES = [
@@ -235,7 +234,6 @@ EditSubjectSetPage = createReactClass
             Subject images can be up to {MAX_FILE_SIZE / 1024}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_FEM_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_FEM_EXTENSIONS}{' '}
             and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}<br />
             <br />
-            If you have .svg subjects, please email us at contact@zooniverse.org. We can host your project on our legacy architecture until these formats are supported on our <a href='https://blog.zooniverse.org/2024/04/23/navigating-the-future-zooniverses-frontend-codebase-migration-and-design-evolution/'>new architecture</a>.
           </UploadDropTarget>
         </p>}
       <div className="manifests-and-subjects">
@@ -344,7 +342,7 @@ EditSubjectSetPage = createReactClass
   _findFilesInMetadata: (metadata) ->
     filesInMetadata = []
     for key, value of metadata
-      extensions = if isAdmin() then '\\.\\D\\w{2,4}' else "(?:#{'\\'+VALID_SUBJECT_EXTENSIONS.join '|\\'})"
+      extensions = if isAdmin() then '\\.\\D\\w{2,4}' else "(?:#{'\\'+VALID_FEM_EXTENSIONS.join '|\\'})"
       filesInValue = value.match? ///([^#{'\\'+INVALID_FILENAME_CHARS.join '\\'}]+#{extensions})///gi
       if filesInValue?
         filesInMetadata.push filesInValue...
