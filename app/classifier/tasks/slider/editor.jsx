@@ -7,6 +7,7 @@ import handleInputChange from '../../../lib/handle-input-change';
 import NextTaskSelector from '../next-task-selector';
 
 const SliderTaskEditor = (props) => {
+  const [root, taskKey] = props.taskPrefix.split('.');
   const handleChange = handleInputChange.bind(props.workflow);
   let nextTask;
   let helpBox;
@@ -16,7 +17,7 @@ const SliderTaskEditor = (props) => {
         <span className="form-label">Next task</span>
         <br />
         <NextTaskSelector
-          task={props.task}
+          taskKey={taskKey}
           workflow={props.workflow}
           name={`${props.taskPrefix}.next`}
           value={props.task.next ? props.task.next : ''}

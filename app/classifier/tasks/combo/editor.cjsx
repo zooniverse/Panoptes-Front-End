@@ -7,6 +7,7 @@ ComboTaskEditor = createReactClass
   getDefaultProps: ->
     workflow: null
     task: null
+    taskPrefix: ''
     onChange: ->
 
   componentWillMount: () ->
@@ -48,6 +49,7 @@ ComboTaskEditor = createReactClass
     </li>
 
   render: ->
+    [root, taskKey] = @props.taskPrefix.split '.'
     tasks = require('..').default
     <div>
       <p>Add any number of tasks here and they will be shown in one step.</p>
@@ -78,7 +80,7 @@ ComboTaskEditor = createReactClass
       <p>
         <label>
           Next task:{' '}
-          <NextTaskSelector task={@props.task} workflow={@props.workflow} value={@props.task.next} onChange={@setNextTask} />
+          <NextTaskSelector taskKey={taskKey} workflow={@props.workflow} value={@props.task.next} onChange={@setNextTask} />
         </label>
         <br />
         <span className="form-help">This overrides anything set by a sub-task.</span>
