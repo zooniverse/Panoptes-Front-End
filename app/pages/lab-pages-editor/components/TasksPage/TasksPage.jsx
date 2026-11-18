@@ -50,16 +50,34 @@ export default function TasksPage() {
   const isLinearWorkflow = !advancedMode
 
   /*
-  Adds a new Task of a specified type (with default settings) to a Step.
+  Add a new Task of a specified type (with default settings) to a Step.
   If no Step is specified, a new Step is created.
   Returns the newly created step index.
    */
   async function addTask(taskType, stepIndex = -1) {
+    // Add Special Task type
+    if (taskType === 'transcription') {
+      if (stepIndex !== -1) throw new Error('TasksPage: Transcription Tasks cannot be added to an existing Page; it must be a new Page.')
+      return await addFixedStepTranscriptionTask()
+    }
+
+    // Add standard Task type. This is the default behaviour.
+    return await addStandardTask(taskType, stepIndex)
+  }
+
+  /*
+  Add a standard Task type to a Step. See addTask() - this is actually the
+  default behaviour.
+   */
+  async function addStandardTask(taskType, stepIndex = -1) {
     if (!workflow) return
+
+    // Create Task (but don't stage or commit changes yet)
     const newTaskKey = getNewTaskKey(workflow.tasks)
     const newTask = createTask(taskType)
     let steps = workflow.steps?.slice() || []
     
+    // Create new Step, or select existing Step
     let step
     if (stepIndex < 0) {
       // If no step is specified, we create a new one.
@@ -78,11 +96,13 @@ export default function TasksPage() {
       }
     }
 
+    // Sanity check
     if (!newTaskKey || !newTask || !step) {
       console.error('TasksPage: could not create Task')
       return
     }
 
+    // Stage changes
     const tasks = {
       ...workflow.tasks,
       [newTaskKey]: newTask
@@ -92,8 +112,47 @@ export default function TasksPage() {
       steps = linkStepsInWorkflow(steps, tasks)
     }
 
+    // Commit changes
     await update({ tasks, steps })
     return (stepIndex < 0) ? steps.length - 1 : stepIndex
+  }
+
+  /*
+  Add a "Transcription Task" which is actually a Fixed Step (aka Fixed Page)
+  that contains exactly two Tasks:
+  1. a task.type=transcription and
+  2. a task.type=single
+  Both Tasks are added 
+   */
+  async function addFixedStepTranscriptionTask() {
+    if (!workflow) return
+
+    // Create Task (but don't stage or commit changes yet)
+    const newTaskKey1 = getNewTaskKey(workflow.tasks, 0)
+    const newTask1 = createTask('transcription-pt1')
+    const newTaskKey2 = getNewTaskKey(workflow.tasks, 1)
+    const newTask2 = createTask('transcription-pt2')
+    let steps = workflow.steps?.slice() || []
+
+    // Create new Step
+    const newStepKey = getNewStepKey(workflow.steps)
+    const step = createStep(newStepKey, [newTaskKey1, newTaskKey2])
+    steps.push(step)
+
+    // Stage changes
+    const tasks = {
+      ...workflow.tasks,
+      [newTaskKey1]: newTask1,
+      [newTaskKey2]: newTask2,
+    }
+
+    if (linkStepsInWorkflow) {
+      steps = linkStepsInWorkflow(steps, tasks)
+    }
+
+    // Commit changes
+    await update({ tasks, steps })
+    return steps.length - 1
   }
 
   /*

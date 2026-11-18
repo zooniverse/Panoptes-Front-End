@@ -25,7 +25,7 @@ function SubTaskSubForm({
       <TaskForm
         deleteTask={deleteTask}
         isSubTask={true}
-        stepHasManyTasks={false}
+        showDeleteButton={false}
         task={task}
         taskKey={subTaskIndex}
         updateTask={updateTask}

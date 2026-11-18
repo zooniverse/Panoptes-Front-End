@@ -14,7 +14,7 @@ function QuestionTask({
   deleteTask = DEFAULT_HANDLER,
   isSubTask = false,
   enforceLimitedBranchingRule,
-  stepHasManyTasks = false,
+  showDeleteButton = false,
   task,
   taskKey,
   updateTask = DEFAULT_HANDLER
@@ -116,7 +116,7 @@ function QuestionTask({
         isSubTask={isSubTask}
         label={isSubTask ? 'Question Sub-Task Instructions' : null}
         setValue={setQuestion}
-        showDeleteButton={stepHasManyTasks}
+        showDeleteButton={showDeleteButton}
         taskKey={taskKey}
         update={update}
         value={question}
@@ -209,7 +209,7 @@ QuestionTask.propTypes = {
   enforceLimitedBranchingRule: PropTypes.shape({
     stepHasBranch: PropTypes.bool
   }),
-  stepHasManyTasks: PropTypes.bool,
+  showDeleteButton: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
   updateTask: PropTypes.func
