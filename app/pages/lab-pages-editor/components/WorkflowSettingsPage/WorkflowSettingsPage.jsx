@@ -311,6 +311,19 @@ export default function WorkflowSettingsPage() {
               Allow users to flip image color
             </label>
           </div>
+          <div className="flex-row align-start spacing-bottom-XS">
+            <input
+              checked={!!workflow?.configuration?.video_loop}
+              data-updaterule="checkbox"
+              id="video_loop"
+              name="configuration.video_loop"
+              onChange={doUpdate}
+              type="checkbox"
+            />
+            <label htmlFor="video_loop">
+              Loop video subjects <span className="small-info">- replay each video from the start when it ends</span>
+            </label>
+          </div>
         </fieldset>
 
         {advancedMode && (<>  {/* Reason for removal (Apr 2024): we want users to use automatic subject viewer selection, to reduce complexity and complications. */}

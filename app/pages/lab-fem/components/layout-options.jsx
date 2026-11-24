@@ -7,7 +7,14 @@ export default function LayoutOptions({ workflow = null }) {
     });
   };
 
+  const handleVideoLoop = (e) => {
+    workflow.update({
+      "configuration.video_loop": e.target.checked,
+    });
+  };
+
   const limitSubjectHeight = !!workflow?.configuration?.limit_subject_height
+  const videoLoop = !!workflow?.configuration?.video_loop
 
   return (
     <div>
@@ -25,6 +32,20 @@ export default function LayoutOptions({ workflow = null }) {
           onChange={handleLimitSubjectHeight}
         />
         Limit subject image height
+      </label>
+      <br />
+      <small className="form-help">
+        Check this option if you want video subjects to replay from the start each time they end.
+      </small>
+      <br />
+      <label htmlFor="video_loop">
+        <input
+          id="video_loop"
+          type="checkbox"
+          checked={videoLoop}
+          onChange={handleVideoLoop}
+        />
+        Loop video subjects
       </label>
     </div>
   );
